@@ -16,8 +16,8 @@ Updated: 2026-10-20
 ## Current project phase vs current actual work
 
 - **Current project phase:** Phase 6 — hardware research, compatibility decisions and first firmware design (**planned, not implemented**)
-- **Current actual work:** Phase 6 physical controls **explicitly accepted** from mockup: **3 MX keys** (Prev / Play-Pause / Next) below touchscreen, and a **push-capable ~18 mm rotary encoder** on right (**turn = volume, press = PC/Wi-Fi mode**). Detached fourth MX symbol was placeholder only. Shuffle/repeat/settings through touchscreen. Input mapping accepted; electronics/CAD/firmware unvalidated.
-- **Status:** Phase 5.2 software **unchanged** (GitHub checkpoint `7172c2e`), archived versions `f781506`. Waveshare/input-expander research predates 3-key preference and still includes four-key assumptions. Physical control mapping accepted and documented in `docs/DESIGN.md` / `docs/DECISIONS.md`. Needs **6 digital inputs**: 3 MX + quadrature A/B + encoder push. No hardware purchased/bench-tested or firmware changed.
+- **Current actual work:** Phase 6 **specific component shortlist research** following accepted 3-MX + push-encoder control mapping. Proposed Waveshare screen SKU **25948** (small 270-nit) vs **27848** 4.3B (550-nit); Adafruit encoder **PID 377**; compact Waveshare AW9523B expansion **SKU 22132** or experimental QUAD seesaw breakout **PID 5752**. Specific parts are **recommended, not user-selected/ordered/wired**.
+- **Status:** Phase 5.2 desktop/simulator software **unchanged**, source checkpoint `7172c2e`. User-accepted controls need **6 input signals**. New **docs/HARDWARE-SHORTLIST.md** records example parts and pricing (£40.90 standard 25948 + ADA377 + WAV-22132, accessories extra), electrical/address/physical caveats, and alternative B screen/QUAD breakout. Documentation research only; no user part selection, procurement or bench test.
 
 ## Last accepted work
 
@@ -44,12 +44,11 @@ Updated: 2026-10-20
 
 ## Current next action
 
-1. **Do not reopen agreed control choice:** 3 MX keys (previous/play-pause/next), encoder turn for volume and integrated momentary press for **PC/Wi-Fi mode**. The detached fourth MX icon was explicitly a discarded placeholder. User provided approx. 18 mm MX keycaps and 18 mm knob diameter.
-2. Source/check **push-capable encoder** options (detents, quadrature resolution, switch travel, shaft and 18 mm knob fit), faceplate spacing and Waveshare board internal depth.
-3. Research **six digital input signals** and compatible 3.3 V I²C connection: AW9523 (0x58), TCA9539 (0x74–0x77) or QUAD seesaw breakout (0x49). For QUAD, hypothesize 3 MX + encoder push on four switch contacts and one A/B encoder, **not bench-proven**; published pin conflict needs schematic verification.
-4. Reassess Waveshare 25948 versus brighter B board; no procurement, validated electrical schematic or firmware selection yet.
-5. Separate future code task: adapt accepted Phase 5.2 four-key simulator to **three keys + encoder push** while preserving playback controls and pairing; do **not** silently alter working application.
-6. Keep Windows/Omarchy Phase 5.2 post-import runtime verification and LAN/security work separate.
+1. Review **docs/HARDWARE-SHORTLIST.md**. Proposed compact kit: **Waveshare 25948 touchscreen (£31.70)** + **Adafruit 377 push encoder/knob (£4.40)** + **Waveshare AW9523B SKU 22132 expansion (£4.80)** = **£40.90 example base parts subtotal**, excluding wiring/pull-ups/USB/keycaps/case/shipping. Prices and stock vary.
+2. **Ask user to confirm** standard smaller 270-nit screen vs brighter but larger 550-nit **4.3B SKU 27848** (about £3.90 more). Do not interpret research as final purchase authority.
+3. Prefer compact AW9523B for easier case fit; if rotary input events are lost under I²C polling, test Adafruit QUAD seesaw breakout (address 0x49) as alternate. On its four switch contacts, **3 MX + encoder push** is a hypothetical off-label use; duplicate pin listing and PCB size require verification.
+4. Before actual wiring, verify exact voltage-selector/I²C pinout, address scan, 6 input pullups, correct connector adapters, encoder momentary push travel and switch body clearance; no validated schematic exists.
+5. Future separate code task: revise accepted Phase 5.2 **four-key simulator** into **three physical keys + push encoder**, preserving audio, artwork, pairing and mode/volume behavior.
 
 ## Relevant project files (from Phase 5.2 source)
 
@@ -58,7 +57,7 @@ Updated: 2026-10-20
 - `static/ui.js`, `static/ui.css`, `static/device.js`, `static/device.css`
 - `templates/index.html`, `templates/device.html`, `templates/pair.html`
 - `tests/`, `requirements-ui.txt`, `requirements-windows.txt`
-- `docs/ROADMAP.md`, `docs/DECISIONS.md`, **`docs/DESIGN.md`**, `docs/HARDWARE.md`, **`docs/HARDWARE-RESEARCH.md`**, **`docs/HARDWARE-COMPARISON.md`**, `docs/CHATGPT-WORKFLOW.md`
+- `docs/ROADMAP.md`, `docs/DECISIONS.md`, **`docs/DESIGN.md`**, `docs/HARDWARE.md`, **`docs/HARDWARE-SHORTLIST.md`**, `docs/HARDWARE-RESEARCH.md`, `docs/HARDWARE-COMPARISON.md`, `docs/CHATGPT-WORKFLOW.md`
 - One-time import scripts: `scripts/import-phase5-2.ps1` (already run) and `scripts/archive-local-phases.ps1` (already run). Historical files: `archives/phase-zips/` and `docs/history/ARCHIVED-PHASE-ZIPS.md` (16 verified archives and their original/stored hashes).
 
 ## Recent meaningful commits
@@ -69,10 +68,12 @@ Updated: 2026-10-20
 - `196a66a` — Phase 6 WaveShare board/expander manufacturer-source research (documentation only; no application or firmware changed).
 - `5833f0e` — Phase 6 extended screen/input-expander comparison; includes AW9523 and QUAD seesaw ideas (documentation only).
 - 2026-10-20 user-accepted physical design mapping: **3 MX keys + push encoder (turn volume, push PC/Wi-Fi)**; docs-only. No fourth physical MX key.
+- `cc6c4b6` — proposed SKU-specific Waveshare / encoder / AW9523B parts shortlist and UK price estimates (documentation only).
 - Documentation-only commits after this checkpoint are not evidence of newer runtime implementation.
 
 ## Unresolved issues / deferred
 
+- Part availability is variable. The Adafruit AW9523 PID 4886 module was shown sold out in one checked supplier listing; Waveshare AW9523B SKU 22132 is a proposed same-chip breakout, not necessarily plug-and-play. User has not ordered hardware.
 - GPIO/I²C warning: onboard CH422G reserves `0x20–0x27` and `0x30–0x3F`, so default MCP23017 (0x20+) and Adafruit **single** I²C rotary breakout (0x36–0x3D) conflict. AW9523 (0x58) and Adafruit **QUAD** seesaw breakout (0x49) are proposed alternatives; QUAD off-label 3 MX + encoder push switch contact use needs schematic/bench checks due to possible duplicated pin listing. No purchase approval.
 - The device simulator can poll `/api/device/state` repeatedly even with SSE; optimization is deferred, not a blocker.
 - A test emitted a minor `ResourceWarning` about a stylesheet file handle.
