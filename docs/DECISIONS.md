@@ -8,9 +8,11 @@ Record accepted direction, rationale and alternatives. Proposed decisions must s
 Develop and test Windows/Omarchy player and a browser simulator **before** buying the display, controller or enclosure components. Reduces risk of incompatible hardware.
 
 ## D002 — Target interaction design
-**Status:** Accepted direction, revised preferred mockup; final physical design pending
+**Status:** **Physical control mapping user-accepted (2026-10-20); final hardware/CAD not accepted**
 
-800 × 480 touchscreen; **revised preferred physical layout (2026-10-20): three MX keys** (previous, play/pause, next) below screen plus **~18 mm volume knob** at right. Proposed secondary **touch UI** handles PC/Wi-Fi mode, shuffle, repeat and settings instead of a fourth dedicated MX key. Sketch uses ~0.71 in (18 mm) square keycaps. The fourth owned MX switch is currently unused. Preserve established browser artwork/glow/progress and speaker/volume UI. **Concept-level preference only**; case geometry, mounting holes, component selection and firmware not yet approved. Phase 5.2 still contains 4 simulator keys: do not silently rewrite completed software.
+The 800×480 touchscreen plus **three MX media keys** (K1 Previous, K2 Play/Pause, K3 Next) below the display, and a **rotary volume encoder with an integrated push switch** on the right, is the selected interaction direction. Turning the knob adjusts volume; **pressing the knob toggles PC/Wi-Fi mode**. The detached fourth-button symbol in the sketch was a placeholder only, **not a fourth MX key**. Shuffle, repeat, settings and optional mode access remain on the touchscreen. Approximate user sketch dimensions: 18 mm / 0.71 in visible 1u-style keycaps and ~18 mm knob outside diameter.
+
+**Electrical consequences:** exactly **six requested digital contact signals** — 3 MX, 2 encoder A/B quadrature, 1 momentary encoder push — before optional expansion. The input-expander selection, compatible *push-capable* encoder model, mounting dimensions and wiring remain research tasks. Existing accepted **Phase 5.2 four-key browser simulator has not changed**; adapt it in a dedicated implementation task, preserving working playback/pairing/glow behaviour.
 
 ## D003 — Cross-platform companion
 **Status:** Accepted
