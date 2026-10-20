@@ -1,6 +1,6 @@
 # Phase 6 — Extended 4.3-inch screen and input-expander comparison
 
-**Date: 2026-10-20. Research only.** No hardware selected, ordered, wired or runtime-tested. Supplement to [HARDWARE-RESEARCH.md](HARDWARE-RESEARCH.md); the accepted software checkpoint remains Phase 5.2 / 7172c2e.
+**Date: 2026-10-20. Research only.** This document assumed **four physical MX keys** at the time of investigation. The user's later mockup now prefers **three physical keys + one knob**; this remains valid expansion research but all required input-count comparisons are subject to that revised requirement. No hardware selected, ordered, wired or runtime-tested. Supplement to [HARDWARE-RESEARCH.md](HARDWARE-RESEARCH.md); the accepted software checkpoint remains Phase 5.2 / 7172c2e.
 
 ## Waveshare model comparison
 
@@ -32,7 +32,7 @@ Waveshare guide: https://docs.waveshare.com/ESP32-S3-Touch-LCD-4.3/Instructions-
 
 ## Expansion approaches for 4 owned MX keys + one volume encoder
 
-**Need:** four distinct switch inputs and two quadrature contacts, optionally a seventh input for an encoder push action (not decided).
+**Updated physical concept:** three distinct MX switch inputs and two quadrature contacts = **five** required inputs, or **six** with optional encoder push. **Original research below was for four MX switches**, so some solutions are overprovisioned; no board must be bought for the obsolete key count.
 
 | Candidate | I²C 7-bit address | Four keys + encoder? | Encoder handling | Prototype practicality |
 |---|---|---|---|---|
