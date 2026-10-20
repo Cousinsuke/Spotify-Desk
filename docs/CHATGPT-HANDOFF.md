@@ -16,8 +16,8 @@ Updated: 2026-10-20
 ## Current project phase vs current actual work
 
 - **Current project phase:** Phase 6 — hardware research, compatibility decisions and first firmware design (**planned, not implemented**)
-- **Current actual work:** Phase 6 hardware compatibility research — Waveshare 4.3-inch board variants, occupied GPIO and I²C expander addressing. Roadmap work; research documented, **awaiting user direction/confirmation**, not purchased or runtime-validated.
-- **Status:** Phase 5.2 source on GitHub at `7172c2e`, 16 archives at `f781506`; migration accepted/verified. Manufacturer-source Phase 6 feasibility research added to `docs/HARDWARE-RESEARCH.md` (SKU shortlist, pin use, I²C address conflicts, candidate expanders, power/memory/performance). **Research does not establish electrical correctness in real hardware or an accepted purchase.**
+- **Current actual work:** Phase 6 follow-up research: compare Waveshare 4.3/4.3B/4.3C screens and input-expansion strategies, including ready-made AW9523 and a possible combined four-key/one-encoder QUAD seesaw controller. Roadmap research, not implementation, **awaiting user decision**.
+- **Status:** Phase 5.2 source at `7172c2e`, 16 archives at `f781506`; software unchanged. Research reports `docs/HARDWARE-RESEARCH.md` and `docs/HARDWARE-COMPARISON.md` compare exact boards, GPIO conflicts, and four-switch+encoder options. Hardware not selected/accepted, purchased or bench tested.
 
 ## Last accepted work
 
@@ -43,10 +43,10 @@ Updated: 2026-10-20
 
 ## Current next action
 
-1. Review [manufacturer-based hardware research](HARDWARE-RESEARCH.md): preferred **Waveshare 25948 touchscreen** vs 4.3B/4.3C (alternates). Ask user to confirm priorities (compactness vs brightness vs built-in audio). No shopping/purchase authorization.
-2. **Resolve controls I²C expander electrically before specifying wiring:** existing CH422G occupies addresses 0x20–0x27 and 0x30–0x3F (common MCP23017 conflicts); candidate **TCA9539 0x74–0x77** / **ATtiny817 seesaw 0x49**, with voltage/pull-ups/encoder response unverified.
-3. Determine physical board SKU/revision, obtain correct mechanical CAD and plan first ESP-IDF/LVGL display bring-up; reserve actual input wiring until compatible expander chosen.
-4. Keep Phase 5.2 post-import Windows/Omarchy tests and network security/provisioning as separate pending work.
+1. Discuss **compact standard Waveshare 25948 (270 nits)** versus **larger/brighter 27848 4.3B (550 nits)**; 4.3C audio variant only if needed. Avoid prematurely selecting/ordering.
+2. Compare **Adafruit AW9523 (0x58)** six-input polling with external bias resistors against **Adafruit I²C QUAD rotary breakout (0x49)** proposed off-label layout using one encoder and four separate switch pads. QUAD schematic/pinout has a possible duplicate pin number and must be bench-verified before use. Both avoid Waveshare CH422G reserved addresses.
+3. If preferred, settle an experiment plan: check exact I²C bus 3.3 V jumper, shared SDA/SCL, connector adapter, mechanical space and encoder responsiveness before committing to firmware/wiring.
+4. Keep Phase 5.2 post-import Windows/Omarchy runtime retest and LAN protocol hardening as separate pending work.
 
 ## Relevant project files (from Phase 5.2 source)
 
@@ -55,7 +55,7 @@ Updated: 2026-10-20
 - `static/ui.js`, `static/ui.css`, `static/device.js`, `static/device.css`
 - `templates/index.html`, `templates/device.html`, `templates/pair.html`
 - `tests/`, `requirements-ui.txt`, `requirements-windows.txt`
-- `docs/ROADMAP.md`, `docs/DECISIONS.md`, `docs/HARDWARE.md`, **`docs/HARDWARE-RESEARCH.md`**, `docs/CHATGPT-WORKFLOW.md`
+- `docs/ROADMAP.md`, `docs/DECISIONS.md`, `docs/HARDWARE.md`, **`docs/HARDWARE-RESEARCH.md`**, **`docs/HARDWARE-COMPARISON.md`**, `docs/CHATGPT-WORKFLOW.md`
 - One-time import scripts: `scripts/import-phase5-2.ps1` (already run) and `scripts/archive-local-phases.ps1` (already run). Historical files: `archives/phase-zips/` and `docs/history/ARCHIVED-PHASE-ZIPS.md` (16 verified archives and their original/stored hashes).
 
 ## Recent meaningful commits
@@ -64,11 +64,12 @@ Updated: 2026-10-20
 - `234a976` — sanitize generated Python bytecode when preserving old ZIPs.
 - `f781506` — all 16 historical ZIP archives and checksum manifest pushed and verified.
 - `196a66a` — Phase 6 WaveShare board/expander manufacturer-source research (documentation only; no application or firmware changed).
+- `5833f0e` — Phase 6 extended screen/input-expander comparison; includes AW9523 and QUAD seesaw ideas (documentation only).
 - Documentation-only commits after this checkpoint are not evidence of newer runtime implementation.
 
 ## Unresolved issues / deferred
 
-- GPIO/I²C research warning: onboard CH422G shares I²C and reserves `0x20–0x27` plus `0x30–0x3F`, so do **not** choose MCP23017 by default. Proposed TCA9539 / seesaw options need input-power and rotary sampling validation before selecting or purchasing.
+- GPIO/I²C warning: onboard CH422G reserves `0x20–0x27` and `0x30–0x3F`, so default MCP23017 (0x20+) and Adafruit **single** I²C rotary breakout (0x36–0x3D) conflict. AW9523 (0x58) and Adafruit **QUAD** seesaw breakout (0x49) are proposed alternatives; QUAD off-label four-MX-switch use needs schematic/bench checks due to possible duplicated pin listing. No purchase approval.
 - The device simulator can poll `/api/device/state` repeatedly even with SSE; optimization is deferred, not a blocker.
 - A test emitted a minor `ResourceWarning` about a stylesheet file handle.
 - Linux `playerctl -l` previously found no player in an SSH session, yet paired device state and Spotify API worked; avoid claiming native MPRIS parity without a local player test.
