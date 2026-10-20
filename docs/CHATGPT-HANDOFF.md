@@ -10,18 +10,18 @@ Updated: 2026-10-20
 - Default / current development branch: `main` (no alternate development branch established yet)
 - Last source baseline: **Phase 5.2** source imported into `main` from checksum-checked ZIP; actual GitHub commit verified
 - Latest implementation checkpoint: **`7172c2ee2f285253507b13c71acb7072adc04067`** (`feat: import accepted Phase 5.2 desktop and simulator baseline`, source commit). Later docs/script commits are not a newer application version.
-- Handoff status: current after source import. Historical ZIP archival is not yet verified; a safety fix to `scripts/archive-local-phases.ps1` is committed awaiting user execution.
+- Handoff status: GitHub migration verified complete. All 16 historical ZIP snapshots and the checksum manifest are committed at `f78150605b15af1fa451aa5ed725f023fd03835c`; this is an archive commit, not a newer application implementation checkpoint.
 - GitHub access: connected read/write access was confirmed at bootstrap; verify access in future conversations
 
 ## Current project phase vs current actual work
 
 - **Current project phase:** Phase 6 — hardware research, compatibility decisions and first firmware design (**planned, not implemented**)
-- **Current actual work:** ad-hoc historical ZIP archive import recovery; first run blocked on generated `__pycache__` entry.
-- **Status:** Phase 5.2 active source successfully imported/pushed and verified on GitHub. Archive script updated to omit generated Python cache entries in copied ZIPs, with checksum manifest; rerun on Windows and verify the archive commit. This is a script-only fix, not a new software phase.
+- **Current actual work:** ad-hoc GitHub migration and TUF-style documentation bootstrap — completed and verified; preparing for Phase 6 hardware research.
+- **Status:** Phase 5.2 root source verified at `7172c2e`; 16 historical archives and `docs/history/ARCHIVED-PHASE-ZIPS.md` verified at `f781506` (420,334 archived bytes). The archival script removed 2 generated Python cache entries from the archived Phase 2.2 ZIP only, leaving Downloads originals unchanged. No hardware implementation has begun.
 
 ## Last accepted work
 
-- **Most recent validated repository task:** Phase 5.2 root source import from Windows, pushed as `7172c2e` and verified on GitHub; historical archive import remains pending.
+- **Most recent validated repository task:** current Phase 5.2 source import and all 16 historical ZIP imports to GitHub; both commits verified from the remote repository; local `git status --short` clean. This is repository housekeeping, not new app runtime validation.
 - **Most recent accepted:** Phase 5.2 device/PC artwork reliability fix on **Omarchy**; user confirmed the fix worked and ran **39 Python tests**, all passing.
 - Previous accepted: Phase 4.2 Windows and Omarchy volume sync; Windows companion play/pause, album art, sound-level stream; Phase 5 pairing and simulator UI were demonstrated, then polished.
 - **Do not assume:** Phase 5.2 has been individually runtime-validated on Windows after the last patch; earlier Windows platform validation is real but older.
@@ -43,10 +43,9 @@ Updated: 2026-10-20
 
 ## Current next action
 
-1. **Rerun historical ZIP archive script** on Windows after `git pull --ff-only origin main`: `scripts/archive-local-phases.ps1 -DownloadsPath $HOME\Downloads -Publish`. It now removes only generated Python caches/bytecode from GitHub archive copies; aborts on potential secret filenames.
-2. Verify `archives/phase-zips/` and `docs/history/ARCHIVED-PHASE-ZIPS.md` are committed; note original/archive hash differences for sanitized files.
-3. Run tests from current checked-in source on Windows and Omarchy (existing ZIP-based Omarchy run reported 39 passing), revalidate the simulator on Windows as appropriate.
-4. Then begin Phase 6 hardware selection; hardware remains unpurchased/unimplemented.
+1. **Begin Phase 6 hardware research and compatibility assessment** only after reviewing this handoff, current HEAD, roadmap, decisions, and `docs/HARDWARE.md`. Identify the exact Waveshare 4.3-inch board/SKU, display bus, GPIO availability and power budget; do not purchase parts until verified.
+2. Keep Windows and Omarchy Phase 5.2 post-import runtime revalidation tracked separately. Previous accepted Omarchy tests (39 passing) ran against the prior ZIP-based project, not a fresh clone.
+3. Validate network pairing, actual MCU device protocol and secure standalone Spotify-control design before writing firmware; do not claim standalone embedded playback is already possible.
 
 ## Relevant project files (from Phase 5.2 source)
 
@@ -56,7 +55,14 @@ Updated: 2026-10-20
 - `templates/index.html`, `templates/device.html`, `templates/pair.html`
 - `tests/`, `requirements-ui.txt`, `requirements-windows.txt`
 - `docs/ROADMAP.md`, `docs/DECISIONS.md`, `docs/HARDWARE.md`, `docs/CHATGPT-WORKFLOW.md`
-- One-time import scripts: `scripts/import-phase5-2.ps1` (already run) and `scripts/archive-local-phases.ps1` (older ZIP snapshots, strips generated bytecode from archival copies, records both hashes)
+- One-time import scripts: `scripts/import-phase5-2.ps1` (already run) and `scripts/archive-local-phases.ps1` (already run). Historical files: `archives/phase-zips/` and `docs/history/ARCHIVED-PHASE-ZIPS.md` (16 verified archives and their original/stored hashes).
+
+## Recent meaningful commits
+
+- `7172c2e` — accepted Phase 5.2 source imported into `main` (**implementation checkpoint**).
+- `234a976` — sanitize generated Python bytecode when preserving old ZIPs.
+- `f781506` — all 16 historical ZIP archives and checksum manifest pushed and verified.
+- Documentation-only commits after this checkpoint are not evidence of newer runtime implementation.
 
 ## Unresolved issues / deferred
 
