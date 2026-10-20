@@ -1,6 +1,6 @@
 # Hardware — researched candidates, no approved wiring
 
-**No final purchased bill of materials, electrical wiring/schematic or hardware runtime result has been accepted.** User has chosen **proposed parts for detailed verification**, not ordered them: Waveshare touch SKU **25948**, Adafruit push encoder **PID 377**, Waveshare AW9523B expansion **SKU 22132**. Read [ELECTRICAL review](HARDWARE-ELECTRICAL-REVIEW.md) (chip outputs/RESET, voltage, I²C adapter, proposed protected switch network) and [PRE-PURCHASE mechanical check](HARDWARE-PRE-PURCHASE-CHECK.md) before wiring/printing. The earlier costed proposals are in [HARDWARE-SHORTLIST.md](HARDWARE-SHORTLIST.md). Manufacturer-based technical research is available in **[HARDWARE-RESEARCH.md](HARDWARE-RESEARCH.md)** and the [model/expander comparison](HARDWARE-COMPARISON.md) (2026-10-20).
+**No final purchased bill of materials, electrical wiring/schematic or hardware runtime result has been accepted.** User has chosen **proposed parts for detailed verification**, not ordered them: Waveshare touch SKU **25948**, Adafruit push encoder **PID 377**, Waveshare AW9523B expansion **SKU 22132**. Read [ELECTRICAL review](HARDWARE-ELECTRICAL-REVIEW.md) (chip outputs/RESET, voltage, I²C adapter, proposed protected switch network), [PRE-PURCHASE mechanical check](HARDWARE-PRE-PURCHASE-CHECK.md), and [new 2D faceplate/knob study](HARDWARE-MECHANICAL-LAYOUT-STUDY.md) before wiring/printing. The earlier costed proposals are in [HARDWARE-SHORTLIST.md](HARDWARE-SHORTLIST.md). Manufacturer-based technical research is available in **[HARDWARE-RESEARCH.md](HARDWARE-RESEARCH.md)** and the [model/expander comparison](HARDWARE-COMPARISON.md) (2026-10-20).
 
 ## Intended parts
 
@@ -9,7 +9,7 @@
 | MCU | ESP32-S3 integrated with Waveshare touch display | Candidate — exact Waveshare screen variant not yet user-accepted |
 | Screen | Waveshare `ESP32-S3-Touch-LCD-4.3`, **SKU 25948** (capacitive touch) | **User-selected provisional part for verification; not ordered**. Manufacturer 106.1×67.8 mm full module, ~98×60 mm mount centres |
 | Keys | **Three** of the user's four owned MX-style mechanical switches — Previous / Play-Pause / Next | Preferred mockup; 0.71 in (~18 mm) keycaps, switch mounting/spacing and wiring TBD |
-| Knob | Adafruit **PID 377** 24-detent push encoder, 6 mm D shaft, plus **provisionally chosen Knob Zone KZ0087-01 flat ridged aluminium cap** (15.1 mm Ø × 15.2 mm total height) | **Not ordered**. KZ0087 grub-screw/6 mm round bore, max insertion 12.4 mm vs encoder nominal 15 mm shaft; press travel, exposed height and faceplate fit unverified |
+| Knob | Adafruit **PID 377** 24-detent push encoder, 6 mm D shaft, plus **provisionally chosen Knob Zone KZ0087-01 flat ridged aluminium cap** (15.1 mm Ø × 15.2 mm total height) | **Not ordered**. KZ0087 6 mm bore/grub screw, 6.0–12.4 mm insertion vs **Bourns l=7.0 mm shaft beyond bushing** (plausible on paper, not physical validation); press travel, exposed height and faceplate fit unverified |
 | Case | 3D-printed | CAD/dimensions TBD |
 | Power | USB-powered prototype preferred for simplicity | Electrical choice TBD |
 
