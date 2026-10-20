@@ -22,17 +22,18 @@ An experimental desktop music controller and future physical desk accessory, bui
 
 The accepted Phase 5.2 Python, JavaScript, CSS, HTML and tests have been imported to the repository root. **Current source checkpoint:** [`7172c2e`](https://github.com/Cousinsuke/Spotify-Desk/commit/7172c2ee2f285253507b13c71acb7072adc04067). Do not re-run the one-time `import-phase5-2.ps1` script on an already imported checkout.
 
-The historical ZIP import is separate, and remains **pending local execution**. Those files are retained for reference only, not as alternate active application trees.
+**Historical ZIP migration is complete.** Sixteen version archives were uploaded in [`f781506`](https://github.com/Cousinsuke/Spotify-Desk/commit/f78150605b15af1fa451aa5ed725f023fd03835c), with checksums recorded in [the archive manifest](docs/history/ARCHIVED-PHASE-ZIPS.md). They are reference snapshots, not alternate active source trees.
 
 ## Preserve earlier ZIP versions
 
-Earlier ChatGPT-delivered patch ZIPs are kept as **archives**, rather than replacing the current runnable code. To archive every matching Spotify Desk phase ZIP in the Windows Downloads folder, run:
+Earlier ChatGPT-delivered patch ZIPs have been uploaded as **archives**, without replacing the current runnable code. If additional historical ZIPs are found later, rerun:
 
 ```powershell
 powershell.exe -NoProfile -ExecutionPolicy Bypass -File "$HOME\Projects\Spotify-Desk\scripts\archive-local-phases.ps1" -DownloadsPath "$HOME\Downloads" -Publish
 ```
 
 The archive script places historical ZIPs under `archives/phase-zips/`, strips generated `__pycache__`/`.pyc` entries from stored copies without changing Downloads, records both original and archived SHA-256 checksums in `docs/history/ARCHIVED-PHASE-ZIPS.md`, and commits/pushes to `main`. The ZIPs are historical reference builds, **not** a replacement for current root-level source. The script rejects common private filenames, but cannot guarantee that older archives contain no secrets within source code; review before publishing in this public repository.
+
 
 ## Project documentation
 
