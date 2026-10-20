@@ -1,6 +1,7 @@
 param(
     [Parameter(Mandatory = $true)]
-    [string]$ArchivePath
+    [string]$ArchivePath,
+    [switch]$Publish
 )
 
 $ErrorActionPreference = 'Stop'
@@ -75,6 +76,24 @@ try {
     Write-Host 'git add desk_ui.py device_bridge.py linux_companion.py linux_diagnostics.py windows_companion.py windows_diagnostics.py requirements-ui.txt requirements-windows.txt static templates tests docs/history'
     Write-Host 'git commit -m "feat: import accepted Phase 5.2 desktop and simulator baseline"'
     Write-Host 'git push origin main'
+    if ($Publish) {
+        Write-Host ''
+        Write-Host 'Publishing allowlisted, verified Phase 5.2 source files...' -ForegroundColor Cyan
+        $Paths = @(
+            'desk_ui.py', 'device_bridge.py', 'linux_companion.py', 'linux_diagnostics.py',
+            'windows_companion.py', 'windows_diagnostics.py', 'requirements-ui.txt',
+            'requirements-windows.txt', 'static', 'templates', 'tests', 'docs/history'
+        )
+        git add -- $Paths
+        if ($LASTEXITCODE -ne 0) { throw 'git add failed; nothing pushed.' }
+        git diff --cached --check
+        if ($LASTEXITCODE -ne 0) { throw 'git diff found whitespace issues; nothing pushed.' }
+        git commit -m 'feat: import accepted Phase 5.2 desktop and simulator baseline'
+        if ($LASTEXITCODE -ne 0) { throw 'git commit failed; nothing pushed.' }
+        git push origin main
+        if ($LASTEXITCODE -ne 0) { throw 'git push failed. Your local commit is retained; check authentication/conflicts.' }
+        Write-Host 'Phase 5.2 source committed and pushed to GitHub.' -ForegroundColor Green
+    }
 }
 finally {
     Pop-Location
