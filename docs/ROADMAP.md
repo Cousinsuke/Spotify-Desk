@@ -61,6 +61,7 @@ This roadmap tracks **planned phases**, not every ad-hoc fix. Actual latest work
 - [ ] Test recoverability after disconnect/reboot
 
 ## Phase 8 — Enclosure and final physical prototype
+- [x] Produce editable **static 2D trial faceplate and rear-depth reference assets**, 150×105 and 165×110 mm (SVG/OpenSCAD sources in [mechanical/](../mechanical/README.md); neither is a final case)
 - [ ] Confirm exact display dimensions and mounting points
 - [ ] 3D-print enclosure prototype with tactile key/knob fit
 - [ ] Finalize cable clearance, serviceability, ventilation and structural mounts
