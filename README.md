@@ -45,6 +45,7 @@ The archive script places historical ZIPs under `archives/phase-zips/`, strips g
 - [Hardware overview](docs/HARDWARE.md)
 - [Phase 6 Waveshare screen and input-expander research](docs/HARDWARE-RESEARCH.md)
 - [Phase 6 extended hardware comparison](docs/HARDWARE-COMPARISON.md)
+- [Phase 6 proposed component shortlist with UK prices](docs/HARDWARE-SHORTLIST.md)
 - [Setup](docs/INSTALL.md)
 - [Testing](docs/TESTING.md)
 - [Changelog](docs/CHANGELOG.md)
