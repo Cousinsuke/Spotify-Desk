@@ -53,3 +53,25 @@ References:
 - https://www.waveshare.com/product/aw9523b-io-expansion-board.htm
 - https://www.adafruit.com/product/377
 - https://learn.adafruit.com/adafruit-i2c-quad-rotary-encoder-breakout/pinouts
+
+## Modern top/knob alternatives (visual selection still OPEN, 2026-10-20)
+
+User dislikes the retro/arrow marking on the **included Adafruit 377 soft-touch knob**. The encoder body itself is still electrically suitable, and has a **6 mm D-shaped shaft**, so swapping the removable cap can be easier than changing the actual encoder. Confirm final shaft insertion depth, panel clearance and ability to **press the encoder**. For any third-party heavy metal knob, test repeated push travel and side loading before final case design. **No substitute selected.**
+
+| Separate knob | Size / look | Shaft fitting, mass | UK price example | Compatibility qualification |
+| --- | --- | --- | ---: | --- |
+| **Knob Zone KZ0022-01** | **18.6 mm Ø × 16.7 mm**, matte black, smooth cylindrical, **concave top and no marker** | **6 mm D push-fit**, 2.11 g; accepts 8.3–15.8 mm inserted shaft | **£0.54** | **Leading size/style fit** to approx 18 mm mockup and Adafruit 377's 6 mm D shaft; push travel still needs testing. |
+| **Knob Zone KZ0087-01** | **15.1 mm Ø × 15.2 mm**, solid black ridged aluminium, flat top and **no marker** | **6 mm round bore + grub screw** (can grip D shaft), 6.23 g; accepts 6.0–12.4 mm shaft insertion | **£3.84** | Modern premium finish, compact; **shorter maximum insertion depth than 377's nominal 15 mm shaft** means test mounting height/exposed shaft; requires set screw. |
+| **Knob Zone KZ0059** | **18.0 mm Ø × 18.5 mm**, black/optional matte black, knurled metal and smooth **domed** top, no marker | **6 mm round bore + grub screw**, **25.5 g**; accepts 9.4–16.1 mm insertion | **£2.63** | Exact sketch diameter and secure grip; substantially heavier, so test momentary encoder push and mechanical wear before acceptance. |
+| **Adafruit 20 mm anodised black aluminium, PID 5527** | **20 mm Ø × 12.5 mm**, knurled sides, white **triangle pointer on top** | 6 mm round bore + grub screw, **11 g** | **£2.90** at Pi Hut; **sold out** in checked listing | Explicitly NOT ideal for desired unmarked minimalist top despite obvious mechanical fit. |
+| **Switch Electronics push encoder MPN 483364** | 24 detents, SPST normally-open push, **20 mm-long 6 mm D shaft**, bare part only | 7 mm panel hole, through-hole solder body | **£0.98 inc VAT** | Optional **entire encoder** alternative if Adafruit 377 mechanical length/price proves unsuitable; no improvement to knob appearance by itself. Verify quality/datasheet and case clearance. |
+
+UK source pages (listing prices/stock can change):
+- KZ0022: https://knobzone.co.uk/products/kz0022
+- KZ0087: https://knobzone.co.uk/products/kz0087
+- KZ0059: https://knobzone.co.uk/products/kz0059
+- Adafruit 5527: https://thepihut.com/products/anodized-aluminium-machined-knob-black-20mm-diameter
+- Switch encoder 483364: https://www.switchelectronics.co.uk/products/20mm-rotary-encoder-with-switch-6mm-d-shaft
+- Adafruit 377 (existing proposed encoder): https://www.adafruit.com/product/377
+
+**Next action:** user chooses a *visual finish* first (smooth concave black / ridged flat-top aluminium / knurled dome), then dimension/shaft/press clearance is verified. Retain **Adafruit 377 + AW9523B + Waveshare 25948** as the currently proposed base; the cosmetic change may only require a separately purchased knob. No parts ordered.
