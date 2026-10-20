@@ -16,8 +16,8 @@ Updated: 2026-10-20
 ## Current project phase vs current actual work
 
 - **Current project phase:** Phase 6 — hardware research, compatibility decisions and first firmware design (**planned, not implemented**)
-- **Current actual work:** Phase 6 continuation: **indexed Waveshare module schematic** partially reveals H3/H4 6-pin order, R1–R4 10k, R5/R6 NC and address jumpers, but graphical RESET-net tracing still blocked. **Awinic 2024 v2.4 datasheet** re-confirms output-at-boot and internal reset pull-down. New manufacturer-based **faceplate study** offers 150×105 and 165×110 mm trial envelopes, documenting the right-edge I2C connector and knob cable conflict. Crucial dimensional correction: Bourns 377 drawing L1=15mm includes bushing; **l=7mm bare shaft beyond bushing** fits **KZ0087 6–12.4mm insertion range on paper**. No hardware ordered, connected or runtime-tested.
-- **Status:** Phase 5.2 source unchanged at `7172c2e`. Expanded docs: **HARDWARE-ELECTRICAL-REVIEW.md** + **HARDWARE-MECHANICAL-LAYOUT-STUDY.md** + prior **HARDWARE-PRE-PURCHASE-CHECK.md**. Module indexed schematic gives component values but not visually verified RESET net, and chip internal RSTN pull-down must be countered by module-level drive/pullup. Nominal 3.3 V 22k+1k input network mathematically checked only. 165×110 mm comfortable faceplate trial, **not approved CAD**. KZ0087/377 shaft fit now more plausible from l=7mm datum, **not physically verified**.
+- **Current actual work:** Phase 6 **dimensioned enclosure envelope artifact creation**. Built 1:1 geometric faceplate drawings comparing **150×105** and **165×110 mm**; preferred *trial*, **not accepted case**, is 165×110. Delivered 3-page A3 PDF, two SVG/DXF reference plans, source generator, OpenSCAD visual envelope and ZIP via conversation; committed GitHub editable sources **mechanical/README.md**, **faceplate_{roomy,compact}.svg**, **faceplate_layout_reference.scad**, **layout_coordinates.csv**. PDF rendered/inspected; DXF roundtrip check passed. No verified Z-depth, hole-diameter, wiring or manufacturing file, no purchases.
+- **Status:** Phase 5.2 software unchanged at `7172c2e`. Static faceplate drawings are verified as vector/PDF artifacts; **no physical case fit/clearance validation**. Roomier candidate offers **6.20 mm** bottom cap/display separation and **17.35 mm** module-edge/knob-rim separation. Hypothesized **14 mm I2C clearance corridor** leaves encoder body +4.30 mm room (vs compact -3.70 mm), but corridor is an **unmeasured assumption**. AW9523B board RESET I2C harness remains unverified. KZ0087 knob not fitted, no hardware bought.
 
 ## Last accepted work
 
@@ -44,12 +44,12 @@ Updated: 2026-10-20
 
 ## Current next action
 
-1. **Read docs/HARDWARE-MECHANICAL-LAYOUT-STUDY.md and docs/HARDWARE-ELECTRICAL-REVIEW.md**. User-selected provisional Waveshare 25948 touch + Adafruit 377 push encoder + WAV AW9523B 22132, plus KZ0087-01 black aluminium knob, 3 MX keys. No purchases or physical tests.
-2. **Electrical:** Indexed Waveshare AW9523B module PDF reveals R1–R4 10k, JP1/JP2 0R, H3/H4 6-pin labels VCC/GND/SDA/SCL/INT/RESET; full layout diagram blocked by bot gate. Waveshare module docs allow INT/RST NC, but AW chip RSTN internal 100k pull-down; **board reset resistor-to-net and connector physical pin 1 still unconfirmed**. Measure/verify 3.3V H8 selector and bus before joining 4-wire screen with 6-wire expander.
-3. **Controls:** candidate six-input network each P0 22k pull-up to 3.3V + 1k series to grounded switch, no hardware test. Configure P0 input early, probe address 0x58 and ID 0x23, test rotary under LVGL/Wi-Fi with initial 2–5ms polling. Choose alternative decoder only if missed steps verified.
-4. **Mechanical:** sourced LCD full **106.1×67.8** and active **95.54×54.36** dimensions; I2C connector is on **screen's right rear edge** and may conflict with right-hand encoder. Two **non-approved** trial panel envelopes **150×105** (tight I2C clearance) vs **165×110** (better room), with key/knob coordinate examples in new doc. Build dimensioned CAD/cable section and check exact owned MX switches before case approval.
-5. **Knob correction:** Adafruit PEC11 L1=15mm **includes bushing**, mechanical drawing gives **l=7.0mm bare shaft beyond threaded section** for 15mm variant. KZ0087 inserted shaft range **6.0–12.4mm** is therefore **plausible**; don't repeat earlier unconditional 15 vs 12.4 mismatch. Still verify grub-screw seating, usable bushing/nut/panel height and 0.5±0.2mm push travel.
-6. Only after electrical/CAD confirmation (or user expressly accepts test-prototype risks) assemble updated BOM; keep accepted Phase 5.2 simulator/firmware unchanged pending separate user-approved implementation.
+1. **Use the new GitHub `mechanical/` editable envelope model and [faceplate research](HARDWARE-MECHANICAL-LAYOUT-STUDY.md)**. User-approved functions and provisional parts unchanged (Waveshare 25948, Adafruit 377, Waveshare AW9523B 22132, KZ0087 knob, 3 MX keys); faceplate **165×110 mm** is only recommended trial, **not accepted manufacturing size**.
+2. **Resolve exact user's 3 MX switches/keycap build**: switch part/fixing type, plate thickness, caps height/spacing and solder lugs. Test a small printed MX mounting coupon first, not an entire case.
+3. **Resolve screen cable/case service access**: right-side I2C plug direction and bend envelope vs knob; left USB-C ports; LCD standoff/hole diameters, antenna/SD/BOOT/RESET access. Assumed 14 mm I2C corridor is not manufacturer spec. Obtain physical dimensions/board revision before a printable casing.
+4. **Resolve case depth by a genuine 3D assembly**: LCD module including connectors, AW9523B breakout on separate depth plane, MX switch housings/lead clearance, mounting boss locations, KZ0087 set-screw and axial push clearance. Current SCAD is only reference envelopes and assumes front plate 3 mm / unknown component Z heights.
+5. **Resolve electrical side separately** in `docs/HARDWARE-ELECTRICAL-REVIEW.md`: actual Waveshare AW9523B reset pull-up, connector orientation, 3.3 V bus, safe six-contact pullup/series network and encoder counts under concurrent UI + WiFi.
+6. After those gates, create an actual 3D-printed test enclosure/BOM, request user review, then only progress to ordering/firmware. **Phase 5.2 app unchanged**.
 
 ## Relevant project files (from Phase 5.2 source)
 
@@ -58,7 +58,7 @@ Updated: 2026-10-20
 - `static/ui.js`, `static/ui.css`, `static/device.js`, `static/device.css`
 - `templates/index.html`, `templates/device.html`, `templates/pair.html`
 - `tests/`, `requirements-ui.txt`, `requirements-windows.txt`
-- `docs/ROADMAP.md`, `docs/DECISIONS.md`, **`docs/DESIGN.md`**, `docs/HARDWARE.md`, **`docs/HARDWARE-SHORTLIST.md`**, **`docs/HARDWARE-PRE-PURCHASE-CHECK.md`**, **`docs/HARDWARE-ELECTRICAL-REVIEW.md`**, **`docs/HARDWARE-MECHANICAL-LAYOUT-STUDY.md`**, `docs/HARDWARE-RESEARCH.md`, `docs/HARDWARE-COMPARISON.md`, `docs/CHATGPT-WORKFLOW.md`
+- `docs/ROADMAP.md`, `docs/DECISIONS.md`, **`docs/DESIGN.md`**, **`mechanical/` (editable CAD envelope sources)**, `docs/HARDWARE.md`, **`docs/HARDWARE-SHORTLIST.md`**, **`docs/HARDWARE-PRE-PURCHASE-CHECK.md`**, **`docs/HARDWARE-ELECTRICAL-REVIEW.md`**, **`docs/HARDWARE-MECHANICAL-LAYOUT-STUDY.md`**, `docs/HARDWARE-RESEARCH.md`, `docs/HARDWARE-COMPARISON.md`, `docs/CHATGPT-WORKFLOW.md`
 - One-time import scripts: `scripts/import-phase5-2.ps1` (already run) and `scripts/archive-local-phases.ps1` (already run). Historical files: `archives/phase-zips/` and `docs/history/ARCHIVED-PHASE-ZIPS.md` (16 verified archives and their original/stored hashes).
 
 ## Recent meaningful commits
@@ -73,6 +73,7 @@ Updated: 2026-10-20
 - `bab9e96` — manufacturer PDF-based pre-purchase mechanical, voltage and input-safety checklist (documentation only).
 - `3f7d768` — manufacturer chip datasheet electrical review + preliminary protected six-input network and documented unresolved module schematic verification (docs only).
 - `e89fa20` — faceplate 150×105 vs 165×110 mechanical study, screen I2C/right-hand knob cable conflict, and manufacturer-supported 7 mm exposed encoder shaft correction (documentation only).
+- 2026-10-20 static CAD envelope milestone: source assets added under `mechanical/`; 3-page A3 PDF/SVG/DXF bundle delivered as a conversation attachment. No 3D-print manufacturing geometry or runtime tests; the latest Git source baseline remains unchanged.
 - Documentation-only commits after this checkpoint are not evidence of newer runtime implementation.
 
 ## Unresolved issues / deferred
