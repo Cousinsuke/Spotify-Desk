@@ -1,4 +1,5 @@
-# Preserve historic Spotify Desk ZIPs in Git without replacing the current source.
+# Preserve historical Spotify Desk version ZIPs, leaving the accepted root source intact.
+# Disposable Python bytecode is stripped from archive copies; originals remain untouched.
 param(
     [string]$DownloadsPath = (Join-Path $HOME 'Downloads'),
     [switch]$Publish
@@ -12,6 +13,8 @@ $ArchiveDirectory = Join-Path $Repo 'archives\phase-zips'
 $ManifestRelative = 'docs/history/ARCHIVED-PHASE-ZIPS.md'
 $ManifestPath = Join-Path $Repo 'docs\history\ARCHIVED-PHASE-ZIPS.md'
 $NamePattern = '^spotify-desk-thing-(?:ui-)?phase[0-9]+(?:-[0-9]+)*(?:-fix)?\.zip$'
+$GeneratedPattern = '(?i)(^|/)__pycache__(/|$)|\.py[co]$'
+$SensitivePattern = '(?i)(^|/)(?:\.env(?:\.[^/]*)?|\.spotify_token\.json|\.desk_config\.json(?:\.tmp)?|\.desk_devices\.json(?:\.tmp)?|\.cache(?:-[^/]*)?|\.git|\.venv|venv|id_rsa|id_ed25519|[^/]+\.(?:pem|p12|pfx))(/|$)'
 
 function Check-ExitCode([string]$Step) {
     if ($LASTEXITCODE -ne 0) { throw "$Step failed (exit code $LASTEXITCODE)." }
@@ -24,45 +27,53 @@ $Files = @(Get-ChildItem -LiteralPath $DownloadsPath -Filter 'spotify-desk-thing
     Where-Object { $_.Name -match $NamePattern } | Sort-Object Name)
 if ($Files.Count -eq 0) { throw "No Spotify Desk phase ZIPs found in $DownloadsPath" }
 
-# Scan archive contents before copying ANY files to the repository.
+# Inspect every matching ZIP *before* modifying or staging the Git repository.
 $Entries = @()
 foreach ($File in $Files) {
-    if ($File.Length -gt 25MB) {
-        throw "Archive over 25 MiB: $($File.Name). Inspect before publishing."
-    }
-    $Zip = [System.IO.Compression.ZipFile]::OpenRead($File.FullName)
+    if ($File.Length -gt 25MB) { throw "Archive over 25 MiB: $($File.Name). Inspect it manually." }
+    $SourceZip = [System.IO.Compression.ZipFile]::OpenRead($File.FullName)
+    $Skipped = 0
+    $TotalUncompressed = [long]0
     try {
-        foreach ($Entry in $Zip.Entries) {
+        foreach ($Entry in $SourceZip.Entries) {
             $Relative = $Entry.FullName.Replace('\', '/')
             if ($Relative.StartsWith('/') -or $Relative -match '(^|/)\.\.(/|$)' -or $Relative -match '^[A-Za-z]:') {
-                throw "Unsafe archive path in $($File.Name): $Relative"
+                throw "Unsafe path in $($File.Name): $Relative"
             }
-            if ($Relative -match '(?i)(^|/)(?:\.env(?:\.[^/]*)?|\.spotify_token\.json|\.desk_config\.json(?:\.tmp)?|\.desk_devices\.json(?:\.tmp)?|\.cache(?:-[^/]*)?|\.git|\.venv|venv|__pycache__|id_rsa|id_ed25519|[^/]+\.(?:pem|p12|pfx))(/|$)') {
-                throw "Possible private data in $($File.Name): $Relative. Inspect manually."
+            if ($Relative -match $SensitivePattern) {
+                throw "Possible private data in $($File.Name): $Relative. Nothing published; inspect manually."
+            }
+            if ($Relative -match $GeneratedPattern) {
+                $Skipped++
+                continue
+            }
+            $TotalUncompressed += $Entry.Length
+            if ($TotalUncompressed -gt 150MB) {
+                throw "Excessive decompressed archive size in $($File.Name); inspect manually."
             }
         }
     }
-    finally { $Zip.Dispose() }
+    finally { $SourceZip.Dispose() }
     $Entries += [pscustomobject]@{
         Name = $File.Name
         FullName = $File.FullName
-        Bytes = $File.Length
-        Hash = (Get-FileHash -LiteralPath $File.FullName -Algorithm SHA256).Hash.ToLowerInvariant()
+        OriginalBytes = $File.Length
+        OriginalHash = (Get-FileHash -LiteralPath $File.FullName -Algorithm SHA256).Hash.ToLowerInvariant()
+        Skipped = $Skipped
     }
 }
 
 Push-Location $Repo
 try {
     if ((git branch --show-current).Trim() -ne 'main') {
-        throw 'Expected the main branch; inspect the repository branch before continuing.'
+        throw 'Expected main branch; inspect the repository branch first.'
     }
     $Dirty = @(git status --porcelain)
     Check-ExitCode 'git status'
-    if ($Dirty.Count -ne 0) { throw 'Working tree is not clean. Commit or stash changes first.' }
+    if ($Dirty.Count -ne 0) { throw 'Working tree is not clean; commit/stash changes first.' }
     if (-not (Test-Path -LiteralPath (Join-Path $Repo 'device_bridge.py') -PathType Leaf)) {
-        throw 'Import the Phase 5.2 root application first with scripts/import-phase5-2.ps1 -Publish.'
+        throw 'Phase 5.2 root source missing. Run scripts/import-phase5-2.ps1 -Publish first.'
     }
-
     git pull --ff-only origin main
     Check-ExitCode 'git pull'
 
@@ -71,43 +82,88 @@ try {
 
     foreach ($Item in $Entries) {
         $Dest = Join-Path $ArchiveDirectory $Item.Name
-        if (Test-Path -LiteralPath $Dest) {
-            $ExistingHash = (Get-FileHash -LiteralPath $Dest -Algorithm SHA256).Hash.ToLowerInvariant()
-            if ($ExistingHash -ne $Item.Hash) {
-                throw "Existing archive has a different checksum: $($Item.Name). No files overwritten."
-            }
+        $Temp = Join-Path $ArchiveDirectory ($Item.Name + '.partial')
+        if (Test-Path -LiteralPath $Temp) {
+            throw "Interrupted archive exists: $Temp. Inspect/remove it before retrying."
         }
-        else { Copy-Item -LiteralPath $Item.FullName -Destination $Dest }
+        try {
+            if ($Item.Skipped -eq 0) {
+                Copy-Item -LiteralPath $Item.FullName -Destination $Temp
+            }
+            else {
+                # Rebuild the ZIP without generated bytecode, preserving all source files.
+                $SourceZip = [System.IO.Compression.ZipFile]::OpenRead($Item.FullName)
+                $DestZip = $null
+                try {
+                    $DestZip = [System.IO.Compression.ZipFile]::Open($Temp, [System.IO.Compression.ZipArchiveMode]::Create)
+                    foreach ($Entry in $SourceZip.Entries) {
+                        $Relative = $Entry.FullName.Replace('\', '/')
+                        if ($Relative -match $GeneratedPattern) { continue }
+                        $NewEntry = $DestZip.CreateEntry($Entry.FullName, [System.IO.Compression.CompressionLevel]::Optimal)
+                        $NewEntry.LastWriteTime = $Entry.LastWriteTime
+                        if ($Entry.Name.Length -eq 0) { continue }
+                        $InputStream = $Entry.Open()
+                        $OutputStream = $NewEntry.Open()
+                        try { $InputStream.CopyTo($OutputStream) }
+                        finally {
+                            $OutputStream.Dispose()
+                            $InputStream.Dispose()
+                        }
+                    }
+                }
+                finally {
+                    if ($null -ne $DestZip) { $DestZip.Dispose() }
+                    $SourceZip.Dispose()
+                }
+            }
+
+            $ArchiveHash = (Get-FileHash -LiteralPath $Temp -Algorithm SHA256).Hash.ToLowerInvariant()
+            if (Test-Path -LiteralPath $Dest -PathType Leaf) {
+                $Existing = (Get-FileHash -LiteralPath $Dest -Algorithm SHA256).Hash.ToLowerInvariant()
+                if ($Existing -ne $ArchiveHash) {
+                    throw "An archive already exists with different contents: $($Item.Name). Nothing overwritten."
+                }
+            }
+            else {
+                Move-Item -LiteralPath $Temp -Destination $Dest
+            }
+            Add-Member -InputObject $Item -NotePropertyName ArchiveHash -NotePropertyValue $ArchiveHash
+            Add-Member -InputObject $Item -NotePropertyName ArchiveBytes -NotePropertyValue (Get-Item -LiteralPath $Dest).Length
+        }
+        finally {
+            if (Test-Path -LiteralPath $Temp) { Remove-Item -LiteralPath $Temp -Force }
+        }
     }
 
     $Lines = @(
         '# Archived Spotify Desk Thing phase ZIPs',
         '',
-        'These are historical snapshots, not the current application source.',
-        'The root-level files on the active development branch are authoritative.',
+        'Historical reference snapshots only. **The root application source on the active branch is authoritative.**',
+        'The original ZIPs remain unchanged in Downloads. Repository copies omit Python caches/bytecode where present.',
         '',
-        '| ZIP archive | Bytes | SHA-256 |',
-        '| --- | ---: | --- |'
+        '| ZIP archive | GitHub bytes | GitHub SHA-256 | Original SHA-256 | Omitted generated entries |',
+        '| --- | ---: | --- | --- | ---: |'
     )
     foreach ($Item in $Entries) {
-        $Lines += "| [$($Item.Name)](../../$ArchiveRelative/$($Item.Name)) | $($Item.Bytes) | $($Item.Hash) |"
+        $Lines += "| [$($Item.Name)](../../$ArchiveRelative/$($Item.Name)) | $($Item.ArchiveBytes) | $($Item.ArchiveHash) | $($Item.OriginalHash) | $($Item.Skipped) |"
     }
     $Lines += ''
-    $Lines += '> The script checks archive file names for common credentials but cannot detect every secret embedded in file contents. Review historic archives before publishing them in a public repository.'
+    $Lines += '> The script rejects common private filenames but cannot detect secrets embedded in otherwise innocuous source code. Review historical archives before publishing in a public repository.'
     [System.IO.File]::WriteAllText($ManifestPath, (($Lines -join [Environment]::NewLine) + [Environment]::NewLine), (New-Object System.Text.UTF8Encoding($false)))
 
     Write-Host "Prepared $($Entries.Count) historical ZIPs:" -ForegroundColor Cyan
-    foreach ($Item in $Entries) { Write-Host ("  " + $Item.Name) }
+    foreach ($Item in $Entries) {
+        Write-Host ("  " + $Item.Name + " (removed generated entries: " + $Item.Skipped + ")")
+    }
 
     git add -- $ArchiveRelative $ManifestRelative
     Check-ExitCode 'git add'
     git diff --cached --check
     Check-ExitCode 'git diff --check'
-
     $Staged = @(git diff --cached --name-only)
     Check-ExitCode 'git diff --cached'
     if ($Staged.Count -eq 0) {
-        Write-Host 'Archives already match the repository.' -ForegroundColor Green
+        Write-Host 'Archives already match GitHub; nothing to commit.' -ForegroundColor Green
         return
     }
     git diff --cached --stat
@@ -119,6 +175,8 @@ try {
         Check-ExitCode 'git push'
         Write-Host 'Archived versions published to GitHub.' -ForegroundColor Green
     }
-    else { Write-Host 'Changes staged for review. Pass -Publish to commit/push.' -ForegroundColor Yellow }
+    else {
+        Write-Host 'Archives staged for review. Pass -Publish to commit and push.' -ForegroundColor Yellow
+    }
 }
 finally { Pop-Location }
