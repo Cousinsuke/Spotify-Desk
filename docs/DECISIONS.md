@@ -35,12 +35,12 @@ Store Spotify public Client ID via `--configure` in ignored `.desk_config.json`;
 ## D007 — Versioning and source-of-truth
 **Status:** Accepted direction
 
-Git main is the canonical source once imported. Use commits, tags/releases and `docs/CHANGELOG.md` for versions, **not duplicated working code folders**. For now, the separately validated Phase 5.2 ZIP remains a transitional source baseline; replace this note once committed.
+Git main is the canonical source once imported. Use commits, tags/releases and `docs/CHANGELOG.md` for versions, **not duplicated working code folders**. **Implemented source-of-truth:** accepted Phase 5.2 files imported at commit `7172c2e`; 16 prior phase ZIP snapshots archived separately at `f781506` with manifest `docs/history/ARCHIVED-PHASE-ZIPS.md`. No older ZIP replaces active root code.
 
 ## D008 — ESP32 board and firmware stack
 **Status:** Pending research
 
-ESP32-S3 and Waveshare 4.3-inch 800 × 480 are intended, but no exact board SKU, pinout, PSRAM/bus/mounting measurements, encoder connection or firmware framework has been accepted. Do not publish fictional wiring or buy lists.
+Research in [HARDWARE-RESEARCH.md](HARDWARE-RESEARCH.md) identifies **Waveshare 25948 (ESP32-S3-Touch-LCD-4.3)** as a preferred candidate (not accepted); B/C variants are alternatives. Original display uses 20 RGB GPIO signals, shared I²C GPIO8/9 and occupies addresses `0x20–0x27`, `0x30–0x3F`, `0x5D`, making common MCP23017 boards a conflict. **Proposed** TCA9539 (0x74–0x77) or ATtiny817 seesaw (0x49) for six input signals, not approved/soldered. ESP-IDF+LVGL is the preliminary firmware preference. The exact board, voltage jumper, expander module, encoder, mechanical fit and framework are still **unaccepted and untested**.
 
 ## D009 — Meaning of standalone Wi-Fi mode
 **Status:** Open
