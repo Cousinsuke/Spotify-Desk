@@ -5,8 +5,8 @@
 ## Constraints from the accepted project
 
 - Display: 4.3-inch landscape touchscreen, 800 × 480; preserve Phase 5.2 artwork/progress/album-colour glow/controls visually when porting from the browser.
-- Four existing MX switches: K1 previous, K2 play/pause, K3 next, K4 Wi-Fi/PC mode.
-- Rotary encoder: two quadrature contacts; optional push switch (not yet assigned an action).
+- **User-accepted revised controls:** three of the four owned MX switches: K1 previous, K2 play/pause, K3 next. The fourth MX is unused; the detached sketch icon was a discarded placeholder.
+- **Required push-capable rotary encoder:** quadrature A/B signals change volume; the integrated momentary **push toggles PC/Wi-Fi**. Six required logical digital inputs total (3 MX + A/B + push).
 - 2.4 GHz Wi-Fi to the existing companion/API; likely USB 5 V for the first bench/desk prototype.
 - Firmware is **not** the existing Flask/HTML/CSS/JS implementation. The ESP32 needs a separately implemented embedded display client (e.g. LVGL) and a secure protocol client. Existing audio meter originates on Windows/Omarchy, not from the screen's microphone.
 
@@ -60,18 +60,17 @@ Two *research candidates* with nonconflicting nominal addresses:
 
 Do not attempt to assign CH422G outputs already used for LCD backlight/reset as physical-key inputs. Even where a board has isolated *dry-contact* inputs (4.3B), only two are documented and electrical/interface behavior differs from an unrestricted digital input.
 
-### Provisional logical mapping for a 16-bit compatible I²C expander (NOT physical wiring)
+### Provisional six-input mapping for compatible I²C expander (NOT physical wiring)
 
 | Logical port | Intended signal | Needed |
 |---|---|---|
 | P00 | MX K1 previous | Yes |
 | P01 | MX K2 play/pause | Yes |
 | P02 | MX K3 next | Yes |
-| P03 | MX K4 PC/Wi-Fi | Yes |
-| P04 | Encoder A | Yes |
-| P05 | Encoder B | Yes |
-| P06 | Encoder push | Optional / no action selected |
-| P07–P17 | Spare | Future |
+| P03 | Encoder A | Yes |
+| P04 | Encoder B | Yes |
+| P05 | Encoder push (PC/Wi-Fi toggle) | Yes |
+| P06–P17 | Spare | Future |
 
 For the TCA9539, provide **external GPIO input bias resistors** appropriate to the circuit rather than assuming MCP23017-like software-selectable pullups; scan/debounce input states and decode quadrature transitions. A fast-rotated encoder may need a dedicated rotary decoder or smarter I²C secondary MCU if bus polling misses edges. **Do not solder from this table.**
 
@@ -100,7 +99,7 @@ Sources:
 
 1. User confirms the preferred board (25948 standard touch, or 27848 B for brightness/industrial use, or 33799 C if sound actually needed). **No purchase yet.**
 2. Download matching exact PCB revision/schematic and double-check all connector pinouts and I²C VCC selector. Do not accidentally order the no-touch 30493.
-3. Choose a physically obtainable expander/breakout at a confirmed nonconflicting address, and test whether encoder polling is smooth. Budget at least six digital inputs and common ground.
+3. Choose a physically obtainable expander/breakout at a confirmed nonconflicting address, and test whether encoder polling is smooth. Budget six digital inputs (3 keys, encoder A/B, encoder push) and common ground.
 4. Measure display PCB, visible glass, fixing-hole pitch/diameter, USB access, antenna keepout and rear clearance; then begin CAD.
 5. First device proof: ESP-IDF/LVGL display + touch, Wi-Fi connection, basic text/status, input events. Only then integrate artwork caching, glow, pairing/security.
 6. Review credentials/secure provisioning and define "Wi-Fi-only without PC" as *Spotify Connect remote control* versus local playback; no assumption that MCU decodes protected Spotify audio.
