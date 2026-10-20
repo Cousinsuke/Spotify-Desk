@@ -8,9 +8,9 @@ Record accepted direction, rationale and alternatives. Proposed decisions must s
 Develop and test Windows/Omarchy player and a browser simulator **before** buying the display, controller or enclosure components. Reduces risk of incompatible hardware.
 
 ## D002 — Target interaction design
-**Status:** Accepted direction
+**Status:** Accepted direction, revised preferred mockup; final physical design pending
 
-800 × 480 touchscreen; 4 MX mechanical keys: previous, play/pause, next and PC/Wi-Fi mode; rotary encoder for volume. Preserve the established player artwork, album-reactive glow, progress and speaker/volume UI. Exact physical locations are not finalized.
+800 × 480 touchscreen; **revised preferred physical layout (2026-10-20): three MX keys** (previous, play/pause, next) below screen plus **~18 mm volume knob** at right. Proposed secondary **touch UI** handles PC/Wi-Fi mode, shuffle, repeat and settings instead of a fourth dedicated MX key. Sketch uses ~0.71 in (18 mm) square keycaps. The fourth owned MX switch is currently unused. Preserve established browser artwork/glow/progress and speaker/volume UI. **Concept-level preference only**; case geometry, mounting holes, component selection and firmware not yet approved. Phase 5.2 still contains 4 simulator keys: do not silently rewrite completed software.
 
 ## D003 — Cross-platform companion
 **Status:** Accepted
