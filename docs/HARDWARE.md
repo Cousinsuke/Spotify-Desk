@@ -1,15 +1,15 @@
 # Hardware — researched candidates, no approved wiring
 
-**No final purchased bill of materials, electrical wiring/schematic or hardware runtime result has been accepted.** A **proposed exact first-prototype parts list** with UK examples and conditional alternatives is in [HARDWARE-SHORTLIST.md](HARDWARE-SHORTLIST.md). Manufacturer-based technical research is available in **[HARDWARE-RESEARCH.md](HARDWARE-RESEARCH.md)** and the [model/expander comparison](HARDWARE-COMPARISON.md) (2026-10-20).
+**No final purchased bill of materials, electrical wiring/schematic or hardware runtime result has been accepted.** User has chosen **proposed parts for detailed verification**, not ordered them: Waveshare touch SKU **25948**, Adafruit push encoder **PID 377**, Waveshare AW9523B expansion **SKU 22132**. Read [PRE-PURCHASE verification](HARDWARE-PRE-PURCHASE-CHECK.md) (voltage, module connector, reset, startup outputs, case clearances) before wiring/printing. The earlier costed proposals are in [HARDWARE-SHORTLIST.md](HARDWARE-SHORTLIST.md). Manufacturer-based technical research is available in **[HARDWARE-RESEARCH.md](HARDWARE-RESEARCH.md)** and the [model/expander comparison](HARDWARE-COMPARISON.md) (2026-10-20).
 
 ## Intended parts
 
 | Part | Current direction | Status |
 |---|---|---|
 | MCU | ESP32-S3 integrated with Waveshare touch display | Candidate — exact Waveshare screen variant not yet user-accepted |
-| Screen | Waveshare `ESP32-S3-Touch-LCD-4.3`, **SKU 25948** (capacitive touch) | **Preferred research candidate**, not yet user-selected; B/C alternate boards documented separately |
+| Screen | Waveshare `ESP32-S3-Touch-LCD-4.3`, **SKU 25948** (capacitive touch) | **User-selected provisional part for verification; not ordered**. Manufacturer 106.1×67.8 mm full module, ~98×60 mm mount centres |
 | Keys | **Three** of the user's four owned MX-style mechanical switches — Previous / Play-Pause / Next | Preferred mockup; 0.71 in (~18 mm) keycaps, switch mounting/spacing and wiring TBD |
-| Knob | **Push-capable** encoder; proposed Adafruit **PID 377**, 24 detents and 6 mm D shaft, includes a knob | Turn adjusts volume; **press toggles PC/Wi-Fi**. Exact purchased model and 18 mm knob fit not accepted |
+| Knob | Adafruit **PID 377** push encoder, 24 detents, 6 mm D shaft, supplied ~16 mm family-drawing knob | **User-selected provisional part, not ordered**; ~13.2 mm body, M7×0.75 bushing; pressing toggles PC/Wi-Fi. Actual fit not tested |
 | Case | 3D-printed | CAD/dimensions TBD |
 | Power | USB-powered prototype preferred for simplicity | Electrical choice TBD |
 
@@ -19,7 +19,7 @@ Three physical MX keys under the touchscreen and a rotary volume knob to its rig
 
 ## Proposed simplest input module
 
-Waveshare **AW9523B IO Expansion Board SKU 22132**, about 38×23 mm, I²C address nominal 0x58, example UK £4.80, uses **six externally biased input signals** (3 MX, A/B, encoder push). A 5752 Adafruit QUAD encoder module with a real encoder counter is a more experimental alternative. Neither is purchased, nor verified against actual board wiring. See [parts shortlist](HARDWARE-SHORTLIST.md).
+User-selected provisional Waveshare **AW9523B IO Expansion Board SKU 22132**, about 38×23 mm, I²C address nominal 0x58, example UK £4.80, uses **six externally biased input signals** (3 MX, A/B, encoder push). A 5752 Adafruit QUAD encoder module with a real encoder counter is a more experimental alternative. Neither is purchased or wired. **AW9523B's GPIO default to output at boot; startup current-limiting/protection needs review**. Display 4-pin I²C and expander 6-pin cable do not mate directly. Open electrical/mechanical risks are documented in [HARDWARE-PRE-PURCHASE-CHECK.md](HARDWARE-PRE-PURCHASE-CHECK.md). See [parts shortlist](HARDWARE-SHORTLIST.md).
 
 ## Critical researched constraint
 
