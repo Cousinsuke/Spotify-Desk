@@ -16,8 +16,8 @@ Updated: 2026-10-20
 ## Current project phase vs current actual work
 
 - **Current project phase:** Phase 6 — hardware research, compatibility decisions and first firmware design (**planned, not implemented**)
-- **Current actual work:** Phase 6 **electrical schematic/boot review** of provisional **Waveshare touchscreen SKU 25948 + Adafruit push encoder 377 + Waveshare AW9523B expansion SKU 22132**, with provisional KZ0087 knob. AW9523B silicon datasheet confirmed initial GPIO outputs, 0x58 address / default P0 open-drain LOW, 0x04 input configuration and **internal RESET pull-down**. Conditional 22k pull-up + 1k series-to-contact network devised for six inputs. **Full Waveshare module schematic unavailable to visually trace, so board reset pull-up, pin orientation and level shifter are not signed off**. No physical test or purchase.
-- **Status:** Phase 5.2 software unchanged at `7172c2e`. Detailed electrical evidence and unresolved risks now recorded in **docs/HARDWARE-ELECTRICAL-REVIEW.md**; earlier mechanical measurements remain in **docs/HARDWARE-PRE-PURCHASE-CHECK.md**. Confirmed chip data: **GPIO reset as outputs**, with 0x58/AD0=AD1=0 **P0 low open-drain**; **RSTN internal 100k pulldown** needs external circuit. Example protected input network mathematically calculated only; no physical/board schematic approval. KZ0087 flat aluminium cap is provisional, not fitted. No purchased hardware.
+- **Current actual work:** Phase 6 continuation: **indexed Waveshare module schematic** partially reveals H3/H4 6-pin order, R1–R4 10k, R5/R6 NC and address jumpers, but graphical RESET-net tracing still blocked. **Awinic 2024 v2.4 datasheet** re-confirms output-at-boot and internal reset pull-down. New manufacturer-based **faceplate study** offers 150×105 and 165×110 mm trial envelopes, documenting the right-edge I2C connector and knob cable conflict. Crucial dimensional correction: Bourns 377 drawing L1=15mm includes bushing; **l=7mm bare shaft beyond bushing** fits **KZ0087 6–12.4mm insertion range on paper**. No hardware ordered, connected or runtime-tested.
+- **Status:** Phase 5.2 source unchanged at `7172c2e`. Expanded docs: **HARDWARE-ELECTRICAL-REVIEW.md** + **HARDWARE-MECHANICAL-LAYOUT-STUDY.md** + prior **HARDWARE-PRE-PURCHASE-CHECK.md**. Module indexed schematic gives component values but not visually verified RESET net, and chip internal RSTN pull-down must be countered by module-level drive/pullup. Nominal 3.3 V 22k+1k input network mathematically checked only. 165×110 mm comfortable faceplate trial, **not approved CAD**. KZ0087/377 shaft fit now more plausible from l=7mm datum, **not physically verified**.
 
 ## Last accepted work
 
@@ -44,12 +44,12 @@ Updated: 2026-10-20
 
 ## Current next action
 
-1. **Read docs/HARDWARE-ELECTRICAL-REVIEW.md** first. Current proposed trio **Waveshare 25948 touch + Adafruit PID 377 push encoder + Waveshare AW9523B SKU 22132**, provisional **KZ0087** cosmetic knob, controls 3 MX + A/B + press (**six** contacts).
-2. **Electrical verification blocker:** obtain **full viewable Waveshare AW9523B 22132 module schematic** and trace RESET pull-up, AD0/AD1 selection, I²C voltage/pullups, connector physical pin 1 and 6-pin routing. Manufacturer Wiki says RST/INT *may be left NC* on its module, but AW9523B **chip RSTN has internal 100k pull-down** and therefore requires a board-level pull-up/drive. Indexed PDF text suggests 10k resistors, **not sufficient to certify connectivity**.
-3. Use external I²C **3.3V** selected at screen H8; the screen has four-wire I²C, expander six-wire PH2.0. Draft 3.3V/GND/SDA/SCL adapter and physically verify orientation and voltage before powered connection. Nominal expander address 0x58 avoids documented 0x20–0x27, 0x30–0x3F, 0x5D devices; confirm with actual I²C scan.
-4. Six switches/encoder contacts on P0_0..P0_5: **proposed** 22kΩ external 3.3V pull-up at GPIO node plus 1kΩ series between node and grounded contact. Predicted LOW ~0.143V vs chip VIL max 0.4V, accidental HIGH-to-ground ~3.3mA, but **no physical electrical approval**. Software must set P0 to inputs (config 0x04), and test encoder step loss under LCD+Wi-Fi load.
-5. Fit/layout blocker remains: LCD full 106.1×67.8 mm, three 18mm MX keys and 15.1mm KZ0087 knob plus push encoder must fit behind faceplate. KZ0087 depth 12.4mm maximum versus nominal 15mm encoder shaft means test visible protrusion/grub screw/push travel before case build.
-6. Update prototype BOM only after safe module circuit is verified and/or residual first-prototype risks are explicitly accepted. **Do not modify accepted Phase 5.2 app until a separate implementation task.**
+1. **Read docs/HARDWARE-MECHANICAL-LAYOUT-STUDY.md and docs/HARDWARE-ELECTRICAL-REVIEW.md**. User-selected provisional Waveshare 25948 touch + Adafruit 377 push encoder + WAV AW9523B 22132, plus KZ0087-01 black aluminium knob, 3 MX keys. No purchases or physical tests.
+2. **Electrical:** Indexed Waveshare AW9523B module PDF reveals R1–R4 10k, JP1/JP2 0R, H3/H4 6-pin labels VCC/GND/SDA/SCL/INT/RESET; full layout diagram blocked by bot gate. Waveshare module docs allow INT/RST NC, but AW chip RSTN internal 100k pull-down; **board reset resistor-to-net and connector physical pin 1 still unconfirmed**. Measure/verify 3.3V H8 selector and bus before joining 4-wire screen with 6-wire expander.
+3. **Controls:** candidate six-input network each P0 22k pull-up to 3.3V + 1k series to grounded switch, no hardware test. Configure P0 input early, probe address 0x58 and ID 0x23, test rotary under LVGL/Wi-Fi with initial 2–5ms polling. Choose alternative decoder only if missed steps verified.
+4. **Mechanical:** sourced LCD full **106.1×67.8** and active **95.54×54.36** dimensions; I2C connector is on **screen's right rear edge** and may conflict with right-hand encoder. Two **non-approved** trial panel envelopes **150×105** (tight I2C clearance) vs **165×110** (better room), with key/knob coordinate examples in new doc. Build dimensioned CAD/cable section and check exact owned MX switches before case approval.
+5. **Knob correction:** Adafruit PEC11 L1=15mm **includes bushing**, mechanical drawing gives **l=7.0mm bare shaft beyond threaded section** for 15mm variant. KZ0087 inserted shaft range **6.0–12.4mm** is therefore **plausible**; don't repeat earlier unconditional 15 vs 12.4 mismatch. Still verify grub-screw seating, usable bushing/nut/panel height and 0.5±0.2mm push travel.
+6. Only after electrical/CAD confirmation (or user expressly accepts test-prototype risks) assemble updated BOM; keep accepted Phase 5.2 simulator/firmware unchanged pending separate user-approved implementation.
 
 ## Relevant project files (from Phase 5.2 source)
 
@@ -58,7 +58,7 @@ Updated: 2026-10-20
 - `static/ui.js`, `static/ui.css`, `static/device.js`, `static/device.css`
 - `templates/index.html`, `templates/device.html`, `templates/pair.html`
 - `tests/`, `requirements-ui.txt`, `requirements-windows.txt`
-- `docs/ROADMAP.md`, `docs/DECISIONS.md`, **`docs/DESIGN.md`**, `docs/HARDWARE.md`, **`docs/HARDWARE-SHORTLIST.md`**, **`docs/HARDWARE-PRE-PURCHASE-CHECK.md`**, **`docs/HARDWARE-ELECTRICAL-REVIEW.md`**, `docs/HARDWARE-RESEARCH.md`, `docs/HARDWARE-COMPARISON.md`, `docs/CHATGPT-WORKFLOW.md`
+- `docs/ROADMAP.md`, `docs/DECISIONS.md`, **`docs/DESIGN.md`**, `docs/HARDWARE.md`, **`docs/HARDWARE-SHORTLIST.md`**, **`docs/HARDWARE-PRE-PURCHASE-CHECK.md`**, **`docs/HARDWARE-ELECTRICAL-REVIEW.md`**, **`docs/HARDWARE-MECHANICAL-LAYOUT-STUDY.md`**, `docs/HARDWARE-RESEARCH.md`, `docs/HARDWARE-COMPARISON.md`, `docs/CHATGPT-WORKFLOW.md`
 - One-time import scripts: `scripts/import-phase5-2.ps1` (already run) and `scripts/archive-local-phases.ps1` (already run). Historical files: `archives/phase-zips/` and `docs/history/ARCHIVED-PHASE-ZIPS.md` (16 verified archives and their original/stored hashes).
 
 ## Recent meaningful commits
@@ -72,6 +72,7 @@ Updated: 2026-10-20
 - `cc6c4b6` — proposed SKU-specific Waveshare / encoder / AW9523B parts shortlist and UK price estimates (documentation only).
 - `bab9e96` — manufacturer PDF-based pre-purchase mechanical, voltage and input-safety checklist (documentation only).
 - `3f7d768` — manufacturer chip datasheet electrical review + preliminary protected six-input network and documented unresolved module schematic verification (docs only).
+- `e89fa20` — faceplate 150×105 vs 165×110 mechanical study, screen I2C/right-hand knob cable conflict, and manufacturer-supported 7 mm exposed encoder shaft correction (documentation only).
 - Documentation-only commits after this checkpoint are not evidence of newer runtime implementation.
 
 ## Unresolved issues / deferred
