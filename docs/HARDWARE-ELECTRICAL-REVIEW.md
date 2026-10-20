@@ -72,3 +72,33 @@ Do **not** assert that Waveshare's RESET is safely pulled up without validating 
 | Hardware procurement | **Not authorized** | Finish module schematic verification and CAD clearance or explicitly accept prototype residual risks |
 
 **Bottom line:** The proposed trio is viable and shares suitable control-voltage and bus specs. The real outstanding work is **Waveshare module schematic/reset/pin-1 proof**, then physical resistor/bus/encoder validation. The circuit above is **an engineered proposal only**, not guaranteed safe instructions for directly hooking up boards sight unseen.
+
+## F. Continued research — module schematic index, newer chip datasheet and connector caveats (2026-10-20)
+
+**NEW SOURCE:** A web-indexed *copy of the exact Waveshare board schematic PDF* provides more net names than the product datasheet, although the PDF server displays an anti-bot gate and its **graphical wiring was not visually accessible**. Indexed extracted text identifies:
+- Chip U1 **AW9523B**, H3/H4 **six-pin duplicated external interfaces** with terminal labels in listed order: **VCC, GND, SDA, SCL, INT, RESET** (corresponding H3/H4 connectors). **Physical plug orientation and pin-1 marking still must be checked on PCB before wiring.**
+- **R1, R2, R3, R4 = 10 kΩ**; R5 and R6 **not populated (NC)**; **JP1/JP2 = 0 Ω** address pads; C2 **100 nF**. The search-extracted netlist places R1/R2 on **VCC** and a RESET label nearby, strongly supporting *some onboard reset/pullup network*, but the exact **which-resistor-to-which-net** graph still cannot be certified from text extraction alone.
+- The indexed schematic footer misleadingly says **MCP23017 IO Expansion Board** even though U1 is AW9523B. Treat the component and silkscreen details as board-version-specific and inspect shipped revision; do not substitute an MCP23017 breakout merely from document footer.
+- Waveshare's own **product/wiki examples explicitly allow INT/RST NC** on the module's 6-pin external harness. This is stronger module-level evidence of autonomous reset behavior than the silicon datasheet alone, but does not conclusively prove the precise RST pull-up resistor topology.
+
+Exact indexed manufacturer PDF: https://www.waveshare.net/w/upload/2/28/AW9523B_IO_Expansion_Board_SCH.pdf
+Manufacturer file-list page: https://www.waveshare.com/wiki/File:AW9523B_IO_Expansion_Board_SCH.pdf
+Official board product: https://www.waveshare.com/product/aw9523b-io-expansion-board.htm
+Board wiring guide: https://www.waveshare.com/wiki/AW9523B_IO_Expansion_Board
+
+**NEW CHIP DOCUMENT:** Awinic's **March 2024 v2.4 AW9523B datasheet** (newer than Waveshare's archived 2019 v1.5) reconfirms the default 16 GPIO **outputs**, port P0 **open-drain**, RSTN **internal 100 kΩ pull-down**, input **VIL max 0.4 V / VIH min 1.4 V**, and the standard port-control register addresses. The previously proposed 22k/1k contact-bias calculation still meets these *nominal* chip thresholds at 3.3 V. The new datasheet does **not** validate assembled module resistors, startup timing, EMI, switch bounce or hardware rotary counting.
+
+Chip v2.4: https://doc.awinic.com/doc/202403/deffbf3b-7e7b-4ff6-8e91-fd85e2d845d5.pdf
+
+**Important screen-side condition:** the Waveshare screen schematic's I2C connector H7 and voltage jumper H8 show the external 4-signal order **VCC/GND/SDA/SCL** by labels. H8 default diagram indicates 3V3, but measure it and SDA/SCL logic before connection. Screen PCB **I2C connector is on the right edge**, where the chosen encoder would sit. Check physical plug exit and routing rather than assuming clearance from front view.
+Screen schematic page 1 plus geometry page 3: https://files.waveshare.com/wiki/ESP32-S3-Touch-LCD-4.3/manual/ESP32-S3-Touch-LCD-4.3-Sch.pdf
+
+### More precise first hardware bring-up gate
+
+1. With **nothing connected to I2C**, power the exact Waveshare 25948 and record H8 setting plus voltage of I2C VCC and idle SDA/SCL relative to GND. Power from a suitable 5 V USB source.
+2. Before joining two modules, read printed pin labels and verify both supplied 4-pin and 6-pin harness conductors using a multimeter/continuity check, **not wire colors**. Only the four *named* signals VCC, GND, SDA, SCL will be joined after 3.3V verification; leave INT/RST unused only if actual board confirms autonomous reset.
+3. Verify expander **VCC to RESET level** with a high-impedance meter during isolated power-up, or inspect board traces/schematic properly; confirm device acknowledges address **0x58** and returns expected ID **0x23**. If it remains in reset, **do not connect directly to ESP32 GPIO without reviewing reset circuit**.
+4. Only after expander register test, separately test protected switch inputs and quadrature tracking. No hardwired 6-input contact harness approved yet.
+5. Simultaneously test LCD, touch and Wi-Fi while polling A/B at provisional **2–5 ms** intervals; rotary contact bounce can itself be up to **5 ms** per Bourns PEC11 datasheet. Count detents vs observed volume steps; if unreliable, consider dedicated seesaw decoder.
+
+**No soldering recipe was signed off.** Missing proof is now narrowed to the exact H3/H4 orientation, actual RESET pull-up circuit/module PCB revision, 3.3V measurement, and real encoder edge retention; manufacturer materials otherwise support the architecture. Pair with [the mechanical fit study](HARDWARE-MECHANICAL-LAYOUT-STUDY.md).
