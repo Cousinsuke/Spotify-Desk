@@ -1,21 +1,25 @@
 # Hardware — researched candidates, no approved wiring
 
-**No final bill of materials, purchase or wiring/schematic has been accepted.** Manufacturer-based technical research is available in **[HARDWARE-RESEARCH.md](HARDWARE-RESEARCH.md)** and the [model/expander comparison](HARDWARE-COMPARISON.md) (2026-10-20).
+**No final purchased bill of materials, electrical wiring/schematic or hardware runtime result has been accepted.** A **proposed exact first-prototype parts list** with UK examples and conditional alternatives is in [HARDWARE-SHORTLIST.md](HARDWARE-SHORTLIST.md). Manufacturer-based technical research is available in **[HARDWARE-RESEARCH.md](HARDWARE-RESEARCH.md)** and the [model/expander comparison](HARDWARE-COMPARISON.md) (2026-10-20).
 
 ## Intended parts
 
 | Part | Current direction | Status |
 |---|---|---|
-| MCU | ESP32-S3 | Candidate |
+| MCU | ESP32-S3 integrated with Waveshare touch display | Candidate — exact Waveshare screen variant not yet user-accepted |
 | Screen | Waveshare `ESP32-S3-Touch-LCD-4.3`, **SKU 25948** (capacitive touch) | **Preferred research candidate**, not yet user-selected; B/C alternate boards documented separately |
 | Keys | **Three** of the user's four owned MX-style mechanical switches — Previous / Play-Pause / Next | Preferred mockup; 0.71 in (~18 mm) keycaps, switch mounting/spacing and wiring TBD |
-| Knob | **Push-capable** rotary encoder and ~18 mm outside-diameter knob right of display | Turn adjusts volume; **press toggles PC/Wi-Fi**. Encoder model/shaft/panel hole TBD |
+| Knob | **Push-capable** encoder; proposed Adafruit **PID 377**, 24 detents and 6 mm D shaft, includes a knob | Turn adjusts volume; **press toggles PC/Wi-Fi**. Exact purchased model and 18 mm knob fit not accepted |
 | Case | 3D-printed | CAD/dimensions TBD |
 | Power | USB-powered prototype preferred for simplicity | Electrical choice TBD |
 
 ## Revised front-panel concept (2026-10-20)
 
 Three physical MX keys under the touchscreen and a rotary volume knob to its right. **Encoder press toggles PC/Wi-Fi mode.** Shuffle, repeat, settings and optionally PC/Wi-Fi remain touchscreen actions. The detached fourth-key icon was only a placeholder: **no fourth MX switch**. Required signals are **six**: three MX contacts, two encoder quadrature contacts (A/B), and its momentary push contact. See [DESIGN.md](DESIGN.md) for the tentative 0.71 in dimensions and mechanical checks. Earlier expander research assumed four keys; it remains useful but should not be mistaken for a finalized six-input requirement.
+
+## Proposed simplest input module
+
+Waveshare **AW9523B IO Expansion Board SKU 22132**, about 38×23 mm, I²C address nominal 0x58, example UK £4.80, uses **six externally biased input signals** (3 MX, A/B, encoder push). A 5752 Adafruit QUAD encoder module with a real encoder counter is a more experimental alternative. Neither is purchased, nor verified against actual board wiring. See [parts shortlist](HARDWARE-SHORTLIST.md).
 
 ## Critical researched constraint
 
