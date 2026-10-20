@@ -11,26 +11,24 @@
 - Loading/skip artwork feedback should be optimistic but reconcile with actual media state.
 - Reuse the established `ui.css` design when creating physical-device or simulator variants. Phase 5.0 diverged and Phase 5.1 restored parity; protect that regression fix.
 
-## Physical controls — revised preferred mockup (2026-10-20)
+## Physical controls — user-accepted mapping (2026-10-20)
 
-The user's revised approximately 1:1-scale sketch **prefers three physical MX keys beneath the touchscreen plus a rotary knob to the right**. This supersedes the earlier *four-physical-key* hardware concept. Do not modify the accepted Phase 5.2 four-key **software simulator** until the user requests a UI/protocol update.
+The revised approximately 1:1-scale sketch establishes **three physical MX keys below the touchscreen** and an **approximately 18 mm diameter rotary knob to the right**. The encoder must have an **integrated momentary push switch**. Pressing the knob replaces the discarded fourth MX mode key. The detached refresh symbol in the sketch was only a placeholder and is **not part of the enclosure**.
 
-| Physical control | Preferred action | Front-panel size from sketch |
+| Control | Accepted action | Preliminary size |
 |---|---|---|
-| K1 | Previous track | 0.71 in / ~18 mm square 1u-style keycap |
-| K2 | Play/Pause | 0.71 in / ~18 mm square 1u-style keycap |
-| K3 | Next track | 0.71 in / ~18 mm square 1u-style keycap |
-| Rotary knob | Adjust volume | 0.71 in / ~18 mm knob diameter |
-| Rotary push (if fitted) | Undecided | Not counted as a fourth key |
-| Touchscreen | PC/Wi-Fi mode, shuffle, repeat, settings and other secondary actions | No independent physical switch specified for these |
+| K1 (MX) | Previous track | 0.71 in / ~18 mm keycap |
+| K2 (MX) | Play/Pause | 0.71 in / ~18 mm keycap |
+| K3 (MX) | Next track | 0.71 in / ~18 mm keycap |
+| Encoder clockwise/counterclockwise | Volume up/down | ~18 mm knob outside diameter |
+| **Encoder push** | **Toggle PC / Wi-Fi mode** | Built-in momentary push, no fourth MX switch |
+| Touchscreen | Shuffle, repeat, settings, player and optional mode switch | 4.3 in active diagonal |
 
-The isolated refresh/mode-like icon drawn to the **right of the case outline** is not counted as a fourth confirmed hardware button; its intended role/location requires clarification before CAD.
+**Electrical input count:** 3 MX switch inputs + 2 rotary quadrature signals (A/B) + 1 encoder press = **six logical digital inputs**, plus a common ground. The input breakout and precise GPIO assignments are **not selected**. An encoder without an integrated push switch will **not meet the agreed control mapping**.
 
-**Mechanical caution:** an 18 mm square keycap is **not** an 18 mm square switch mounting cut-out; common MX plate cut-outs are about 14×14 mm (validate the exact switch model and plate). Standard 1u pitch is 19.05 mm centre-to-centre; this mockup has more clearance, subject to final CAD. 18 mm knob is its **outside diameter**, not an encoder mounting hole or shaft diameter. Check underside switch/PCB depth, encoder nut/washer/rotation clearance and wiring.
+**Mechanical caution:** 18 mm keycaps are not 18 mm mounting holes; common MX plate cutouts are ~14×14 mm (verify exact switches) and standard 1u key pitch is 19.05 mm. An 18 mm knob diameter is not its shaft/panel hole size. Check encoder shaft format, push travel, available depth, nut/washer, switch spacing and PCB clearance. The Waveshare 4.3-in diagonal is not the complete module: the candidate original touch board is ~106.1×67.8 mm and requires clearance behind the faceplate.
 
-The **4.3-inch diagonal** refers to the active glass/display, not the complete WaveShare module; the candidate original board is ~106.1 × 67.8 mm. The diagram is a **concept sketch, not a validated machinable drawing**: the PCB, display connector, mounting holes, Wi-Fi antenna keepout, case walls and keys/encoder may conflict internally. Verify exact dimensions/revision before cutting or printing.
-
-No firmware/hardware pinout, 3D-print case, purchase or physical validation has been accepted.
+**Acceptance scope:** button *functions and approximate face layout* are confirmed by the user. No part number, wiring diagram, final CAD, purchase, firmware or physical runtime result has been accepted. The existing Phase 5.2 four-key browser simulator remains **unchanged** pending a separate focused adaptation.
 
 ## Screen states to design for firmware
 
