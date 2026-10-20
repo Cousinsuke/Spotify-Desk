@@ -1,6 +1,6 @@
 # Phase 6 — Pre-purchase electrical and mechanical verification
 
-**Date:** 2026-10-20. **Status:** Manufacturer document check + preliminary enclosure fit assessment. **Further chip/boot safety findings and provisional six-input resistor network are now in [HARDWARE-ELECTRICAL-REVIEW.md](HARDWARE-ELECTRICAL-REVIEW.md).** **No real device or wiring was tested**; no purchases authorized or final circuit verified. User has explicitly chosen these *proposed* parts for further checks (not yet bought):
+**Date:** 2026-10-20. **Status:** Manufacturer document check + preliminary enclosure fit assessment. **Extended faceplate/cable fit and corrected Bourns shaft dimensions are in [HARDWARE-MECHANICAL-LAYOUT-STUDY.md](HARDWARE-MECHANICAL-LAYOUT-STUDY.md).** **Further chip/boot safety findings and provisional six-input resistor network are now in [HARDWARE-ELECTRICAL-REVIEW.md](HARDWARE-ELECTRICAL-REVIEW.md).** **No real device or wiring was tested**; no purchases authorized or final circuit verified. User has explicitly chosen these *proposed* parts for further checks (not yet bought):
 
 1. Waveshare **ESP32-S3-Touch-LCD-4.3 / SKU 25948**, **WITH capacitive touch** (do not substitute no-touch SKU 30493).
 2. Adafruit **Rotary Encoder + Extras / PID 377** (physical rotary plus integral normally-open press).
@@ -83,7 +83,7 @@ Manufacturer:
 Adafruit 377 includes **24-detent / 24-pulse mechanical encoder** and a **separate normally-open momentary switch**. Encoder pins **A, C(common), B** plus two push-switch contacts = **five external signal terminals**; together with three MX keys this is six logical sensed inputs plus ground returns. The kit contains nut, washer and soft-touch knob.
 
 Adafruit lists **PEC11-4215F-S24** datasheet. Decoding the Bourns PEC11 code:
-- **L1 shaft length 15 mm**, **6 mm D-flat** shaft, **M7 × 0.75 threaded mounting bushing**.
+- **L1 shaft length 15 mm**, **6 mm D-flat** shaft, **M7 × 0.75 threaded mounting bushing**. Importantly, the Bourns dimensional drawing also gives **l = 7.0 mm**, the bare shaft past the bushing end, for L1=15 mm; this is the pertinent insertion comparison with KZ0087's 6.0–12.4 mm shaft bore, not the full 15 mm L1 code.
 - **Encoder body around 13.2 × 13.2 mm** (see mechanical drawing; PCB/side terminals extend farther).
 - Momentary switch travel **0.5 ± 0.2 mm**. Don't allow the 3D-printed faceplate or knob to bottom out before activation; require axial clearance.
 - Separate push switch is **normally open**; design click debounce and distinguish from rotation to avoid accidental volume change on mode press.
