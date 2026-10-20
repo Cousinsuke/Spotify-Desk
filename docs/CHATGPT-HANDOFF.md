@@ -8,24 +8,25 @@ Updated: 2026-10-20
 
 - Repository: `Cousinsuke/Spotify-Desk`
 - Default / current development branch: `main` (no alternate development branch established yet)
-- Last source baseline: **Phase 5.2** ZIP from the working conversation, **not yet imported into this newly initialized repository** at the time of this handoff
-- Latest implementation checkpoint: **not yet recorded in Git**; do not misidentify a documentation-only commit as the Phase 5.2 source checkpoint
-- Handoff status: newly bootstrapped; update after importing source, and after each meaningful task/acceptance
+- Last source baseline: **Phase 5.2** source imported into `main` from checksum-checked ZIP; actual GitHub commit verified
+- Latest implementation checkpoint: **`7172c2ee2f285253507b13c71acb7072adc04067`** (`feat: import accepted Phase 5.2 desktop and simulator baseline`, source commit). Later docs/script commits are not a newer application version.
+- Handoff status: current after source import. Historical ZIP archival is not yet verified; a safety fix to `scripts/archive-local-phases.ps1` is committed awaiting user execution.
 - GitHub access: connected read/write access was confirmed at bootstrap; verify access in future conversations
 
 ## Current project phase vs current actual work
 
 - **Current project phase:** Phase 6 — hardware research, compatibility decisions and first firmware design (**planned, not implemented**)
-- **Current actual work:** ad-hoc repository bootstrap and importing accepted source plus historical ZIP archives from Windows Downloads
-- **Status:** documentation and import helpers committed. Phase 5.2 root source and historical ZIPs require a one-time local PowerShell import; do not claim GitHub contains them until their files are committed and checked.
+- **Current actual work:** ad-hoc historical ZIP archive import recovery; first run blocked on generated `__pycache__` entry.
+- **Status:** Phase 5.2 active source successfully imported/pushed and verified on GitHub. Archive script updated to omit generated Python cache entries in copied ZIPs, with checksum manifest; rerun on Windows and verify the archive commit. This is a script-only fix, not a new software phase.
 
 ## Last accepted work
 
+- **Most recent validated repository task:** Phase 5.2 root source import from Windows, pushed as `7172c2e` and verified on GitHub; historical archive import remains pending.
 - **Most recent accepted:** Phase 5.2 device/PC artwork reliability fix on **Omarchy**; user confirmed the fix worked and ran **39 Python tests**, all passing.
 - Previous accepted: Phase 4.2 Windows and Omarchy volume sync; Windows companion play/pause, album art, sound-level stream; Phase 5 pairing and simulator UI were demonstrated, then polished.
 - **Do not assume:** Phase 5.2 has been individually runtime-validated on Windows after the last patch; earlier Windows platform validation is real but older.
 
-## Implemented in accepted source archive (Phase 5.2)
+## Implemented in current checked-in Phase 5.2 source
 
 - Flask + Spotipy PKCE Spotify Wi-Fi mode at `/`, OAuth redirect on localhost.
 - PC mode: Windows media-session adapter or Linux playerctl/MPRIS adapter; WASAPI/PipeWire audio level sampling, SSE for the glow.
@@ -42,10 +43,10 @@ Updated: 2026-10-20
 
 ## Current next action
 
-1. **Import complete Phase 5.2 source tree** into this repository, excluding local secrets, caches and credentials.
-2. Preserve older named phase ZIPs using `scripts/archive-local-phases.ps1 -Publish` into `archives/phase-zips/` (historical reference only). Run tests from the repository on Windows and Omarchy and confirm `/device` plus PC/Wi-Fi modes.
-3. Refresh `Latest implementation checkpoint` to the actual source commit SHA.
-4. Begin Phase 6 hardware selection only when repository/code state has been confirmed.
+1. **Rerun historical ZIP archive script** on Windows after `git pull --ff-only origin main`: `scripts/archive-local-phases.ps1 -DownloadsPath $HOME\Downloads -Publish`. It now removes only generated Python caches/bytecode from GitHub archive copies; aborts on potential secret filenames.
+2. Verify `archives/phase-zips/` and `docs/history/ARCHIVED-PHASE-ZIPS.md` are committed; note original/archive hash differences for sanitized files.
+3. Run tests from current checked-in source on Windows and Omarchy (existing ZIP-based Omarchy run reported 39 passing), revalidate the simulator on Windows as appropriate.
+4. Then begin Phase 6 hardware selection; hardware remains unpurchased/unimplemented.
 
 ## Relevant project files (from Phase 5.2 source)
 
@@ -55,7 +56,7 @@ Updated: 2026-10-20
 - `templates/index.html`, `templates/device.html`, `templates/pair.html`
 - `tests/`, `requirements-ui.txt`, `requirements-windows.txt`
 - `docs/ROADMAP.md`, `docs/DECISIONS.md`, `docs/HARDWARE.md`, `docs/CHATGPT-WORKFLOW.md`
-- One-time import scripts: `scripts/import-phase5-2.ps1` (checksum-checked active source) and `scripts/archive-local-phases.ps1` (older ZIP snapshots, records hashes)
+- One-time import scripts: `scripts/import-phase5-2.ps1` (already run) and `scripts/archive-local-phases.ps1` (older ZIP snapshots, strips generated bytecode from archival copies, records both hashes)
 
 ## Unresolved issues / deferred
 
