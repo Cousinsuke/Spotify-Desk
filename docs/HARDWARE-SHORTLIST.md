@@ -1,14 +1,14 @@
 # Phase 6 — Proposed hardware shortlist (UK)
 
-**2026-10-20 — research/proposal only.** No final user selection, purchase, electrical wiring, CAD or firmware validation. The confirmed interaction mapping is: **three MX keys** (previous, play/pause, next); rotary encoder clockwise/anticlockwise = volume, **integrated press** = PC/Wi-Fi mode. This is **six digital contact signals** including encoder A/B. Existing Phase 5.2 desktop code remains unchanged.
+**2026-10-20 — user-selected provisional trio, not a purchase approval.** User chose Waveshare **25948**, Adafruit **377** and Waveshare AW9523B **22132** for pre-purchase verification. Research cost examples still apply; electrical wiring, CAD and firmware unvalidated. See [pre-purchase verification](HARDWARE-PRE-PURCHASE-CHECK.md). The confirmed interaction mapping is: **three MX keys** (previous, play/pause, next); rotary encoder clockwise/anticlockwise = volume, **integrated press** = PC/Wi-Fi mode. This is **six digital contact signals** including encoder A/B. Existing Phase 5.2 desktop code remains unchanged.
 
 ## Preferred compact prototype
 
 | Component | Specific part | UK example price | Reason / caveat |
 | --- | --- | ---: | --- |
 | ESP32-S3 + touch display | Waveshare **ESP32-S3-Touch-LCD-4.3**, manufacturer **SKU 25948**, The Pi Hut WAV-25948 | **£31.70** | 800×480 touch; ~106.1×67.8 mm board; 270 cd/m²; 16 MB flash / 8 MB PSRAM. Be sure to select TOUCH, not no-touch 30493. |
-| Knob with integrated push | Adafruit **Rotary Encoder + Extras PID 377**, The Pi Hut ADA377 | **£4.40** | 24-detent rotary, built-in momentary switch, 6 mm D shaft, supplied soft-touch knob; included knob diameter not verified against 18 mm mockup. |
-| 16-input expansion | Waveshare **AW9523B IO Expansion Board SKU 22132**, The Pi Hut WAV-22132 | **£4.80** | Nominal I2C address **0x58**; ~38×23 mm, 3.3/5 V capable. Needs external bias resistors on switch/encoder contacts, and its 6-wire connector is NOT interchangeable with the display's four-wire I2C connector. |
+| Knob with integrated push | Adafruit **Rotary Encoder + Extras PID 377**, The Pi Hut ADA377 | **£4.40** | 24-detent rotary, built-in momentary switch, 6 mm D shaft, supplied soft-touch knob; Adafruit-linked 450-BA761 *family drawing* indicates **~16 mm outside diameter**, close to 18 mm mockup; confirm actual supplied knob before CAD. |
+| 16-input expansion | Waveshare **AW9523B IO Expansion Board SKU 22132**, The Pi Hut WAV-22132 | **£4.80** | Nominal I2C address **0x58**; ~38×23 mm, 3.3/5 V capable. Needs external bias resistors on switch/encoder contacts **and validated boot-time output/short-circuit protection**, and its 6-wire connector is NOT interchangeable with the display's four-wire I2C connector. |
 | Keys | **3 owned MX switches**, plus 1u keycaps if not already available | Already owned switches | Use for previous/play-pause/next. |
 
 **Base parts subtotal: £40.90**, before shipping, power/USB cable, cables/adapters, six external resistors, 1u keycaps if missing, solder/perfboard, fastening and printing. Values are observed example UK prices, not guaranteed stock quotes.
@@ -45,7 +45,7 @@ The **Waveshare ESP32-S3-Touch-LCD-4.3B**, **SKU 27848** (BARE, not factory-case
 5. **Encoder mechanics:** push-switch must work through the final knob, and intended ~18 mm visible outside diameter must not interfere with encoder nut/panel or nearby display.
 6. **Firmware/software:** ESP-IDF+LVGL firmware and a secure device protocol are not yet implemented. Existing Flask/HTML/JS browser app cannot simply run on the ESP32-S3. Full screen rendering performance remains bench-untested.
 
-**Proposed selection:** original Waveshare **25948**, Adafruit **377**, Waveshare **AW9523B 22132** for a compact first prototype. **No automatic purchase authorization**. Confirm brightness/size preference and bench tests before a final BOM.
+**Provisional trio accepted for verification:** original Waveshare **25948**, Adafruit **377**, Waveshare **AW9523B 22132**. **No purchase authorization or validated harness/case**. Next gate is AW9523B-module startup/reset schematic review, 3.3 V 4-to-6 wire adapter, and internal CAD clearance; see [pre-purchase check](HARDWARE-PRE-PURCHASE-CHECK.md).
 
 References:
 - https://docs.waveshare.com/ESP32-S3-Touch-LCD-4.3
