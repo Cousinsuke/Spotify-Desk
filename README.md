@@ -31,6 +31,17 @@ powershell.exe -NoProfile -ExecutionPolicy Bypass -File "$HOME\Projects\Spotify-
 
 This one-time transfer is necessary because the GitHub connector cannot ingest a ZIP stored in ChatGPT's isolated working environment. It should not be mistaken for an accepted new software phase.
 
+
+## Preserve earlier ZIP versions
+
+Earlier ChatGPT-delivered patch ZIPs are kept as **archives**, rather than replacing the current runnable code. After the one-time Phase 5.2 import shown above, upload every matching Spotify Desk phase ZIP in the Windows Downloads folder:
+
+```powershell
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File "$HOME\Projects\Spotify-Desk\scripts\archive-local-phases.ps1" -DownloadsPath "$HOME\Downloads" -Publish
+```
+
+The archive script places historical ZIPs under `archives/phase-zips/`, writes SHA-256 checksums to `docs/history/ARCHIVED-PHASE-ZIPS.md`, and commits/pushes to `main`. The ZIPs are historical reference builds, **not** a replacement for current root-level source. The script checks for common private filenames, but cannot guarantee that arbitrary older ZIP contents contain no secrets; review before publishing to a public repository.
+
 ## Project documentation
 
 - [Current-state handoff](docs/CHATGPT-HANDOFF.md)
