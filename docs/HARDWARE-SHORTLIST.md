@@ -54,14 +54,14 @@ References:
 - https://www.adafruit.com/product/377
 - https://learn.adafruit.com/adafruit-i2c-quad-rotary-encoder-breakout/pinouts
 
-## Modern top/knob alternatives (visual selection still OPEN, 2026-10-20)
+## Modern top/knob alternatives — KZ0087 provisionally chosen (2026-10-20)
 
-User dislikes the retro/arrow marking on the **included Adafruit 377 soft-touch knob**. The encoder body itself is still electrically suitable, and has a **6 mm D-shaped shaft**, so swapping the removable cap can be easier than changing the actual encoder. Confirm final shaft insertion depth, panel clearance and ability to **press the encoder**. For any third-party heavy metal knob, test repeated push travel and side loading before final case design. **No substitute selected.**
+User dislikes the retro/arrow marking on the **included Adafruit 377 soft-touch knob**. The encoder body itself is still electrically suitable, and has a **6 mm D-shaped shaft**, so swapping the removable cap can be easier than changing the actual encoder. Confirm final shaft insertion depth, panel clearance and ability to **press the encoder**. For any third-party heavy metal knob, test repeated push travel and side loading before final case design. **User has provisionally selected Knob Zone KZ0087-01 for its RK M75-like flat aluminium look; not yet ordered or mechanically validated.**
 
 | Separate knob | Size / look | Shaft fitting, mass | UK price example | Compatibility qualification |
 | --- | --- | --- | ---: | --- |
 | **Knob Zone KZ0022-01** | **18.6 mm Ø × 16.7 mm**, matte black, smooth cylindrical, **concave top and no marker** | **6 mm D push-fit**, 2.11 g; accepts 8.3–15.8 mm inserted shaft | **£0.54** | **Leading size/style fit** to approx 18 mm mockup and Adafruit 377's 6 mm D shaft; push travel still needs testing. |
-| **Knob Zone KZ0087-01** | **15.1 mm Ø × 15.2 mm**, solid black ridged aluminium, flat top and **no marker** | **6 mm round bore + grub screw** (can grip D shaft), 6.23 g; accepts 6.0–12.4 mm shaft insertion | **£3.84** | Modern premium finish, compact; **shorter maximum insertion depth than 377's nominal 15 mm shaft** means test mounting height/exposed shaft; requires set screw. |
+| **Knob Zone KZ0087-01 — PROVISIONALLY CHOSEN** | **15.1 mm Ø × 15.2 mm**, solid black ridged aluminium, flat top and **no marker** | **6 mm round bore + grub screw** (can grip D shaft), 6.23 g; accepts 6.0–12.4 mm shaft insertion | **£3.84** | Modern premium finish, compact; **shorter maximum insertion depth than 377's nominal 15 mm shaft** means test mounting height/exposed shaft; requires set screw. |
 | **Knob Zone KZ0059** | **18.0 mm Ø × 18.5 mm**, black/optional matte black, knurled metal and smooth **domed** top, no marker | **6 mm round bore + grub screw**, **25.5 g**; accepts 9.4–16.1 mm insertion | **£2.63** | Exact sketch diameter and secure grip; substantially heavier, so test momentary encoder push and mechanical wear before acceptance. |
 | **Adafruit 20 mm anodised black aluminium, PID 5527** | **20 mm Ø × 12.5 mm**, knurled sides, white **triangle pointer on top** | 6 mm round bore + grub screw, **11 g** | **£2.90** at Pi Hut; **sold out** in checked listing | Explicitly NOT ideal for desired unmarked minimalist top despite obvious mechanical fit. |
 | **Switch Electronics push encoder MPN 483364** | 24 detents, SPST normally-open push, **20 mm-long 6 mm D shaft**, bare part only | 7 mm panel hole, through-hole solder body | **£0.98 inc VAT** | Optional **entire encoder** alternative if Adafruit 377 mechanical length/price proves unsuitable; no improvement to knob appearance by itself. Verify quality/datasheet and case clearance. |
@@ -74,12 +74,12 @@ UK source pages (listing prices/stock can change):
 - Switch encoder 483364: https://www.switchelectronics.co.uk/products/20mm-rotary-encoder-with-switch-6mm-d-shaft
 - Adafruit 377 (existing proposed encoder): https://www.adafruit.com/product/377
 
-**Next action:** user chooses a *visual finish* first (smooth concave black / ridged flat-top aluminium / knurled dome), then dimension/shaft/press clearance is verified. Retain **Adafruit 377 + AW9523B + Waveshare 25948** as the currently proposed base; the cosmetic change may only require a separately purchased knob. No parts ordered.
+**Next action:** check **KZ0087** shaft/grub-screw fit, exposed height, push travel and front-panel clearance before ordering. KZ0022 is a fallback, not the selected part. Retain **Adafruit 377 + AW9523B + Waveshare 25948** as the currently proposed base; the cosmetic change may only require a separately purchased knob. No parts ordered.
 
 
 ### User visual preference refined — RK M75 low-profile reference (2026-10-20)
 
-User likes **KZ0022 (smooth concave black, 18.6 mm wide × 16.7 mm overall height)** or **KZ0087 (flat ridged black aluminium, 15.1 mm wide × 15.2 mm overall height)**; **rejects KZ0059 domed top**. The style reference is the owner's **Royal Kludge RK M75 keyboard knob**: low exposed height, flat top, short cylinder and subtle textured grip. RK M75 exact physical knob height/diameter could not be reliably verified from a manufacturer measurement; **do not assert numerical equivalence**. Manufacturer keyboard product photo: https://www.rkgamingstore.com/products/m75-keyboard-side-printed-keycaps
+User subsequently **provisionally selected KZ0087 (flat ridged black aluminium, 15.1 mm wide × 15.2 mm overall height)**; retains **KZ0022 (smooth concave black, 18.6 mm wide × 16.7 mm)** as a fallback and **rejects KZ0059 domed top**. The style reference is the owner's **Royal Kludge RK M75 keyboard knob**: low exposed height, flat top, short cylinder and subtle textured grip. RK M75 exact physical knob height/diameter could not be reliably verified from a manufacturer measurement; **do not assert numerical equivalence**. Manufacturer keyboard product photo: https://www.rkgamingstore.com/products/m75-keyboard-side-printed-keycaps
 
 **Key distinction:** manufacturer knob *overall height* is not the same as *height protruding above a 3D-printed faceplate*. A custom counterbore/recess and mounting position may expose a shorter cylinder while retaining enough accessible grip, rotation clearance and axial encoder push travel (~0.5 ± 0.2 mm). Full CAD cross-section required.
 
@@ -87,4 +87,6 @@ User likes **KZ0022 (smooth concave black, 18.6 mm wide × 16.7 mm overall heigh
 
 **Potential alternative:** custom **3D-printed flat cylindrical 18 mm diameter cap ~8–11 mm tall** with correctly dimensioned 6 mm D recess, allowing final exposed profile to imitate the RK M75, but print tolerances, material wear, tactile grip and shaft/push clearance need physical iteration. This is an optional design exploration, **not a proven or selected part**.
 
-**Pending before cosmetic selection:** if practical, measure the owned RK M75 knob **diameter** and **height above the keyboard's surrounding case surface**, ideally with ruler/caliper and a side photo. Use those numbers to set the visible height target, then test the faceplate/shaft interaction in CAD. No finalized knob/purchase.
+**Next verification for provisionally chosen KZ0087:** optionally measure the owned RK M75 knob **diameter** and **height above the keyboard case** to target a similar visible profile. Verify the nominal 15 mm Adafruit shaft against KZ0087's 12.4 mm maximum insertion, grub-screw grip on a D shaft, faceplate clearance and encoder press travel. **No purchase or final mechanical fit approval.**
+
+**Provisional cosmetic BOM addition:** KZ0087 black aluminium knob ~£3.84 (UK example). Original display + encoder + AW9523B base subtotal ~£40.90; with additional knob ~**£44.74** (excluding accessories/shipping). Adafruit 377 remains the encoder; its supplied knob can stay unused.
