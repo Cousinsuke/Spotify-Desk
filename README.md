@@ -18,6 +18,19 @@ An experimental desktop music controller and future physical desk accessory, bui
 - Omarchy/Arch companion and browser device simulator: **Phase 5.2 user-accepted**; 39 tests passed in the user's Omarchy virtual environment.
 - Real ESP32 firmware, electrical design, final hardware protocol and enclosure: **not implemented**.
 
+## Import the accepted Phase 5.2 source
+
+The source archive was developed and validated separately from this newly created repository. Until its source import commit is visible here, the repository is **documentation-only** and is not a runnable checkout.
+
+To import the exact accepted `spotify-desk-thing-phase5-2.zip` archive from a Windows machine with GitHub push access, clone this repo and run `scripts/import-phase5-2.ps1` with `-ArchivePath` and `-Publish`. The script verifies the archive SHA-256, imports only an explicit allowlist, excludes secrets, and commits/pushes the source to `main`. Historical Phase 4.1–5.2 README notes go under `docs/history/`. After the import, the source checkpoint must be recorded in the handoff.
+
+```powershell
+git clone https://github.com/Cousinsuke/Spotify-Desk.git "$HOME\Projects\Spotify-Desk"
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File "$HOME\Projects\Spotify-Desk\scripts\import-phase5-2.ps1" -ArchivePath "$HOME\Downloads\spotify-desk-thing-phase5-2.zip" -Publish
+```
+
+This one-time transfer is necessary because the GitHub connector cannot ingest a ZIP stored in ChatGPT's isolated working environment. It should not be mistaken for an accepted new software phase.
+
 ## Project documentation
 
 - [Current-state handoff](docs/CHATGPT-HANDOFF.md)
