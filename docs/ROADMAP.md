@@ -41,12 +41,12 @@ This roadmap tracks **planned phases**, not every ad-hoc fix. Actual latest work
 
 ## Phase 6 — Hardware selection and firmware proof-of-concept (current planning)
 
-- Front-panel design checkpoint (2026-10-20): user prefers **three** ~18 mm MX keycaps (Previous / Play-Pause / Next) below the screen and **one** ~18 mm diameter volume knob to the right; PC/Wi-Fi and secondary actions migrate to touchscreen. This is a **preferred concept**, not validated CAD or changed Phase 5.2 simulator code.
+- Front-panel decision (2026-10-20): user accepted **three ~18 mm MX keycaps** (Previous / Play-Pause / Next) below screen and **push-capable ~18 mm rotary knob** to the right. **Turn = volume; press = toggle PC/Wi-Fi**. Detached fourth button is a placeholder only. Shuffle/repeat/settings remain touchscreen actions. This accepts input behaviour, **not** electrical/CAD/firmware design; Phase 5.2 simulator unchanged.
 
 - Research checkpoint (2026-10-20): manufacturer-supported shortlist, original-board pin usage, **CH422G I²C address conflict**, potential expansion choices, power and PSRAM estimates recorded in [HARDWARE-RESEARCH.md](HARDWARE-RESEARCH.md). An extended comparison of original/B/C models and AW9523 vs quadrature-decoding seesaw expansion is in [HARDWARE-COMPARISON.md](HARDWARE-COMPARISON.md). **Research only:** final SKU, pinout and wiring remain unchecked below until user selection and hardware validation.
 - [ ] Identify **exact** Waveshare 4.3-inch 800 × 480 board/SKU and obtain schematic/pinout
 - [ ] Check ESP32-S3 RAM/PSRAM, flash, display bus/controller, touch controller and library support
-- [ ] Map **3 MX keys + rotary encoder** and confirm usable inputs / expansion strategy (preferred mockup; optional encoder push adds sixth signal)
+- [ ] Map **3 MX keys + push-to-mode-switch encoder** and confirm **6 digital input signals** (3 MX + A/B + push), pullups/voltage and expansion strategy.
 - [ ] Power and USB strategy, current requirements, charging (if applicable), ESD and grounding
 - [ ] Decide first firmware stack (ESP-IDF, LVGL, Arduino or compatible framework)
 - [ ] Implement firmware that pairs to Phase 5 companion and renders basic track state
