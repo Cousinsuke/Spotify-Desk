@@ -26,6 +26,8 @@ The revised approximately 1:1-scale sketch establishes **three physical MX keys 
 
 **Electrical input count:** 3 MX switch inputs + 2 rotary quadrature signals (A/B) + 1 encoder press = **six logical digital inputs**, plus a common ground. The input breakout and precise GPIO assignments are **not selected**. An encoder without an integrated push switch will **not meet the agreed control mapping**.
 
+**Knob styling refinement:** model the user's RK M75 keyboard: flat unmarked top, low visible height above case and short clean cylinder with restrained grip texture. User prefers modern KZ0022 or KZ0087 candidates; **rejects domed KZ0059**. Their overall heights are 16.7 mm and 15.2 mm respectively; the desired exposed height remains **unmeasured** and may require a 3D-printed recess or a custom lower-profile cap. Verify actual rotary shaft insertion depth and press travel before CAD approval. See [HARDWARE-SHORTLIST.md](HARDWARE-SHORTLIST.md).
+
 **Mechanical caution:** 18 mm keycaps are not 18 mm mounting holes; common MX plate cutouts are ~14×14 mm (verify exact switches) and standard 1u key pitch is 19.05 mm. An 18 mm knob diameter is not its shaft/panel hole size. Check encoder shaft format, push travel, available depth, nut/washer, switch spacing and PCB clearance. The Waveshare 4.3-in diagonal is not the complete module: the candidate original touch board is ~106.1×67.8 mm and requires clearance behind the faceplate.
 
 **Acceptance scope:** button *functions and approximate face layout* are confirmed by the user. No part number, wiring diagram, final CAD, purchase, firmware or physical runtime result has been accepted. The existing Phase 5.2 four-key browser simulator remains **unchanged** pending a separate focused adaptation.
