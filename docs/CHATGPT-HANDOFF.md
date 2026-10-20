@@ -16,8 +16,8 @@ Updated: 2026-10-20
 ## Current project phase vs current actual work
 
 - **Current project phase:** Phase 6 — hardware research, compatibility decisions and first firmware design (**planned, not implemented**)
-- **Current actual work:** ad-hoc repository bootstrap, source import and documentation structure modelled on TUF Linux
-- **Status:** documentation bootstrap in progress. Phase 5.2 software is a known external baseline; do not claim GitHub contains it until its files are committed and checked.
+- **Current actual work:** ad-hoc repository bootstrap and importing accepted source plus historical ZIP archives from Windows Downloads
+- **Status:** documentation and import helpers committed. Phase 5.2 root source and historical ZIPs require a one-time local PowerShell import; do not claim GitHub contains them until their files are committed and checked.
 
 ## Last accepted work
 
@@ -43,7 +43,7 @@ Updated: 2026-10-20
 ## Current next action
 
 1. **Import complete Phase 5.2 source tree** into this repository, excluding local secrets, caches and credentials.
-2. Run tests from the repository on Windows and Omarchy and confirm `/device` plus PC/Wi-Fi modes.
+2. Preserve older named phase ZIPs using `scripts/archive-local-phases.ps1 -Publish` into `archives/phase-zips/` (historical reference only). Run tests from the repository on Windows and Omarchy and confirm `/device` plus PC/Wi-Fi modes.
 3. Refresh `Latest implementation checkpoint` to the actual source commit SHA.
 4. Begin Phase 6 hardware selection only when repository/code state has been confirmed.
 
@@ -55,6 +55,7 @@ Updated: 2026-10-20
 - `templates/index.html`, `templates/device.html`, `templates/pair.html`
 - `tests/`, `requirements-ui.txt`, `requirements-windows.txt`
 - `docs/ROADMAP.md`, `docs/DECISIONS.md`, `docs/HARDWARE.md`, `docs/CHATGPT-WORKFLOW.md`
+- One-time import scripts: `scripts/import-phase5-2.ps1` (checksum-checked active source) and `scripts/archive-local-phases.ps1` (older ZIP snapshots, records hashes)
 
 ## Unresolved issues / deferred
 
