@@ -50,6 +50,8 @@ The archive script places historical ZIPs under `archives/phase-zips/`, strips g
 - [Phase 6 electrical chip/boot and protected-input design review](docs/HARDWARE-ELECTRICAL-REVIEW.md)
 - [Phase 6 manufacturer-dimensioned faceplate and encoder fit study](docs/HARDWARE-MECHANICAL-LAYOUT-STUDY.md)
 - [Editable trial mechanical envelope CAD (SCAD / SVG / coordinates)](mechanical/README.md)
+- [Angled wedge 3D shape, internal packaging and input-PCB proposal](docs/HARDWARE-WEDGE-CASE-PROPOSAL.md)
+- [Parametric 3D reference model (not a print-ready case)](mechanical/wedge_packaging_concept.scad)
 - [Setup](docs/INSTALL.md)
 - [Testing](docs/TESTING.md)
 - [Changelog](docs/CHANGELOG.md)
