@@ -1,6 +1,6 @@
 # Phase 6 hardware research — 4.3-inch ESP32-S3 compatibility
 
-**Status:** Manufacturer-source research **completed 2026-10-20**. Findings and recommendations only; **no board, expander, firmware stack, wiring design or purchase is user-accepted yet**. Physical devices have not been tested.
+**Status:** Manufacturer-source research **completed 2026-10-20**. For a deeper comparison and additional readily-available input options, read [HARDWARE-COMPARISON.md](HARDWARE-COMPARISON.md). Findings and recommendations only; **no board, expander, firmware stack, wiring design or purchase is user-accepted yet**. Physical devices have not been tested.
 
 ## Constraints from the accepted project
 
