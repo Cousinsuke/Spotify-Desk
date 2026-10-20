@@ -60,3 +60,24 @@ For the comfortable trial, module visible rectangle would begin approximately at
 - Finish electrical schematic/RESET/harness review and encoder quadrature sampling tests as separate gates.
 
 **Acceptance:** the user chose the exact provisional part models and input functions; **neither outer faceplate dimensions nor physical KZ0087↔Adafruit 377 fit is accepted**. This is research/CAD-preparation only, no generated finished STL.
+
+## Dimensioned drawing/CAD reference artifact checkpoint (2026-10-20)
+
+A **1:1 XY-scaled front layout** has now been generated for **both** the 150×105 mm and **165×110 mm** studies. A three-page landscape A3 PDF was rendered and visually inspected, and editable reference SVG and DXF files, parametric OpenSCAD envelope model, and a Python generator were packaged as a conversation download.
+
+**GitHub source-of-truth text/vector assets:**
+- [mechanical/README.md](../mechanical/README.md): coordinates, evidence, limitations, and next measurement steps.
+- [mechanical/faceplate_roomy.svg](../mechanical/faceplate_roomy.svg): preferred trial, front plan **165×110 mm**.
+- [mechanical/faceplate_compact.svg](../mechanical/faceplate_compact.svg): alternate **150×105 mm** plan.
+- [mechanical/faceplate_layout_reference.scad](../mechanical/faceplate_layout_reference.scad): change `trial=1` (roomier) to `trial=0` (compact); transparent **component-envelope** model only, no manufactured cutouts.
+- [mechanical/layout_coordinates.csv](../mechanical/layout_coordinates.csv): exact source-of-truth positions in mm.
+
+**Dimensioned calculations checked from generator:**
+- Compact: bottom of LCD outer=**74.8 mm**, keycap top=**77 mm**, gap **2.20 mm**; screen right edge **114.1 mm**, knob rim begins **123.45 mm**, gap **9.35 mm**. If one **hypothesizes** a 14 mm-wide right-side connector/cable envelope, the encoder's square 13.2 mm body would overlap it by **3.70 mm**.
+- Roomier: bottom of LCD outer=**75.8 mm**, keycap top=**82 mm**, gap **6.20 mm**; screen right edge **117.1 mm**, knob rim begins **134.45 mm**, gap **17.35 mm**. Under the *same invented 14 mm connector/cable zone*, the encoder body has **4.30 mm** horizontal clearance. A positive theoretical clearance **does not prove** a real plug/cable fits.
+- Both use manufacturer **106.1×67.8 mm** LCD module and **95.54×54.36 mm** visible region. The **~98×60 mm rear mounting centres** are **reference marks only**, not drilled panel holes.
+- A conceptual side section explicitly labels panel thickness **3 mm as an assumption**, rear display depth, switch depth, encoder body Z length and the AW9523B mounting depth as **unverified**. Its dimensions are not manufacturable.
+
+**Verification completed:** SVG rendered to PNG previews; both millimetre DXF files re-opened with ezdxf; PDF visually inspected page-by-page after rendering; generated archive ZIP passed integrity test. These are **static artifact checks only**, not physical, electrical or 3D collision tests.
+
+**Selection status:** **165×110 mm is only the leading CAD trial**; the user's existing arrangement of 3 MX keys and push volume knob is accepted, but neither faceplate outline nor a casing/printing design has yet been approved. Need exact switch model, rear cable geometry, PCB fasteners and real component depths before producing actual STL/cut files.
