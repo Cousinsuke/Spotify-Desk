@@ -37,9 +37,11 @@ This roadmap tracks **planned phases**, not every ad-hoc fix. Actual latest work
 - [x] Run 39 Python tests on Omarchy (reported passing)
 - [ ] Revalidate newest Phase 5.2 source on Windows
 - [ ] Improve state polling/SSE efficiency and test across real LAN clients
-- [ ] Import vetted source into GitHub; use Git for later history and releases
+- [x] Import vetted source into GitHub (`7172c2e`), preserve 16 historical ZIPs (`f781506`) and use Git for later history and releases
 
 ## Phase 6 — Hardware selection and firmware proof-of-concept (current planning)
+
+- Research checkpoint (2026-10-20): manufacturer-supported shortlist, original-board pin usage, **CH422G I²C address conflict**, potential expansion choices, power and PSRAM estimates recorded in [HARDWARE-RESEARCH.md](HARDWARE-RESEARCH.md). **Research only:** final SKU, pinout and wiring remain unchecked below until user selection and hardware validation.
 - [ ] Identify **exact** Waveshare 4.3-inch 800 × 480 board/SKU and obtain schematic/pinout
 - [ ] Check ESP32-S3 RAM/PSRAM, flash, display bus/controller, touch controller and library support
 - [ ] Map 4 MX switches + rotary encoder and confirm usable free GPIO / expansion strategy
