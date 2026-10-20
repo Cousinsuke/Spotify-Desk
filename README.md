@@ -2,7 +2,7 @@
 
 An experimental desktop music controller and future physical desk accessory, built around an 800 × 480 touchscreen, four mechanical keys, and a rotary encoder.
 
-**Repository status:** Documentation bootstrap is underway. The currently accepted software release is **Phase 5.2**, tested on Omarchy/Arch. The source import is tracked separately from the documentation bootstrap and should not be described as complete until the full source tree is committed.
+**Repository status:** Phase 5.2 application source is committed on `main` at [`7172c2e`](https://github.com/Cousinsuke/Spotify-Desk/commit/7172c2ee2f285253507b13c71acb7072adc04067). This is the current checked-in software baseline; hardware firmware has not started.
 
 ## Direction
 
@@ -18,29 +18,21 @@ An experimental desktop music controller and future physical desk accessory, bui
 - Omarchy/Arch companion and browser device simulator: **Phase 5.2 user-accepted**; 39 tests passed in the user's Omarchy virtual environment.
 - Real ESP32 firmware, electrical design, final hardware protocol and enclosure: **not implemented**.
 
-## Import the accepted Phase 5.2 source
+## Current source and historical versions
 
-The source archive was developed and validated separately from this newly created repository. Until its source import commit is visible here, the repository is **documentation-only** and is not a runnable checkout.
+The accepted Phase 5.2 Python, JavaScript, CSS, HTML and tests have been imported to the repository root. **Current source checkpoint:** [`7172c2e`](https://github.com/Cousinsuke/Spotify-Desk/commit/7172c2ee2f285253507b13c71acb7072adc04067). Do not re-run the one-time `import-phase5-2.ps1` script on an already imported checkout.
 
-To import the exact accepted `spotify-desk-thing-phase5-2.zip` archive from a Windows machine with GitHub push access, clone this repo and run `scripts/import-phase5-2.ps1` with `-ArchivePath` and `-Publish`. The script verifies the archive SHA-256, imports only an explicit allowlist, excludes secrets, and commits/pushes the source to `main`. Historical Phase 4.1–5.2 README notes go under `docs/history/`. After the import, the source checkpoint must be recorded in the handoff.
-
-```powershell
-git clone https://github.com/Cousinsuke/Spotify-Desk.git "$HOME\Projects\Spotify-Desk"
-powershell.exe -NoProfile -ExecutionPolicy Bypass -File "$HOME\Projects\Spotify-Desk\scripts\import-phase5-2.ps1" -ArchivePath "$HOME\Downloads\spotify-desk-thing-phase5-2.zip" -Publish
-```
-
-This one-time transfer is necessary because the GitHub connector cannot ingest a ZIP stored in ChatGPT's isolated working environment. It should not be mistaken for an accepted new software phase.
-
+The historical ZIP import is separate, and remains **pending local execution**. Those files are retained for reference only, not as alternate active application trees.
 
 ## Preserve earlier ZIP versions
 
-Earlier ChatGPT-delivered patch ZIPs are kept as **archives**, rather than replacing the current runnable code. After the one-time Phase 5.2 import shown above, upload every matching Spotify Desk phase ZIP in the Windows Downloads folder:
+Earlier ChatGPT-delivered patch ZIPs are kept as **archives**, rather than replacing the current runnable code. To archive every matching Spotify Desk phase ZIP in the Windows Downloads folder, run:
 
 ```powershell
 powershell.exe -NoProfile -ExecutionPolicy Bypass -File "$HOME\Projects\Spotify-Desk\scripts\archive-local-phases.ps1" -DownloadsPath "$HOME\Downloads" -Publish
 ```
 
-The archive script places historical ZIPs under `archives/phase-zips/`, writes SHA-256 checksums to `docs/history/ARCHIVED-PHASE-ZIPS.md`, and commits/pushes to `main`. The ZIPs are historical reference builds, **not** a replacement for current root-level source. The script checks for common private filenames, but cannot guarantee that arbitrary older ZIP contents contain no secrets; review before publishing to a public repository.
+The archive script places historical ZIPs under `archives/phase-zips/`, strips generated `__pycache__`/`.pyc` entries from stored copies without changing Downloads, records both original and archived SHA-256 checksums in `docs/history/ARCHIVED-PHASE-ZIPS.md`, and commits/pushes to `main`. The ZIPs are historical reference builds, **not** a replacement for current root-level source. The script rejects common private filenames, but cannot guarantee that older archives contain no secrets within source code; review before publishing in this public repository.
 
 ## Project documentation
 
