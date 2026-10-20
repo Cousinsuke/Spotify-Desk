@@ -75,3 +75,16 @@ UK source pages (listing prices/stock can change):
 - Adafruit 377 (existing proposed encoder): https://www.adafruit.com/product/377
 
 **Next action:** user chooses a *visual finish* first (smooth concave black / ridged flat-top aluminium / knurled dome), then dimension/shaft/press clearance is verified. Retain **Adafruit 377 + AW9523B + Waveshare 25948** as the currently proposed base; the cosmetic change may only require a separately purchased knob. No parts ordered.
+
+
+### User visual preference refined — RK M75 low-profile reference (2026-10-20)
+
+User likes **KZ0022 (smooth concave black, 18.6 mm wide × 16.7 mm overall height)** or **KZ0087 (flat ridged black aluminium, 15.1 mm wide × 15.2 mm overall height)**; **rejects KZ0059 domed top**. The style reference is the owner's **Royal Kludge RK M75 keyboard knob**: low exposed height, flat top, short cylinder and subtle textured grip. RK M75 exact physical knob height/diameter could not be reliably verified from a manufacturer measurement; **do not assert numerical equivalence**. Manufacturer keyboard product photo: https://www.rkgamingstore.com/products/m75-keyboard-side-printed-keycaps
+
+**Key distinction:** manufacturer knob *overall height* is not the same as *height protruding above a 3D-printed faceplate*. A custom counterbore/recess and mounting position may expose a shorter cylinder while retaining enough accessible grip, rotation clearance and axial encoder push travel (~0.5 ± 0.2 mm). Full CAD cross-section required.
+
+**Fit caution:** Adafruit 377 has a nominal 15 mm 6 mm D shaft. KZ0022's specified shaft insertion 8.3–15.8 mm is a closer nominal match. KZ0087 uses a 6 mm round bore/set screw (can hold D shafts if oriented properly) but accepts only 6.0–12.4 mm insertion: **cannot assume full 15 mm shaft seats inside; may need to stand proud or have an alternative mounting solution**, tested with push travel. Do not cut a shaft or place an order based on nominal diameters alone. KZ0087 is closest aesthetically to the flat/ridged RK M75; KZ0022 is closer to 18 mm design diameter and easier shaft match. Both still subject to height/fit testing.
+
+**Potential alternative:** custom **3D-printed flat cylindrical 18 mm diameter cap ~8–11 mm tall** with correctly dimensioned 6 mm D recess, allowing final exposed profile to imitate the RK M75, but print tolerances, material wear, tactile grip and shaft/push clearance need physical iteration. This is an optional design exploration, **not a proven or selected part**.
+
+**Pending before cosmetic selection:** if practical, measure the owned RK M75 knob **diameter** and **height above the keyboard's surrounding case surface**, ideally with ruler/caliper and a side photo. Use those numbers to set the visible height target, then test the faceplate/shaft interaction in CAD. No finalized knob/purchase.
