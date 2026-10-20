@@ -1,4 +1,14 @@
-# Faceplate layout reference — Spotify Desk Thing
+# Mechanical CAD concepts — Spotify Desk Thing
+
+## New wedge body and internal packaging pass — 2026-10-20
+
+**Latest envelope proposal:** a desktop wedge inspired by the user's angled stand photo (shape, not material). See [parametric 3D wedge model](wedge_packaging_concept.scad) and [full design rationale](../docs/HARDWARE-WEDGE-CASE-PROPOSAL.md).
+
+**Illustrative outside dimensions:** **165 mm wide × 83.1 mm deep × 106.1 mm high**, using a **165 × 110 mm** sloping front at **55° from desktop**, **16 mm raised chin**, **20 mm top roof** and a *3 mm placeholder wall*. The angled front keeps accepted touchscreen / three MX buttons / KZ0087 push knob. A **bottom service hatch** is represented but has no attachment hardware. LCD PCB, key housings, knob and AW9523B are shown as *approximate bounding volumes only*. The user has NOT approved the final case/angle.
+
+**Use:** open `wedge_packaging_concept.scad` in OpenSCAD, edit `tilt_deg` (50/55/60), `front_chin`, `rear_roof`, and `mode` (exterior, ghost, cutaway, shell_only). Generated exterior/cutaway screenshots, side sections, angle comparisons and an **L-shaped optional input carrier PCB zoning concept** are included in the separate conversation ZIP, not in the checked-in source because the PCB and shell are not manufacturing geometry.
+
+**Remaining:** confirm actual MX switch type, display mounting bore and connector exit, true right I²C cable bend, actual shell wall/fasteners, USB ports, KZ0087 push clearance, AW9523B reset/startup circuits, and real PCB mounting depth. **Do not export this reference SCAD as a final print STL.**
 
 **Status:** Phase 6, editable envelope study. NOT a final case, 3D-print-ready model, production cut file or validated electrical design. Created from the chosen provisional Waveshare 25948 touchscreen, Adafruit PID 377 push encoder, KZ0087 knob and three existing MX keys.
 
