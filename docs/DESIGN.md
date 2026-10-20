@@ -32,6 +32,14 @@ The revised approximately 1:1-scale sketch establishes **three physical MX keys 
 
 **Acceptance scope:** button *functions and approximate face layout* are confirmed by the user. No part number, wiring diagram, final CAD, purchase, firmware or physical runtime result has been accepted. The existing Phase 5.2 four-key browser simulator remains **unchanged** pending a separate focused adaptation.
 
+## Angled desktop body — provisional wedge concept (2026-10-20)
+
+Reference shape: **freestanding angled wedge** based on user photo, with a sloped front, flat base, compact rear and removable lower access. Proposal: keep original **165×110 mm faceplane** and control positions, tilt **55° above desk**, use a **16 mm raised front chin** to house lower MX switch bodies and a **20 mm rear roof** to provide depth behind the screen near top. This yields an **illustrative outside footprint 165 mm width × 83.1 mm depth × 106.1 mm height**. Rounded edges, finish, print material, feet, wall thickness and access-fastener size NOT chosen. 50° and 60° are alternatives.
+
+A **three-dimensional bounding-volume reference**, not printable CAD, is in [mechanical/wedge_packaging_concept.scad](../mechanical/wedge_packaging_concept.scad). The detailed [3D design / internal PCB strategy](HARDWARE-WEDGE-CASE-PROPOSAL.md) preserves Waveshare 25948 display, Adafruit 377 push encoder, KZ0087 knob and AW9523B candidate breakout. A future **small input-only carrier PCB** might reduce 6 loose contact wires, while retaining the ESP32/display main board; only design it after real mechanical/electrical validation.
+
+**Not yet user-accepted:** 55° inclination, 16 mm raised chin, 20 mm roof, outer case size, actual component Z stack, mounting holes, cable clearance, custom PCB or printed case. Preexisting 3 MX plus push-to-toggle volume knob functionality remains accepted.
+
 ## Screen states to design for firmware
 
 Paired and playing; paired and paused; changing tracks; waiting for artwork; no media; PC unavailable; Wi-Fi disconnected; first-time pairing; revoked pairing; firmware update/recovery.
