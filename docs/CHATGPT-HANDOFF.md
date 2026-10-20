@@ -16,8 +16,8 @@ Updated: 2026-10-20
 ## Current project phase vs current actual work
 
 - **Current project phase:** Phase 6 — hardware research, compatibility decisions and first firmware design (**planned, not implemented**)
-- **Current actual work:** Phase 6 **specific component shortlist research** following accepted 3-MX + push-encoder control mapping. Proposed Waveshare screen SKU **25948** (small 270-nit) vs **27848** 4.3B (550-nit); Adafruit encoder **PID 377**; compact Waveshare AW9523B expansion **SKU 22132** or experimental QUAD seesaw breakout **PID 5752**. Specific parts are **recommended, not user-selected/ordered/wired**.
-- **Status:** Phase 5.2 desktop/simulator software **unchanged**, source checkpoint `7172c2e`. User-accepted controls need **6 input signals**. New **docs/HARDWARE-SHORTLIST.md** records example parts and pricing (£40.90 standard 25948 + ADA377 + WAV-22132, accessories extra), electrical/address/physical caveats, and alternative B screen/QUAD breakout. Documentation research only; no user part selection, procurement or bench test.
+- **Current actual work:** Phase 6 **pre-purchase verification** of user-confirmed *proposed* hardware: **Waveshare 25948** capacitive touch screen + **Adafruit 377** momentary-push encoder + **Waveshare AW9523B 22132** expander. User agreed to verify wiring, voltage and fit before buying. Manufacturer schematic/datasheet checks completed, but expansion board schematic, safe startup wiring and enclosure fit remain open. Roadmap hardware-research task, not firmware implementation.
+- **Status:** Phase 5.2 software unchanged, source checkpoint `7172c2e`. User-selected *proposed* physical component trio documented in **docs/HARDWARE-PRE-PURCHASE-CHECK.md**. Screen physical module **106.1×67.8 mm**, visible drawing **95.54×54.36 mm**, ~98×60 mm screw-center spacing; Adafruit encoder 377 has ~13.2 mm body, M7×0.75 threaded bushing, short momentary switch travel; kit knob family drawing ~16 mm diameter. AW9523B 22132 is 38×23 mm, nominal 0x58 I²C, 3.3 V capable; module-specific reset/pullup and electrical safety still need schematic. Current case sketch likely crowds the LCD rear PCB. No purchase, wiring or hardware runtime test.
 
 ## Last accepted work
 
@@ -44,11 +44,11 @@ Updated: 2026-10-20
 
 ## Current next action
 
-1. Review **docs/HARDWARE-SHORTLIST.md**. Proposed compact kit: **Waveshare 25948 touchscreen (£31.70)** + **Adafruit 377 push encoder/knob (£4.40)** + **Waveshare AW9523B SKU 22132 expansion (£4.80)** = **£40.90 example base parts subtotal**, excluding wiring/pull-ups/USB/keycaps/case/shipping. Prices and stock vary.
-2. **Ask user to confirm** standard smaller 270-nit screen vs brighter but larger 550-nit **4.3B SKU 27848** (about £3.90 more). Do not interpret research as final purchase authority.
-3. Prefer compact AW9523B for easier case fit; if rotary input events are lost under I²C polling, test Adafruit QUAD seesaw breakout (address 0x49) as alternate. On its four switch contacts, **3 MX + encoder push** is a hypothetical off-label use; duplicate pin listing and PCB size require verification.
-4. Before actual wiring, verify exact voltage-selector/I²C pinout, address scan, 6 input pullups, correct connector adapters, encoder momentary push travel and switch body clearance; no validated schematic exists.
-5. Future separate code task: revise accepted Phase 5.2 **four-key simulator** into **three physical keys + push encoder**, preserving audio, artwork, pairing and mode/volume behavior.
+1. **Read docs/HARDWARE-PRE-PURCHASE-CHECK.md** before recommending a wiring kit. User's proposed screen/encoder/expander parts are **Waveshare 25948 + Adafruit 377 + Waveshare AW9523B 22132**; treat them as research-selected, not purchased or proven.
+2. **Electrical blocker:** retrieve/check the exact **AW9523B module schematic**, especially reset pullups, I²C pullups/voltage domains, address straps and GPIO default outputs on power-up. Draw a reviewed 4-wire screen I²C to 6-wire expander harness and safe switch-input bias/current-limit plan; verify 3.3 V selector. Do not issue plug-by-color/soldering instructions yet.
+3. **Case-fit blocker:** revise original mockup with full **106.1×67.8 mm** LCD PCB footprint (rather than visible 95.54×54.36 mm), ~98×60 mm mounting pitch, and bottom/side bezels. The 18 mm MX caps directly below display and ~18 mm right knob may compete for PCB/encoder body space. Develop an explicit 3D cross-section and mounting study before printing; tentative faceplate exploration 140–150×100–110 mm is only an estimate.
+4. **Encoder check:** Adafruit 377's linked PEC11 drawing says **M7×0.75 mounting bushing**, **15 mm shaft (part code)**, 6 mm D shaft, 13.2 mm body and **0.5±0.2 mm momentary switch travel**. Linked included 450-BA761 knob drawing shows **~16 mm outside diameter**, so it can plausibly replace an 18 mm sketch circle; confirm actual kit knob after receipt.
+5. When mechanical and electrical issues are resolved, make a separately approved prototype procurement checklist and then bench-validate I²C address, six inputs, rotary at speed and screen+Wi-Fi simultaneous operation. Phase 5.2 app unchanged; independent firmware work still future.
 
 ## Relevant project files (from Phase 5.2 source)
 
@@ -57,7 +57,7 @@ Updated: 2026-10-20
 - `static/ui.js`, `static/ui.css`, `static/device.js`, `static/device.css`
 - `templates/index.html`, `templates/device.html`, `templates/pair.html`
 - `tests/`, `requirements-ui.txt`, `requirements-windows.txt`
-- `docs/ROADMAP.md`, `docs/DECISIONS.md`, **`docs/DESIGN.md`**, `docs/HARDWARE.md`, **`docs/HARDWARE-SHORTLIST.md`**, `docs/HARDWARE-RESEARCH.md`, `docs/HARDWARE-COMPARISON.md`, `docs/CHATGPT-WORKFLOW.md`
+- `docs/ROADMAP.md`, `docs/DECISIONS.md`, **`docs/DESIGN.md`**, `docs/HARDWARE.md`, **`docs/HARDWARE-SHORTLIST.md`**, **`docs/HARDWARE-PRE-PURCHASE-CHECK.md`**, `docs/HARDWARE-RESEARCH.md`, `docs/HARDWARE-COMPARISON.md`, `docs/CHATGPT-WORKFLOW.md`
 - One-time import scripts: `scripts/import-phase5-2.ps1` (already run) and `scripts/archive-local-phases.ps1` (already run). Historical files: `archives/phase-zips/` and `docs/history/ARCHIVED-PHASE-ZIPS.md` (16 verified archives and their original/stored hashes).
 
 ## Recent meaningful commits
@@ -69,10 +69,12 @@ Updated: 2026-10-20
 - `5833f0e` — Phase 6 extended screen/input-expander comparison; includes AW9523 and QUAD seesaw ideas (documentation only).
 - 2026-10-20 user-accepted physical design mapping: **3 MX keys + push encoder (turn volume, push PC/Wi-Fi)**; docs-only. No fourth physical MX key.
 - `cc6c4b6` — proposed SKU-specific Waveshare / encoder / AW9523B parts shortlist and UK price estimates (documentation only).
+- `bab9e96` — manufacturer PDF-based pre-purchase mechanical, voltage and input-safety checklist (documentation only).
 - Documentation-only commits after this checkpoint are not evidence of newer runtime implementation.
 
 ## Unresolved issues / deferred
 
+- The Waveshare AW9523B silicon **defaults all GPIO to outputs** before software config: avoid directly grounding contacts without validated startup/current-limit protection. Manufacturer module schematic was not accessible through research interface; check it prior to soldering. Exact connector and reset wiring remain unproven.
 - Part availability is variable. The Adafruit AW9523 PID 4886 module was shown sold out in one checked supplier listing; Waveshare AW9523B SKU 22132 is a proposed same-chip breakout, not necessarily plug-and-play. User has not ordered hardware.
 - GPIO/I²C warning: onboard CH422G reserves `0x20–0x27` and `0x30–0x3F`, so default MCP23017 (0x20+) and Adafruit **single** I²C rotary breakout (0x36–0x3D) conflict. AW9523 (0x58) and Adafruit **QUAD** seesaw breakout (0x49) are proposed alternatives; QUAD off-label 3 MX + encoder push switch contact use needs schematic/bench checks due to possible duplicated pin listing. No purchase approval.
 - The device simulator can poll `/api/device/state` repeatedly even with SSE; optimization is deferred, not a blocker.
