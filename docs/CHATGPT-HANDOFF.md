@@ -16,8 +16,8 @@ Updated: 2026-10-20
 ## Current project phase vs current actual work
 
 - **Current project phase:** Phase 6 — hardware research, compatibility decisions and first firmware design (**planned, not implemented**)
-- **Current actual work:** Phase 6 follow-up research: compare Waveshare 4.3/4.3B/4.3C screens and input-expansion strategies, including ready-made AW9523 and a possible combined four-key/one-encoder QUAD seesaw controller. Roadmap research, not implementation, **awaiting user decision**.
-- **Status:** Phase 5.2 source at `7172c2e`, 16 archives at `f781506`; software unchanged. Research reports `docs/HARDWARE-RESEARCH.md` and `docs/HARDWARE-COMPARISON.md` compare exact boards, GPIO conflicts, and four-switch+encoder options. Hardware not selected/accepted, purchased or bench tested.
+- **Current actual work:** Phase 6 **physical control-layout revision** based on user-provided approx. 1:1 mockup. User now **prefers 3 MX keys** (Prev/Play-Pause/Next) below touchscreen + **18 mm rotary volume knob** at right, instead of old 4-key design. Secondary PC/Wi-Fi/shuffle/repeat proposed as touch actions. **Preferred concept, not final CAD or implementation.**
+- **Status:** Phase 5.2 software **unchanged** (GitHub checkpoint `7172c2e`), archived versions `f781506`. Waveshare/input-expander research predates 3-key preference and still includes four-key assumptions. Physical design preference documented in `docs/DESIGN.md`; no hardware purchased/bench-tested or firmware changed.
 
 ## Last accepted work
 
@@ -38,15 +38,16 @@ Updated: 2026-10-20
 ## Not implemented / still awaiting validation
 
 - Actual ESP32-S3 firmware, pairing on-device, Wi-Fi provisioning, secure LAN transport, final standalone-without-PC architecture.
-- Final Waveshare board SKU, connector/pinout, input expander and electrical verification, case and encoder/switch placement. Research favors original touch SKU **25948**, but user has not accepted a final board.
+- Final Waveshare board SKU, connector/pinout, input expander and electrical verification, case/3-key/knob placement. Research favors original touch SKU **25948**, but user has not selected final board. Check whether module's *full PCB* (~106.1×67.8 mm) leaves clearance behind 18 mm bottom keys and right knob.
 - Real cross-platform end-to-end device simulator testing over separate physical LAN clients; Linux and Windows post-import revalidation.
 
 ## Current next action
 
-1. Discuss **compact standard Waveshare 25948 (270 nits)** versus **larger/brighter 27848 4.3B (550 nits)**; 4.3C audio variant only if needed. Avoid prematurely selecting/ordering.
-2. Compare **Adafruit AW9523 (0x58)** six-input polling with external bias resistors against **Adafruit I²C QUAD rotary breakout (0x49)** proposed off-label layout using one encoder and four separate switch pads. QUAD schematic/pinout has a possible duplicate pin number and must be bench-verified before use. Both avoid Waveshare CH422G reserved addresses.
-3. If preferred, settle an experiment plan: check exact I²C bus 3.3 V jumper, shared SDA/SCL, connector adapter, mechanical space and encoder responsiveness before committing to firmware/wiring.
-4. Keep Phase 5.2 post-import Windows/Omarchy runtime retest and LAN protocol hardening as separate pending work.
+1. Confirm refined front-panel mockup: **three ~18 mm MX caps below display, ~18 mm diameter knob at right**; what does the isolated refresh icon outside the case denote? Record the answer without inventing a fourth physical button.
+2. Reassess standard Waveshare touch 25948 versus brighter 4.3B 27848. Verify full module/PCB and hole locations, not only diagonal display or apparent CAD scale, to ensure front-panel key/encoder clearance.
+3. Recalculate I²C input needs: **5** basic digital signals (3 keys + encoder A/B), **6** with push switch. AW9523 (0x58), TCA9539 (0x74–0x77), QUAD seesaw (0x49) still candidates; no module chosen. Test quadrature count under real display/Wi-Fi load before wiring.
+4. Decide whether to revise the Phase 5.2 **four-key simulator** to match new physical concept in a future focused code task; don't break existing accepted simulator/protocol by silently changing it.
+5. Track Windows/Omarchy Phase 5.2 post-import validation and device LAN-security work separately.
 
 ## Relevant project files (from Phase 5.2 source)
 
@@ -65,6 +66,7 @@ Updated: 2026-10-20
 - `f781506` — all 16 historical ZIP archives and checksum manifest pushed and verified.
 - `196a66a` — Phase 6 WaveShare board/expander manufacturer-source research (documentation only; no application or firmware changed).
 - `5833f0e` — Phase 6 extended screen/input-expander comparison; includes AW9523 and QUAD seesaw ideas (documentation only).
+- 2026-10-20 physical mockup preference: three physical keys + knob; details in `docs/DESIGN.md` (documentation only, no app changes).
 - Documentation-only commits after this checkpoint are not evidence of newer runtime implementation.
 
 ## Unresolved issues / deferred
