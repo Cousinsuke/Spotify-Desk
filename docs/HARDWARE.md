@@ -8,10 +8,14 @@
 |---|---|---|
 | MCU | ESP32-S3 | Candidate |
 | Screen | Waveshare `ESP32-S3-Touch-LCD-4.3`, **SKU 25948** (capacitive touch) | **Preferred research candidate**, not yet user-selected; B/C alternate boards documented separately |
-| Keys | Four owned MX-style mechanical switches | User has switches; physical wiring TBD |
-| Knob | Rotary encoder + knob | Model/pins TBD; quadrature needs 2 GPIO inputs, plus optional press |
+| Keys | **Three** of the user's four owned MX-style mechanical switches — Previous / Play-Pause / Next | Preferred mockup; 0.71 in (~18 mm) keycaps, switch mounting/spacing and wiring TBD |
+| Knob | Rotary encoder + **18 mm outside-diameter** knob to the right of display | Preferred mockup; shaft/panel-hole size TBD; quadrature uses two input signals, plus optional press |
 | Case | 3D-printed | CAD/dimensions TBD |
 | Power | USB-powered prototype preferred for simplicity | Electrical choice TBD |
+
+## Revised front-panel concept (2026-10-20)
+
+Three physical MX keys under the touchscreen and a rotary volume knob to its right. **PC/Wi-Fi, shuffle, repeat and settings are proposed touchscreen actions**, replacing the old fourth physical mode key. Five required digital input signals (three keys + encoder A/B), or six with encoder press. See [DESIGN.md](DESIGN.md) for the tentative 0.71 in dimensions and mechanical checks. Earlier expander research assumed four keys; it remains useful but should not be mistaken for a finalized six-input requirement.
 
 ## Critical researched constraint
 
