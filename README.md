@@ -1,6 +1,6 @@
 # Spotify Desk Thing
 
-An experimental desktop music controller and future physical desk accessory, built around an 800 × 480 touchscreen, a **preferred three-key media layout**, and a rotary volume encoder.
+An experimental desktop music controller and future physical desk accessory, built around an 800 × 480 touchscreen, a **preferred three-key media layout**, and a **push-to-switch-mode rotary volume encoder**.
 
 **Repository status:** Phase 5.2 application source is committed on `main` at [`7172c2e`](https://github.com/Cousinsuke/Spotify-Desk/commit/7172c2ee2f285253507b13c71acb7072adc04067). This is the current checked-in software baseline; hardware firmware has not started.
 
@@ -10,7 +10,7 @@ An experimental desktop music controller and future physical desk accessory, bui
 - **PC mode**: local Windows 11 media sessions or Linux MPRIS/playerctl, with PC audio visualisation.
 - Common HTML/CSS/JavaScript 800 × 480 player interface.
 - Optional private-LAN device simulator, paired using a short-lived code and bearer token.
-- Planned physical hardware: ESP32-S3, Waveshare 4.3-inch 800 × 480 touchscreen, **three ~18 mm MX media keys beneath screen and ~18 mm diameter volume knob at right (preferred mockup)**, custom 3D-printed enclosure. The prior four-key *software simulator* is unchanged. **Board, case dimensions and pinout are not finalized or purchased.**
+- Planned physical hardware: ESP32-S3, Waveshare 4.3-inch 800 × 480 touchscreen, **three ~18 mm MX media keys beneath screen and an ~18 mm diameter push-capable rotary knob at right** (rotate for volume; **press to switch PC/Wi-Fi mode**; interaction mapping accepted), custom 3D-printed enclosure. The prior four-key *software simulator* is unchanged. **Board, case dimensions and pinout are not finalized or purchased.**
 
 ## Current status
 
