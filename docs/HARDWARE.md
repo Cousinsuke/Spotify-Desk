@@ -1,6 +1,6 @@
 # Hardware — researched candidates, no approved wiring
 
-**No final bill of materials, purchase or wiring/schematic has been accepted.** Manufacturer-based technical research is available in **[HARDWARE-RESEARCH.md](HARDWARE-RESEARCH.md)** (research logged 2026-10-20).
+**No final bill of materials, purchase or wiring/schematic has been accepted.** Manufacturer-based technical research is available in **[HARDWARE-RESEARCH.md](HARDWARE-RESEARCH.md)** and the [model/expander comparison](HARDWARE-COMPARISON.md) (2026-10-20).
 
 ## Intended parts
 
@@ -15,7 +15,7 @@
 
 ## Critical researched constraint
 
-The original 4.3 touchscreen uses most GPIO for RGB LCD and board peripherals. Its Waveshare guide lists onboard I²C addresses `0x20–0x27`, `0x30–0x3F`, `0x5D`, so **common MCP23017 expander address `0x20–0x27` conflicts**. A **TCA9539 (0x74–0x77)** or **ATtiny817 seesaw (0x49)** is a *candidate*, not a finalized part. Use the manufacturer's schematic and verify 3.3 V I²C power and hardware revision before wiring. See [detailed research](HARDWARE-RESEARCH.md) and its primary sources.
+The original 4.3 touchscreen uses most GPIO for RGB LCD and board peripherals. Its Waveshare guide lists onboard I²C addresses `0x20–0x27`, `0x30–0x3F`, `0x5D`, so **common MCP23017 expander address `0x20–0x27` conflicts**. An **AW9523 16-channel breakout (0x58)**, **TCA9539 (0x74–0x77)** or **Adafruit QUAD rotary breakout (0x49)** is a *candidate*, not a finalized part. The QUAD breakout could potentially read four wired MX keys via four switch contacts alongside one rotary encoder, but requires pin-mapping proof. Use the manufacturer's schematic and verify 3.3 V I²C power and hardware revision before wiring. See [detailed research](HARDWARE-RESEARCH.md) and its primary sources.
 
 ## Compatibility checks before buying
 
