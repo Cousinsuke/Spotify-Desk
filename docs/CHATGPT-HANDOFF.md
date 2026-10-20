@@ -16,8 +16,8 @@ Updated: 2026-10-20
 ## Current project phase vs current actual work
 
 - **Current project phase:** Phase 6 — hardware research, compatibility decisions and first firmware design (**planned, not implemented**)
-- **Current actual work:** ad-hoc **modern knob aesthetic exploration** during Phase 6 pre-purchase verification. User **provisionally selected Knob Zone KZ0087-01 flat ridged black aluminium** to replace the Adafruit 377 supplied cap; **KZ0022 is fallback**, domed KZ0059 rejected. New style target is the short, low-protrusion flat knob on the user's **RK M75 keyboard**. KZ0087 measures **15.1 mm diameter × 15.2 mm total height**, UK example **£3.84**, and needs a 6 mm bore/grub-screw fit. RK M75 exact reference measurements unknown; target visible height above the faceplate still open. **Chosen provisionally only: not ordered, physically fitted or press-tested.** Existing proposed Waveshare 25948 + Adafruit 377 *encoder body* + AW9523B 22132 remains in place.
-- **Status:** Phase 5.2 software unchanged, source checkpoint `7172c2e`. User-selected *proposed* physical component trio documented in **docs/HARDWARE-PRE-PURCHASE-CHECK.md**. Screen physical module **106.1×67.8 mm**, visible drawing **95.54×54.36 mm**, ~98×60 mm screw-center spacing; Adafruit encoder 377 has ~13.2 mm body, M7×0.75 threaded bushing, short momentary switch travel; kit knob family drawing ~16 mm diameter. AW9523B 22132 is 38×23 mm, nominal 0x58 I²C, 3.3 V capable; module-specific reset/pullup and electrical safety still need schematic. Current case sketch likely crowds the LCD rear PCB. No purchase, wiring or hardware runtime test.
+- **Current actual work:** Phase 6 **electrical schematic/boot review** of provisional **Waveshare touchscreen SKU 25948 + Adafruit push encoder 377 + Waveshare AW9523B expansion SKU 22132**, with provisional KZ0087 knob. AW9523B silicon datasheet confirmed initial GPIO outputs, 0x58 address / default P0 open-drain LOW, 0x04 input configuration and **internal RESET pull-down**. Conditional 22k pull-up + 1k series-to-contact network devised for six inputs. **Full Waveshare module schematic unavailable to visually trace, so board reset pull-up, pin orientation and level shifter are not signed off**. No physical test or purchase.
+- **Status:** Phase 5.2 software unchanged at `7172c2e`. Detailed electrical evidence and unresolved risks now recorded in **docs/HARDWARE-ELECTRICAL-REVIEW.md**; earlier mechanical measurements remain in **docs/HARDWARE-PRE-PURCHASE-CHECK.md**. Confirmed chip data: **GPIO reset as outputs**, with 0x58/AD0=AD1=0 **P0 low open-drain**; **RSTN internal 100k pulldown** needs external circuit. Example protected input network mathematically calculated only; no physical/board schematic approval. KZ0087 flat aluminium cap is provisional, not fitted. No purchased hardware.
 
 ## Last accepted work
 
@@ -44,12 +44,12 @@ Updated: 2026-10-20
 
 ## Current next action
 
-1. **KZ0087-01 chosen provisionally as knob cap** (flat ridged aluminium, 15.1×15.2 mm, ~£3.84), retaining Adafruit 377 encoder body, Waveshare 25948 touch board and AW9523B 22132. **Check 6 mm bore/grub screw and max 12.4 mm insertion versus nominal 15 mm encoder D shaft**, plus user-desired low exposed height and encoder press travel. No purchase/fit approval. KZ0022 remains the fallback; domed KZ0059 rejected. This is cosmetic design work, not a new numbered phase.
-2. **Read docs/HARDWARE-PRE-PURCHASE-CHECK.md** before recommending a wiring kit. User's proposed screen/encoder/expander parts are **Waveshare 25948 + Adafruit 377 + Waveshare AW9523B 22132**; treat them as research-selected, not purchased or proven.
-3. **Electrical blocker:** retrieve/check the exact **AW9523B module schematic**, especially reset pullups, I²C pullups/voltage domains, address straps and GPIO default outputs on power-up. Draw a reviewed 4-wire screen I²C to 6-wire expander harness and safe switch-input bias/current-limit plan; verify 3.3 V selector. Do not issue plug-by-color/soldering instructions yet.
-4. **Case-fit blocker:** revise original mockup with full **106.1×67.8 mm** LCD PCB footprint (rather than visible 95.54×54.36 mm), ~98×60 mm mounting pitch, and bottom/side bezels. The 18 mm MX caps directly below display and ~18 mm right knob may compete for PCB/encoder body space. Develop an explicit 3D cross-section and mounting study before printing; tentative faceplate exploration 140–150×100–110 mm is only an estimate.
-5. **Encoder check:** Adafruit 377's linked PEC11 drawing says **M7×0.75 mounting bushing**, **15 mm shaft (part code)**, 6 mm D shaft, 13.2 mm body and **0.5±0.2 mm momentary switch travel**. Linked included 450-BA761 knob drawing shows **~16 mm outside diameter**, so it can plausibly replace an 18 mm sketch circle; confirm actual kit knob after receipt.
-6. When mechanical and electrical issues are resolved, make a separately approved prototype procurement checklist and then bench-validate I²C address, six inputs, rotary at speed and screen+Wi-Fi simultaneous operation. Phase 5.2 app unchanged; independent firmware work still future.
+1. **Read docs/HARDWARE-ELECTRICAL-REVIEW.md** first. Current proposed trio **Waveshare 25948 touch + Adafruit PID 377 push encoder + Waveshare AW9523B SKU 22132**, provisional **KZ0087** cosmetic knob, controls 3 MX + A/B + press (**six** contacts).
+2. **Electrical verification blocker:** obtain **full viewable Waveshare AW9523B 22132 module schematic** and trace RESET pull-up, AD0/AD1 selection, I²C voltage/pullups, connector physical pin 1 and 6-pin routing. Manufacturer Wiki says RST/INT *may be left NC* on its module, but AW9523B **chip RSTN has internal 100k pull-down** and therefore requires a board-level pull-up/drive. Indexed PDF text suggests 10k resistors, **not sufficient to certify connectivity**.
+3. Use external I²C **3.3V** selected at screen H8; the screen has four-wire I²C, expander six-wire PH2.0. Draft 3.3V/GND/SDA/SCL adapter and physically verify orientation and voltage before powered connection. Nominal expander address 0x58 avoids documented 0x20–0x27, 0x30–0x3F, 0x5D devices; confirm with actual I²C scan.
+4. Six switches/encoder contacts on P0_0..P0_5: **proposed** 22kΩ external 3.3V pull-up at GPIO node plus 1kΩ series between node and grounded contact. Predicted LOW ~0.143V vs chip VIL max 0.4V, accidental HIGH-to-ground ~3.3mA, but **no physical electrical approval**. Software must set P0 to inputs (config 0x04), and test encoder step loss under LCD+Wi-Fi load.
+5. Fit/layout blocker remains: LCD full 106.1×67.8 mm, three 18mm MX keys and 15.1mm KZ0087 knob plus push encoder must fit behind faceplate. KZ0087 depth 12.4mm maximum versus nominal 15mm encoder shaft means test visible protrusion/grub screw/push travel before case build.
+6. Update prototype BOM only after safe module circuit is verified and/or residual first-prototype risks are explicitly accepted. **Do not modify accepted Phase 5.2 app until a separate implementation task.**
 
 ## Relevant project files (from Phase 5.2 source)
 
@@ -58,7 +58,7 @@ Updated: 2026-10-20
 - `static/ui.js`, `static/ui.css`, `static/device.js`, `static/device.css`
 - `templates/index.html`, `templates/device.html`, `templates/pair.html`
 - `tests/`, `requirements-ui.txt`, `requirements-windows.txt`
-- `docs/ROADMAP.md`, `docs/DECISIONS.md`, **`docs/DESIGN.md`**, `docs/HARDWARE.md`, **`docs/HARDWARE-SHORTLIST.md`**, **`docs/HARDWARE-PRE-PURCHASE-CHECK.md`**, `docs/HARDWARE-RESEARCH.md`, `docs/HARDWARE-COMPARISON.md`, `docs/CHATGPT-WORKFLOW.md`
+- `docs/ROADMAP.md`, `docs/DECISIONS.md`, **`docs/DESIGN.md`**, `docs/HARDWARE.md`, **`docs/HARDWARE-SHORTLIST.md`**, **`docs/HARDWARE-PRE-PURCHASE-CHECK.md`**, **`docs/HARDWARE-ELECTRICAL-REVIEW.md`**, `docs/HARDWARE-RESEARCH.md`, `docs/HARDWARE-COMPARISON.md`, `docs/CHATGPT-WORKFLOW.md`
 - One-time import scripts: `scripts/import-phase5-2.ps1` (already run) and `scripts/archive-local-phases.ps1` (already run). Historical files: `archives/phase-zips/` and `docs/history/ARCHIVED-PHASE-ZIPS.md` (16 verified archives and their original/stored hashes).
 
 ## Recent meaningful commits
@@ -71,12 +71,13 @@ Updated: 2026-10-20
 - 2026-10-20 user-accepted physical design mapping: **3 MX keys + push encoder (turn volume, push PC/Wi-Fi)**; docs-only. No fourth physical MX key.
 - `cc6c4b6` — proposed SKU-specific Waveshare / encoder / AW9523B parts shortlist and UK price estimates (documentation only).
 - `bab9e96` — manufacturer PDF-based pre-purchase mechanical, voltage and input-safety checklist (documentation only).
+- `3f7d768` — manufacturer chip datasheet electrical review + preliminary protected six-input network and documented unresolved module schematic verification (docs only).
 - Documentation-only commits after this checkpoint are not evidence of newer runtime implementation.
 
 ## Unresolved issues / deferred
 
 - Adafruit 377 included cap rejected aesthetically; **KZ0087 provisionally selected** to match low-profile RK M75 styling. Its 12.4 mm maximum insertion is shorter than Adafruit shaft's nominal 15 mm, so mechanical fit/encoder push still require validation. Encoder electronics unchanged.
-- The Waveshare AW9523B silicon **defaults all GPIO to outputs** before software config: avoid directly grounding contacts without validated startup/current-limit protection. Manufacturer module schematic was not accessible through research interface; check it prior to soldering. Exact connector and reset wiring remain unproven.
+- The Waveshare AW9523B silicon **defaults GPIO to outputs**; at the anticipated 0x58 straps P0 starts low open-drain, but **RESET has internal 100k pull-down**, so verify module's external reset pull-up and boot timing. Preliminary six-input 22k pullups + 1k series are **not an approved wiring schematic**. Module full diagram still inaccessible even though an indexed text copy identifies R1–R4 10k. See `docs/HARDWARE-ELECTRICAL-REVIEW.md`.
 - Part availability is variable. The Adafruit AW9523 PID 4886 module was shown sold out in one checked supplier listing; Waveshare AW9523B SKU 22132 is a proposed same-chip breakout, not necessarily plug-and-play. User has not ordered hardware.
 - GPIO/I²C warning: onboard CH422G reserves `0x20–0x27` and `0x30–0x3F`, so default MCP23017 (0x20+) and Adafruit **single** I²C rotary breakout (0x36–0x3D) conflict. AW9523 (0x58) and Adafruit **QUAD** seesaw breakout (0x49) are proposed alternatives; QUAD off-label 3 MX + encoder push switch contact use needs schematic/bench checks due to possible duplicated pin listing. No purchase approval.
 - The device simulator can poll `/api/device/state` repeatedly even with SSE; optimization is deferred, not a blocker.
