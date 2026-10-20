@@ -9,17 +9,17 @@
 | MCU | ESP32-S3 | Candidate |
 | Screen | Waveshare `ESP32-S3-Touch-LCD-4.3`, **SKU 25948** (capacitive touch) | **Preferred research candidate**, not yet user-selected; B/C alternate boards documented separately |
 | Keys | **Three** of the user's four owned MX-style mechanical switches — Previous / Play-Pause / Next | Preferred mockup; 0.71 in (~18 mm) keycaps, switch mounting/spacing and wiring TBD |
-| Knob | Rotary encoder + **18 mm outside-diameter** knob to the right of display | Preferred mockup; shaft/panel-hole size TBD; quadrature uses two input signals, plus optional press |
+| Knob | **Push-capable** rotary encoder and ~18 mm outside-diameter knob right of display | Turn adjusts volume; **press toggles PC/Wi-Fi**. Encoder model/shaft/panel hole TBD |
 | Case | 3D-printed | CAD/dimensions TBD |
 | Power | USB-powered prototype preferred for simplicity | Electrical choice TBD |
 
 ## Revised front-panel concept (2026-10-20)
 
-Three physical MX keys under the touchscreen and a rotary volume knob to its right. **PC/Wi-Fi, shuffle, repeat and settings are proposed touchscreen actions**, replacing the old fourth physical mode key. Five required digital input signals (three keys + encoder A/B), or six with encoder press. See [DESIGN.md](DESIGN.md) for the tentative 0.71 in dimensions and mechanical checks. Earlier expander research assumed four keys; it remains useful but should not be mistaken for a finalized six-input requirement.
+Three physical MX keys under the touchscreen and a rotary volume knob to its right. **Encoder press toggles PC/Wi-Fi mode.** Shuffle, repeat, settings and optionally PC/Wi-Fi remain touchscreen actions. The detached fourth-key icon was only a placeholder: **no fourth MX switch**. Required signals are **six**: three MX contacts, two encoder quadrature contacts (A/B), and its momentary push contact. See [DESIGN.md](DESIGN.md) for the tentative 0.71 in dimensions and mechanical checks. Earlier expander research assumed four keys; it remains useful but should not be mistaken for a finalized six-input requirement.
 
 ## Critical researched constraint
 
-The original 4.3 touchscreen uses most GPIO for RGB LCD and board peripherals. Its Waveshare guide lists onboard I²C addresses `0x20–0x27`, `0x30–0x3F`, `0x5D`, so **common MCP23017 expander address `0x20–0x27` conflicts**. An **AW9523 16-channel breakout (0x58)**, **TCA9539 (0x74–0x77)** or **Adafruit QUAD rotary breakout (0x49)** is a *candidate*, not a finalized part. The QUAD breakout could potentially read four wired MX keys via four switch contacts alongside one rotary encoder, but requires pin-mapping proof. Use the manufacturer's schematic and verify 3.3 V I²C power and hardware revision before wiring. See [detailed research](HARDWARE-RESEARCH.md) and its primary sources.
+The original 4.3 touchscreen uses most GPIO for RGB LCD and board peripherals. Its Waveshare guide lists onboard I²C addresses `0x20–0x27`, `0x30–0x3F`, `0x5D`, so **common MCP23017 expander address `0x20–0x27` conflicts**. An **AW9523 16-channel breakout (0x58)**, **TCA9539 (0x74–0x77)** or **Adafruit QUAD rotary breakout (0x49)** is a *candidate*, not a finalized part. The QUAD breakout could potentially read **three wired MX keys and the encoder push** from four switch contacts, plus one encoder's A/B signals; this off-label wiring still requires schematic and bench verification. Use the manufacturer's schematic and verify 3.3 V I²C power and hardware revision before wiring. See [detailed research](HARDWARE-RESEARCH.md) and its primary sources.
 
 ## Compatibility checks before buying
 
