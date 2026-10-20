@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Desk Thing · Hardware Simulator 5.2</title>
+<!-- The physical-device preview now uses the same screen design as the original player. -->
+<link rel="stylesheet" href="/static/ui.css?v=5.1">
+<link rel="stylesheet" href="/static/device.css?v=5.1">
+<script src="/static/device.js?v=5.2" defer></script>
+</head>
+<body>
+<main class="simulator">
+  <header class="intro"><div><span class="eyebrow">PHASE 5.2 · VIRTUAL HARDWARE</span><h1>Desk Thing <span>Simulator</span></h1></div><div class="connect-indicator"><i id="networkDot"></i><span id="networkText">Not paired</span></div></header>
+  <div class="shell" id="shell">
+    <section class="screen" aria-label="800 by 480 touchscreen simulator">
+      <div class="surface">
+        <header class="topbar">
+          <div class="brand"><span class="brand-dot">◉</span> DESK THING <span class="brand-sub">/ SPOTIFY</span></div>
+          <div class="topright"><div class="mode-switch" role="group" aria-label="Playback source"><button type="button" id="modeSpotify" class="mode-choice" aria-pressed="false">WI-FI</button><button type="button" id="modePC" class="mode-choice active" aria-pressed="true">PC</button></div><span class="connection"><i id="statusLamp"></i><span id="connectionText">PAIRING</span></span></div>
+        </header>
+        <div class="content">
+          <div class="art-frame" id="artFrame"><div class="art-fallback" id="fallback">♫</div><img id="cover" alt="Album artwork" crossorigin="anonymous" hidden></div>
+          <div class="details"><div class="overline">NOW PLAYING</div><h1 id="track">Waiting for companion</h1><p id="artist">Pair the simulated device to continue</p><p class="album" id="album"></p>
+            <div class="timeline"><div class="progress-line"><div id="progressFill"></div></div><div class="time-row"><span id="elapsed">0:00</span><span id="duration">0:00</span></div></div>
+            <div class="transport">
+              <button id="back" type="button" class="transport-btn" aria-label="Previous track" title="Previous (K1)"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="2.5" height="14" rx=".6"/><path d="M12 5 5.8 12 12 19V5Zm8 0-6.2 7 6.2 7V5Z"/></svg></button>
+              <button id="play" type="button" class="play-btn" aria-label="Play" title="Play/Pause (K2)"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6.5 4.5c0-.5.55-.8.99-.5L19.4 11.5c.39.25.39.75 0 1L7.49 20c-.44.3-.99 0-.99-.5V4.5Z"/></svg></button>
+              <button id="next" type="button" class="transport-btn" aria-label="Next track" title="Next (K3)"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="18.5" y="5" width="2.5" height="14" rx=".6"/><path d="M4 5 10.2 12 4 19V5Zm8 0 6.2 7-6.2 7V5Z"/></svg></button>
+            </div>
+          </div>
+        </div>
+        <div class="bottom"><div class="device-name"><span class="device-icon">▣</span><span id="deviceName">No playback device</span></div><div class="volume-group"><span id="volumeSource" class="volume-source">SPOTIFY</span><span class="vol-icon" id="volumeIcon" role="img" aria-label="Volume unavailable"></span><input id="volume" type="range" min="0" max="100" value="20" aria-label="Spotify volume"><span id="volumeLabel">--%</span></div></div>
+        <div class="pair-overlay" id="pairOverlay"><form id="pairForm" class="pair-box"><span class="eyebrow">LOCAL DEVICE PAIRING</span><h3>Connect to your companion</h3><p>Open <code>http://127.0.0.1:8888/pair</code> on your companion PC, then enter its six-digit code.</p><label for="code">PAIRING CODE</label><input id="code" name="code" inputmode="numeric" maxlength="6" autocomplete="one-time-code" pattern="[0-9]{6}" placeholder="000000" required><button type="submit">Pair device</button><div class="pair-error" id="pairError" role="alert"></div></form></div>
+      </div>
+    </section>
+    <div class="hardware"><div class="key-set">
+      <button class="key" data-action="previous" title="Key 1 · Previous"><span>⏮</span><small>K1</small></button>
+      <button class="key" data-action="toggle" title="Key 2 · Play/Pause"><span>⏯</span><small>K2</small></button>
+      <button class="key" data-action="next" title="Key 3 · Next"><span>⏭</span><small>K3</small></button>
+      <button class="key mode-key" data-action="mode" title="Key 4 · PC / Wi-Fi"><span>⇆</span><small>K4</small></button>
+    </div><div class="knob-group"><button class="adjust" id="volDown" title="Encoder left">−</button><button id="knob" class="knob" aria-label="Volume encoder; mouse wheel adjusts volume"><span class="indicator"></span><span class="knob-core"></span></button><button class="adjust" id="volUp" title="Encoder right">+</button><small>VOLUME · ENCODER</small></div></div>
+  </div>
+  <footer><span id="hint" role="status">K1–K4 simulate your mechanical switches · turn the virtual encoder to adjust volume</span><button id="disconnect" hidden>Forget pairing on this browser</button></footer>
+</main>
+</body>
+</html>

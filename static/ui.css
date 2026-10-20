@@ -1,0 +1,106 @@
+:root { color-scheme:dark; font-family: Inter,Segoe UI,Arial,sans-serif; background:#0c1012; color:#f8f9fa; --ambient-rgb: 30, 215, 96; --ambient-soft-rgb: 65, 238, 126; }
+* { box-sizing:border-box }
+.workspace { max-width:920px; width:100%; padding:28px 18px 34px }
+/* The browser page remains neutral; album-reactive colour lives ONLY inside .device. */
+body { margin:0; min-height:100vh; display:grid; place-items:center; background:radial-gradient(circle at 50% 13%,#1a2022 0,#101719 47%,#090b0d 100%); }
+.workspace { position:relative; }
+
+.top-note { display:flex; align-items:center; gap:10px; color:#c5cecb; font-size:13px; padding:0 9px 15px; }
+.top-note span:last-child { margin-left:auto; color:#87938d; font-size:12px }
+.dot { width:7px; height:7px; background:#1ed760; border-radius:50%; box-shadow:0 0 12px #1ed760a8 }
+.device { margin:auto; width:800px; max-width:100%; aspect-ratio:5/3; background:#040506; border:9px solid #22282a; border-radius:24px; box-shadow:0 28px 80px #000a, inset 0 0 0 1px #ffffff16; overflow:hidden; }
+.surface { position:relative; height:100%; background:radial-gradient(ellipse at 33% 34%, rgba(var(--ambient-rgb),0.18), #0c1315 60%, #0b0f12 100%); padding:25px 30px 22px; display:flex; flex-direction:column; overflow:hidden; transition: background 700ms ease; }
+.surface::before { content:""; position:absolute; inset:-5% auto auto -7%; width:74%; height:82%; pointer-events:none; background:radial-gradient(circle at 38% 34%, rgba(var(--ambient-rgb),0.28) 0, rgba(var(--ambient-rgb),0.14) 24%, transparent 58%); filter: blur(28px); opacity:.85; transform:scale(1); transition: background 700ms ease, opacity 250ms ease, transform 250ms ease; }
+body.is-playing .surface::before { animation: ambient-breathe 3.2s ease-in-out infinite; }
+.surface > * { position:relative; z-index:1; }
+.topbar { display:flex; align-items:center; justify-content:space-between; color:#c7cfca; font-size:11px; font-weight:800; letter-spacing:1.25px }
+.brand { color:#f0f5f0; display:flex; align-items:center; gap:8px }
+.brand-dot { color:#1ed760; font-size:23px; line-height:0 }
+.brand-sub { color:#71837c; font-weight:500 }
+.topright { display:flex; align-items:center; gap:20px }
+.mode { color:#1ed760; font-size:10px }
+.connection { display:flex; align-items:center; gap:7px; color:#a8b6af; font-size:10px; letter-spacing:0 }
+.connection i { background:#e3aa43; width:6px; height:6px; border-radius:100% }
+.connection i.online { background:#1ed760 }
+.content { display:flex; align-items:center; gap:33px; flex:1; min-height:0; padding:18px 0 11px }
+.art-frame { position:relative; width:242px; aspect-ratio:1; flex:none; background:linear-gradient(135deg,#28423a,#111d1c); border-radius:8px; overflow:hidden; box-shadow:0 12px 27px #0008, 0 0 0 1px rgba(255,255,255,0.04) inset; transition: box-shadow 500ms ease; }
+.art-frame::after { content:""; position:absolute; inset:-10px; border-radius:16px; pointer-events:none; box-shadow:0 0 0 rgba(var(--ambient-rgb),0); opacity:.0; transition: box-shadow 500ms ease, opacity 300ms ease; }
+body.is-playing .art-frame::after { box-shadow:0 0 30px rgba(var(--ambient-rgb),0.32); opacity:1; animation: ambient-breathe 3.2s ease-in-out infinite; }
+.art-frame img { width:100%; height:100%; object-fit:cover; position:absolute; inset:0 }
+.art-fallback { display:grid; place-items:center; height:100%; font-size:90px; color:#76998d }
+.details { flex:1; min-width:0 }
+.overline { color:#1ed760; font-size:10px; font-weight:800; letter-spacing:2.2px; margin-bottom:11px }
+h1 { font-size:32px; line-height:1.1; letter-spacing:-.7px; margin:0 0 8px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis }
+p { margin:0 }
+#artist { color:#e1e6e4; font-size:17px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis }
+.album { color:#82928c; font-size:12px; height:22px; padding-top:5px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis }
+.timeline { margin-top:27px }
+.progress-line { height:4px; background:#39433f; border-radius:10px; overflow:hidden }
+#progressFill { height:100%; width:0; background:#1ed760; border-radius:10px; }
+.time-row { display:flex; justify-content:space-between; color:#8f9c95; font-size:10px; margin-top:9px; font-variant-numeric:tabular-nums }
+/* Transport uses fixed symmetrical columns; icons render consistently on any browser. */
+.transport { display:grid; grid-template-columns:36px 56px 36px; justify-content:center; align-items:center; gap:26px; margin-top:9px }
+button { cursor:pointer; font-family:inherit }
+.transport-btn, .play-btn { display:grid; place-items:center; padding:0; line-height:0; flex:none }
+.transport-btn { background:none; color:#d8dfdc; border:0; border-radius:8px; width:36px; height:36px }
+.transport-btn svg { display:block; width:23px; height:23px; fill:currentColor }
+.transport-btn:hover { color:#1ed760 }
+.play-btn { background:#1ed760; color:#092315; border:0; border-radius:50%; width:56px; height:56px; box-shadow:0 4px 20px #1ed76022 }
+.play-btn svg { display:block; width:28px; height:28px; fill:currentColor }
+.play-btn:hover { background:#56f48e }
+.transport-btn:focus-visible, .play-btn:focus-visible { outline:2px solid #fff; outline-offset:3px }
+button:disabled { opacity:.4; cursor:not-allowed }
+.bottom { border-top:1px solid #ffffff16; padding-top:14px; display:flex; justify-content:space-between; align-items:center; gap:20px; font-size:12px; color:#a9b7af }
+.device-name,.volume-group { display:flex; align-items:center; gap:10px }
+.device-icon { color:#1ed760; font-size:21px }
+.volume-group { width:275px; gap:8px; flex-shrink:0 }
+.volume-source { font-size:9px; font-weight:700; letter-spacing:.65px; color:#a9bab0; width:52px; flex:none; }
+.vol-icon { display:grid; place-items:center; flex:none; width:26px; height:26px; color:#b4c0bd }
+.vol-icon svg { display:block; width:23px; height:23px; fill:none; stroke:currentColor; stroke-width:1.9; stroke-linecap:round; stroke-linejoin:round }
+#volume { flex:1; min-width:32px; width:auto; accent-color:#1ed760 }
+#volumeLabel { min-width:34px; font-size:11px; font-variant-numeric:tabular-nums; text-align:right }
+.overlay { position:absolute; inset:0; background:#0b1012e8; display:grid; place-items:center; z-index:2; text-align:center; padding:20px }
+.overlay[hidden] { display:none }
+.overlay-inner { max-width:360px }
+.overlay h2 { font-size:26px; margin:0 0 12px }
+.overlay p { font-size:14px; line-height:1.5; color:#b8c3bd }
+.overlay a { background:#1ed760; border-radius:999px; color:#062010; font-weight:bold; text-decoration:none; padding:13px 22px; display:inline-block; margin-top:20px }
+.below { display:flex; gap:20px; align-items:center; justify-content:space-between; padding:22px 8px 0 }
+.below div { display:flex; flex-direction:column; gap:6px }
+.below strong { font-size:13px }
+.below span { font-size:12px; color:#84958c }
+.below button { background:#28352e; color:#d6e1d9; border:1px solid #43554b; padding:10px 16px; border-radius:8px; white-space:nowrap }
+.helper { color:#6b8175; font-size:12px; padding:14px 8px; line-height:1.5 }
+@keyframes ambient-breathe { 0%,100% { transform: scale(1); opacity:.82; } 50% { transform: scale(1.025); opacity:1; } }
+@media (max-width:830px) { .device{ border-width:5px; border-radius:14px } .surface{padding:3.2% 4% 2.5%} .content{gap:4%;padding:2% 0} .art-frame{width:33%} h1{font-size:clamp(14px,3.9vw,32px)} #artist{font-size:clamp(10px,2vw,17px)} .album{font-size:clamp(9px,1.5vw,12px)} .timeline{margin-top:4%}.transport{margin-top:1%}.transport{grid-template-columns:clamp(24px,4vw,36px) clamp(34px,7vw,56px) clamp(24px,4vw,36px);gap:clamp(9px,3vw,26px)} .play-btn{width:clamp(34px,7vw,56px);height:clamp(34px,7vw,56px)} .play-btn svg{width:clamp(18px,3.5vw,28px);height:clamp(18px,3.5vw,28px)} .transport-btn{width:clamp(24px,4vw,36px);height:clamp(24px,4vw,36px)} .transport-btn svg{width:clamp(14px,2.9vw,23px);height:clamp(14px,2.9vw,23px)} .bottom{padding-top:1%;font-size:clamp(9px,1.5vw,12px)} .volume-group{width:40%}.volume-source{font-size:clamp(6px,1vw,9px);width:clamp(33px,5vw,52px)} .topright{gap:8px} .brand-sub{display:none} }
+
+/* Phase 2.1 — on-demand device recovery */
+.below .bottom-actions { flex-direction:row; gap:10px; align-items:center; }
+.device-picker { margin:12px 8px 0; padding:12px; border:1px solid #365045; border-radius:10px; background:#17211e; }
+.device-picker[hidden] { display:none; }
+.device-picker h2 { font-size:14px; margin:0 0 6px; }
+.device-picker p { color:#aabdb3; font-size:12px; margin:0 0 8px; }
+.device-option { display:flex; flex-direction:row; justify-content:space-between; gap:8px; align-items:center; padding:9px 0; border-top:1px solid #ffffff18; }
+.device-option span { font-size:12px; color:#dae5de; }
+.device-option button { color:#112718; background:#1ed760; padding:7px 11px; border:0; border-radius:7px; font-size:12px; }
+.device-option button:disabled { opacity:.4; }
+@media(max-width:600px) { .below { flex-wrap:wrap; } .below .bottom-actions { gap:6px; } .below button { padding:7px 9px; } }
+
+/* Align every action-button label independently of browser font metrics. */
+.below button, .device-option button { display:inline-flex; align-items:center; justify-content:center; text-align:center; line-height:1.2 }
+
+/* Phase 2.5: distinguish a pending skip from stale track metadata. */
+.art-frame.is-changing img { opacity:.5; }
+.details.is-changing #track { color:#dde7e2; }
+.details.is-changing .overline { color:#91a89b; }
+
+/* Phase 3.1: compact playback-mode selection and true sound-reactive ambient strength. */
+.mode-switch { display:flex; align-items:center; gap:3px; padding:2px; background:#19231f; border:1px solid #344138; border-radius:999px; }
+.mode-choice { border:0; background:transparent; color:#9daea5; border-radius:999px; padding:5px 9px; font-size:10px; font-weight:800; letter-spacing:.5px; line-height:1.1; }
+.mode-choice.active { background:#1ed760; color:#092315; }
+.mode-choice:focus-visible {outline:2px solid #fff; outline-offset:2px;}
+.audio-diagnostic {padding-top:3px; opacity:.8;}
+body.pc-audio.is-playing .surface::before { animation:none; opacity:calc(.48 + var(--meter-strength, 0) * .43); transform:scale(calc(1 + var(--meter-strength, 0) * .045)); transition:opacity 135ms linear, transform 135ms linear, background 700ms ease; }
+body.pc-audio.is-playing .art-frame::after { animation:none; opacity:calc(.32 + var(--meter-strength, 0) * .55); transition:opacity 135ms linear, box-shadow 500ms ease; }
+@media(max-width:830px) { .mode-choice {padding:3px 5px; font-size:8px;} .topright {gap:6px;} }
+@media(prefers-reduced-motion:reduce) { body.is-playing .surface::before, body.is-playing .art-frame::after {animation:none;} }

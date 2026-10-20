@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Display Spotify Desk Thing — Prototype</title>
+  <link rel="stylesheet" href="/static/ui.css?v=4.2">
+  <script>window.DESK_PLATFORM = {{ desktop_platform | tojson }};</script>
+  <script defer src="/static/ui.js?v=4.2"></script>
+</head>
+<body>
+  <main class="workspace">
+    <div class="top-note"><span class="dot"></span><strong>Desk Thing</strong><span>Browser prototype · 800 × 480</span></div>
+    <section class="device" aria-label="Spotify Desk Thing touchscreen prototype">
+      <div class="surface">
+        <header class="topbar">
+          <div class="brand"><span class="brand-dot">◉</span> DESK THING <span class="brand-sub">/ SPOTIFY</span></div>
+          <div class="topright"><div class="mode-switch" role="group" aria-label="Playback source"><button type="button" id="modeSpotify" class="mode-choice active" aria-pressed="true">WI-FI</button><button type="button" id="modePC" class="mode-choice" aria-pressed="false">PC</button></div><span class="connection"><i id="statusLamp"></i><span id="connectionText">Connecting...</span></span></div>
+        </header>
+        <div class="content">
+          <div class="art-frame" id="artFrame">
+            <div class="art-fallback">♫</div>
+            <img id="cover" alt="Album artwork" crossorigin="anonymous" hidden>
+          </div>
+          <div class="details">
+            <div class="overline">NOW PLAYING</div>
+            <h1 id="track">Waiting for Spotify</h1>
+            <p id="artist">Connect your account to get started</p>
+            <p class="album" id="album"></p>
+            <div class="timeline">
+              <div class="progress-line"><div id="progressFill"></div></div>
+              <div class="time-row"><span id="elapsed">0:00</span><span id="duration">0:00</span></div>
+            </div>
+            <div class="transport">
+              <button id="back" type="button" class="transport-btn" aria-label="Previous track" title="Previous (←)">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="2.5" height="14" rx=".6"/><path d="M12 5 5.8 12 12 19V5Zm8 0-6.2 7 6.2 7V5Z"/></svg>
+              </button>
+              <button id="play" type="button" class="play-btn" aria-label="Play" title="Play / pause (Space)">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6.5 4.5c0-.5.55-.8.99-.5L19.4 11.5c.39.25.39.75 0 1L7.49 20c-.44.3-.99 0-.99-.5V4.5Z"/></svg>
+              </button>
+              <button id="next" type="button" class="transport-btn" aria-label="Next track" title="Next (→)">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="18.5" y="5" width="2.5" height="14" rx=".6"/><path d="M4 5 10.2 12 4 19V5Zm8 0 6.2 7-6.2 7V5Z"/></svg>
+              </button>
+            </div>
+          </div>
+        </div>
+        <div class="bottom">
+          <div class="device-name"><span class="device-icon">▣</span><span id="deviceName">No playback device</span></div>
+          <div class="volume-group"><span id="volumeSource" class="volume-source" title="Volume control source">SPOTIFY</span><span class="vol-icon" id="volumeIcon" role="img" aria-label="Volume unavailable"></span><input aria-label="Spotify volume" id="volume" type="range" min="0" max="100" value="20"><span id="volumeLabel">--%</span></div>
+        </div>
+        <div class="overlay" id="overlay" hidden>
+          <div class="overlay-inner"><h2 id="overlayTitle">Spotify not connected</h2><p id="overlayMessage">Authorize the prototype to read playback.</p><a id="connect" href="/login">Connect Spotify</a></div>
+        </div>
+      </div>
+    </section>
+    <div class="below">
+      <div><strong>Preview controls</strong><span>Space: Play/Pause · ← / →: Previous/Next · Volume: drag slider</span></div>
+      <div class="bottom-actions"><button type="button" id="devices">Find Spotify devices</button><button type="button" id="refresh">Refresh track</button></div>
+    </div>
+    <div class="device-picker" id="devicePicker" hidden aria-label="Spotify Connect devices"></div>
+    <p class="helper" id="message" role="status">This is a Spotify API prototype. Select WI-FI for standalone Spotify or PC for local media controls.</p>
+    <p class="helper audio-diagnostic" id="audioStatus" aria-live="off" hidden></p>
+  </main>
+</body>
+</html>
