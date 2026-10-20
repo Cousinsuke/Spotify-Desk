@@ -1,6 +1,6 @@
 # Phase 6 — Extended 4.3-inch screen and input-expander comparison
 
-**Date: 2026-10-20. Research only.** This document assumed **four physical MX keys** at the time of investigation. The user's later mockup now prefers **three physical keys + one knob**; this remains valid expansion research but all required input-count comparisons are subject to that revised requirement. No hardware selected, ordered, wired or runtime-tested. Supplement to [HARDWARE-RESEARCH.md](HARDWARE-RESEARCH.md); the accepted software checkpoint remains Phase 5.2 / 7172c2e.
+**Date: 2026-10-20. Research only.** This document assumed **four physical MX keys** at the time of investigation. The user subsequently **accepted three physical MX keys + a push-capable encoder** (turn = volume, press = PC/Wi-Fi). The fourth-button sketch icon is discarded. All options below must support 3 MX contacts + quadrature A/B + momentary push = six logical input signals. No hardware selected, ordered, wired or runtime-tested. Supplement to [HARDWARE-RESEARCH.md](HARDWARE-RESEARCH.md); the accepted software checkpoint remains Phase 5.2 / 7172c2e.
 
 ## Waveshare model comparison
 
@@ -32,7 +32,7 @@ Waveshare guide: https://docs.waveshare.com/ESP32-S3-Touch-LCD-4.3/Instructions-
 
 ## Expansion approaches for 4 owned MX keys + one volume encoder
 
-**Updated physical concept:** three distinct MX switch inputs and two quadrature contacts = **five** required inputs, or **six** with optional encoder push. **Original research below was for four MX switches**, so some solutions are overprovisioned; no board must be bought for the obsolete key count.
+**Accepted physical control requirement:** **six** input signals: 3 MX switch contacts, encoder quadrature A/B, **required** integrated encoder push (PC/Wi-Fi mode). Original table considered 4 MX switches plus 1 encoder; the **Adafruit QUAD** candidate could potentially route the three MX switches **and the encoder push** into its four separate switch contacts alongside one encoder quadrature input. This specific off-label arrangement requires schematic and physical tests.
 
 | Candidate | I²C 7-bit address | Four keys + encoder? | Encoder handling | Prototype practicality |
 |---|---|---|---|---|
@@ -53,7 +53,7 @@ UK listing: https://thepihut.com/products/adafruit-aw9523-gpio-expander-and-led-
 
 ### Option B details — Adafruit QUAD seesaw board as combined controller
 
-The official Quad breakout has **four rotary footprints**, and **each has a separate switch contact/ground pair**. Hypothesis: wire the four MX switches to those four pairs, and attach *one* hand-rotated PEC11-style mechanical encoder to the A/B/ground pads of one encoder footprint. The onboard seesaw stores rotation counts and exposes all four switch inputs, potentially covering all desired physical controls using **one I²C board at 0x49** without an extra GPIO expander.
+The official Quad breakout has **four rotary footprints**, and **each has a separate switch contact/ground pair**. Hypothesis: wire **three MX switches plus the selected encoder's own push contact** to those four pairs, and attach the same *push-capable* encoder's quadrature A/B/ground to one encoder footprint. The onboard seesaw stores rotation counts and exposes all four switch inputs, potentially covering the accepted **three MX + encoder push + rotation** controls using **one I²C board at 0x49** without an extra GPIO expander.
 
 **Not yet proven:** this off-label use needs testing on actual hardware for all four switch contacts and independent encoder counting. The official online pinout lists 'pin 9' for *both* encoder #0 B and encoder #3 switch; **possible documentation inconsistency**. Before using that pin mapping, inspect the board's actual Eagle schematic and test a real unit; do not wire from that textual pin list. The full board has four spaced footprints, which may not fit our compact enclosure; wires from external switches can be used if electrically validated.
 
