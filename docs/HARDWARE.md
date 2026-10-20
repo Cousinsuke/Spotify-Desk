@@ -9,7 +9,7 @@
 | MCU | ESP32-S3 integrated with Waveshare touch display | Candidate — exact Waveshare screen variant not yet user-accepted |
 | Screen | Waveshare `ESP32-S3-Touch-LCD-4.3`, **SKU 25948** (capacitive touch) | **User-selected provisional part for verification; not ordered**. Manufacturer 106.1×67.8 mm full module, ~98×60 mm mount centres |
 | Keys | **Three** of the user's four owned MX-style mechanical switches — Previous / Play-Pause / Next | Preferred mockup; 0.71 in (~18 mm) keycaps, switch mounting/spacing and wiring TBD |
-| Knob | Adafruit **PID 377** push encoder, 24 detents, 6 mm D shaft, supplied ~16 mm family-drawing knob | **User-selected provisional part, not ordered**; ~13.2 mm body, M7×0.75 bushing; pressing toggles PC/Wi-Fi. Actual fit not tested |
+| Knob | Adafruit **PID 377** 24-detent push encoder, 6 mm D shaft, plus **provisionally chosen Knob Zone KZ0087-01 flat ridged aluminium cap** (15.1 mm Ø × 15.2 mm total height) | **Not ordered**. KZ0087 grub-screw/6 mm round bore, max insertion 12.4 mm vs encoder nominal 15 mm shaft; press travel, exposed height and faceplate fit unverified |
 | Case | 3D-printed | CAD/dimensions TBD |
 | Power | USB-powered prototype preferred for simplicity | Electrical choice TBD |
 
