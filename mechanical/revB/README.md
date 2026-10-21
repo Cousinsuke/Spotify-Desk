@@ -40,6 +40,13 @@ The user asked for exactly LCD-centred MX keys, a narrower knob-side case and sh
 
 **Important:** the previous [mechanical/wedge_packaging_concept.scad](../wedge_packaging_concept.scad) is **Rev A**, with 165 mm width and non-centred key row. It has NOT been silently overwritten. Use Rev B coordinates from [the CSV](layout_revB.csv), [the checked-in CAD files](cad/) and [the dimensioned design note](../../docs/HARDWARE-WEDGE-REV-B-CAD.md) for future editing.
 
+## Rev B fit study tools (2026-10-21)
+
+- [Read the physical fit audit, scenarios, references and measurement gate](../../docs/HARDWARE-REV-B-FIT-REVIEW.md).
+- [`cad/fit_audit.py`](cad/fit_audit.py) evaluates a range of **assumed** I2C cable-extension scenarios and can export an SVG front projection; it does not test actual 3D clashes.
+- [`cad/fit_coupons.scad`](cad/fit_coupons.scad) is the parametric OpenSCAD source for small test-print MX and encoder mounting plates, preserving the original 156mm enclosure models.
+- [`cad/test_fit_audit.py`](cad/test_fit_audit.py) covers the dimensions arithmetic. Initial 5 tests passed and an STL sample was rendered in OpenSCAD **without physically printing or testing it**.
+
 ## Checks before manufacturing
 
 1. Confirm exact MX switch model and actual depths/mount clips.

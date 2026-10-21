@@ -43,9 +43,15 @@ Updated: 2026-10-21
 - Final Waveshare board SKU, connector/pinout, input expander and electrical verification, case/3-key/**push-encoder** placement. Research favors original touch SKU **25948**, but user has not selected final board. Check whether module's *full PCB* (~106.1×67.8 mm) leaves clearance behind 18 mm bottom keys and right knob.
 - Real cross-platform end-to-end device simulator testing over separate physical LAN clients; Linux and Windows post-import revalidation.
 
+## Phase 6 Rev B component-fit review checkpoint (2026-10-21)
+
+- Manufacturer board rear drawing, PEC11 encoder drawing, KZ0087 specs, and Cherry MX plate conventions reviewed. **No measured physical part in hand and no revised enclosure dimensions approved.** Right-side I2C plug remains the principal unknown; encoder's 5mm nominal threaded bushing and 3mm conceptual face require washer/nut assembly checking; common Cherry MX clips may require ~1.5mm local plate, not 3mm.
+- Added **[`docs/HARDWARE-REV-B-FIT-REVIEW.md`](HARDWARE-REV-B-FIT-REVIEW.md)**; `mechanical/revB/cad/fit_audit.py`, `fit_coupons.scad` and `test_fit_audit.py`. Fit calculator: assumed I2C extension 14mm -> 3.3mm nominal X gap; if actual extension 20mm overlaps same V/Z region, 2mm trial guard would imply 160.7mm wider-case scenario (NOT a decision).
+- **Validation:** 5 Python tests passed; OpenSCAD generated five conceptual mounting coupons without CSG errors in assistant environment. **Pending user testing:** print test samples, seat actual MX switches/encoder/knob and measure real Waveshare connector/cable. Both existing 156mm sharp/R5 STEP variants remain unchanged; no firmware/runtime work.
+
 ## Current next action
 
-1. **Review and iterate the GitHub-hosted Rev B sharp and rounded models**. Both are retained as the current design baseline; choose a single outer edge style when ready to finalize. Neither is a production-approved case.
+1. **Complete [the Rev B fit measurement gate](HARDWARE-REV-B-FIT-REVIEW.md): test MX/encoder coupons and measure the H7 I2C connector/cable, mount holes, port and Z envelopes. Only then alter the main sharp/R5 CAD models.** Both are retained as the current design baseline; choose a single outer edge style when ready to finalize. Neither is a production-approved case.
 2. Use the [Rev B report](HARDWARE-WEDGE-REV-B-CAD.md), [coordinate notes](../mechanical/revB/README.md) and [checked-in CAD package](../mechanical/revB/cad/) as the source for mechanical edits. Rev A's 165mm OpenSCAD model is historical.
 3. **Measure exact owned MX switches and caps**, screen mounting-hole bores, left USB-C service locations, right I2C plug and bend radius, true AW9523B and encoder/knob Z/depth, then perform real 3D collision analysis.
 4. **Case engineering** still needed: 3D printable mounting lips and screw bosses, bottom-access hatch fasteners, key/switch tolerances and support, USB ports, screen and antenna keepouts, knob push travel and KZ0087 grub-screw access. Current STEP shell cutouts are placeholders.
