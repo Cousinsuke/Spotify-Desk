@@ -54,7 +54,7 @@ The demonstration shell STEP and assembly STEP are real editable boundary-repres
 
 ## Generated drawings and model formats
 
-The user received a ZIP named **Spotify_Desk_RevB_CAD_Shared_Package.zip** containing:
+The original [Rev B shared ZIP](../mechanical/revB/Spotify_Desk_RevB_CAD_Shared_Package.zip) and [its 13 extracted files](../mechanical/revB/cad/) were user-pushed to GitHub in `6ae257e` (all file blob hashes verified against ZIP contents). The archive contains:
 
 - **Four-page A3 PDF** `Spotify_Desk_RevB_dimensioned_CAD_comparison.pdf`, including both earlier concept images, true-XY-scale frontal/side dimension sheets for each version and confirmed-versus-assumed matrix. Print on **A3 at 100%** if physical scale is needed.
 - **Sharp and rounded DXF** measured front and side orthographic drawings with dimensions/layers.
@@ -62,7 +62,7 @@ The user received a ZIP named **Spotify_Desk_RevB_CAD_Shared_Package.zip** conta
 - A **Python generator `build_cad.py`**, based on CadQuery, ezdxf, ReportLab, Shapely and Pillow, with geometry dimensions exported to `dimensions.json`.
 - Actual 3D CAD-based PNG previews for each variant and a side-by-side comparison (distinct from image-generation aesthetic references).
 
-Because the GitHub connector can create text assets but not binary CAD files directly, the STEP/DXF/PDF/ZIP are **conversation attachments**; they are **not claimed as GitHub-hosted binary files**. GitHub's current reference remains the original [`mechanical/wedge_packaging_concept.scad`](../mechanical/wedge_packaging_concept.scad) for earlier Rev A, not this new Rev B.
+GitHub now hosts the complete Rev B STEP/DXF/PDF/PNG/generator assets and ZIP at [`mechanical/revB/`](../mechanical/revB/). The previous [`mechanical/wedge_packaging_concept.scad`](../mechanical/wedge_packaging_concept.scad) remains **Rev A history**, not the current Rev B CAD source. No print-ready manufacturing design or fit validation is implied.
 
 ## Next design gates
 

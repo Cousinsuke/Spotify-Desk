@@ -4,7 +4,7 @@
 
 Current physical components and approved interaction are unchanged: Waveshare 25948 capacitive LCD, 3 MX media keys (previous/play-pause/next), Adafruit PID 377 turn-for-volume/push-for-PC-Wi-Fi mode encoder, and KZ0087-01 flat aluminium cap; WAV AW9523B expander is provisional.
 
-The user asked to **centre the 3 keys under the LCD**, **shrink wasted width around the right knob**, and compare **normal/sharp corners vs rounded corners**. The actual CAD assets for both versions were generated locally and delivered as **STEP/BREP, DXF and A3 PDF in the chat ZIP**. The GitHub connector cannot upload arbitrary binary CAD bytes through its text-only create/update interface. This directory keeps the **coordinate constraints** and links to the project research; the ZIP's **build_cad.py** is the editable generating source of the STEP/DXF/PDF outputs.
+The user asked for exactly LCD-centred MX keys, a narrower knob-side case and sharp vs R5-rounded comparisons. **Both CAD alternatives now live in GitHub**. The [`cad/`](cad/) folder contains STEP cases, STEP assemblies, DXF dimension drawings, A3 PDF, PNG previews, `dimensions.json` and the editable [`build_cad.py`](cad/build_cad.py) generator. The [original ZIP](Spotify_Desk_RevB_CAD_Shared_Package.zip) is preserved alongside them. Commit [`6ae257e`](https://github.com/Cousinsuke/Spotify-Desk/commit/6ae257e2ce01256b320417fd21e14d9339bd9ed1), verified byte-for-byte against all 13 ZIP entries. Both are **design references**, not approved printed enclosures.
 
 ## Current model dimensions (mm)
 
@@ -38,7 +38,7 @@ The user asked to **centre the 3 keys under the LCD**, **shrink wasted width aro
 
 **Models:** Sharp STEP is crisp outer case. Rounded STEP is a separate valid solid with nominal R5 exterior fillets (not simply a rounded JPEG). Both contain **conceptual** front LCD/keyboard/encoder cutouts and a bottom service opening but no verified screw hardware, LCD mounting standoffs, port openings, cable paths or official switch tolerances. The multi-part STEP contains schematic component envelopes as separate editable bodies and may include intended contacts/overlaps pending design of supports and real thicknesses.
 
-**Important:** the previous [mechanical/wedge_packaging_concept.scad](../wedge_packaging_concept.scad) is **Rev A**, with 165 mm width and non-centred key row. It has NOT been silently overwritten. Use Rev B coordinates from [the CSV](layout_revB.csv) and [new project design note](../../docs/HARDWARE-WEDGE-REV-B-CAD.md); use the exact Rev B STEP/DXF from the delivered chat ZIP to continue editing.
+**Important:** the previous [mechanical/wedge_packaging_concept.scad](../wedge_packaging_concept.scad) is **Rev A**, with 165 mm width and non-centred key row. It has NOT been silently overwritten. Use Rev B coordinates from [the CSV](layout_revB.csv), [the checked-in CAD files](cad/) and [the dimensioned design note](../../docs/HARDWARE-WEDGE-REV-B-CAD.md) for future editing.
 
 ## Checks before manufacturing
 

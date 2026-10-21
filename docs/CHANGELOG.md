@@ -2,6 +2,11 @@
 
 This is **historical milestone tracking**, not a separate implementation branch for each ZIP. The accepted Phase 5.2 source is committed at `7172c2e`; historical ZIPs are reference snapshots only. Prefer Git commits, tags and releases for future work rather than duplicated source folders.
 
+## Rev B CAD package archived on GitHub — 2026-10-21
+- User pushed [`6ae257e`](https://github.com/Cousinsuke/Spotify-Desk/commit/6ae257e2ce01256b320417fd21e14d9339bd9ed1) containing the original Rev B ZIP and 13 extracted STEP, DXF, PDF, PNG, generator and metadata files to `mechanical/revB/`.
+- Verified that all 13 GitHub blobs match the original ZIP's entries byte-for-byte. Added `.gitattributes` to prevent Windows CRLF conversion of CAD and binary data on future checkout.
+- Both sharp and R5-rounded variants retained as concept geometry; no final manufacturing signoff, wiring or firmware test.
+
 ## Repository migration — 2026-10-20
 - Imported exact accepted Phase 5.2 desktop/simulator source into `main`: commit `7172c2e`.
 - Uploaded 16 historical ZIP archives with SHA-256 manifest: commit `f781506`.

@@ -10,19 +10,19 @@ Updated: 2026-10-21
 - Default / current development branch: `main` (no alternate development branch established yet)
 - Last source baseline: **Phase 5.2** source imported into `main` from checksum-checked ZIP; actual GitHub commit verified
 - Latest implementation checkpoint: **`7172c2ee2f285253507b13c71acb7072adc04067`** (`feat: import accepted Phase 5.2 desktop and simulator baseline`, source commit). Later docs/script commits are not a newer application version.
-- Handoff status: GitHub migration verified complete. All 16 historical ZIP snapshots and the checksum manifest are committed at `f78150605b15af1fa451aa5ed725f023fd03835c`; this is an archive commit, not a newer application implementation checkpoint.
+- Handoff status: GitHub migration completed; 16 historical ZIPs archived at `f781506`. User uploaded the full Rev B package in [`6ae257e`](https://github.com/Cousinsuke/Spotify-Desk/commit/6ae257e2ce01256b320417fd21e14d9339bd9ed1): original ZIP and 13 extracted files. GitHub blob hashes matched the uploaded ZIP entries exactly. This is a CAD artifact checkpoint, not newer application code.
 - GitHub access: connected read/write access was confirmed at bootstrap; verify access in future conversations
 
 ## Current project phase vs current actual work
 
 - **Current project phase:** Phase 6 physical design research/CAD, no ESP32 firmware implemented.
-- **Current actual work:** **Rev B** after user requested (1) three MX keys centred exactly to display, (2) narrower/less unused space around the knob, (3) comparison of sharp and rounded case exterior. A first set of **actual STEP solids and reference assemblies**, **layered DXF orthographic drawings**, **A3 four-page dimensioned PDF**, and CAD-rendered side-by-side PNG preview have been generated and statically verified, delivered in chat ZIP **Spotify_Desk_RevB_CAD_Shared_Package.zip**. The GitHub connector has **text-only** create/update actions, so **STEP/DXF/PDF are conversation artifacts, not GitHub uploads**; full Python CadQuery generator included in ZIP and documented in `mechanical/revB/`.
+- **Current actual work:** **Rev B design package is now tracked in GitHub** at [`mechanical/revB/cad/`](../mechanical/revB/cad/), with the [original source ZIP](../mechanical/revB/Spotify_Desk_RevB_CAD_Shared_Package.zip). Both sharp and R5-rounded cases, full reference assemblies, dimensioned DXF, four-page A3 PDF, preview images, Python CadQuery generator and JSON dimensions are preserved. User indicates these are the designs to continue from; no single exterior style or print-ready enclosure is definitively approved.
 - **Rev B proposed dimensions:** **156 mm wide × 83.093 mm desk depth × 106.107 mm high**, 156×110 mm sloped face at 55° from desk, 16 mm front chin, 20 mm rear roof, 3 mm assumed wall. Rounded option is **R5 external edge fillets**; sharp option has crisp edges. LCD module X=8..114.1 mm, centre **61.05 mm**; 3 MX X centres **31.05, 61.05, 91.05** mm at V=91, exactly centred under module; 30 mm pitch; knob centre (138,44) mm, diameter 15.1. Gap knob rim to right face edge **10.45 mm**. Assumed 14 mm I2C right-side cable zone leaves just **3.30 mm assumed lateral encoder-body clearance**; **not a guaranteed physical fit**.
-- **Status:** CAD STEP solids independently reopened and validated; DXF files reopened; PDF rendered/checked. **No finished fabrication geometry**, board screw bores, custom PCB, actual port cutouts, true switch Z heights or real cable/fit collision verification. Electrical AW9523B RESET/pin mapping remains open. User has NOT yet approved shell dimensions/edge option or purchased hardware. Current accepted software stays Phase 5.2 source `7172c2e`.
+- **Status:** Reference STEP solids were reopened/checked, DXF reopened and A3 PDF rendered during design; GitHub files now byte-matched 13/13 with source ZIP. **Not fabrication geometry**: screw bores, full electronics/cable collisions, switch depths, USB openings and fasteners remain unverified. AW9523B RESET/pin mapping still open. No hardware purchase reported. Accepted software remains Phase 5.2 (`7172c2e`).
 
 ## Last accepted work
 
-- **Most recent validated repository task:** current Phase 5.2 source import and all 16 historical ZIP imports to GitHub; both commits verified from the remote repository; local `git status --short` clean. This is repository housekeeping, not new app runtime validation.
+- **Most recent validated repository task:** Rev B package push (`6ae257e`) and GitHub-to-ZIP hash integrity verified. This is asset preservation and does **not** prove physical fit, firmware, or desktop runtime behaviour.
 - **Most recent accepted interaction-design task:** three physical MX media keys plus rotary volume encoder whose **press toggles PC/Wi-Fi** (2026-10-20; design approval only, no hardware implementation).
 - **Last accepted software:** Phase 5.2 device/PC artwork reliability fix on **Omarchy**; user confirmed the fix worked and ran **39 Python tests**, all passing.
 - Previous accepted: Phase 4.2 Windows and Omarchy volume sync; Windows companion play/pause, album art, sound-level stream; Phase 5 pairing and simulator UI were demonstrated, then polished.
@@ -45,8 +45,8 @@ Updated: 2026-10-21
 
 ## Current next action
 
-1. **Present/review actual Rev B sharp vs rounded CAD previews and A3 dimension PDF** with user; ask which exterior style to proceed with, and if revised **156 mm width** plus centred keys/closer knob is acceptable. Do not call either shape a user-approved final shell until then.
-2. **Use [docs/HARDWARE-WEDGE-REV-B-CAD.md](HARDWARE-WEDGE-REV-B-CAD.md) and [mechanical/revB/README.md](../mechanical/revB/README.md)** as current CAD dimension reference; older 165mm OpenSCAD wedge is archived Rev A, **not silently updated**. STEP/DXF/PDF and generator are in chat download ZIP, not in GitHub.
+1. **Review and iterate the GitHub-hosted Rev B sharp and rounded models**. Both are retained as the current design baseline; choose a single outer edge style when ready to finalize. Neither is a production-approved case.
+2. Use the [Rev B report](HARDWARE-WEDGE-REV-B-CAD.md), [coordinate notes](../mechanical/revB/README.md) and [checked-in CAD package](../mechanical/revB/cad/) as the source for mechanical edits. Rev A's 165mm OpenSCAD model is historical.
 3. **Measure exact owned MX switches and caps**, screen mounting-hole bores, left USB-C service locations, right I2C plug and bend radius, true AW9523B and encoder/knob Z/depth, then perform real 3D collision analysis.
 4. **Case engineering** still needed: 3D printable mounting lips and screw bosses, bottom-access hatch fasteners, key/switch tolerances and support, USB ports, screen and antenna keepouts, knob push travel and KZ0087 grub-screw access. Current STEP shell cutouts are placeholders.
 5. **Electrical** still needed: AW9523B module RESET/pullup and safe 3.3V connector mapping, protected six input signals and encoder pulse tracking. If layout/electrical tests succeed, *then* consider compact carrier PCB. Firmware unchanged.
@@ -75,7 +75,7 @@ Updated: 2026-10-21
 - `e89fa20` — faceplate 150×105 vs 165×110 mechanical study, screen I2C/right-hand knob cable conflict, and manufacturer-supported 7 mm exposed encoder shaft correction (documentation only).
 - 2026-10-20 static CAD envelope milestone: source assets added under `mechanical/`; 3-page A3 PDF/SVG/DXF bundle delivered as a conversation attachment. No 3D-print manufacturing geometry or runtime tests; the latest Git source baseline remains unchanged.
 - 2026-10-20: wedge 3D Rev A packaging proposal + editable SCAD checked in to mechanical/, separate annotated rendered concept ZIP in conversation; purely geometric.
-- 2026-10-21: **Rev B** compact 156mm shell and exact screen-centred 3-key row, matched sharp/R5 rounded valid STEP solids, assembly STEP, DXF, A3 4-page PDF and image comparison. Chat-delivered ZIP; coordinate README/CSV and validation docs in GitHub, no physical test.
+- 2026-10-21: **Rev B** 156mm wedge with centred MX keys; matched sharp/R5 STEP solids, assemblies, DXFs, A3 PDF and rendered previews produced. User pushed CAD ZIP plus all 13 extracted assets in `6ae257e`; remote blobs verified byte-for-byte. No physical test or software implementation change.
 - Documentation-only commits after this checkpoint are not evidence of newer runtime implementation.
 
 ## Unresolved issues / deferred

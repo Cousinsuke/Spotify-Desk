@@ -16,6 +16,7 @@ An experimental desktop music controller and future physical desk accessory, bui
 
 - Windows 11 companion: **Phase 4.2 user-accepted**; later simulator changes need platform-specific revalidation.
 - Omarchy/Arch companion and browser device simulator: **Phase 5.2 user-accepted**; 39 tests passed in the user's Omarchy virtual environment.
+- Rev B CAD package: both sharp and R5-rounded alternatives and original ZIP uploaded and verified under [`mechanical/revB/`](mechanical/revB/) (`6ae257e`). This is a design baseline, not a final enclosure.
 - Real ESP32 firmware, electrical design, final hardware protocol and enclosure: **not implemented**.
 
 ## Current source and historical versions
@@ -52,7 +53,7 @@ The archive script places historical ZIPs under `archives/phase-zips/`, strips g
 - [Editable trial mechanical envelope CAD (SCAD / SVG / coordinates)](mechanical/README.md)
 - [Angled wedge 3D shape, internal packaging and input-PCB proposal](docs/HARDWARE-WEDGE-CASE-PROPOSAL.md)
 - [Parametric 3D reference model (not a print-ready case)](mechanical/wedge_packaging_concept.scad)
-- [Latest Rev B compact sharp and R5-rounded CAD coordinates](mechanical/revB/README.md)
+- [Rev B sharp and R5-rounded CAD package, ZIP and coordinates](mechanical/revB/README.md)
 - [Latest Rev B dimensioned CAD study and fit blockers](docs/HARDWARE-WEDGE-REV-B-CAD.md)
 - [Setup](docs/INSTALL.md)
 - [Testing](docs/TESTING.md)

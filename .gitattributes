@@ -1,0 +1,10 @@
+# Retain exact CAD and media bytes across Windows and Linux Git checkouts.
+# PDF/STEP/DXF can be misidentified as text by Git's default CRLF handling.
+*.pdf -text
+*.step -text
+*.stp -text
+*.dxf -text
+*.zip -text
+*.png -text
+*.jpg -text
+*.jpeg -text
