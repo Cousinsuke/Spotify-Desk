@@ -1,0 +1,54 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 490" width="1200" height="490">
+<rect width="1200" height="490" fill="#141922"/>
+<text x="26" y="36" fill="#f6f8fc" font-family="Arial" font-size="23">Switch section comparison / same theoretical stem engagement</text>
+<text x="26" y="60" fill="#d3dee7" font-family="Arial" font-size="15">W (inward): zero at external skin. Caps above case have negative W. Not a measured cap or switch.</text>
+<rect x="20" y="90" width="385" height="347" rx="8" fill="#202a35"/>
+<text x="40" y="124" fill="#fbfbfd" font-family="Arial" font-size="22">2 mm proud at REST</text>
+<text x="40" y="147" fill="#bacbdd" font-family="Arial" font-size="14">Mount plate top W = 11.5 mm</text>
+<rect x="50.00" y="226.00" width="74.00" height="30.00" fill="#7c8b98"/>
+<rect x="316.00" y="226.00" width="74.00" height="30.00" fill="#7c8b98"/>
+<rect x="104.00" y="256.00" width="20.00" height="85.00" fill="#556671"/>
+<rect x="316.00" y="256.00" width="20.00" height="85.00" fill="#556671"/>
+<rect x="104.00" y="341.00" width="46.00" height="15.00" fill="#ebb46b"/>
+<rect x="290.00" y="341.00" width="46.00" height="15.00" fill="#ebb46b"/>
+<rect x="142.00" y="275.00" width="156.00" height="66.00" fill="#5893a3"/>
+<rect x="130.00" y="206.00" width="180.00" height="10.00" fill="#161719"/>
+<rect x="130.00" y="216.00" width="10.00" height="70.00" fill="#161719"/>
+<rect x="300.00" y="216.00" width="10.00" height="70.00" fill="#161719"/>
+<rect x="199.00" y="239.00" width="42.00" height="36.00" fill="#b4cace"/>
+<path d="M 40 226 H 400" stroke="#f0f5f8" stroke-dasharray="6,4"/>
+<text x="42" y="405" fill="#c8d6e2" font-size="14" font-family="Arial">Stroke 4 mm → plate guard 1.5 mm</text>
+<rect x="420" y="90" width="385" height="347" rx="8" fill="#202a35"/>
+<text x="440" y="124" fill="#fbfbfd" font-family="Arial" font-size="22">4 mm proud at REST</text>
+<text x="440" y="147" fill="#bacbdd" font-family="Arial" font-size="14">Mount plate top W = 9.5 mm</text>
+<rect x="450.00" y="226.00" width="74.00" height="30.00" fill="#7c8b98"/>
+<rect x="716.00" y="226.00" width="74.00" height="30.00" fill="#7c8b98"/>
+<rect x="504.00" y="256.00" width="20.00" height="65.00" fill="#556671"/>
+<rect x="716.00" y="256.00" width="20.00" height="65.00" fill="#556671"/>
+<rect x="504.00" y="321.00" width="46.00" height="15.00" fill="#ebb46b"/>
+<rect x="690.00" y="321.00" width="46.00" height="15.00" fill="#ebb46b"/>
+<rect x="542.00" y="255.00" width="156.00" height="66.00" fill="#5893a3"/>
+<rect x="530.00" y="186.00" width="180.00" height="10.00" fill="#161719"/>
+<rect x="530.00" y="196.00" width="10.00" height="70.00" fill="#161719"/>
+<rect x="700.00" y="196.00" width="10.00" height="70.00" fill="#161719"/>
+<rect x="599.00" y="219.00" width="42.00" height="36.00" fill="#b4cace"/>
+<path d="M 440 226 H 800" stroke="#f0f5f8" stroke-dasharray="6,4"/>
+<text x="442" y="405" fill="#c8d6e2" font-size="14" font-family="Arial">Stroke 4 mm → plate guard 1.5 mm</text>
+<rect x="820" y="90" width="385" height="347" rx="8" fill="#202a35"/>
+<text x="840" y="124" fill="#fbfbfd" font-family="Arial" font-size="22">6 mm proud at REST</text>
+<text x="840" y="147" fill="#bacbdd" font-family="Arial" font-size="14">Mount plate top W = 7.5 mm</text>
+<rect x="850.00" y="226.00" width="74.00" height="30.00" fill="#7c8b98"/>
+<rect x="1116.00" y="226.00" width="74.00" height="30.00" fill="#7c8b98"/>
+<rect x="904.00" y="256.00" width="20.00" height="45.00" fill="#556671"/>
+<rect x="1116.00" y="256.00" width="20.00" height="45.00" fill="#556671"/>
+<rect x="904.00" y="301.00" width="46.00" height="15.00" fill="#ebb46b"/>
+<rect x="1090.00" y="301.00" width="46.00" height="15.00" fill="#ebb46b"/>
+<rect x="942.00" y="235.00" width="156.00" height="66.00" fill="#5893a3"/>
+<rect x="930.00" y="166.00" width="180.00" height="10.00" fill="#161719"/>
+<rect x="930.00" y="176.00" width="10.00" height="70.00" fill="#161719"/>
+<rect x="1100.00" y="176.00" width="10.00" height="70.00" fill="#161719"/>
+<rect x="999.00" y="199.00" width="42.00" height="36.00" fill="#b4cace"/>
+<path d="M 840 226 H 1200" stroke="#f0f5f8" stroke-dasharray="6,4"/>
+<text x="842" y="405" fill="#c8d6e2" font-size="14" font-family="Arial">Stroke 4 mm → plate guard 1.5 mm</text>
+<text x="25" y="470" fill="#e9b57e" font-family="Arial" font-size="15">Cap body depth 8 mm, skirt and stem are illustrative. Actual cap depth, clip tabs, return and tolerance NOT proven.</text>
+</svg>

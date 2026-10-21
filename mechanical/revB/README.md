@@ -88,6 +88,12 @@ The user asked for exactly LCD-centred MX keys, a narrower knob-side case and sh
 - `cad/media_controls_fit_study.py` and `cad/keycap_mount_assumptions.json`: trial 18mm 1U keycaps with white icon masters, 19.2mm wells and 0.6mm nominal lateral clearance each side. The MX switch clips to an integral **1.5mm local plate at W=11.5mm behind face**, with nominal 14mm mounting cutout, rather than the 3mm case front wall. Cap sits 2mm above surface at rest, assumed 4mm travel, 8mm cap depth. This is not a real fit verified by physical parts.
 - `cad/test_media_controls_fit_study.py`: **15 assistant-side checks pass**, including actual CadQuery R5 shell validity and STEP roundtrip. Windows and actual cap fit pending; optional CAD tests skip without CadQuery. White standalone SVG icon drafts in `../revB/keycaps/`. Separate ZIP delivered contains new STEP shell, complete cap/knob reference assembly, drawings and vector icons. Earlier CAD files are preserved.
 
+## Separate actual CAD models for 2mm, 4mm, 6mm media-keycap heights
+
+- [Three-height rounded CAD comparison, Windows instructions, status and mechanical assumptions](../../docs/HARDWARE-REV-B-KEYCAP-HEIGHT-CAD-COMPARISON.md).
+- Generator `cad/media_controls_height_variants.py`, config `cad/keycap_height_variant_parameters.json`, tests `cad/test_media_controls_height_variants.py`; saved comparison SVGs `cad/media_controls_2_4_6_front_comparison.svg` and `cad/media_controls_2_4_6_section_comparison.svg`. **20/20 assistant-side tests PASS** including CadQuery single-solids + multibody STEP assembly checks; user Windows test pending.
+- Actual experimental STEP files supplied in a **separate chat ZIP** for FreeCAD: each of 2/4/6mm has single-solid R5 shell and cap/switch/knob envelope assembly. All retain rounded 156mm USB-left 180° Waveshare layout and 3 MX key centres. To keep assumed stem engagement and full-stroke 1.5mm plate guard constant, MX retaining plates change **11.5/9.5/7.5mm inward**. Profiles, safety margin, snap clips, male USB and print tolerances remain hypothetical; no purchase or print approval.
+
 ## Checks before manufacturing
 
 1. Confirm exact MX switch model and actual depths/mount clips.

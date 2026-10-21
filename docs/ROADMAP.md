@@ -81,6 +81,8 @@ This roadmap tracks **planned phases**, not every ad-hoc fix. Actual latest work
 
 **2026-10-21 media-cap Windows validation, height comparison and pricing:** User independently passed 13/15 tests with two optional CAD skips (no CadQuery/Shapely), generated front and cross-section drawings, and requested a comparison of 2mm recessed versus 6mm raised keycaps. Produced illustrative comparison only, **not revised CAD**. Investigated UK pricing: blank MX-compatible black four-pack ~£1.56 + shipping, 4-pack printed custom MX caps £14.95 + £3.95 standard shipping, versus original £24+ for three individual custom caps. Actual black/white printing and cap geometries still need confirmation; no physical/firmware approval.
 
+**2026-10-21 three R5 USB-left STEP keycap heights built:** user asked for **2/4/6mm CAD**, not only a visual; added [three independently generated single-solid rounded STEP shells and three multibody cap/switch/knob reference STEP assemblies](HARDWARE-REV-B-KEYCAP-HEIGHT-CAD-COMPARISON.md) in a downloadable conversation ZIP, with source/assumptions/tests in GitHub. Retaining MX plate depths change **11.5 / 9.5 / 7.5mm** inward to keep assumed stem engagement and 1.5mm nominal full-stroke skirt clearance constant. **20 assistant-side tests passed** including CAD/STEP reimport; Windows validation and user height selection pending. Existing 0°/180° and 2mm original sources preserved. No physical fit or manufacturing signoff.
+
 ## Phase 7 — Standalone mode and secure provisioning
 - [ ] Define what 'standalone' means: remote Spotify Connect control vs direct audio playback
 - [ ] Confirm Spotify API/SDK constraints and provisioning/refresh-token storage approach

@@ -1,0 +1,54 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1250 460" width="1250" height="460">
+<rect width="1250" height="460" fill="#111620"/>
+<text x="34" y="35" font-size="23" font-family="Arial" fill="#f0f4fa">Spotify Desk Rev B / rounded / USB LEFT / media cap resting heights</text>
+<text x="34" y="59" font-size="15" font-family="Arial" fill="#aebbc9">Dimensioned design comparison; 18 mm cap envelope, 4 mm assumed travel and 1.5 mm MX clip plate</text>
+<rect x="33" y="77" width="340.6" height="344" rx="12" fill="#1b2230" stroke="#586878"/>
+<text x="45" y="106" font-size="20" font-family="Arial" fill="#ffffff">2 mm raised</text>
+<rect x="36.0" y="115.0" width="327.6" height="231.0" rx="10.5" fill="#35414f" stroke="#9cabb5"/>
+<rect x="63.993" y="150.889" width="200.63400000000001" height="114.156" rx="3" fill="#071923" stroke="#4b728b"/>
+<circle cx="325.8" cy="207.4" r="15.855" fill="#121417" stroke="#b8c1c9" stroke-width="2"/>
+<text x="74.493" y="207.589" fill="#70abc6" font-size="15" font-family="Arial">800 x 480</text>
+<rect x="81.045" y="285.94" width="40.32" height="40.32" rx="3.4" fill="#11161c" stroke="#879099"/>
+<rect x="82.30499999999999" y="287.20000000000005" width="37.800000000000004" height="37.800000000000004" rx="3.0" fill="#1d222a" stroke="#e5e6e9" stroke-width=".7"/>
+<path d="M12 9 L12 29 M31 9 L14 19 L31 29 Z" transform="translate(81.20 286.10)" stroke="#f5f7fa" stroke-width="1.6" fill="none"/>
+<rect x="144.04500000000002" y="285.94" width="40.32" height="40.32" rx="3.4" fill="#11161c" stroke="#879099"/>
+<rect x="145.305" y="287.20000000000005" width="37.800000000000004" height="37.800000000000004" rx="3.0" fill="#1d222a" stroke="#e5e6e9" stroke-width=".7"/>
+<path d="M12 9 L25 19 L12 29 Z M30 9 L30 29 M36 9 L36 29" transform="translate(144.21 286.10)" stroke="#f5f7fa" stroke-width="1.6" fill="none"/>
+<rect x="207.04500000000002" y="285.94" width="40.32" height="40.32" rx="3.4" fill="#11161c" stroke="#879099"/>
+<rect x="208.305" y="287.20000000000005" width="37.800000000000004" height="37.800000000000004" rx="3.0" fill="#1d222a" stroke="#e5e6e9" stroke-width=".7"/>
+<path d="M30 9 L30 29 M11 9 L28 19 L11 29 Z" transform="translate(207.21 286.10)" stroke="#f5f7fa" stroke-width="1.6" fill="none"/>
+<text x="48" y="374.0" font-size="15" font-family="Arial" fill="#d7e2eb">Plate: 11.5 mm inward   /   full press guard: 1.5 mm</text>
+<rect x="438" y="77" width="340.6" height="344" rx="12" fill="#1b2230" stroke="#586878"/>
+<text x="450" y="106" font-size="20" font-family="Arial" fill="#ffffff">4 mm raised</text>
+<rect x="441.0" y="115.0" width="327.6" height="231.0" rx="10.5" fill="#35414f" stroke="#9cabb5"/>
+<rect x="468.993" y="150.889" width="200.63400000000001" height="114.156" rx="3" fill="#071923" stroke="#4b728b"/>
+<circle cx="730.8" cy="207.4" r="15.855" fill="#121417" stroke="#b8c1c9" stroke-width="2"/>
+<text x="479.493" y="207.589" fill="#70abc6" font-size="15" font-family="Arial">800 x 480</text>
+<rect x="486.04499999999996" y="285.94" width="40.32" height="40.32" rx="3.4" fill="#11161c" stroke="#879099"/>
+<rect x="487.305" y="287.20000000000005" width="37.800000000000004" height="37.800000000000004" rx="3.0" fill="#1d222a" stroke="#e5e6e9" stroke-width=".7"/>
+<path d="M12 9 L12 29 M31 9 L14 19 L31 29 Z" transform="translate(486.20 286.10)" stroke="#f5f7fa" stroke-width="1.6" fill="none"/>
+<rect x="549.0450000000001" y="285.94" width="40.32" height="40.32" rx="3.4" fill="#11161c" stroke="#879099"/>
+<rect x="550.3050000000001" y="287.20000000000005" width="37.800000000000004" height="37.800000000000004" rx="3.0" fill="#1d222a" stroke="#e5e6e9" stroke-width=".7"/>
+<path d="M12 9 L25 19 L12 29 Z M30 9 L30 29 M36 9 L36 29" transform="translate(549.21 286.10)" stroke="#f5f7fa" stroke-width="1.6" fill="none"/>
+<rect x="612.0450000000001" y="285.94" width="40.32" height="40.32" rx="3.4" fill="#11161c" stroke="#879099"/>
+<rect x="613.3050000000001" y="287.20000000000005" width="37.800000000000004" height="37.800000000000004" rx="3.0" fill="#1d222a" stroke="#e5e6e9" stroke-width=".7"/>
+<path d="M30 9 L30 29 M11 9 L28 19 L11 29 Z" transform="translate(612.21 286.10)" stroke="#f5f7fa" stroke-width="1.6" fill="none"/>
+<text x="453" y="374.0" font-size="15" font-family="Arial" fill="#d7e2eb">Plate: 9.5 mm inward   /   full press guard: 1.5 mm</text>
+<rect x="843" y="77" width="340.6" height="344" rx="12" fill="#1b2230" stroke="#586878"/>
+<text x="855" y="106" font-size="20" font-family="Arial" fill="#ffffff">6 mm raised</text>
+<rect x="846.0" y="115.0" width="327.6" height="231.0" rx="10.5" fill="#35414f" stroke="#9cabb5"/>
+<rect x="873.993" y="150.889" width="200.63400000000001" height="114.156" rx="3" fill="#071923" stroke="#4b728b"/>
+<circle cx="1135.8" cy="207.4" r="15.855" fill="#121417" stroke="#b8c1c9" stroke-width="2"/>
+<text x="884.4929999999999" y="207.589" fill="#70abc6" font-size="15" font-family="Arial">800 x 480</text>
+<rect x="891.0450000000001" y="285.94" width="40.32" height="40.32" rx="3.4" fill="#11161c" stroke="#879099"/>
+<rect x="892.3050000000001" y="287.20000000000005" width="37.800000000000004" height="37.800000000000004" rx="3.0" fill="#1d222a" stroke="#e5e6e9" stroke-width=".7"/>
+<path d="M12 9 L12 29 M31 9 L14 19 L31 29 Z" transform="translate(891.21 286.10)" stroke="#f5f7fa" stroke-width="1.6" fill="none"/>
+<rect x="954.0450000000001" y="285.94" width="40.32" height="40.32" rx="3.4" fill="#11161c" stroke="#879099"/>
+<rect x="955.3050000000001" y="287.20000000000005" width="37.800000000000004" height="37.800000000000004" rx="3.0" fill="#1d222a" stroke="#e5e6e9" stroke-width=".7"/>
+<path d="M12 9 L25 19 L12 29 Z M30 9 L30 29 M36 9 L36 29" transform="translate(954.21 286.10)" stroke="#f5f7fa" stroke-width="1.6" fill="none"/>
+<rect x="1017.045" y="285.94" width="40.32" height="40.32" rx="3.4" fill="#11161c" stroke="#879099"/>
+<rect x="1018.305" y="287.20000000000005" width="37.800000000000004" height="37.800000000000004" rx="3.0" fill="#1d222a" stroke="#e5e6e9" stroke-width=".7"/>
+<path d="M30 9 L30 29 M11 9 L28 19 L11 29 Z" transform="translate(1017.20 286.10)" stroke="#f5f7fa" stroke-width="1.6" fill="none"/>
+<text x="858" y="374.0" font-size="15" font-family="Arial" fill="#d7e2eb">Plate: 7.5 mm inward   /   full press guard: 1.5 mm</text>
+<text x="34" y="443" font-size="14" fill="#deae81" font-family="Arial">NOTE: same enclosure silhouette; changes are in cap and switch-retaining-plate Z/W positions. Nominal MX stems only, not fitted parts.</text>
+</svg>

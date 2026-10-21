@@ -1,0 +1,12 @@
+{
+  "status": "Design-only 3-position comparison; no selected keycap or MX switch was physically measured",
+  "heights_above_front_mm": [2.0, 4.0, 6.0],
+  "strategy": "Hold assumed MX stem-to-cap engagement and skirt-to-retainer full-stroke gap constant by moving the 1.5mm switch retaining plate outward as keycap rest height increases",
+  "reference_height_mm": 2.0,
+  "reference_plate_top_inward_mm": 11.5,
+  "plate_shift_per_mm_height": -1.0,
+  "minimum_plate_front_inward_mm": 7.0,
+  "full_travel_skirt_to_plate_guard_mm": 1.5,
+  "profile": "Same nominal 18mm-wide 8mm-deep 1U keycap shell in all variants, with approximate MX geometry; exact model unknown",
+  "existing_rev_b_sources_not_modified": true
+}

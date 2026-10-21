@@ -2,6 +2,11 @@
 
 This is **historical milestone tracking**, not a separate implementation branch for each ZIP. The accepted Phase 5.2 source is committed at `7172c2e`; historical ZIPs are reference snapshots only. Prefer Git commits, tags and releases for future work rather than duplicated source folders.
 
+## Independent 2/4/6mm keycap-height rounded enclosure STEP designs — 2026-10-21
+- User requested actual CAD for all three cap rest heights. Generated **3 separate R5/USB-left single-solid case STEP** and **3 cap/knob/MX-reference assembly STEP**, with dimensioned front/section SVGs, CAD-derived isometric previews, report, reproducible source and offline ZIP.
+- Switch support top W adjusted 11.5/9.5/7.5mm for 2/4/6mm caps to preserve mathematical stem projection and 1.5mm full-press skirt-to-retainer margin; front, USB, knob and screen positions unchanged. Exact cap profile/stem and print fit not proven.
+- **20 new assistant-side tests passed** including actual CadQuery roundtrips of all six STEP files; 2mm shell volume identical to preceding study. User Windows test and choice of height pending; no original CAD replaced.
+
 ## Media-cap Windows tests, raised styling and cheaper supplier options — 2026-10-21
 - User pulled `9322af3` and passed 13 of 15 tests on Windows, with two optional CadQuery B-Rep tests skipped. Both overview and mechanical cross-section generated/opened. Assistant full 15/15 had passed earlier independently.
 - Created an illustrative **2mm recessed vs 6mm raised-at-rest** media-cap appearance comparison; 6mm not yet recalculated as mechanical design, 2mm experimental case unchanged.
