@@ -2,6 +2,11 @@
 
 This is **historical milestone tracking**, not a separate implementation branch for each ZIP. The accepted Phase 5.2 source is committed at `7172c2e`; historical ZIPs are reference snapshots only. Prefer Git commits, tags and releases for future work rather than duplicated source folders.
 
+## Rev B Windows fit-audit validation — 2026-10-21
+- User pulled commit `fd82d35` on Windows 11 and ran the Rev B Python clearance auditor successfully; 14/17/20/25mm scenarios reported the expected nominal 3.3/0.3/−2.7/−7.7mm gaps.
+- User's Windows 11 Python ran all **5 fit-audit unit tests successfully**; this validates the calculation tooling on Windows, **not** physical CAD fit or the desktop media companion.
+- User explicitly confirmed the project is **still designing**. Next mechanical task is parameterized 3D packaging/keep-out exploration using clearly marked assumptions; no real-world measurement or hardware purchase claimed.
+
 ## Rev B component-fit preparation — 2026-10-21
 - Reviewed manufacturer LCD rear board/connectors, Bourns PEC11 encoder mounting geometry, KZ0087 specs and standard Cherry MX plate cutouts.
 - Added a pure-Python cable-clearance scenario audit, explanatory vector overlay export, five OpenSCAD mounting coupons, five regression tests and a measured-fit checklist. The script retains original 156mm Rev B dimensions; no existing STEP assemblies changed.

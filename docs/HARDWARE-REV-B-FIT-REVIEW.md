@@ -46,6 +46,15 @@ python -m unittest discover -s mechanical\revB\cad -p test_fit_audit.py -v
 openscad -o "$HOME\Downloads\Spotify_Desk_RevB_fit_coupons.stl" mechanical\revB\cad\fit_coupons.scad
 ```
 
+## User validation and next design-only stage (2026-10-21)
+
+- User ran `git pull --ff-only origin main` on Windows 11 and received `fd82d35` without a merge conflict.
+- User ran `python mechanical\\revB\\cad\\fit_audit.py`: hypothetical 14/17/20/25 mm extensions produced 3.3/0.3/−2.7/−7.7 mm lateral gaps and suggested widths 156.0/157.7/160.7/165.7 mm respectively, identical to study expectations.
+- User ran `python -m unittest discover -s mechanical\\revB\\cad -p test_fit_audit.py -v`: **five tests OK**, 0.002s. This proves the *auditor ran on the user's Windows Python*, not that any CAD enclosure or actual hardware has been physically checked.
+- User clarified **we are still designing**. There is no confirmed physical screen/encoder purchase or measured fit. **Do not require a print, component measurement or electrical bring-up before further CAD research**. Those remain eventual fabrication gates.
+
+**CAD-only continuation:** (1) create modular parametric 3D *envelope* checks for I2C plug/bend, LCD Z depth, rotary body/terminals, MX retention thickness, USB service ports, antenna zone and board supports, clearly separating manufacturer-backed sizes from placeholders; (2) compare whether layout changes are actually needed across reasonable scenarios; (3) keep the agreed 156 mm Rev B sharp/R5 source models unchanged until user chooses a revision; (4) choose purchases after drawing-level fit blockers are reduced. A mock 3D envelope is not a verified mating-connector model.
+
 ## Measurements needed to upgrade CAD from study to real fit
 
 1. **Screen and connectors:** Take direct photos with a ruler/calipers beside right H7 I2C header with factory cable fully seated; measure extension beyond 106.1mm module edge and cable bend radius, V band and rear-plane depth. Verify both USB-C plug/port access, SD, antenna and pin-1 orientation.
