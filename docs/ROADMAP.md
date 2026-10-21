@@ -41,6 +41,9 @@ This roadmap tracks **planned phases**, not every ad-hoc fix. Actual latest work
 
 ## Phase 6 — Hardware selection and firmware proof-of-concept (current planning)
 
+- **2026-10-21 Rev B CAD milestone:** created **sharp** and **R5 rounded** solid STEP references and DXF/A3 PDF drawings in chat artifacts; revised trial 156×110 mm front, width -9mm, 3 MX key centres exactly aligned to screen centre, compact KZ0087 knob at X=138. Read [dimensioned Rev B report](HARDWARE-WEDGE-REV-B-CAD.md) and [Rev B coordinate register](../mechanical/revB/README.md). **Static geometry/drawing validation only**; STEP case may not be a printable case until actual components/cable/fasteners are measured. Earlier 165mm envelope is Rev A research, not secretly overwritten.
+
+
 - **2026-10-20 provisional 3D wedge packaging milestone:** user reference photo motivated a sloped desktop case rather than flat face alone. **Parametric OpenSCAD envelope created**, following previous 165×110 mm face layout: **55° from tabletop**, **16 mm raised front chin**, **20 mm top roof**, external **165 W × 83.1 D × 106.1 H mm**. View [wedge concept and PCB plan](HARDWARE-WEDGE-CASE-PROPOSAL.md) and editable [3D envelope](../mechanical/wedge_packaging_concept.scad). **NOT user-approved manufacturing CAD; no STL, collision verification, fit-tested hatch, wiring or parts ordered.** Compare 50°/55°/60°, check actual MX and rear connector depths before making a printable shell.
 
 
