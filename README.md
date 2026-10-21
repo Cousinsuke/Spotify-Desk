@@ -54,6 +54,7 @@ The archive script places historical ZIPs under `archives/phase-zips/`, strips g
 - [Angled wedge 3D shape, internal packaging and input-PCB proposal](docs/HARDWARE-WEDGE-CASE-PROPOSAL.md)
 - [Parametric 3D reference model (not a print-ready case)](mechanical/wedge_packaging_concept.scad)
 - [Rev B sharp and R5-rounded CAD package, ZIP and coordinates](mechanical/revB/README.md)
+- [Rev B parametric 3D internal packaging study (concept only)](docs/HARDWARE-REV-B-INTERNAL-PACKAGING.md)
 - [Latest Rev B dimensioned CAD study and fit blockers](docs/HARDWARE-WEDGE-REV-B-CAD.md)
 - [Setup](docs/INSTALL.md)
 - [Testing](docs/TESTING.md)

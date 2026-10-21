@@ -47,6 +47,14 @@ The user asked for exactly LCD-centred MX keys, a narrower knob-side case and sh
 - [`cad/fit_coupons.scad`](cad/fit_coupons.scad) is the parametric OpenSCAD source for small test-print MX and encoder mounting plates, preserving the original 156mm enclosure models.
 - [`cad/test_fit_audit.py`](cad/test_fit_audit.py) covers the dimensions arithmetic. Initial 5 tests passed and an STL sample was rendered in OpenSCAD **without physically printing or testing it**.
 
+## Independent 3D internal packaging reference
+
+- [3D packaging study and Windows instructions](../../docs/HARDWARE-REV-B-INTERNAL-PACKAGING.md).
+- `cad/internal_packaging.py`: Python-only parameterised X/V/inward-W 3D box overlap and nominal case-inner-boundary calculations; optional OpenSCAD and JSON export.
+- `cad/internal_packaging_view.scad` and `cad/internal_packaging_params.scad`: conceptual shell/part/cable view in OpenSCAD. For scenario variants, run Python `--out-dir` and inspect generated files.
+- `cad/internal_packaging_assumptions.json`: explicitly unmeasured component envelopes. `cad/test_internal_packaging.py`: eight assistant-side tests passed, user Windows testing pending.
+- **No changes to original sharp/R5 B-Rep CAD, part fit or manufacturing status.**
+
 ## Checks before manufacturing
 
 1. Confirm exact MX switch model and actual depths/mount clips.

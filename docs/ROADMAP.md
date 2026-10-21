@@ -63,6 +63,8 @@ This roadmap tracks **planned phases**, not every ad-hoc fix. Actual latest work
 
 **2026-10-21 Windows design-script validation:** user pulled `fd82d35`, ran all four clearance scenarios and **passed all five unit tests**. User confirmed **still designing**, so physical component measurement, print-fit and purchasing stay future gates. Continue **parametric 3D packaging study** and avoid claiming the current STEP case is finalized or the Windows desktop companion was retested.
 
+**2026-10-21 independent 3D packaging study:** added [3D envelope modeller, OpenSCAD reference scene and eight Python regression tests](HARDWARE-REV-B-INTERNAL-PACKAGING.md). Assistant-side tests and OpenSCAD render passed; Windows/user review pending. Cable, rear board and fixing dimensions are explicit assumptions; no change to retained sharp/R5 STEP case models and no manufacturing acceptance.
+
 ## Phase 7 — Standalone mode and secure provisioning
 - [ ] Define what 'standalone' means: remote Spotify Connect control vs direct audio playback
 - [ ] Confirm Spotify API/SDK constraints and provisioning/refresh-token storage approach

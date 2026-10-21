@@ -55,6 +55,10 @@ openscad -o "$HOME\Downloads\Spotify_Desk_RevB_fit_coupons.stl" mechanical\revB\
 
 **CAD-only continuation:** (1) create modular parametric 3D *envelope* checks for I2C plug/bend, LCD Z depth, rotary body/terminals, MX retention thickness, USB service ports, antenna zone and board supports, clearly separating manufacturer-backed sizes from placeholders; (2) compare whether layout changes are actually needed across reasonable scenarios; (3) keep the agreed 156 mm Rev B sharp/R5 source models unchanged until user chooses a revision; (4) choose purchases after drawing-level fit blockers are reduced. A mock 3D envelope is not a verified mating-connector model.
 
+### New 3D envelope follow-up
+
+The design-only [parametric 3D packaging study](HARDWARE-REV-B-INTERNAL-PACKAGING.md) extends the earlier frontal X-only calculation with aligned X/V/inward-W rectangular parts, nominal inner-case boundary checks and right I2C/left USB hypothetical cable scenarios. Eight assistant-side tests passed; physical connectors and exact locations are still unknown.
+
 ## Measurements needed to upgrade CAD from study to real fit
 
 1. **Screen and connectors:** Take direct photos with a ruler/calipers beside right H7 I2C header with factory cable fully seated; measure extension beyond 106.1mm module edge and cable bend radius, V band and rear-plane depth. Verify both USB-C plug/port access, SD, antenna and pin-1 orientation.

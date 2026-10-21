@@ -1,0 +1,43 @@
+// AUTO-GENERATED from dimensions.json + internal_packaging_assumptions.json.
+// Assumed geometry: NOT a manufacturer fit specification.
+
+W = 156.0;
+FACE = 110.0;
+ANGLE = 55.0;
+CHIN = 16.0;
+ROOF = 20.0;
+WALL = 3.0;
+SCREEN_X = 8.0;
+SCREEN_V = 8.0;
+SCREEN_W = 106.1;
+SCREEN_H = 67.8;
+SCREEN_IN = 3.3;
+SCREEN_DEPTH = 6.8;
+KEY_X = [31.05,61.05,91.05];
+KEY_V = 91.0;
+SWITCH_SIZE = 14.0;
+SWITCH_IN = 3.2;
+SWITCH_DEPTH = 16.8;
+KNOB_X = 138.0;
+KNOB_V = 44.0;
+KNOB_D = 15.1;
+ENCODER_SIZE = 13.2;
+ENCODER_IN = 3.3;
+ENCODER_DEPTH = 14.8;
+TERMINAL_DEPTH = 6.0;
+I2C_EXTENSION = 14.0;
+I2C_V = 34.0;
+I2C_V_LEN = 26.0;
+I2C_IN = 5.0;
+I2C_DEPTH = 14.0;
+USB_EXTENSION = 6.0;
+USB_V = 34.0;
+USB_V_LEN = 12.0;
+USB_IN = 5.0;
+USB_DEPTH = 10.0;
+FIX_PITCH_X = 98;
+FIX_PITCH_V = 60;
+FIXING_MARKER_D = 4.5;
+AW_BOARD_SIZE = [38.0,23.0,1.6];
+AW_BOARD_WORLD_MIN = [24.0,43.0,10.0];
+HATCH_CLEARANCE_Z = 8.0;

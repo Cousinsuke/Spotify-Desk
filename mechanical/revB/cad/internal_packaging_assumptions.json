@@ -1,0 +1,28 @@
+{
+  "status": "UNMEASURED exploratory part envelopes. Only manufacturer-backed front dimensions are in dimensions.json.",
+  "assumptions": {
+    "screen_inward_start": 3.3,
+    "screen_depth": 6.8,
+    "switch_size": 14.0,
+    "switch_inward_start": 3.2,
+    "switch_depth": 16.8,
+    "encoder_size": 13.2,
+    "encoder_inward_start": 3.3,
+    "encoder_depth": 14.8,
+    "encoder_terminal_depth": 6.0,
+    "i2c_extension": 14.0,
+    "i2c_v_start": 34.0,
+    "i2c_v_length": 26.0,
+    "i2c_inward_start": 5.0,
+    "i2c_inward_depth": 14.0,
+    "usb_extension": 6.0,
+    "usb_v_start": 34.0,
+    "usb_v_length": 12.0,
+    "usb_inward_start": 5.0,
+    "usb_inward_depth": 10.0,
+    "fixing_marker_diameter": 4.5,
+    "aw_board_size": [38.0,23.0,1.6],
+    "aw_board_world_min": [24.0,43.0,10.0],
+    "hatch_clearance_height": 8.0
+  }
+}

@@ -2,6 +2,11 @@
 
 This is **historical milestone tracking**, not a separate implementation branch for each ZIP. The accepted Phase 5.2 source is committed at `7172c2e`; historical ZIPs are reference snapshots only. Prefer Git commits, tags and releases for future work rather than duplicated source folders.
 
+## Rev B internal packaging model (design-only) — 2026-10-21
+- Added Python standard-library 3D envelope collision report, configurable right I2C and left USB scenarios, OpenSCAD reference scene, assumptions JSON, SCAD parameters and eight tests.
+- Assistant environment: 8 Python tests passed and OpenSCAD CGAL generated geometry without errors. Original sharp/R5 STEP reference designs unchanged; user Windows validation still pending.
+- Trial 20mm I2C reach overlaps a nominal encoder reference prism; provisional left USB extension enters nominal wall. These are **unmeasured box assumptions**, not physical collisions or a dimension decision.
+
 ## Rev B Windows fit-audit validation — 2026-10-21
 - User pulled commit `fd82d35` on Windows 11 and ran the Rev B Python clearance auditor successfully; 14/17/20/25mm scenarios reported the expected nominal 3.3/0.3/−2.7/−7.7mm gaps.
 - User's Windows 11 Python ran all **5 fit-audit unit tests successfully**; this validates the calculation tooling on Windows, **not** physical CAD fit or the desktop media companion.
