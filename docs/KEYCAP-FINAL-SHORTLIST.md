@@ -22,6 +22,19 @@ User independently pulled `3b3c7f0` and ran the three-height CAD Python suite on
 
 **Ready-made media legend search:** UK direct suppliers, media-keycap marketplaces and broad shopping listings reviewed. No *specific in-stock, matching three-cap 1U/MX black+white prior/play-pause/next trio with validated profile, dimensions, seller URL and delivered price* was found. This is a limit of what was verified, **not evidence no ready-made sets exist anywhere**. Do not purchase unrelated full keyboard sets merely to extract media legends.
 
+## Tech Toppers chatbot response received — 2026-10-21
+
+The user asked the Tech Toppers storefront chatbot about four custom WASD keycaps appearing **black (#000000) with white (#FFFFFF) previous / play-pause / next / play symbols** in the preview.
+
+**Chatbot claims, not written production confirmation:**
+- Printing method: **dye sublimation**; minor colour and design-clarity differences are possible, and the supplier may correct colours or layers.
+- It **did not confirm** that the finished result will have white artwork on genuinely black material or an equivalent sharp **white-on-black appearance**. Instead, it urged the buyer to notify the supplier **in writing before production** with exact colour requirements.
+- It states **Cherry profile** and **Cherry MX-style cross-stem compatibility**. Four WASD positions are **normally 1U**, but even the chatbot recommended directly confirming individual sizes.
+- It supplied **no measured cap outer width, underside/skirt size, height, stem socket depth or row/profile equality**. The conventional WASD grouping may have **mixed sculpted Cherry rows**; three side-by-side controls in Spotify Desk require identical physical row and top slope.
+- These statements are from a generic chatbot, **not a named human order/production guarantee**. The configuration screenshot and ability to add to cart are NOT proof of feasible white printing.
+
+**Next action before checkout:** request a human/support team response in writing explaining whether they print dark dye *around white negative-space symbols* on light material or have another actual technique for high-contrast white on black; request a finished example/photograph if possible, confirm identical 1U profile row for the three main keys (ideally all four), and request maximal cap skirt dimensions/overall depth/underside MX socket drawing. Verify saved artwork and total delivered price. If they cannot confirm appearance or row consistency, consider Krome UV printed alternatives instead. User has **not stated they have paid for or received** these caps.
+
 ## Provisional recommendation and next supplier confirmation
 
 **Primary procurement candidate:** **Tech Toppers 4-key WASD custom set**, not three £8 Krome singles. It has a verifiable 4-key MX PBT listing, allows 3 independent media SVG designs and is about **£18.90 delivered** at the listed UK standard rate. **However, do NOT mark this as the chosen keycap model until the vendor confirms the actual black-white process and underside dimensions.** White lettering cannot be directly dye-sub printed onto black PBT by a conventional coloured dye process; an inverted design on light PBT may be possible, but must be vendor confirmed for colour/quality.
