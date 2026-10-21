@@ -15,7 +15,7 @@
 
 - `mechanical/revB/cad/rotated_case_prototype.py` — Python/CadQuery source generator. Always outputs to an explicitly supplied **separate output folder**; never writes or changes the source ZIP or the existing `spotify_desk_sharp_case_reference.step` or rounded counterpart.
 - `mechanical/revB/cad/rotated_case_parameters.json` — assumptions controlling left USB wall cut, angle-independent mounting datum, nominal aperture and existing rear access.
-- `mechanical/revB/cad/test_rotated_case_prototype.py` — 10 unit checks: physical 180° geometry, aperture offsets, socket sides, left slot location, retained footprint/key centres, B-rep validity and actual volume removed by USB wall slot in both variants. **10/10 passed assistant-side**, where CadQuery/Shapely were installed. Windows user tests pending; two B-rep tests **skip** if optional CAD dependencies are absent.
+- `mechanical/revB/cad/test_rotated_case_prototype.py` — 10 unit checks: physical 180° geometry, aperture offsets, socket sides, left slot location, retained footprint/key centres, B-rep validity and actual volume removed by USB wall slot in both variants. **10/10 passed assistant-side** with CadQuery/Shapely. **User Windows validation (2026-10-21): 10 discovered, 8 passed and 2 skipped** because optional CadQuery/Shapely were unavailable. Skipped: `test_sharp_and_rounded_are_valid_brep_solids` and `test_left_usb_cut_removes_wall_material_both_variants`. These are not Windows-validated solid tests; assistant-side B-Rep validation passed independently.
 - `spotify_desk_rotated180_sharp_experimental.step` and `spotify_desk_rotated180_rounded_experimental.step` — new editable solids (both opened and checked valid, 156 × 83.09 × 106.11 mm outer bounding boxes). Also two **experimental multi-solid STEP envelope assemblies** (shell + simple LCD bounding box + USB-C1/USB-UART/I2C socket bounding prisms) and a diagnostic front-view SVG/PNG. **The new experimental case STEP binaries are available in the separately delivered ZIP attachment**, not necessarily in the GitHub repository; source and parameters are in GitHub.
 - Not a separate module manufacturer STEP: original third-party source ZIP remains outside GitHub.
 
@@ -36,6 +36,12 @@ python mechanical\revB\cad\rotated_case_prototype.py --out-dir "$HOME\Downloads\
 ```
 
 Alternatively use the pre-generated STEP ZIP delivered with this chat and open in FreeCAD or another STEP viewer; it does **not** need CadQuery on the user's Windows PC.
+
+## User Windows design-tool validation (2026-10-21)
+
+The user fast-forwarded to commit `f186eac`, ran the rotated-case unit suite (**8 PASS, 2 SKIP**) and successfully generated the report-only SVG. It returned a 156mm body, visible aperture X=13.33, V=17.09, size 95.54×54.36mm; assumed left USB-C1 wall slot X=-2…9.244, V=36.073…49.655 and W=8.889…17.051mm. The SVG was opened using `Invoke-Item` without a reported error. These checks establish Windows script execution and parameter consistency, **not** user inspection of both STEP solids, actual cable fit or fabrication approval.
+
+The next step is to inspect the **already-generated** rotated sharp/R5 STEP shells and reference assemblies in FreeCAD or another STEP viewer. Installing CadQuery is **optional**, not needed simply to view the supplied ZIP. Do not misreport skipped Windows B-Rep checks as passing.
 
 ## Remaining gates before a prototype print
 

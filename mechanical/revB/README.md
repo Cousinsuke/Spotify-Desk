@@ -79,7 +79,7 @@ The user asked for exactly LCD-centred MX keys, a narrower knob-side case and sh
 ## Separate 180° experimental CAD case shells (new design alternative)
 
 - The Windows user ran the **12 original-vs-180° study tests successfully**. The [new rotated-180 shell prototype report](../../docs/HARDWARE-REV-B-ROTATED180-CASE-PROTOTYPE.md) explains the two **experimental B-rep STEP shell versions** (sharp/R5) with a **LEFT USB-C1 wall opening** and visibly shifted screen cutout (X+0.10, V+4.74), retaining 156mm width and centred keys.
-- Source checked in: [`cad/rotated_case_prototype.py`](cad/rotated_case_prototype.py), [assumptions JSON](cad/rotated_case_parameters.json), and [ten geometry tests](cad/test_rotated_case_prototype.py). Assistant-side 10/10 pass. **Pre-generated experimental STEP assemblies/shells live only in delivered chat ZIP**, original Rev B STEP/DXF/PDF and source ZIP are unchanged.
+- Source checked in: [`cad/rotated_case_prototype.py`](cad/rotated_case_prototype.py), [assumptions JSON](cad/rotated_case_parameters.json), and [ten geometry tests](cad/test_rotated_case_prototype.py). Assistant-side 10/10 pass; **Windows user checks 8 passed, 2 skipped** (optional CAD dependencies missing), with report-only overview generated. **Pre-generated experimental STEP assemblies/shells live only in delivered chat ZIP**, original Rev B STEP/DXF/PDF and source ZIP are unchanged.
 - Experimental W=3.25mm glass datum and USB-C1 wall slot (X=-2..9.244, V=36.073..49.655, W=8.889..17.051mm) are **not verified plug, mounting or manufacturing dimensions**. Neither optional UART service nor LCD bosses/hatch/actual connector is engineered.
 
 ## Checks before manufacturing

@@ -2,6 +2,10 @@
 
 This is **historical milestone tracking**, not a separate implementation branch for each ZIP. The accepted Phase 5.2 source is committed at `7172c2e`; historical ZIPs are reference snapshots only. Prefer Git commits, tags and releases for future work rather than duplicated source folders.
 
+## Rotated-180 Rev B Windows test checkpoint — 2026-10-21
+- User pulled commit `f186eac` and ran rotated prototype tests on Windows 11: **8 passed, 2 skipped** because CadQuery/Shapely absent (solid validity and true cut subtraction). Assistant B-Rep tests passed independently, not revalidated on Windows.
+- User generated front overview SVG with anticipated 156mm geometry, (13.33,17.09) display aperture origin and experimental left USB slot, and opened via `Invoke-Item`. No confirmation of user FreeCAD inspection or preference decision yet.
+
 ## Rotated-180 Rev B experimental sharp and R5 STEP case models — 2026-10-21
 - User passed 12/12 rotation-comparison tests on Windows; assistant developed separate 180° experimental sharp and R5-rounded CAD enclosure solids, front aperture moved +4.74mm down and trial USB-C1 access slot cut through left wall; nominal 156×83.093×106.107mm external dimensions and three keys retained.
 - Added reproducible CadQuery generator, editable assumptions, 10 assistant-passing regression checks and engineering-gate documentation. Exported STEP files and independent reference assemblies provided in chat ZIP, not committed as third-party source or silently substituted for original Rev B CAD.
