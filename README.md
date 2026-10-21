@@ -54,6 +54,7 @@ The archive script places historical ZIPs under `archives/phase-zips/`, strips g
 - [Angled wedge 3D shape, internal packaging and input-PCB proposal](docs/HARDWARE-WEDGE-CASE-PROPOSAL.md)
 - [Parametric 3D reference model (not a print-ready case)](mechanical/wedge_packaging_concept.scad)
 - [Rev B sharp and R5-rounded CAD package, ZIP and coordinates](mechanical/revB/README.md)
+- [Rounded USB-left case: recessed MX media keycaps, play/pause icons, knob and fit drawings](docs/HARDWARE-REV-B-MEDIA-CONTROLS-FIT.md)
 - [Rotated 180° experimental case CAD (sharp/R5 shells, side power access cutout; not print-ready)](docs/HARDWARE-REV-B-ROTATED180-CASE-PROTOTYPE.md)
 - [Rev B alternative 180° Waveshare module orientation: move USB power to case left](docs/HARDWARE-WAVESHARE-ROTATION-180-STUDY.md)
 - [Waveshare manufacturer STEP inspection: actual board sockets, mounting points and corrected connector sides](docs/HARDWARE-WAVESHARE-STEP-INSPECTION.md)

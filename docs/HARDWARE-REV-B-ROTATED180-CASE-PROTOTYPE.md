@@ -43,6 +43,10 @@ The user fast-forwarded to commit `f186eac`, ran the rotated-case unit suite (**
 
 The next step is to inspect the **already-generated** rotated sharp/R5 STEP shells and reference assemblies in FreeCAD or another STEP viewer. Installing CadQuery is **optional**, not needed simply to view the supplied ZIP. Do not misreport skipped Windows B-Rep checks as passing.
 
+## Later visual choice and separate recessed button investigation (2026-10-21)
+
+The user **viewed the R5 rounded variant** and confirmed rounded corners and USB on LEFT are their desired visual direction; this does **not** validate the port, model geometry or printability. Three visible keycaps with previous/play-pause/next symbols and a 15.1mm knob were requested before proceeding. A **separate experimental recessed-keycap R5 STEP model and cross-section** has now been produced as [media controls fit study](HARDWARE-REV-B-MEDIA-CONTROLS-FIT.md). The old experimental STEP models are retained. User has not yet approved specific keycaps/switches, recess machining or full press/return fit.
+
 ## Remaining gates before a prototype print
 
 1. Confirm user's preferred physical orientation and sharp versus rounded exterior. **This step is a review study only, not implicit acceptance of 180°.**

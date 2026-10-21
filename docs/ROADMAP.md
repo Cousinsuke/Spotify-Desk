@@ -77,6 +77,8 @@ This roadmap tracks **planned phases**, not every ad-hoc fix. Actual latest work
 
 **2026-10-21 rotated-case Windows script validation:** user fast-forwarded to `f186eac`, ran **8 passing/2 skipped** tests (optional CadQuery and Shapely not installed), and generated the report-only display/USB slot SVG. Previously all ten tests passed assistant-side with CadQuery. **FreeCAD STEP visual review and choice of 180° orientation/exterior style still pending**, with no fit/purchase/print approval.
 
+**2026-10-21 rounded case media-control and MX recess study:** user looked at R5 USB-left screenshot and chose rounded corners/USB-left direction. Assistant generated [an independent 1U media-icon cap and MX recessed mounting study](HARDWARE-REV-B-MEDIA-CONTROLS-FIT.md): 18mm cap in 19.2mm well, conceptual 1.5mm MX plate at 11.5mm behind face, rest cap 2mm proud, 4mm assumed travel, 15.1mm knob, white icons, and valid R5 STEP shell/assembly. **15 assistant-side tests pass** including 2 true B-Rep. Candidate custom 1U black/white Cherry caps from Krome ~£8 each; no size/profile/colour order/physical fit chosen. Pre-generated STEP ZIP separate, original CAD unchanged.
+
 ## Phase 7 — Standalone mode and secure provisioning
 - [ ] Define what 'standalone' means: remote Spotify Connect control vs direct audio playback
 - [ ] Confirm Spotify API/SDK constraints and provisioning/refresh-token storage approach

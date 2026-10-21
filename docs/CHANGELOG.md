@@ -2,6 +2,11 @@
 
 This is **historical milestone tracking**, not a separate implementation branch for each ZIP. The accepted Phase 5.2 source is committed at `7172c2e`; historical ZIPs are reference snapshots only. Prefer Git commits, tags and releases for future work rather than duplicated source folders.
 
+## Rounded R180 media keycaps and recessed MX retention study — 2026-10-21
+- User visually preferred R5 rounded enclosure and USB-left physical orientation; asked to see the three playback icon keycaps and knob and evaluate switch recess/travel before purchasing.
+- Produced independent rounded STEP CAD with three 19.2mm cap wells, behind-face 1.5mm nominal plate retaining 14mm square MX switches and an exploded reference assembly with three 18mm caps, white icons and Ø15.1mm knob. 15 assistant-side Python/CadQuery tests passed, not a physical fit check.
+- Published three printable original white SVG legend drafts (previous/play-pause/next), configuration and technical drawing. Krome Keycaps custom Cherry 1U PBT candidate listed £8 each (≈£24 three + delivery), colour/profile and actual cap underside need confirmation. Generated STEP outputs remain in separate conversation ZIP; legacy CAD unmodified.
+
 ## Rotated-180 Rev B Windows test checkpoint — 2026-10-21
 - User pulled commit `f186eac` and ran rotated prototype tests on Windows 11: **8 passed, 2 skipped** because CadQuery/Shapely absent (solid validity and true cut subtraction). Assistant B-Rep tests passed independently, not revalidated on Windows.
 - User generated front overview SVG with anticipated 156mm geometry, (13.33,17.09) display aperture origin and experimental left USB slot, and opened via `Invoke-Item`. No confirmation of user FreeCAD inspection or preference decision yet.

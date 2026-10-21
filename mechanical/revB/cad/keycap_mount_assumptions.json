@@ -1,0 +1,31 @@
+{
+  "status": "DESIGN STUDY ONLY. Full-height Cherry MX & candidate Cherry-profile PBT 1u caps; cap retention/mount depths and all tolerances must be validated using real purchases.",
+  "cap_width_mm": 18.0,
+  "cap_depth_assumed_mm": 8.0,
+  "cap_corner_radius_mm": 1.4,
+  "cap_rest_above_skin_mm": 2.0,
+  "switch_total_travel_nominal_mm": 4.0,
+  "well_width_mm": 19.2,
+  "well_outer_support_width_mm": 23.2,
+  "switch_plate_top_inward_mm": 11.5,
+  "switch_plate_thickness_mm": 1.5,
+  "switch_plate_aperture_mm": 14.0,
+  "switch_flange_width_nominal_mm": 15.6,
+  "switch_top_above_plate_assumed_mm": 6.6,
+  "stem_top_above_switch_housing_mm": 3.6,
+  "knob_diameter_mm": 15.1,
+  "knob_exterior_height_assumed_mm": 8.0,
+  "icon_color": "#F3F5F7",
+  "cap_color": "#101318",
+  "enclosure_color": "#34404A",
+  "price_source": "Krome Keycaps custom Cherry 1U PBT UV printed, approx GBP 8 per cap on 2026-10-21; supplier confirms no backlighting",
+  "supplier_url": "https://www.kromekeycaps.com/products/create-your-own-custom-cherry-keycap",
+  "future_gates": [
+    "actual chosen Cherry MX switch flange and full travel",
+    "actual keycap underside depth and cross stem engagement",
+    "plate snap retention in 3D print material",
+    "interference near Waveshare and case chin",
+    "Knob push travel and M7 nut",
+    "real electrical wiring"
+  ]
+}

@@ -82,6 +82,12 @@ The user asked for exactly LCD-centred MX keys, a narrower knob-side case and sh
 - Source checked in: [`cad/rotated_case_prototype.py`](cad/rotated_case_prototype.py), [assumptions JSON](cad/rotated_case_parameters.json), and [ten geometry tests](cad/test_rotated_case_prototype.py). Assistant-side 10/10 pass; **Windows user checks 8 passed, 2 skipped** (optional CAD dependencies missing), with report-only overview generated. **Pre-generated experimental STEP assemblies/shells live only in delivered chat ZIP**, original Rev B STEP/DXF/PDF and source ZIP are unchanged.
 - Experimental W=3.25mm glass datum and USB-C1 wall slot (X=-2..9.244, V=36.073..49.655, W=8.889..17.051mm) are **not verified plug, mounting or manufacturing dimensions**. Neither optional UART service nor LCD bosses/hatch/actual connector is engineered.
 
+## Rounded USB-left media keycaps and recessed switch mounting (experimental)
+
+- User visually selected rounded R5 corners and left-side USB as design direction; not print signoff. [Three media cap designs, full-press clearance and supplier shortlist](../../docs/HARDWARE-REV-B-MEDIA-CONTROLS-FIT.md).
+- `cad/media_controls_fit_study.py` and `cad/keycap_mount_assumptions.json`: trial 18mm 1U keycaps with white icon masters, 19.2mm wells and 0.6mm nominal lateral clearance each side. The MX switch clips to an integral **1.5mm local plate at W=11.5mm behind face**, with nominal 14mm mounting cutout, rather than the 3mm case front wall. Cap sits 2mm above surface at rest, assumed 4mm travel, 8mm cap depth. This is not a real fit verified by physical parts.
+- `cad/test_media_controls_fit_study.py`: **15 assistant-side checks pass**, including actual CadQuery R5 shell validity and STEP roundtrip. Windows and actual cap fit pending; optional CAD tests skip without CadQuery. White standalone SVG icon drafts in `../revB/keycaps/`. Separate ZIP delivered contains new STEP shell, complete cap/knob reference assembly, drawings and vector icons. Earlier CAD files are preserved.
+
 ## Checks before manufacturing
 
 1. Confirm exact MX switch model and actual depths/mount clips.
