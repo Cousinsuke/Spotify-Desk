@@ -65,6 +65,8 @@ This roadmap tracks **planned phases**, not every ad-hoc fix. Actual latest work
 
 **2026-10-21 independent 3D packaging study:** added [3D envelope modeller, OpenSCAD reference scene and eight Python regression tests](HARDWARE-REV-B-INTERNAL-PACKAGING.md). Assistant-side tests and OpenSCAD render passed; Windows/user review pending. Cable, rear board and fixing dimensions are explicit assumptions; no change to retained sharp/R5 STEP case models and no manufacturing acceptance.
 
+**2026-10-21: Windows 3D packaging validation and official CAD-source investigation.** User independently passed all 8 Python tests and generated both default and long-cable scenarios with expected provisional overlaps. Found Waveshare's [official original 4.3-inch 3D drawing](https://docs.waveshare.com/ESP32-S3-Touch-LCD-4.3/Resources-And-Documents), added a local download/list helper; source contents and compatibility with touch SKU not yet checked. No physical manufacturing gate passed, no enclosure change.
+
 ## Phase 7 — Standalone mode and secure provisioning
 - [ ] Define what 'standalone' means: remote Spotify Connect control vs direct audio playback
 - [ ] Confirm Spotify API/SDK constraints and provisioning/refresh-token storage approach

@@ -52,8 +52,12 @@ The user asked for exactly LCD-centred MX keys, a narrower knob-side case and sh
 - [3D packaging study and Windows instructions](../../docs/HARDWARE-REV-B-INTERNAL-PACKAGING.md).
 - `cad/internal_packaging.py`: Python-only parameterised X/V/inward-W 3D box overlap and nominal case-inner-boundary calculations; optional OpenSCAD and JSON export.
 - `cad/internal_packaging_view.scad` and `cad/internal_packaging_params.scad`: conceptual shell/part/cable view in OpenSCAD. For scenario variants, run Python `--out-dir` and inspect generated files.
-- `cad/internal_packaging_assumptions.json`: explicitly unmeasured component envelopes. `cad/test_internal_packaging.py`: eight assistant-side tests passed, user Windows testing pending.
+- `cad/internal_packaging_assumptions.json`: explicitly unmeasured component envelopes. `cad/test_internal_packaging.py`: eight tests passed assistant-side **and on user's Windows 11 machine**; actual component fit and user OpenSCAD review remain unverified.
 - **No changes to original sharp/R5 B-Rep CAD, part fit or manufacturing status.**
+
+## Official Waveshare 3D drawing — pending archive verification
+
+[Waveshare's hardware resources](https://docs.waveshare.com/ESP32-S3-Touch-LCD-4.3/Resources-And-Documents) link an original ESP32-S3-Touch-LCD-4.3 3D Drawing ZIP. Its contents, units, 25948 touch SKU compatibility, USB/I2C socket detail and reuse permissions have not been verified. Run [`scripts/inspect-waveshare-3d-reference.ps1`](../../scripts/inspect-waveshare-3d-reference.ps1) on Windows to download/list the archive into Downloads before relying on any manufacturer geometry.
 
 ## Checks before manufacturing
 

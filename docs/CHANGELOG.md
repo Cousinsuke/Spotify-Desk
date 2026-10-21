@@ -2,6 +2,10 @@
 
 This is **historical milestone tracking**, not a separate implementation branch for each ZIP. The accepted Phase 5.2 source is committed at `7172c2e`; historical ZIPs are reference snapshots only. Prefer Git commits, tags and releases for future work rather than duplicated source folders.
 
+## Rev B Windows tests and official manufacturer CAD discovery — 2026-10-21
+- User confirmed `internal_packaging.py` generates expected nominal and expanded cable scenarios on Windows; **8/8 Python tests passed**. No physical assembly, electrical or OpenSCAD user visual test accepted.
+- Waveshare publishes an official 3D Drawing ZIP for the original ESP32-S3-Touch-LCD-4.3 model. Added a PowerShell archive downloader and listing tool with SHA-256; keeping manufacturer models separate from the repository until exact contents, revisions and distribution terms are checked.
+
 ## Rev B internal packaging model (design-only) — 2026-10-21
 - Added Python standard-library 3D envelope collision report, configurable right I2C and left USB scenarios, OpenSCAD reference scene, assumptions JSON, SCAD parameters and eight tests.
 - Assistant environment: 8 Python tests passed and OpenSCAD CGAL generated geometry without errors. Original sharp/R5 STEP reference designs unchanged; user Windows validation still pending.
