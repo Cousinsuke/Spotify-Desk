@@ -1,0 +1,13 @@
+component,x_mm,v_mm,width_or_diam_mm,length_mm,meaning,source_status
+face_outer,0,0,156,110,full_sloped_face,trial
+lcd_full,8,8,106.1,67.8,whole_waveshare_module,manufacturer_nominal
+lcd_visible,13.23,12.35,95.54,54.36,inner_visible_rectangle,manufacturer_reference
+lcd_center,61.05,41.9,0,0,module_centre,calculated
+mx_prev,31.05,91,18,18,keycap_envelope,user_proposed
+mx_playpause,61.05,91,18,18,keycap_envelope,user_proposed
+mx_next,91.05,91,18,18,keycap_envelope,user_proposed
+rotary_knob,138,44,15.1,0,kz0087_outer_diameter,manufacturer_spec
+encoder_body,138,44,13.2,13.2,mechanical_body_XY,manufacturer_reference
+i2c_clearance_zone,114.1,35,14,26,assumed_connector_cable_footprint,UNVERIFIED
+case_sharp,0,0,0,0,unfilleted_shell_reference,styling_choice
+case_rounded,0,0,5,0,nominal_R5_all_outer_edges,styling_choice
