@@ -40,6 +40,14 @@ A **three-dimensional bounding-volume reference**, not printable CAD, is in [mec
 
 **Not yet user-accepted:** 55° inclination, 16 mm raised chin, 20 mm roof, outer case size, actual component Z stack, mounting holes, cable clearance, custom PCB or printed case. Preexisting 3 MX plus push-to-toggle volume knob functionality remains accepted.
 
+## Rev B — compact and exact screen-centred buttons (2026-10-21)
+
+The user's two new exterior reference renders establish a request for **exact 3-MX-button alignment under screen**, less unused blank area around the **right-hand knob**, and both **sharp** and **rounded** shell options. A dimensioned, editable CAD comparison has been generated and is documented in [HARDWARE-WEDGE-REV-B-CAD.md](HARDWARE-WEDGE-REV-B-CAD.md), with GitHub coordinate reference in [mechanical/revB](../mechanical/revB/README.md). Older 165mm Rev A plans remain historical baselines, not current dimensions.
+
+**Rev B proposal (not yet user approved as final case):** 156mm wide, 110mm sloped front face, 55° angle above desk, 16mm front chin and 20mm rear roof; derived 83.09mm desk depth and 106.11mm overall height. LCD module starts at (8,8) and has 106.1mm width; **its centre is X=61.05mm**. The MX keys are centred **X=31.05,61.05,91.05** at V=91, exactly symmetric around LCD centre and spaced 30mm apart. KZ0087 knob centre (138,44), 15.1mm diameter; right rim leaves 10.45mm outer margin. **Sharp casing versus all-edge R5 outer fillets** offered as matched alternatives.
+
+**Not production confirmed:** 14mm hypothetical right-side I2C cable keepout leaves only ~3.3mm estimated clearance to encoder body; switch fixing/cutout tolerances, screen mounting holes, depth and USB access, hatch supports and encoder press/grub-screw still require actual hardware and print test. **No fabrication release or application code change.**
+
 ## Screen states to design for firmware
 
 Paired and playing; paired and paused; changing tracks; waiting for artwork; no media; PC unavailable; Wi-Fi disconnected; first-time pairing; revoked pairing; firmware update/recovery.
