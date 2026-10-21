@@ -1,5 +1,10 @@
 # Mechanical CAD concepts — Spotify Desk Thing
 
+## Current front/case revision: Rev B (2026-10-21)
+
+The **latest user-requested layout** now has exactly LCD-centred three MX keys, narrower 156mm outer width and two options: sharp casing or R5 rounded outer-edge styling. The newer STEP/BREP solids, DXFs and an A3 PDF were generated and delivered as a chat ZIP, not uploaded to GitHub. **[Rev B coordinate/data register](revB/README.md)** | [full research, limitations and measurements](../docs/HARDWARE-WEDGE-REV-B-CAD.md). Older 165mm wedge below remains a **Rev A history/reference**, not the latest model.
+
+
 ## New wedge body and internal packaging pass — 2026-10-20
 
 **Latest envelope proposal:** a desktop wedge inspired by the user's angled stand photo (shape, not material). See [parametric 3D wedge model](wedge_packaging_concept.scad) and [full design rationale](../docs/HARDWARE-WEDGE-CASE-PROPOSAL.md).
