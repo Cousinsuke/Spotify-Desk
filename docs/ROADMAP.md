@@ -71,6 +71,8 @@ This roadmap tracks **planned phases**, not every ad-hoc fix. Actual latest work
 
 **2026-10-21 Waveshare official 3D STEP inspection:** user uploaded manufacturer ZIP, SHA and CRC confirmed. Real STEP imported with 693 solids; measured **106.106×68.268×16.906mm** overall, 98×60mm mounting pitch. Crucial correction: *front* glass view has **USB-C on right** and **I2C four-pin on left**, opposite earlier rear-view-based hypothetical fit scripts. Added [STEP measurement report and new parametric comparator](HARDWARE-WAVESHARE-STEP-INSPECTION.md), 10 assistant-side tests passed, Windows validation pending. Original Rev B sharp/R5 156mm case assets unchanged; actual mating cables/hardware not modelled.
 
+**2026-10-21 180° physical module orientation study (awaiting user review):** after user verified the normal STEP comparator (10/10 Windows tests), explored their suggestion to turn the entire Waveshare module 180° so USB power is front-left and I2C front-right. A [side-by-side drawing and 12 new tests](HARDWARE-WAVESHARE-ROTATION-180-STUDY.md) support the coordinate mapping: nominal 98×60 mounts and centred keys unchanged, visible LCD aperture must shift V +4.74mm, planned left USB cable access still requires a side-wall opening. No firmware/hardware/purchase/case revision approved.
+
 ## Phase 7 — Standalone mode and secure provisioning
 - [ ] Define what 'standalone' means: remote Spotify Connect control vs direct audio playback
 - [ ] Confirm Spotify API/SDK constraints and provisioning/refresh-token storage approach

@@ -2,6 +2,11 @@
 
 This is **historical milestone tracking**, not a separate implementation branch for each ZIP. The accepted Phase 5.2 source is committed at `7172c2e`; historical ZIPs are reference snapshots only. Prefer Git commits, tags and releases for future work rather than duplicated source folders.
 
+## Rev B proposed 180-degree Waveshare mounting alternative — 2026-10-21
+- User passed 10/10 manufacturer STEP normal-orientation comparator tests on Windows and produced both assumption scenarios; suggested turning whole board 180° to move USB power port to left side of case.
+- Verified Waveshare publishes 5V USB-C input and separate USB vs USB-UART functions; added a **separate** side-by-side X/V/W orientation study, SVG and 12 locally passing tests. In 180° layout, USB becomes left and I2C right; visible window should shift 4.74mm down to align the existing display area; USB service tunnel/harness remains an open requirement.
+- Design alternative pending user acceptance and real LVGL/GT911 firmware rotation test. **Both existing Rev B sharp/R5 STEP files unchanged.**
+
 ## Manufacturer Waveshare STEP analysed and front/rear corrected — 2026-10-21
 - Uploaded original Waveshare source ZIP independently hashed/CRC-verified; OCCT imported the single 31.34MB Creo STEP and located 693 solid bodies, the two USB-C sockets, 4-pin I2C socket, four M2.5-named standoffs and actual overall 3D assembly bounds.
 - Corrected earlier **front-vs-rear mirrored connector placement**: front USB-C1/C2 RIGHT toward encoder, I2C four-pin LEFT toward inner left sidewall. Archived old scenario scripts are explicitly labelled historical hypotheses.

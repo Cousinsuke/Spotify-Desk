@@ -70,6 +70,12 @@ The user asked for exactly LCD-centred MX keys, a narrower knob-side case and sh
 - [`cad/manufacturer_fit_compare.py`](cad/manufacturer_fit_compare.py) calculates trial mating-cable extension overlap and outputs a vector layout; [`cad/waveshare_step_front_overlay.svg`](cad/waveshare_step_front_overlay.svg) is the checked-in front-view reference. Ten assistant-side tests passed in [`cad/test_manufacturer_fit_compare.py`](cad/test_manufacturer_fit_compare.py); Windows user acceptance pending.
 - **16.906mm** complete STEP depth includes rear PCB, supports and sockets; it is not a per-component or mounted-case allowance. No real plugs modelled and no final port cutouts/bosses.
 
+## Alternative physical 180° touchscreen orientation (under evaluation)
+
+- [Original vs flipped-in-plane comparison and installation tradeoffs](../../docs/HARDWARE-WAVESHARE-ROTATION-180-STUDY.md) uses `cad/orientation_180_study.py` and `cad/test_orientation_180_study.py`; 12 assistant-side tests passed, Windows test pending.
+- Physical 180° rotation (glass stays facing user) makes **USB-C on LEFT** and **I2C on RIGHT**. Nominal screen aperture must move **+4.74mm down V** (and 0.10mm right X), without moving the three key centres, original face size, or 98×60 mounting hole pitch.
+- A **left USB-C power access slot/tunnel** must be modelled, as its mating plug is not included in manufacturer STEP; right-side I2C cabling and encoder body may still interfere under longer cable assumptions. Firmware LVGL display and GT911 touch rotation untested. Existing sharp/R5 STEP source remains unchanged until user chooses preferred layout.
+
 ## Checks before manufacturing
 
 1. Confirm exact MX switch model and actual depths/mount clips.

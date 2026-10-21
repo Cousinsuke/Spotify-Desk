@@ -79,6 +79,10 @@ python mechanical\revB\cad\manufacturer_fit_compare.py --usb-reach-mm 20 --i2c-r
 
 Open the exported `waveshare_step_front_overlay.svg` in a browser. Orange = USB housings; aqua/green = I²C four-pin housing; yellow = source-model mounting standoffs; white keys and dark rotary represent the **existing Rev B design**. This drawing displays *measured socket-body rectangles*, not their unmodelled mating plugs.
 
+## Alternative 180° physical board orientation
+
+The user proposed rotating the *complete front-facing module* by 180° in the sloped face, leaving its glass outward. This would move the **main USB-C and USB-UART to the LEFT** and **four-pin H7 I2C to the RIGHT**. It could be preferable for an externally exposed power port away from the encoder, though a deliberate left side-wall USB port/tunnel is still necessary. The nominal visible LCD aperture moves **+4.74mm in V** after rotation due to asymmetric front bezel, and display/touch firmware rotation is untested. Compare both options in the [physical-orientation report](HARDWARE-WAVESHARE-ROTATION-180-STUDY.md); no case modifications or final orientation decisions yet.
+
 ## Remaining design and engineering gates
 
 1. Determine **USB-C1** realistic plug and strain relief size and potential side/rear access corridor. Its V interval overlaps the trial encoder body; investigate orienting plug into case depth, right-angle harness and alternate encoder/USB V placement before making shell wider.
