@@ -2,6 +2,8 @@
 
 **2026-10-21. Status: design-only envelope modelling, not verified physical fit, wiring, or manufacturing geometry.** The original 156 mm sharp and R5-rounded STEP CAD cases and their associated files are **not edited**. This adds an independent, approximate **sharp-outline** 3D visualization and calculation of rectangular part envelopes. The original R5 fillet is **not represented** by the exploratory shell and may reduce local clearances.
 
+**Superseded connector-side assumption:** this script intentionally used **right I2C / left USB** from a manufacturer's *rear view*. On the face observed from the display glass, actual Waveshare STEP places **USB-C1/C2 on right** and **H7 I2C on left**. The numbers below remain correct for hypothetical boxes but must **not** be used as current port placement. See [the newer STEP-verified orientation and study](HARDWARE-WAVESHARE-STEP-INSPECTION.md) and use its comparator for future routing choices.
+
 ## Inputs and scope
 
 - [CAD original dimensions](../mechanical/revB/cad/dimensions.json): 156×110 mm 55° front, 16 mm chin, 20 mm roof, 3 mm **assumed** wall; module 106.1×67.8 mm at X=8,V=8; 3 MX centres X=31.05,61.05,91.05, V=91; knob X=138,V=44.

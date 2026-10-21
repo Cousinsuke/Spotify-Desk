@@ -1,5 +1,7 @@
 # Phase 6 — Faceplate / clearance study (not final CAD)
 
+**Orientation update (2026-10-21, manufacturer STEP):** This document was written using component photographs from the *rear* of the PCB; front-view left/right placements were assumed. The actual 693-solid manufacturer's STEP puts **USB-C1/USB-C2 at the RIGHT edge when looking at the display glass**, and the **four-pin I2C H7 at the LEFT edge**. Historical right-I2C-to-encoder or left-USB-to-wall calculations below are **hypothetical mirrored scenarios**, not the verified component layout. See [Waveshare STEP inspection and corrected front-view drawing](HARDWARE-WAVESHARE-STEP-INSPECTION.md). Mating plugs and cable paths still unverified; no original CAD models have been changed.
+
 **Research update 2026-10-20. Status: manufacturer-dimension-based 2D exploration only.** No physical 3D parts measured, case printed, enclosure approved or hardware purchased. User's accepted physical controls: **3 MX keys** (previous/play-pause/next) beneath touchscreen and **Adafruit 377 push encoder** right of screen, with **KZ0087-01** flat black aluminium knob selected provisionally (press = PC/Wi-Fi). The detached fourth icon is not a control.
 
 ## Grounded hardware dimensions

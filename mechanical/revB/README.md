@@ -6,6 +6,8 @@ Current physical components and approved interaction are unchanged: Waveshare 25
 
 The user asked for exactly LCD-centred MX keys, a narrower knob-side case and sharp vs R5-rounded comparisons. **Both CAD alternatives now live in GitHub**. The [`cad/`](cad/) folder contains STEP cases, STEP assemblies, DXF dimension drawings, A3 PDF, PNG previews, `dimensions.json` and the editable [`build_cad.py`](cad/build_cad.py) generator. The [original ZIP](Spotify_Desk_RevB_CAD_Shared_Package.zip) is preserved alongside them. Commit [`6ae257e`](https://github.com/Cousinsuke/Spotify-Desk/commit/6ae257e2ce01256b320417fd21e14d9339bd9ed1), verified byte-for-byte against all 13 ZIP entries. Both are **design references**, not approved printed enclosures.
 
+**Manufacturer-model orientation update:** The official STEP was uploaded and parsed on 2026-10-21. Looking at the display from the **front**, USB Type-C1/Type-C2 are on the **right** (toward knob), and I2C H7 plus other peripheral sockets on **left**. Prior `right I2C 14mm gap` in the coordinate table and the earlier fit-audit were **hypothetical rear-view-mirrored studies, not accurate USB/I2C case routing**. Source-dimension overlay and checks: [Waveshare STEP inspection](../../docs/HARDWARE-WAVESHARE-STEP-INSPECTION.md) and [`cad/waveshare_step_front_overlay.svg`](cad/waveshare_step_front_overlay.svg). Original case shape untouched.
+
 ## Current model dimensions (mm)
 
 | Datum | Value |
@@ -31,8 +33,8 @@ The user asked for exactly LCD-centred MX keys, a narrower knob-side case and sh
 | Knob rim to outer right side | **10.45** |
 | Full display module to knob rim horizontally | **16.35** |
 | Display module bottom to keycap top | **6.20** |
-| Hypothetical I2C cable clearance corridor | 14.0 (UNVERIFIED) |
-| Nominal encoder body to hypothetical I2C corridor | **3.30** (NOT a verified fit) |
+| Old rear-view-mirrored hypothetical I2C corridor | 14.0 mm (OBSOLETE as front connector location; scenario only) |
+| Old theoretical encoder-to-right-I2C margin | **3.30 mm** (HISTORICAL/HYPOTHETICAL; actual right-side connector is USB) |
 
 **Coordinate system:** front X increases from left to right; front V increases down the **sloping front face**, not vertically. Deskside Y and Z refer to depth and absolute vertical height. Upper/rear end of sloping face is at local Y = 110 cos 55° = **63.093408** and Z = **106.106725**. Lower/front end at desk Y=0, Z=16. Rectangular side section is extended by a 20 mm horizontal roof behind the upper end to a desk Y=83.093408.
 
@@ -61,10 +63,17 @@ The user asked for exactly LCD-centred MX keys, a narrower knob-side case and sh
 
 **Official ZIP download checkpoint:** Windows download/extraction verified by user, 2026-10-21. Sole file is `esp32-s3-touch-lcd-4_3.stp` (31,338,066 bytes), ZIP SHA-256 `8721FAC43DE47B35771C438829A3251A4C0723227D83696B5517EFE7D854DE15`. **Geometry not inspected; no modification to Rev B case yet.** Await source ZIP upload to chat to inspect board geometry in an isolated reference study.
 
+## Manufacturer STEP reference (2026-10-21)
+
+- [Official STEP part measurements, orientation correction, trial fit results and Windows commands](../../docs/HARDWARE-WAVESHARE-STEP-INSPECTION.md).
+- [`cad/waveshare_step_reference.json`](cad/waveshare_step_reference.json) records manufacturer model SHA, part bounding boxes, glass-facing coordinate signs, USB/H7 and 98×60 standoffs. Raw Waveshare STEP/ZIP intentionally remains out of public GitHub.
+- [`cad/manufacturer_fit_compare.py`](cad/manufacturer_fit_compare.py) calculates trial mating-cable extension overlap and outputs a vector layout; [`cad/waveshare_step_front_overlay.svg`](cad/waveshare_step_front_overlay.svg) is the checked-in front-view reference. Ten assistant-side tests passed in [`cad/test_manufacturer_fit_compare.py`](cad/test_manufacturer_fit_compare.py); Windows user acceptance pending.
+- **16.906mm** complete STEP depth includes rear PCB, supports and sockets; it is not a per-component or mounted-case allowance. No real plugs modelled and no final port cutouts/bosses.
+
 ## Checks before manufacturing
 
 1. Confirm exact MX switch model and actual depths/mount clips.
-2. Check LCD module rear hole bores and right-side I2C/connector/cable requirements. The 14 mm band was invented for a clearance study.
+2. Check LCD module mount bore/thread details and **front-left H7 I2C connector** plus **front-right USB-C1/USB-C2** mating plugs/cable paths; ZIP-derived socket positions alone don't establish cable clearance.
 3. Verify KZ0087 real exposure and ability to press Adafruit 377 through front wall, and assembly order.
 4. Confirm 3.3 V electrical protection and AW9523B reset/gpio behaviour; no approved circuit layout yet.
 5. Iterate latch/screw bosses, bottom hatch, USB power opening and real tool tolerances, and perform true 3D collision checks.

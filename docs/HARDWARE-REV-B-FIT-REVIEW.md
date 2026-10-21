@@ -2,6 +2,8 @@
 
 **2026-10-21. Status: engineering review, 2D calculations and printable test coupons; NO verified physical assembly.** Keep both existing sharp and R5 rounded STEP variants and the **156 mm external width unchanged** until user review/actual measurements. This work does not revise either original STEP case.
 
+**2026-10-21 ORIENTATION CORRECTION:** This document predates our inspection of the genuine Waveshare 3D STEP. It describes a **rear-board photographic view** (I2C right, USB left). On the **front-view sloped case** used by Rev B, those sides are **reversed**: USB-C on the right near knob; four-pin I2C on left near side wall. Previous right-I2C scenarios are historical *hypothetical* examples only. For geometry from actual STEP see [manufacturer STEP inspection](HARDWARE-WAVESHARE-STEP-INSPECTION.md). No production dimensions approved.
+
 ## Verified manufacturer / supplier reference dimensions
 
 - **Waveshare ESP32-S3-Touch-LCD-4.3, touch SKU 25948:** total display module 106.1 × 67.8 mm; rear board mounting centres nominal 98 × 60 mm. Manufacturer photo/dimensional drawing shows right-edge I2C and other connectors, left-side USB/UART USB-C, and rear wiring/flex. Exact right-edge mating plug protrusion, bend radius, screw bore and assembled Z clearance are **not** specified here. Source: https://docs.waveshare.com/ESP32-S3-Touch-LCD-4.3 ; https://files.waveshare.com/wiki/ESP32-S3-Touch-LCD-4.3/manual/ESP32-S3-Touch-LCD-4.3-Sch.pdf (page 3).
@@ -61,11 +63,11 @@ The design-only [parametric 3D packaging study](HARDWARE-REV-B-INTERNAL-PACKAGIN
 
 ## Measurements needed to upgrade CAD from study to real fit
 
-1. **Screen and connectors:** Take direct photos with a ruler/calipers beside right H7 I2C header with factory cable fully seated; measure extension beyond 106.1mm module edge and cable bend radius, V band and rear-plane depth. Verify both USB-C plug/port access, SD, antenna and pin-1 orientation.
+1. **Screen and connectors:** Manufacturer STEP now locates H7 four-pin I2C socket on *front LEFT* and USB-C1/USB-C2 on *front RIGHT*. Once parts are owned, photograph the **actual mating plugs** with ruler/calipers; measure left H7 exit, right USB-C1 cord, bend radius, inward depth and possible enclosure service openings. Confirm pin-1 orientation, SD and antenna exclusion. The STEP supplies bare sockets, not real harness geometry.
 2. **LCD mounting:** Measure actual rear screw hole diameters, stand-off heights, wiring and screw-head clearance. Manufacturer nominal 98×60 pitch alone is insufficient.
 3. **Three MX switches:** Identify model, keycap size/height, whether plate-mount or PCB-mount, mounting clip thickness and rear pin/wire envelope. Test both coupon square sizes and record which snaps securely.
 4. **Encoder and knob:** On the actual PID 377 + KZ0087, test the 7.0 and 7.3mm holes, 1.5/3mm plate thicknesses, retained washer/nut and room for push-click travel. Confirm press action while grub screw is engaged; check terminals and panel-side washer.
-5. **Case internal support:** Once component Z dimensions exist, add real display bosses, mechanical reinforcement behind locally thin MX clips, left USB-C access, cable retainers, input-expander supports, bottom-hatch hardware and true B-rep component clash checks.
+5. **Case internal support:** Once physical parts exist, use the manufacturer 98×60mm standoff reference, full 16.906mm assembled depth, real support hardware and accurate mounting datum to refine bosses, thin MX plate supports, **right USB-C1/USB-C2 service access**, left H7 cable retention, input-expander supports, bottom hatch and B-rep collision checks.
 6. **Electrical safety:** Before wiring the AW9523B, separately validate voltage selector, connector pin ordering and expander reset/startup as recorded in `HARDWARE-ELECTRICAL-REVIEW.md`.
 
 **Gate:** do not call current Rev B STEP printable/production-ready; only cut/print final enclosure after real component measurements, 3D clearance checks and a user's physical fit test.

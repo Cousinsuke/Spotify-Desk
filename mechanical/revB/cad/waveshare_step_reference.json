@@ -1,0 +1,43 @@
+{
+  "status": "Extracted manufacturer STEP reference metadata, NOT a mating-cable or fabrication model",
+  "source": {
+    "archive": "ESP32-S3-Touch-LCD-4in3_3D_Drawing.zip",
+    "archive_sha256": "8721fac43de47b35771c438829a3251a4c0723227d83696b5517efe7d854de15",
+    "archive_bytes": 5677592,
+    "step_filename": "esp32-s3-touch-lcd-4_3.stp",
+    "step_bytes": 31338066,
+    "step_product": "ESP32-S3-TOUCH-LCD-4_3_ASM",
+    "step_creator_date": "2023-12-13",
+    "source_units": "mm",
+    "solid_count": 693,
+    "component_names_provenance": "OCCT STEPCAF/XCAF tree; reference instance bounding boxes in global STEP coordinates",
+    "scope": "No cable connectors/mating plugs, case mounts or direct manufacturing tolerance certification; exact PCB revision not known"
+  },
+  "step_coordinates": {
+    "positive_z": "front glass, looking from +Z towards board gives FRONT viewing orientation",
+    "positive_y": "top edge of screen in STEP viewer",
+    "positive_x": "right edge when viewing front of glass; USB-C on +X, I2C header on -X",
+    "front_touch_datum_box_xyz": [-53.0,-36.388,-4.25,53.1,31.53,4.8]
+  },
+  "parts": {
+    "full_assembly": {"box": [-53.003144,-36.481771,-12.103144,53.103144,31.785800,4.803144], "evidence": "actual global STEP union"},
+    "touch_glass": {"product":"43H-800480-TP", "box": [-53.0,-36.388,-4.25,53.1,31.53,4.8]},
+    "ips_display": {"product":"43H-800480-IPS", "box": [-52.71,-35.94,-4.75,52.71,31.13,2.9]},
+    "rear_pcb": {"product":"BOARD", "box": [-52.962,-36.482,-3.703,53.062,31.543,-2.097]},
+    "usb_type_c1": {"product":"TYPE_C1_ASM", "role":"USB port labelled USB in manufacturer rear board drawing", "box": [45.145,-6.197,-7.001,52.856,3.385,-2.839]},
+    "usb_type_c2": {"product":"TYPE_C2_ASM", "role":"USB TO UART port labelled UART in manufacturer rear board drawing", "box": [45.275,13.772,-7.001,52.986,23.355,-2.839]},
+    "i2c_4pin_socket": {"product":"HP2_0-4PIN-00", "role":"H7 four-pin peripheral I2C connector, inferred by four-pin edge-connector count and manufacturer port layout", "box": [-52.423,-5.738,-12.1,-47.423,4.262,-2.45]},
+    "peripheral_3pin_socket": {"product":"HP2_0-3PIN-00", "box": [-52.413,11.13,-12.1,-47.413,19.13,-2.45]},
+    "peripheral_2pin_socket_1": {"product":"HP2_0-2PIN-00", "box": [-52.423,5.13,-12.1,-47.423,11.13,-2.45]},
+    "peripheral_2pin_socket_2": {"product":"HP2_0-2PIN-00", "box": [-52.423,-12.453,-12.1,-47.423,-6.453,-2.45]},
+    "standoff_top_left": {"product":"SMTSO-M2_5-4ET", "box": [-51.7,24.78,-7.7,-46.2,30.28,-2.04]},
+    "standoff_bottom_left": {"product":"SMTSO-M2_5-4ET", "box": [-51.7,-35.22,-7.7,-46.2,-29.72,-2.04]},
+    "standoff_top_right": {"product":"SMTSO-M2_5-4ET", "box": [46.3,24.78,-7.7,51.8,30.28,-2.04]},
+    "standoff_bottom_right": {"product":"SMTSO-M2_5-4ET", "box": [46.3,-35.22,-7.7,51.8,-29.72,-2.04]}
+  },
+  "reference_alignment": {
+    "method":"align the touch glass XY bounding box top-left to existing Rev B (X=8, V=8); front touch max Z to local inward W=0; assumption for glass flush with face, not a finalized mount",
+    "assumed_front_glass_w_mm": 0.0,
+    "sloped_wedge_face_is_not_changed": true
+  }
+}

@@ -1,5 +1,7 @@
 # Rev B — Compact centred-button wedge CAD
 
+**Orientation update (2026-10-21, manufacturer STEP):** This document was written using component photographs from the *rear* of the PCB; front-view left/right placements were assumed. The actual 693-solid manufacturer's STEP puts **USB-C1/USB-C2 at the RIGHT edge when looking at the display glass**, and the **four-pin I2C H7 at the LEFT edge**. Historical right-I2C-to-encoder or left-USB-to-wall calculations below are **hypothetical mirrored scenarios**, not the verified component layout. See [Waveshare STEP inspection and corrected front-view drawing](HARDWARE-WAVESHARE-STEP-INSPECTION.md). Mating plugs and cable paths still unverified; no original CAD models have been changed.
+
 **Status: provisional dimensioned CAD study, not fabrication approved.** 2026-10-21. This revises the former **165 x 110 mm** front and its wedge enclosure after the user requested three changes based on both visual renders:
 
 1. Centre the three square MX keys **exactly under the LCD**.

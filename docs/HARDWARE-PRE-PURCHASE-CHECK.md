@@ -1,5 +1,7 @@
 # Phase 6 — Pre-purchase electrical and mechanical verification
 
+**Orientation update (2026-10-21, manufacturer STEP):** This document was written using component photographs from the *rear* of the PCB; front-view left/right placements were assumed. The actual 693-solid manufacturer's STEP puts **USB-C1/USB-C2 at the RIGHT edge when looking at the display glass**, and the **four-pin I2C H7 at the LEFT edge**. Historical right-I2C-to-encoder or left-USB-to-wall calculations below are **hypothetical mirrored scenarios**, not the verified component layout. See [Waveshare STEP inspection and corrected front-view drawing](HARDWARE-WAVESHARE-STEP-INSPECTION.md). Mating plugs and cable paths still unverified; no original CAD models have been changed.
+
 **Date:** 2026-10-20. **Status:** Manufacturer document check + preliminary enclosure fit assessment. **Extended faceplate/cable fit and corrected Bourns shaft dimensions are in [HARDWARE-MECHANICAL-LAYOUT-STUDY.md](HARDWARE-MECHANICAL-LAYOUT-STUDY.md).** **Further chip/boot safety findings and provisional six-input resistor network are now in [HARDWARE-ELECTRICAL-REVIEW.md](HARDWARE-ELECTRICAL-REVIEW.md).** **No real device or wiring was tested**; no purchases authorized or final circuit verified. User has explicitly chosen these *proposed* parts for further checks (not yet bought):
 
 1. Waveshare **ESP32-S3-Touch-LCD-4.3 / SKU 25948**, **WITH capacitive touch** (do not substitute no-touch SKU 30493).

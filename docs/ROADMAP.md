@@ -69,6 +69,8 @@ This roadmap tracks **planned phases**, not every ad-hoc fix. Actual latest work
 
 **2026-10-21 official CAD download verified on user's Windows:** ZIP fetched and extracted via new helper (5,677,592 bytes; one 31,338,066-byte STEP named `esp32-s3-touch-lcd-4_3.stp`). User reported SHA-256 `8721FAC43DE47B35771C438829A3251A4C0723227D83696B5517EFE7D854DE15`. The STEP geometry, exact touch SKU equivalence and connector fidelity remain **unreviewed**; next step is to upload ZIP to chat for CAD inspection. No changes to original Rev B enclosures.
 
+**2026-10-21 Waveshare official 3D STEP inspection:** user uploaded manufacturer ZIP, SHA and CRC confirmed. Real STEP imported with 693 solids; measured **106.106×68.268×16.906mm** overall, 98×60mm mounting pitch. Crucial correction: *front* glass view has **USB-C on right** and **I2C four-pin on left**, opposite earlier rear-view-based hypothetical fit scripts. Added [STEP measurement report and new parametric comparator](HARDWARE-WAVESHARE-STEP-INSPECTION.md), 10 assistant-side tests passed, Windows validation pending. Original Rev B sharp/R5 156mm case assets unchanged; actual mating cables/hardware not modelled.
+
 ## Phase 7 — Standalone mode and secure provisioning
 - [ ] Define what 'standalone' means: remote Spotify Connect control vs direct audio playback
 - [ ] Confirm Spotify API/SDK constraints and provisioning/refresh-token storage approach
