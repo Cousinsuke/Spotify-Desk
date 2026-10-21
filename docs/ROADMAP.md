@@ -67,6 +67,8 @@ This roadmap tracks **planned phases**, not every ad-hoc fix. Actual latest work
 
 **2026-10-21: Windows 3D packaging validation and official CAD-source investigation.** User independently passed all 8 Python tests and generated both default and long-cable scenarios with expected provisional overlaps. Found Waveshare's [official original 4.3-inch 3D drawing](https://docs.waveshare.com/ESP32-S3-Touch-LCD-4.3/Resources-And-Documents), added a local download/list helper; source contents and compatibility with touch SKU not yet checked. No physical manufacturing gate passed, no enclosure change.
 
+**2026-10-21 official CAD download verified on user's Windows:** ZIP fetched and extracted via new helper (5,677,592 bytes; one 31,338,066-byte STEP named `esp32-s3-touch-lcd-4_3.stp`). User reported SHA-256 `8721FAC43DE47B35771C438829A3251A4C0723227D83696B5517EFE7D854DE15`. The STEP geometry, exact touch SKU equivalence and connector fidelity remain **unreviewed**; next step is to upload ZIP to chat for CAD inspection. No changes to original Rev B enclosures.
+
 ## Phase 7 — Standalone mode and secure provisioning
 - [ ] Define what 'standalone' means: remote Spotify Connect control vs direct audio playback
 - [ ] Confirm Spotify API/SDK constraints and provisioning/refresh-token storage approach

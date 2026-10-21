@@ -59,6 +59,8 @@ The user asked for exactly LCD-centred MX keys, a narrower knob-side case and sh
 
 [Waveshare's hardware resources](https://docs.waveshare.com/ESP32-S3-Touch-LCD-4.3/Resources-And-Documents) link an original ESP32-S3-Touch-LCD-4.3 3D Drawing ZIP. Its contents, units, 25948 touch SKU compatibility, USB/I2C socket detail and reuse permissions have not been verified. Run [`scripts/inspect-waveshare-3d-reference.ps1`](../../scripts/inspect-waveshare-3d-reference.ps1) on Windows to download/list the archive into Downloads before relying on any manufacturer geometry.
 
+**Official ZIP download checkpoint:** Windows download/extraction verified by user, 2026-10-21. Sole file is `esp32-s3-touch-lcd-4_3.stp` (31,338,066 bytes), ZIP SHA-256 `8721FAC43DE47B35771C438829A3251A4C0723227D83696B5517EFE7D854DE15`. **Geometry not inspected; no modification to Rev B case yet.** Await source ZIP upload to chat to inspect board geometry in an isolated reference study.
+
 ## Checks before manufacturing
 
 1. Confirm exact MX switch model and actual depths/mount clips.

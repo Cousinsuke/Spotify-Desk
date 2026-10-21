@@ -2,6 +2,10 @@
 
 This is **historical milestone tracking**, not a separate implementation branch for each ZIP. The accepted Phase 5.2 source is committed at `7172c2e`; historical ZIPs are reference snapshots only. Prefer Git commits, tags and releases for future work rather than duplicated source folders.
 
+## Manufacturer STEP download confirmed on Windows — 2026-10-21
+- User ran the new PowerShell inspection helper after successful Git pull; downloaded official Waveshare ZIP (5,677,592 bytes, SHA-256 `8721FAC43DE47B35771C438829A3251A4C0723227D83696B5517EFE7D854DE15`) and extracted the sole STEP `esp32-s3-touch-lcd-4_3.stp` (31,338,066 bytes).
+- ZIP member listing is now confirmed by user PowerShell output, but **the actual STEP model has not been opened or analysed**, touch SKU 25948/PCB revision alignment remains open. Manufacturer bytes stay outside GitHub pending rights/fit review.
+
 ## Rev B Windows tests and official manufacturer CAD discovery — 2026-10-21
 - User confirmed `internal_packaging.py` generates expected nominal and expanded cable scenarios on Windows; **8/8 Python tests passed**. No physical assembly, electrical or OpenSCAD user visual test accepted.
 - Waveshare publishes an official 3D Drawing ZIP for the original ESP32-S3-Touch-LCD-4.3 model. Added a PowerShell archive downloader and listing tool with SHA-256; keeping manufacturer models separate from the repository until exact contents, revisions and distribution terms are checked.
