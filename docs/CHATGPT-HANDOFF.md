@@ -2,7 +2,7 @@
 
 > Current-state save point, not the full project history. **Read this first** in a new project conversation. Cross-check against the current branch and commits.
 
-Updated: 2026-10-20
+Updated: 2026-10-21
 
 ## Repository / checkpoint
 
@@ -15,11 +15,10 @@ Updated: 2026-10-20
 
 ## Current project phase vs current actual work
 
-- **Current project phase:** Phase 6 — hardware research, compatibility decisions, printable-case work to come; **no ESP32 firmware implemented**.
-- **Current actual work:** A new **3D wedge packaging concept** based on user's triangular/wedge desk-stand reference. **Do not assume 165×110 face/55° angle are user accepted**. Leading model uses 165 mm wide, 110 mm *sloped-face* length, **55° from tabletop**, 16 mm vertical chin and 20 mm rear top roof, deriving **83.1 mm desk depth and 106.1 mm height**. Raised chin addresses lower MX switch body/floor clearance; roof prevents upper LCD from occupying near-zero tip depth. Previous 2D key/knob/display positions preserved. Removable bottom hatch and AW9523B accessible base position are concepts only.
-- **Artifacts:** GitHub [`mechanical/wedge_packaging_concept.scad`](../mechanical/wedge_packaging_concept.scad) for parametric 3D *component-envelope* modelling and [`docs/HARDWARE-WEDGE-CASE-PROPOSAL.md`](HARDWARE-WEDGE-CASE-PROPOSAL.md) for dimensions/assembly/PCB strategy. Chat deliverable `spotify_desk_wedge_packaging_study.zip` includes the OpenSCAD model, rendered exterior/cutaway/ghost images, side-section diagram, 50/55/60 angle comparison, and speculative single-piece L-shaped *input-only* PCB zone diagram. Static OpenSCAD screenshots generated; ZIP integrity verified. **NO accurate board Z stackup, manufacturing holes, printable STL, electrical schematic approval, part order or physical fit test**.
-- **Electronics strategy:** keep integrated Waveshare 25948 MCU/display. Prototype AW9523B using validated wiring first, then consider **small custom input-carrier PCB** (3 MX + encoder/push + AW9523B/protective resistors) or two smaller boards, not a ground-up ESP32 motherboard.
-- **Current source baseline unchanged:** accepted Phase 5.2 app from `7172c2e`, still four simulator buttons; no hardware firmware.
+- **Current project phase:** Phase 6 physical design research/CAD, no ESP32 firmware implemented.
+- **Current actual work:** **Rev B** after user requested (1) three MX keys centred exactly to display, (2) narrower/less unused space around the knob, (3) comparison of sharp and rounded case exterior. A first set of **actual STEP solids and reference assemblies**, **layered DXF orthographic drawings**, **A3 four-page dimensioned PDF**, and CAD-rendered side-by-side PNG preview have been generated and statically verified, delivered in chat ZIP **Spotify_Desk_RevB_CAD_Shared_Package.zip**. The GitHub connector has **text-only** create/update actions, so **STEP/DXF/PDF are conversation artifacts, not GitHub uploads**; full Python CadQuery generator included in ZIP and documented in `mechanical/revB/`.
+- **Rev B proposed dimensions:** **156 mm wide × 83.093 mm desk depth × 106.107 mm high**, 156×110 mm sloped face at 55° from desk, 16 mm front chin, 20 mm rear roof, 3 mm assumed wall. Rounded option is **R5 external edge fillets**; sharp option has crisp edges. LCD module X=8..114.1 mm, centre **61.05 mm**; 3 MX X centres **31.05, 61.05, 91.05** mm at V=91, exactly centred under module; 30 mm pitch; knob centre (138,44) mm, diameter 15.1. Gap knob rim to right face edge **10.45 mm**. Assumed 14 mm I2C right-side cable zone leaves just **3.30 mm assumed lateral encoder-body clearance**; **not a guaranteed physical fit**.
+- **Status:** CAD STEP solids independently reopened and validated; DXF files reopened; PDF rendered/checked. **No finished fabrication geometry**, board screw bores, custom PCB, actual port cutouts, true switch Z heights or real cable/fit collision verification. Electrical AW9523B RESET/pin mapping remains open. User has NOT yet approved shell dimensions/edge option or purchased hardware. Current accepted software stays Phase 5.2 source `7172c2e`.
 
 ## Last accepted work
 
@@ -46,12 +45,11 @@ Updated: 2026-10-20
 
 ## Current next action
 
-1. **Review 3D wedge exterior and side section with user.** 165×83.1×106.1 mm (W×depth×H), **55° tilted front, 16mm raised chin, 20mm rear shelf**, soft corners and removable bottom are **proposed**, not yet accepted. Compare 50° lower/more reclined (90.7 mm deep, 100.3 mm high) vs 60° taller/more upright (75 mm deep, 111.3 mm high).
-2. Request/measure exact model of the **three owned MX switches/keycaps**, plate retaining clip/total body and wiring/PCB mounting requirements. Need test coupon before full shell.
-3. Obtain/mechanically trace screen 25948 **full PCB**, mounting-hole bore, antenna, left USB ports, **right I2C connector/cable direction/bend radius** and expander dimensions on real part, then create complete *collision-checked 3D assembly* (current wedge SCAD is bounding-box only).
-4. Validate KZ0087 cap low-profile protrusion (~8 mm styling aim) and **encoder press/grub-screw** on Adafruit 377; Bourns l≈7mm projection beyond bushing is inside KZ0087 6–12.4mm accepted engagement range on paper, but not measured.
-5. Resolve **AW9523B reset bias and 3.3 V bus safety** in `HARDWARE-ELECTRICAL-REVIEW.md` and test six resistor-protected contacts plus fast knob rotation under Wi-Fi + display load. **Do not issue solder/PCB production instructions from preliminary circuit**.
-6. Only after layout/inputs are measured: draw actual fasteners, hatch, key plate and ports, 3D print fit coupons, then optionally design **custom input-only carrier PCB** in KiCad. Do not redesign the already integrated Waveshare ESP32 main board by default.
+1. **Present/review actual Rev B sharp vs rounded CAD previews and A3 dimension PDF** with user; ask which exterior style to proceed with, and if revised **156 mm width** plus centred keys/closer knob is acceptable. Do not call either shape a user-approved final shell until then.
+2. **Use [docs/HARDWARE-WEDGE-REV-B-CAD.md](HARDWARE-WEDGE-REV-B-CAD.md) and [mechanical/revB/README.md](../mechanical/revB/README.md)** as current CAD dimension reference; older 165mm OpenSCAD wedge is archived Rev A, **not silently updated**. STEP/DXF/PDF and generator are in chat download ZIP, not in GitHub.
+3. **Measure exact owned MX switches and caps**, screen mounting-hole bores, left USB-C service locations, right I2C plug and bend radius, true AW9523B and encoder/knob Z/depth, then perform real 3D collision analysis.
+4. **Case engineering** still needed: 3D printable mounting lips and screw bosses, bottom-access hatch fasteners, key/switch tolerances and support, USB ports, screen and antenna keepouts, knob push travel and KZ0087 grub-screw access. Current STEP shell cutouts are placeholders.
+5. **Electrical** still needed: AW9523B module RESET/pullup and safe 3.3V connector mapping, protected six input signals and encoder pulse tracking. If layout/electrical tests succeed, *then* consider compact carrier PCB. Firmware unchanged.
 
 ## Relevant project files (from Phase 5.2 source)
 
@@ -76,12 +74,13 @@ Updated: 2026-10-20
 - `3f7d768` — manufacturer chip datasheet electrical review + preliminary protected six-input network and documented unresolved module schematic verification (docs only).
 - `e89fa20` — faceplate 150×105 vs 165×110 mechanical study, screen I2C/right-hand knob cable conflict, and manufacturer-supported 7 mm exposed encoder shaft correction (documentation only).
 - 2026-10-20 static CAD envelope milestone: source assets added under `mechanical/`; 3-page A3 PDF/SVG/DXF bundle delivered as a conversation attachment. No 3D-print manufacturing geometry or runtime tests; the latest Git source baseline remains unchanged.
-- 2026-10-20: wedge 3D packaging proposal + editable SCAD checked in to mechanical/, separate annotated rendered concept ZIP in conversation; purely geometric, not accepted hardware or firmware.
+- 2026-10-20: wedge 3D Rev A packaging proposal + editable SCAD checked in to mechanical/, separate annotated rendered concept ZIP in conversation; purely geometric.
+- 2026-10-21: **Rev B** compact 156mm shell and exact screen-centred 3-key row, matched sharp/R5 rounded valid STEP solids, assembly STEP, DXF, A3 4-page PDF and image comparison. Chat-delivered ZIP; coordinate README/CSV and validation docs in GitHub, no physical test.
 - Documentation-only commits after this checkpoint are not evidence of newer runtime implementation.
 
 ## Unresolved issues / deferred
 
-- Raised-front wedge preliminary footprint **83.1 mm depth / 106.1 mm height** (55°); differs from prior 55–75mm depth guess because of 20mm roof for upper LCD clearance; angle/case unapproved.
+- Current Rev B trial is **156×83.09×106.11 mm** (W×D×H), 55° slope and 16mm chin/20mm roof; width is reduced from Rev A 165mm. Proposed R5 round is an *option*, not a final user-accepted finish. 14mm assumed I2C corridor + encoder body leaves just 3.3mm theoretical lateral gap, real fit unknown.
 - Adafruit 377 included cap rejected aesthetically; **KZ0087 provisionally selected** to match low-profile RK M75 styling. Its 12.4 mm maximum insertion is shorter than Adafruit shaft's nominal 15 mm, so mechanical fit/encoder push still require validation. Encoder electronics unchanged.
 - The Waveshare AW9523B silicon **defaults GPIO to outputs**; at the anticipated 0x58 straps P0 starts low open-drain, but **RESET has internal 100k pull-down**, so verify module's external reset pull-up and boot timing. Preliminary six-input 22k pullups + 1k series are **not an approved wiring schematic**. Module full diagram still inaccessible even though an indexed text copy identifies R1–R4 10k. See `docs/HARDWARE-ELECTRICAL-REVIEW.md`.
 - Part availability is variable. The Adafruit AW9523 PID 4886 module was shown sold out in one checked supplier listing; Waveshare AW9523B SKU 22132 is a proposed same-chip breakout, not necessarily plug-and-play. User has not ordered hardware.
