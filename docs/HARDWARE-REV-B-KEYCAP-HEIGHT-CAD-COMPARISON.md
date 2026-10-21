@@ -1,6 +1,6 @@
 # Rev B — CAD comparison: 2 mm, 4 mm, and 6 mm raised MX media keycaps
 
-**2026-10-21. User requested separate CAD designs for all three resting cap heights. Status: three independent experimental CAD prototypes have been generated and B-Rep-validated locally, NOT physical fit-tested and NOT manufacturing-ready.** The user has visually selected the *rounded R5 exterior and USB-C on the left* as the preferred design direction, but has not selected a keycap height or actual caps/switches.
+**2026-10-21. User requested separate CAD designs for all three resting cap heights. Status: three independent experimental CAD prototypes have been generated and B-Rep-validated locally, NOT physical fit-tested and NOT manufacturing-ready.** The user has visually selected the *rounded R5 exterior and USB-C on the left* as the preferred design direction, and has now **selected 4mm above face at rest** as the preferred height after Windows geometry runs (18 pass / 2 optional CAD skips). Exact retail caps/switches remain unselected.
 
 ## Downloaded outputs
 
@@ -32,7 +32,7 @@ All variants use an **18mm square assumed cap**, **19.2mm square well** (0.6mm n
 
 - Python/CadQuery **20/20 new tests pass** in assistant environment, including STEP generation and re-import for three independent single-solid R5 cases, three multi-body coloured reference assemblies and comparison geometry. No full STEP geometry has been modified in place.
 - Generated individual rounded B-Rep case volumes: 2mm = **138,105.0mm³**, 4mm = **137,087.4mm³**, 6mm = **136,069.8mm³**. They are distinct solids; changing the plate height changes collar volume. Case external shape, display aperture, knob bore and left USB slot remain in the same coordinates.
-- **User Windows validation of these new 3-height scripts pending.** Existing 2mm media-controls study had 13 Windows tests passing with 2 optional CadQuery/Shapely skips; do not claim the new 20 tests have already been run on Windows.
+- **User Windows validation completed: 18 tests passed, 2 optional CadQuery/Shapely tests skipped.** Existing 2mm media-controls study had 13 Windows tests passing with 2 optional CadQuery/Shapely skips; do not claim the new 20 tests have already been run on Windows.
 
 ## Windows PowerShell
 
@@ -54,6 +54,8 @@ Optional full local STEP regeneration if CadQuery and Shapely are already instal
 ```powershell
 python mechanical\revB\cad\media_controls_height_variants.py --out-dir "$HOME\Downloads\SpotifyDesk-RevB-2-4-6mm-CAD"
 ```
+
+**Chosen study branch:** 4mm above panel, plate W=9.5mm; 2mm and 6mm remain comparisons. See [keycap purchasing and printing-method due diligence](KEYCAP-FINAL-SHORTLIST.md) for exact-product verification before CAD tolerances are finalized.
 
 ## Next choice
 

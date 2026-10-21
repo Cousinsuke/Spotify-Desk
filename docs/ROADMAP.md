@@ -83,6 +83,8 @@ This roadmap tracks **planned phases**, not every ad-hoc fix. Actual latest work
 
 **2026-10-21 three R5 USB-left STEP keycap heights built:** user asked for **2/4/6mm CAD**, not only a visual; added [three independently generated single-solid rounded STEP shells and three multibody cap/switch/knob reference STEP assemblies](HARDWARE-REV-B-KEYCAP-HEIGHT-CAD-COMPARISON.md) in a downloadable conversation ZIP, with source/assumptions/tests in GitHub. Retaining MX plate depths change **11.5 / 9.5 / 7.5mm** inward to keep assumed stem engagement and 1.5mm nominal full-stroke skirt clearance constant. **20 assistant-side tests passed** including CAD/STEP reimport; Windows validation and user height selection pending. Existing 0°/180° and 2mm original sources preserved. No physical fit or manufacturing signoff.
 
+**2026-10-21 user chose 4mm media-cap CAD and final keycap supplier shortlist:** After pulling `3b3c7f0`, user passed **18/20 Windows tests** with 2 optional B-Rep skips and generated all 2/4/6mm reports. **4mm is the selected resting keycap height** and R5/USB-left remain desired, but not manufacturer-approved or fit-tested. [Supplier research](KEYCAP-FINAL-SHORTLIST.md) recommends investigating Tech Toppers 4 custom MX caps £14.95 + £3.95 UK shipping (need white-on-black dye-sub method and exact skirt/profile), Mechbox 4 blank £1.56 + shipping for fit test, or Krome 3×£8 UV. Exact product and drawing still unconfirmed; no order made.
+
 ## Phase 7 — Standalone mode and secure provisioning
 - [ ] Define what 'standalone' means: remote Spotify Connect control vs direct audio playback
 - [ ] Confirm Spotify API/SDK constraints and provisioning/refresh-token storage approach

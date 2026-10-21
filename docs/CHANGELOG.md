@@ -2,6 +2,10 @@
 
 This is **historical milestone tracking**, not a separate implementation branch for each ZIP. The accepted Phase 5.2 source is committed at `7172c2e`; historical ZIPs are reference snapshots only. Prefer Git commits, tags and releases for future work rather than duplicated source folders.
 
+## Preferred 4mm MX cap design and keycap procurement research — 2026-10-21
+- User pulled `3b3c7f0`, independently ran 20 geometry/CAD study tests on Windows (**18 passed, 2 skipped** for optional CadQuery/Shapely), and generated reports for 2/4/6mm. **User selected 4mm resting cap height**, with the assumed 9.5mm inward retainer plate. No physical test or print approval.
+- Final UK purchasing review covers Tech Toppers 4× custom MX PBT £14.95 + £3.95 standard UK delivery (requires black/white reverse dye-sub/print confirmation), Mechbox 4× blank black OEM MX PBT £1.56 + shipping, Krome 3 individually UV-printed Cherry PBT at £8 each. No guaranteed matching off-the-shelf printed trio was located; requested stem, skirt and print-method confirmations remain before any purchase or CAD dimensional lock.
+
 ## Independent 2/4/6mm keycap-height rounded enclosure STEP designs — 2026-10-21
 - User requested actual CAD for all three cap rest heights. Generated **3 separate R5/USB-left single-solid case STEP** and **3 cap/knob/MX-reference assembly STEP**, with dimensioned front/section SVGs, CAD-derived isometric previews, report, reproducible source and offline ZIP.
 - Switch support top W adjusted 11.5/9.5/7.5mm for 2/4/6mm caps to preserve mathematical stem projection and 1.5mm full-press skirt-to-retainer margin; front, USB, knob and screen positions unchanged. Exact cap profile/stem and print fit not proven.
