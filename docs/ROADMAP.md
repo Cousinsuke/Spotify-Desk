@@ -73,6 +73,8 @@ This roadmap tracks **planned phases**, not every ad-hoc fix. Actual latest work
 
 **2026-10-21 180° physical module orientation study (awaiting user review):** after user verified the normal STEP comparator (10/10 Windows tests), explored their suggestion to turn the entire Waveshare module 180° so USB power is front-left and I2C front-right. A [side-by-side drawing and 12 new tests](HARDWARE-WAVESHARE-ROTATION-180-STUDY.md) support the coordinate mapping: nominal 98×60 mounts and centred keys unchanged, visible LCD aperture must shift V +4.74mm, planned left USB cable access still requires a side-wall opening. No firmware/hardware/purchase/case revision approved.
 
+**2026-10-21 separate rotated-180° case trial:** user independently passed 12 orientation Python tests on Windows. Assistant generated **new sharp and R5 B-rep STEP case variants** with moved display aperture (X+0.10mm, V+4.74mm), nominal side-wall USB-C1 access passage and preserved 156mm outer envelope. New [generator, assumptions, 10 locally passing checks and cautionary design note](HARDWARE-REV-B-ROTATED180-CASE-PROTOTYPE.md) in GitHub; case STEP outputs delivered separately as chat ZIP. **Awaiting user design inspection/choice, physical connectors and final mounting/port implementation.** Original design and apps unchanged.
+
 ## Phase 7 — Standalone mode and secure provisioning
 - [ ] Define what 'standalone' means: remote Spotify Connect control vs direct audio playback
 - [ ] Confirm Spotify API/SDK constraints and provisioning/refresh-token storage approach

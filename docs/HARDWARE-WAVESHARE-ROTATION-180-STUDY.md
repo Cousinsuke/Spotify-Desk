@@ -52,6 +52,10 @@ python mechanical\revB\cad\orientation_180_study.py --usb-reach-mm 20 --i2c-reac
 Invoke-Item "$HOME\Downloads\SpotifyDesk-RevB-Orientation-Study\orientation_180_comparison.svg"
 ```
 
+## Further optional CAD alternative — generated 180° sharp and rounded B-reps (2026-10-21)
+
+User independently ran all 12 tests in this orientation-study on Windows 11 and reviewed the generated SVG command. A distinct [rotated-case prototype](HARDWARE-REV-B-ROTATED180-CASE-PROTOTYPE.md) has now been generated in sharp/R5 STEP: moved aperture (+0.10mm X, +4.74mm V), nominal left-side USB power service cutout, and unchanged 156mm envelope. This remains an **unapproved geometry alternative**, not physical confirmation; user hasn't yet approved USB tunnel dimensions or final board orientation. Tool source and 10 new local checks are in GitHub, with full experimental STEP outputs delivered separately as a chat download. Both previous Rev B CAD models remain untouched.
+
 ## Design decision gate
 
 **Recommendation for investigation:** Try the **physical 180° board orientation** as a separate Rev B fit-iteration, because left-side USB power entry could avoid a close-to-encoder external cable. Keep both 156mm exterior styles and the existing original-mounted reference unchanged. Before choosing this as final, prototype or model a left-side port tunnel/USB harness, verify right-side H7 wiring does not collide with encoder terminals, reposition the LCD *visible* aperture, preserve UART/BOOT/RESET servicing and Wi-Fi antenna clearance, and verify firmware LCD+touch rotation when the board is purchased. It is **not yet a user-confirmed mechanical design decision**.

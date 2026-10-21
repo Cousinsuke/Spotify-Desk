@@ -1,0 +1,18 @@
+{
+  "status": "EXPERIMENTAL rotated 180 degree enclosure reference; not print or manufacture approved",
+  "physical_rotation_deg": 180,
+  "case_wall_mm": 3.0,
+  "front_glass_inward_w_mm": 3.25,
+  "usb_c1_service_slot": {
+    "v_margin_mm": 2.0,
+    "w_margin_mm": 2.0,
+    "reach_past_socket_inner_edge_x_mm": 1.0,
+    "outer_x_extra_mm": 2.0
+  },
+  "display_aperture_extra_each_side_mm": 0.0,
+  "mx_aperture_mm": 14.0,
+  "encoder_bore_mm": 7.3,
+  "rounded_edge_radius_mm": 5.0,
+  "bottom_access_nominal": {"edge_x_mm": 11.0, "edge_y_mm": 12.0, "vertical_cut_height_mm": 8.0},
+  "mounting_provision": "Reference markings only. Bosses, screws, retention lips and actual LCD bearing surface not modeled."
+}

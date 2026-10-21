@@ -2,6 +2,11 @@
 
 This is **historical milestone tracking**, not a separate implementation branch for each ZIP. The accepted Phase 5.2 source is committed at `7172c2e`; historical ZIPs are reference snapshots only. Prefer Git commits, tags and releases for future work rather than duplicated source folders.
 
+## Rotated-180 Rev B experimental sharp and R5 STEP case models — 2026-10-21
+- User passed 12/12 rotation-comparison tests on Windows; assistant developed separate 180° experimental sharp and R5-rounded CAD enclosure solids, front aperture moved +4.74mm down and trial USB-C1 access slot cut through left wall; nominal 156×83.093×106.107mm external dimensions and three keys retained.
+- Added reproducible CadQuery generator, editable assumptions, 10 assistant-passing regression checks and engineering-gate documentation. Exported STEP files and independent reference assemblies provided in chat ZIP, not committed as third-party source or silently substituted for original Rev B CAD.
+- **No approval** of the physical orientation/port choice or actual cable, standoff, encoder, touch, firmware and printable fit; all remain open.
+
 ## Rev B proposed 180-degree Waveshare mounting alternative — 2026-10-21
 - User passed 10/10 manufacturer STEP normal-orientation comparator tests on Windows and produced both assumption scenarios; suggested turning whole board 180° to move USB power port to left side of case.
 - Verified Waveshare publishes 5V USB-C input and separate USB vs USB-UART functions; added a **separate** side-by-side X/V/W orientation study, SVG and 12 locally passing tests. In 180° layout, USB becomes left and I2C right; visible window should shift 4.74mm down to align the existing display area; USB service tunnel/harness remains an open requirement.
