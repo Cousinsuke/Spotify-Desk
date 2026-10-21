@@ -2,6 +2,11 @@
 
 This is **historical milestone tracking**, not a separate implementation branch for each ZIP. The accepted Phase 5.2 source is committed at `7172c2e`; historical ZIPs are reference snapshots only. Prefer Git commits, tags and releases for future work rather than duplicated source folders.
 
+## Media-cap Windows tests, raised styling and cheaper supplier options — 2026-10-21
+- User pulled `9322af3` and passed 13 of 15 tests on Windows, with two optional CadQuery B-Rep tests skipped. Both overview and mechanical cross-section generated/opened. Assistant full 15/15 had passed earlier independently.
+- Created an illustrative **2mm recessed vs 6mm raised-at-rest** media-cap appearance comparison; 6mm not yet recalculated as mechanical design, 2mm experimental case unchanged.
+- Identified cheaper MX cap options: Mechbox 4 blank black 1U PBT caps £1.56 (DIY legends), Tech Toppers 4 custom 1U MX caps £14.95 + £3.95 standard delivery, compared to Krome 3 custom singles £24 + delivery. Suitable dye-sub white on black and true cap measurements are unverified; no order placed.
+
 ## Rounded R180 media keycaps and recessed MX retention study — 2026-10-21
 - User visually preferred R5 rounded enclosure and USB-left physical orientation; asked to see the three playback icon keycaps and knob and evaluate switch recess/travel before purchasing.
 - Produced independent rounded STEP CAD with three 19.2mm cap wells, behind-face 1.5mm nominal plate retaining 14mm square MX switches and an exploded reference assembly with three 18mm caps, white icons and Ø15.1mm knob. 15 assistant-side Python/CadQuery tests passed, not a physical fit check.

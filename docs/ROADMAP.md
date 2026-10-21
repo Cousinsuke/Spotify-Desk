@@ -79,6 +79,8 @@ This roadmap tracks **planned phases**, not every ad-hoc fix. Actual latest work
 
 **2026-10-21 rounded case media-control and MX recess study:** user looked at R5 USB-left screenshot and chose rounded corners/USB-left direction. Assistant generated [an independent 1U media-icon cap and MX recessed mounting study](HARDWARE-REV-B-MEDIA-CONTROLS-FIT.md): 18mm cap in 19.2mm well, conceptual 1.5mm MX plate at 11.5mm behind face, rest cap 2mm proud, 4mm assumed travel, 15.1mm knob, white icons, and valid R5 STEP shell/assembly. **15 assistant-side tests pass** including 2 true B-Rep. Candidate custom 1U black/white Cherry caps from Krome ~£8 each; no size/profile/colour order/physical fit chosen. Pre-generated STEP ZIP separate, original CAD unchanged.
 
+**2026-10-21 media-cap Windows validation, height comparison and pricing:** User independently passed 13/15 tests with two optional CAD skips (no CadQuery/Shapely), generated front and cross-section drawings, and requested a comparison of 2mm recessed versus 6mm raised keycaps. Produced illustrative comparison only, **not revised CAD**. Investigated UK pricing: blank MX-compatible black four-pack ~£1.56 + shipping, 4-pack printed custom MX caps £14.95 + £3.95 standard shipping, versus original £24+ for three individual custom caps. Actual black/white printing and cap geometries still need confirmation; no physical/firmware approval.
+
 ## Phase 7 — Standalone mode and secure provisioning
 - [ ] Define what 'standalone' means: remote Spotify Connect control vs direct audio playback
 - [ ] Confirm Spotify API/SDK constraints and provisioning/refresh-token storage approach
