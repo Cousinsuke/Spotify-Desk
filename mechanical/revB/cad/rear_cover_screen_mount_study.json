@@ -1,0 +1,19 @@
+{
+  "status": "EXPERIMENTAL Rev B 4mm R5 rounded USB-left screen mount/rear cover; NOT print-ready or tested with real parts",
+  "physical_rotation_deg": 180,
+  "cap_rest_height_mm": 4.0,
+  "rear_opening": {"x_edge_mm": 11.0, "y_edge_mm": 12.0, "cut_height_mm": 8.0},
+  "cover": {"perimeter_clearance_mm": 0.4, "bottom_z_mm": 0.35, "thickness_mm": 2.0, "corner_radius_mm": 1.5, "screw_clearance_diameter_mm": 2.9},
+  "case_lip": {"outer_overlap_mm": 2.5, "inner_overlap_mm": 2.0, "bottom_z_mm": 2.35, "height_mm": 2.3},
+  "cover_fasteners": {"inset_x_mm": 18.5, "inset_y_mm": 19.5, "boss_diameter_mm": 8.2, "boss_base_z_mm": 2.35, "boss_height_mm": 9.0, "pilot_diameter_mm": 2.0, "bridge_width_mm": 6.0, "bridge_height_mm": 3.5},
+  "screen_brackets": {"flange_diameter_mm": 8.7, "fastener_diameter_mm": 2.9, "flange_front_clearance_mm": 0.10, "flange_thickness_mm": 2.8, "beam_width_mm": 8.5, "anchor_width_mm": 8.5, "anchor_front_w_mm": 2.8, "anchor_v_top_mm": 4.2, "anchor_v_bottom_mm": 80.0, "anchor_v_length_mm": 6.0, "anchor_to_flange_rear_extension_mm": 0.3},
+  "tolerances_unverified": [
+    "rear cover fit for intended FDM/SLA material and orientation",
+    "screw pilot diameter must be reselected for exact M2.5 hardware or threaded insert",
+    "screen module board revision and rear-thread orientation",
+    "support arm interference with touch glass, PCB, radio antenna, USB, flex ribbons and MX housings",
+    "case wall/screen supports under screw clamping and drop loads",
+    "hinge or cable service routing, heat and vents, power plug strain relief",
+    "the 4mm cap profile from Tech Toppers remains unspecified"
+  ]
+}

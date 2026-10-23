@@ -98,7 +98,7 @@ The user asked for exactly LCD-centred MX keys, a narrower knob-side case and sh
 
 - [Engineering note and known insertion/access risks](../../docs/HARDWARE-REV-B-REAR-COVER-AND-SCREEN-MOUNTS.md). New CAD supplied as separate chat ZIP, **not** a replacement for existing Rev B source files.
 - Case support lip and four physical cover-screw bosses added; separate inset 2mm service lid, 0.4mm nominal all-edge clearance, four M2.5 candidate clearance holes and *untested* 2mm pilot bosses. Four cantilevered screen alignment brackets match 98x60mm 2023 Waveshare STEP standoff centres. **16 assistant-side tests pass** and lid has zero computed intersection with case. Screen installation through ~59mm underside hatch and cable/tool reach **unresolved**; not fabrication ready.
-- **Source publishing status:** Python generator and tests remain only in separate conversation ZIP because a repository transfer attempt failed; do not instruct Windows users to execute them from a normal Git pull yet.
+- **Source publishing status:** [`cad/rear_cover_screen_mount_study.py`](cad/rear_cover_screen_mount_study.py), [settings](cad/rear_cover_screen_mount_study.json), [16-case regression suite](cad/test_rear_cover_screen_mount_study.py) and the two SVGs are now natively tracked. User can `git pull` and use `--report-only` without CadQuery; two to four optional B-Rep tests skip when optional CadQuery/Shapely are absent. Full STEP case/cover/assembly files remain in the separate chat ZIP.
 
 ## Checks before manufacturing
 

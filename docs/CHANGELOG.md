@@ -5,7 +5,7 @@ This is **historical milestone tracking**, not a separate implementation branch 
 ## Removable underside hatch and Waveshare LCD mounting reference — 2026-10-23
 - Generated new R5 4mm media-control case STEP with screen support cantilevers, rear/underside seating lip, four attached screw bosses and **separate 2mm lift-out underside lid STEP** with 0.4mm nominal edge allowance; both installed and exploded assembly STEP outputs in separate chat ZIP.
 - Screen stand-off targets from manufacturer's actual 2023 reference: 98×60mm pitch, nominal contact W15.85mm; candidate M2.5 lid/screen fasteners require part-specific pilot/strength verification. **16 assistant-side tests pass** including actual STEP CAD validity and zero lid/case solid overlap. Not print/fabrication approved; board installation through underside hatch and screw access unproven.
-- Engineering note tracked in GitHub; generator, parameters and tests are in downloadable ZIP, **not yet natively committed** due to file transfer error. The original 4mm keycap CAD and all earlier baselines are unchanged.
+- CAD generator, editable parameters, 16 tests and 2 vector coordinate drawings subsequently checked into `mechanical/revB/cad/` after transfer recovery, with source Git blob hashes independently verified. Full STEP outputs remain separately downloadable; original 4mm keycap CAD and earlier baselines unchanged.
 
 ## Preferred 4mm MX cap design and keycap procurement research — 2026-10-21
 - User pulled `3b3c7f0`, independently ran 20 geometry/CAD study tests on Windows (**18 passed, 2 skipped** for optional CadQuery/Shapely), and generated reports for 2/4/6mm. **User selected 4mm resting cap height**, with the assumed 9.5mm inward retainer plate. No physical test or print approval.

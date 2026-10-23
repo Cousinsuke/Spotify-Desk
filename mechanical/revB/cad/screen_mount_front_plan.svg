@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="950" height="600" viewBox="0 0 950 600">
+<rect width="950" height="600" fill="#111922"/>
+<text x="50" y="42" font-family="Arial" font-size="24" fill="#f6f7fa">Screen support alignment / face X,V</text>
+<text x="50" y="67" font-family="Arial" font-size="15" fill="#c8d5df">180-degree Waveshare / nominal 98 × 60 mm M2.5 standoff centres from manufacturer STEP</text>
+<rect x="50" y="105" width="561.6" height="396.0" rx="12" fill="#303c49" stroke="#b4bdc8"/>
+<rect x="78.8" y="133.8" width="381.96" height="244.07999999999998" fill="#1a485d" stroke="#66bed6" stroke-width="1"/>
+<path d="M 446.2 120.1 V 147.5" stroke="#d0b06c" stroke-width="25"/>
+<circle cx="446.2" cy="147.5" r="13.5" fill="#d4aa68" stroke="#f9e3b5" stroke-width="2"/>
+<circle cx="446.2" cy="147.5" r="5" fill="#1d2530"/>
+<path d="M 93.4 120.1 V 147.5" stroke="#d0b06c" stroke-width="25"/>
+<circle cx="93.4" cy="147.5" r="13.5" fill="#d4aa68" stroke="#f9e3b5" stroke-width="2"/>
+<circle cx="93.4" cy="147.5" r="5" fill="#1d2530"/>
+<path d="M 446.2 393.0 V 363.5" stroke="#d0b06c" stroke-width="25"/>
+<circle cx="446.2" cy="363.5" r="13.5" fill="#d4aa68" stroke="#f9e3b5" stroke-width="2"/>
+<circle cx="446.2" cy="363.5" r="5" fill="#1d2530"/>
+<path d="M 93.4 393.0 V 363.5" stroke="#d0b06c" stroke-width="25"/>
+<circle cx="93.4" cy="363.5" r="13.5" fill="#d4aa68" stroke="#f9e3b5" stroke-width="2"/>
+<circle cx="93.4" cy="363.5" r="5" fill="#1d2530"/>
+<text x="50" y="551" font-family="Arial" font-size="15" fill="#e3af7a">Brackets behind display glass; direct interference with PCB / antenna / ribbon remains unverified.</text>
+</svg>

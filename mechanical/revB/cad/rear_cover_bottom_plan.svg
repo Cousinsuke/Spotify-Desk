@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1050" height="610" viewBox="0 0 1050 610">
+<rect width="1050" height="610" fill="#111922"/>
+<text x="60" y="48" font-family="Arial" font-size="25" fill="#edf4f8">Rear cover / underside plan (concept)</text>
+<text x="60" y="77" font-family="Arial" font-size="15" fill="#aebdc8">Actual case 156 × 83.09 mm / 4 removable screws / lid separately exportable</text>
+<rect x="60" y="106" width="483.6" height="257.58956479570674" rx="14" fill="#364651" stroke="#a9bbc9" stroke-width="2"/>
+<rect x="94.1" y="143.2" width="415.40000000000003" height="183.18956479570676" fill="#0c1218" stroke="#e3b078" stroke-width="2"/>
+<rect x="95.34" y="144.44" width="412.91999999999996" height="180.70956479570674" rx="6" fill="#657e91" stroke="#edf4fb" stroke-width="1"/>
+<circle cx="117.3" cy="166.4" r="7" fill="#101922" stroke="#f2f5f7" stroke-width="2"/>
+<circle cx="486.2" cy="166.4" r="7" fill="#101922" stroke="#f2f5f7" stroke-width="2"/>
+<circle cx="117.3" cy="303.1" r="7" fill="#101922" stroke="#f2f5f7" stroke-width="2"/>
+<circle cx="486.2" cy="303.1" r="7" fill="#101922" stroke="#f2f5f7" stroke-width="2"/>
+<text x="60" y="425" font-family="Arial" font-size="15" fill="#e4b878">Screw centres X=18.5 / 137.5 mm</text>
+<text x="60" y="450" font-family="Arial" font-size="15" fill="#b8cad7">Y=19.5 / 63.593 mm</text>
+<text x="60" y="540" font-family="Arial" font-size="15" fill="#e8b374">M2.5 hardware/pilot fit, material strength and panel tolerance not proven.</text>
+</svg>
