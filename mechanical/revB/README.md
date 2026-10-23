@@ -94,6 +94,12 @@ The user asked for exactly LCD-centred MX keys, a narrower knob-side case and sh
 - Generator `cad/media_controls_height_variants.py`, config `cad/keycap_height_variant_parameters.json`, tests `cad/test_media_controls_height_variants.py`; saved comparison SVGs `cad/media_controls_2_4_6_front_comparison.svg` and `cad/media_controls_2_4_6_section_comparison.svg`. **20/20 assistant-side tests PASS** including CadQuery single-solids + multibody STEP assembly checks; user Windows test pending.
 - Actual experimental STEP files supplied in a **separate chat ZIP** for FreeCAD: each of 2/4/6mm has single-solid R5 shell and cap/switch/knob envelope assembly. All retain rounded 156mm USB-left 180° Waveshare layout and 3 MX key centres. To keep assumed stem engagement and full-stroke 1.5mm plate guard constant, MX retaining plates change **11.5/9.5/7.5mm inward**. Profiles, safety margin, snap clips, male USB and print tolerances remain hypothetical; no purchase or print approval.
 
+## Experiment: Removable underside cover and screen brackets (4mm, R5)
+
+- [Engineering note and known insertion/access risks](../../docs/HARDWARE-REV-B-REAR-COVER-AND-SCREEN-MOUNTS.md). New CAD supplied as separate chat ZIP, **not** a replacement for existing Rev B source files.
+- Case support lip and four physical cover-screw bosses added; separate inset 2mm service lid, 0.4mm nominal all-edge clearance, four M2.5 candidate clearance holes and *untested* 2mm pilot bosses. Four cantilevered screen alignment brackets match 98x60mm 2023 Waveshare STEP standoff centres. **16 assistant-side tests pass** and lid has zero computed intersection with case. Screen installation through ~59mm underside hatch and cable/tool reach **unresolved**; not fabrication ready.
+- **Source publishing status:** Python generator and tests remain only in separate conversation ZIP because a repository transfer attempt failed; do not instruct Windows users to execute them from a normal Git pull yet.
+
 ## Checks before manufacturing
 
 1. Confirm exact MX switch model and actual depths/mount clips.

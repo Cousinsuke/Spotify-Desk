@@ -85,6 +85,8 @@ This roadmap tracks **planned phases**, not every ad-hoc fix. Actual latest work
 
 **2026-10-21 user chose 4mm media-cap CAD and final keycap supplier shortlist:** After pulling `3b3c7f0`, user passed **18/20 Windows tests** with 2 optional B-Rep skips and generated all 2/4/6mm reports. **4mm is the selected resting keycap height** and R5/USB-left remain desired, but not manufacturer-approved or fit-tested. [Supplier research](KEYCAP-FINAL-SHORTLIST.md) recommends investigating Tech Toppers 4 custom MX caps £14.95 + £3.95 UK shipping (need white-on-black dye-sub method and exact skirt/profile), Mechbox 4 blank £1.56 + shipping for fit test, or Krome 3×£8 UV. Exact product and drawing still unconfirmed; no order made.
 
+**2026-10-23 experimental underside hatch + screen mounting study:** Built independent **4mm key R5 USB-left STEP case**, removable lid, 4 case-connected screw bosses, 4 screen support cantilevers aligned to the Waveshare 98×60mm hardware standoffs, exploded/assembled STEP views. [Design note](HARDWARE-REV-B-REAR-COVER-AND-SCREEN-MOUNTS.md), offline source and STEP files in chat ZIP. **16 assistant-side tests pass** including STEP roundtrips and 0 case/lid intersection. User Windows testing/physical screen insertion and screw-tool clearance remain open; 59.1mm hatch depth may complicate insertion of ~68mm board. New generator source not yet pushed to GitHub after file-transfer error; earlier 4mm shell preserved.
+
 ## Phase 7 — Standalone mode and secure provisioning
 - [ ] Define what 'standalone' means: remote Spotify Connect control vs direct audio playback
 - [ ] Confirm Spotify API/SDK constraints and provisioning/refresh-token storage approach

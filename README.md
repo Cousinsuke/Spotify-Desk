@@ -54,6 +54,7 @@ The archive script places historical ZIPs under `archives/phase-zips/`, strips g
 - [Angled wedge 3D shape, internal packaging and input-PCB proposal](docs/HARDWARE-WEDGE-CASE-PROPOSAL.md)
 - [Parametric 3D reference model (not a print-ready case)](mechanical/wedge_packaging_concept.scad)
 - [Rev B sharp and R5-rounded CAD package, ZIP and coordinates](mechanical/revB/README.md)
+- [Rev B removable underside cover and screen mounting prototype (separate STEP download; not print-ready)](docs/HARDWARE-REV-B-REAR-COVER-AND-SCREEN-MOUNTS.md)
 - [Selected 4mm caps: final UK keycap shortlist, print process and physical dimensions to verify](docs/KEYCAP-FINAL-SHORTLIST.md)
 - [Rounded Rev B actual CAD comparison: 2mm / 4mm / 6mm media keycap heights](docs/HARDWARE-REV-B-KEYCAP-HEIGHT-CAD-COMPARISON.md)
 - [Rounded USB-left case: recessed MX media keycaps, play/pause icons, knob and fit drawings](docs/HARDWARE-REV-B-MEDIA-CONTROLS-FIT.md)

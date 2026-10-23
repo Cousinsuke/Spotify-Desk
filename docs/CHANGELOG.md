@@ -2,6 +2,11 @@
 
 This is **historical milestone tracking**, not a separate implementation branch for each ZIP. The accepted Phase 5.2 source is committed at `7172c2e`; historical ZIPs are reference snapshots only. Prefer Git commits, tags and releases for future work rather than duplicated source folders.
 
+## Removable underside hatch and Waveshare LCD mounting reference — 2026-10-23
+- Generated new R5 4mm media-control case STEP with screen support cantilevers, rear/underside seating lip, four attached screw bosses and **separate 2mm lift-out underside lid STEP** with 0.4mm nominal edge allowance; both installed and exploded assembly STEP outputs in separate chat ZIP.
+- Screen stand-off targets from manufacturer's actual 2023 reference: 98×60mm pitch, nominal contact W15.85mm; candidate M2.5 lid/screen fasteners require part-specific pilot/strength verification. **16 assistant-side tests pass** including actual STEP CAD validity and zero lid/case solid overlap. Not print/fabrication approved; board installation through underside hatch and screw access unproven.
+- Engineering note tracked in GitHub; generator, parameters and tests are in downloadable ZIP, **not yet natively committed** due to file transfer error. The original 4mm keycap CAD and all earlier baselines are unchanged.
+
 ## Preferred 4mm MX cap design and keycap procurement research — 2026-10-21
 - User pulled `3b3c7f0`, independently ran 20 geometry/CAD study tests on Windows (**18 passed, 2 skipped** for optional CadQuery/Shapely), and generated reports for 2/4/6mm. **User selected 4mm resting cap height**, with the assumed 9.5mm inward retainer plate. No physical test or print approval.
 - Final UK purchasing review covers Tech Toppers 4× custom MX PBT £14.95 + £3.95 standard UK delivery (requires black/white reverse dye-sub/print confirmation), Mechbox 4× blank black OEM MX PBT £1.56 + shipping, Krome 3 individually UV-printed Cherry PBT at £8 each. No guaranteed matching off-the-shelf printed trio was located; requested stem, skirt and print-method confirmations remain before any purchase or CAD dimensional lock.
