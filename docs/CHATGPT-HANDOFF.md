@@ -1,5 +1,13 @@
 # ChatGPT handoff — Spotify Desk Thing
 
+## Home weather/glucose tiles and weather footer — 2026-10-25 (v1.1; needs screenshot)
+
+- User showed live Bournemouth Weather and Home screenshots for Weather v1.0. The 3-day forecast cards worked, but **the source/update line was clipped at the bottom of the Weather screen**. User asked for a condition icon next to the weather temperature on Home and **glucose number plus trend arrow instead of mmol/L**.
+- Updated `static/desk-dashboard.css`: scoped reductions for the Weather panel/forecast cards and note spacing to fit the 800×480 surface without affecting the accepted Glucose/Spotify layouts. Weather footer text shortened to `Open-Meteo · Updated HH:MM · Every 15 min` while preserving 15-minute refresh and previous-error text.
+- Home weather now shows a larger dynamically updated icon beside the current temperature using the **same Open-Meteo weather code/condition mapping as the Weather page**; it changes along with Bournemouth weather updates. Home Glucose now renders the one-decimal numeric reading plus **Gluroo-provided trend direction** (↑↑/↑/↗/→/↘/↓/↓↓), without `mmol/L` printed in the tile. The accessible label still communicates mmol/L. Unknown direction omits the arrow; stale/unavailable data shows `Not live` and removes the arrow. Historical CSV shows `History loaded` without a trend arrow. The actual Glucose dashboard and medical safety warning are unaffected.
+- Added Node fixtures `tests/check_home_glucose.cjs` and updated `tests/check_weather_daily.cjs` to test live/stale/unknown trends, weather icons and footer, plus new focused Python test cases. Assistant-side Node-compatible mock tests and JavaScript syntax passed; **Windows visual acceptance pending**. New CSS+JS cache version **v1.1**.
+- Next: user pulls main, runs targeted dashboard tests and both Node checks, restarts their existing PowerShell server (same environment for Gluroo), reloads `/device`, checks Weather footer no longer clipped and Home readings/icons fit correctly. Do not request or store private glucose readings or secrets.
+
 ## Weather page v1.0 — Bournemouth only, 3-day forecast (2026-10-25; awaiting visual review)
 
 - User explicitly accepted the glucose v0.9 layout ("glucose page now looks good") and moved to Weather. **Do not modify glucose UI without a new request.**
