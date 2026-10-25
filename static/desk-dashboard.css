@@ -1,0 +1,84 @@
+/* Multi-dashboard preview. The existing 800x480 Spotify view stays unchanged. */
+.screen .desk-tabs{display:flex;align-items:center;gap:4px;margin:0 10px;min-width:0}
+.screen .desk-tab{font-size:10px;font-weight:750;letter-spacing:0;border:1px solid #ffffff1d;border-radius:8px;padding:7px 10px;background:#ffffff09;color:#b5c5c2;white-space:nowrap}
+.screen .desk-tab[aria-selected="true"]{background:#d0fce1;color:#092117;border-color:#d0fce1}
+.screen .desk-tab:focus-visible,.screen .desk-card:focus-visible,.screen .desk-range:focus-visible{outline:2px solid #fff;outline-offset:2px}
+.screen .surface[data-desk-page]:not([data-desk-page="spotify"])>.content,
+.screen .surface[data-desk-page]:not([data-desk-page="spotify"])>.bottom{display:none}
+.screen .desk-view{flex:1;min-height:0;display:none;margin-top:16px;overflow:hidden}
+.screen .surface[data-desk-page]:not([data-desk-page="spotify"])>.desk-view{display:block}
+.screen .desk-panel{height:100%;min-height:0}
+.screen .desk-panel[hidden]{display:none}
+.screen .desk-kicker{font-size:10px;font-weight:800;letter-spacing:1.6px;color:#81cfa9;text-transform:uppercase}
+.screen .desk-heading{font-size:25px;margin:4px 0 5px;line-height:1.1;font-weight:750;letter-spacing:-.8px}
+.screen .desk-muted{color:#9cafb1;font-size:12px}
+.screen .desk-hero{height:43%;border:1px solid #ffffff20;border-radius:16px;padding:20px 22px;background:linear-gradient(112deg,#203a33cc,#0b1b1b9c);display:flex;justify-content:space-between;align-items:center}
+.screen .desk-clock{font-size:60px;font-weight:650;letter-spacing:-3px;line-height:1.05;margin:8px 0 4px;font-variant-numeric:tabular-nums}
+.screen .desk-date{font-size:14px;color:#b4cac4}
+.screen .desk-hero-note{text-align:right;max-width:180px;color:#a7cbc0;font-size:12px}
+.screen .desk-hero-note strong{display:block;margin-top:7px;font-size:20px;color:#e7f8ef}
+.screen .desk-cards{height:calc(57% - 12px);display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin-top:12px}
+.screen .desk-card{display:flex;flex-direction:column;align-items:flex-start;justify-content:space-between;text-align:left;min-width:0;border-radius:14px;border:1px solid #ffffff1b;color:#e6f5ec;background:#17241fbf;padding:15px 16px}
+.screen .desk-card:hover{background:#203830}
+.screen .desk-card strong{font-size:14px}
+.screen .desk-card .desk-card-value{font-size:22px;font-weight:750;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;width:100%}
+.screen .desk-card small{font-size:11px;color:#a4bcb1;line-height:1.35;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%}
+.screen .desk-card .desk-card-icon{font-size:20px;line-height:1}
+.screen .desk-panel-head{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:13px}
+.screen .desk-panel-head h2{font-size:23px;line-height:1.15;margin:3px 0 4px}
+.screen .desk-weather-search{display:flex;gap:6px;align-items:center}
+.screen .desk-weather-search input{width:136px;min-width:0;background:#11201c;border:1px solid #3b584e;color:#fff;border-radius:8px;padding:8px;font-size:12px}
+.screen .desk-weather-search button{background:#c7f7d9;color:#10251b;border:0;padding:8px 11px;border-radius:8px;font-size:11px;font-weight:700}
+.screen .desk-weather-current{display:grid;grid-template-columns:1.15fr 1fr;gap:14px}
+.screen .desk-weather-focus{border:1px solid #ffffff19;border-radius:13px;padding:16px;background:#132923bd;display:flex;align-items:center;gap:14px;min-height:126px}
+.screen .desk-weather-icon{font-size:52px;min-width:57px;text-align:center}
+.screen .desk-temp{font-size:49px;line-height:1.05;font-weight:700;letter-spacing:-2px}
+.screen .desk-weather-meta{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.screen .desk-stat{border-radius:11px;border:1px solid #ffffff17;background:#ffffff07;padding:12px}
+.screen .desk-stat small{display:block;color:#9eb4aa;font-size:10px;margin-bottom:6px}
+.screen .desk-stat strong{font-size:16px;font-variant-numeric:tabular-nums}
+.screen .desk-forecast{margin-top:13px}
+.screen .desk-hourly{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:8px;margin-top:7px}
+.screen .desk-hour{border:1px solid #ffffff16;border-radius:9px;background:#101d1af0;padding:9px;text-align:center;min-width:0}
+.screen .desk-hour span{display:block;font-size:11px;color:#adc4ba}
+.screen .desk-hour strong{display:block;font-size:16px;margin:4px 0}
+.screen .desk-hour small{display:block;font-size:10px;color:#83bfac}
+.screen .desk-weather-note{margin-top:7px;color:#a2b8ad;font-size:10px}
+.screen .desk-glucose-info{display:flex;gap:15px;align-items:center;justify-content:space-between;padding:13px 17px;border:1px solid #42605a;border-radius:12px;background:#142c29}
+.screen .desk-glucose-info strong{font-size:22px}
+.screen .desk-glucose-info p{font-size:11px;color:#b9cdc5;line-height:1.4;margin-top:3px}
+.screen .desk-demo-badge{flex-shrink:0;border:1px solid #e2c486;color:#ffe6ae;padding:6px 9px;border-radius:6px;font-size:10px;font-weight:800;letter-spacing:.5px}
+.screen .desk-chart-head{display:flex;justify-content:space-between;align-items:center;margin:14px 0 8px}
+.screen .desk-chart-head strong{font-size:12px}
+.screen .desk-chart-range{display:flex;gap:5px}
+.screen .desk-range{padding:5px 9px;border:1px solid #ffffff26;background:#152521;color:#a8c4b7;border-radius:7px;font-size:11px}
+.screen .desk-range[aria-pressed="true"]{background:#c7f7d9;color:#10251b}
+.screen .desk-plot{height:155px;border:1px solid #ffffff24;border-radius:11px;padding:6px 9px;background:linear-gradient(180deg,#1b3230a5,#0b1918bd);position:relative}
+.screen .desk-plot svg{width:100%;height:100%;display:block}
+.screen .desk-plot-watermark{position:absolute;top:10px;right:13px;color:#e8c888;font-size:10px;letter-spacing:.7px;font-weight:800;pointer-events:none}
+.screen .desk-plot-axis{display:flex;justify-content:space-between;font-size:10px;color:#a3b6af;margin-top:5px}
+.screen .desk-glucose-footer{font-size:11px;color:#b1c3ba;margin-top:8px}
+@media(max-width:850px){
+ .screen .desk-tabs{gap:2px;margin:0 4px}
+ .screen .desk-tab{font-size:clamp(5px,1.1vw,9px);padding:4px 5px}
+ .screen .desk-view{margin-top:2%}
+ .screen .desk-hero{padding:3%}
+ .screen .desk-clock{font-size:clamp(28px,7vw,60px)}
+ .screen .desk-card{padding:8%}
+ .screen .desk-card strong{font-size:clamp(9px,1.8vw,14px)}
+ .screen .desk-card .desk-card-value{font-size:clamp(11px,2.5vw,22px)}
+ .screen .desk-card small,.screen .desk-muted{font-size:clamp(7px,1.3vw,12px)}
+ .screen .desk-panel-head h2{font-size:clamp(13px,2.7vw,23px)}
+ .screen .desk-weather-current{gap:2%}
+ .screen .desk-weather-focus{min-height:0;padding:3%}
+ .screen .desk-weather-icon{font-size:clamp(19px,6vw,52px);min-width:0}
+ .screen .desk-temp{font-size:clamp(18px,6vw,49px)}
+ .screen .desk-stat{padding:5%}
+ .screen .desk-hour{padding:5%}
+ .screen .desk-weather-search input{width:clamp(75px,16vw,136px);font-size:9px;padding:5px}
+ .screen .desk-weather-search button{font-size:9px;padding:6px}
+ .screen .desk-plot{height:clamp(75px,19vw,155px)}
+ .screen .desk-glucose-info{padding:2%}
+ .screen .desk-glucose-info strong{font-size:clamp(13px,3vw,22px)}
+ .screen .desk-glucose-info p,.screen .desk-glucose-footer{font-size:clamp(7px,1.2vw,11px)}
+}
