@@ -4,6 +4,10 @@
 
 **Windows Python validation (user log, 2026-10-25):** `unittest discover -s tests -v` ran 44 tests: **42 passed, 2 errors** in `test_linux_companion` because its Linux-only code ran under Windows; the four dashboard static tests and new LAN static-allowlist test passed. Node JS syntax check passed. Nonfatal `ResourceWarning` for Flask static-response file handles was observed. Do not report a clean 44/44 suite.
 
+## Live glucose feed now available as opt-in integration (2026-10-25)
+
+**Implementation completed, live account validation pending.** The Glucose screen can now consume a frequently updated **Gluroo Global Connect / Nightscout-compatible HTTPS source** through the local PC server, with reading timestamps, trend arrows, 3/6/12h history, caching and stale-data labels. This is not an Abbott API and not a standalone ESP32 connection; it requires setting up a LibreLinkUp follower account, connecting it through Gluroo and supplying private GGC credentials in the PC environment. No personal readings have been tested. **See [GLUCOSE-LIVE.md](GLUCOSE-LIVE.md)** for setup, security and third-party privacy implications. The historical CSV importer remains an optional fallback when no live source is configured. The health endpoint is restricted to localhost and excluded from plain-HTTP device LAN routes.
+
 ## Screens
 
 - **Home (default):** local clock/date, music shortcut reflecting the existing player, current weather summary once loaded, and glucose connection status.
