@@ -4,13 +4,13 @@
 
 Updated: 2026-10-25
 
-## Ad-hoc multi-dashboard preview — 2026-10-25 (implemented, NOT user-validated)
+## Ad-hoc multi-dashboard preview — 2026-10-25 (Windows visual validation confirmed)
 
 - User asked to start building Home, Weather and glucose monitoring after a review of all repository Markdown files. Existing hardware candidate and current Rev B CAD remain unchanged.
 - Additive `/device` browser screens created: default Home (clock, existing Spotify summary, weather shortcut, disconnected glucose status), Spotify (Phase 5.2 interface preserved), Weather (Open-Meteo city geocoding/current/hourly forecasts, example London and browser-local city preference), Glucose (**synthetic SAMPLE DATA graph only, no connected Libre 2 Plus readings**). Screen tabs, arrow-key navigation and swipe switching. New CSS/JS loaded after existing assets; restricted LAN allowlist includes those static assets only.
-- Feature code committed on main through `3918194`, and regression tests through `3bf9630`. See [docs/DASHBOARDS.md](DASHBOARDS.md) for architecture, safety boundaries and test instructions. Python regression tests are added but **not yet run on the user's Windows/Omarchy machines**; standalone JS source parsed in assistant-side JavaScript syntax check. No end-to-end browser or hardware runtime validation claimed.
+- Feature code committed on main through `3918194`, and regression tests through `3bf9630`. See [docs/DASHBOARDS.md](DASHBOARDS.md) for architecture, safety boundaries and test instructions. Windows user ran tests with Python 3.13: **42 passed, 2 Linux-only test errors**; four dashboard tests and restricted LAN assets test passed. Node syntax check passed. Screenshots show Home, Spotify, live weather and clearly labelled sample graph; the paired device is connected. Spotify transport functions, all chart range controls, Omarchy and ESP32 remain to be tested.
 - **Glucose privacy gate:** existing `--lan` device transport is plain HTTP. Never send real medical data or Abbott credentials through it. No permitted/authorised Libre data integration validated; official Libre app remains primary for readings, alarms and treatment decisions.
-- **Next action:** user tests `/device` on Windows, checks weather city and layout and existing Spotify pairing/controls, then reports any changes; later research secure, permitted Libre readings. No firmware, physical purchase or enclosure change implied.
+- **Next action:** validate actual playback/volume controls and chart time-range switching, address Windows/Linux test isolation, then research a secure, permitted glucose-data integration. The dashboard's Windows visual layout and live weather are user-confirmed. No firmware, physical purchase or enclosure change implied.
 
 
 ## Repository / checkpoint
