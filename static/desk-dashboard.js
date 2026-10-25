@@ -527,8 +527,8 @@
     const scaleButton = byId('deskChartScale');
     scaleButton.textContent = chartScale === 'auto' ? 'AUTO' : 'FULL';
     scaleButton.setAttribute('aria-label', chartScale === 'auto'
-      ? 'Automatic vertical scale. Select full 0 to 40 mmol/L scale'
-      : 'Full 0 to 40 mmol/L scale. Select automatic vertical scale');
+      ? 'Automatic vertical scale. Select Libre-style 3 to 21 mmol/L scale'
+      : 'Libre-style 3 to 21 mmol/L scale, extended for extreme readings. Select automatic vertical scale');
     scaleButton.setAttribute('aria-pressed',String(chartScale === 'fixed'));
   }
   function drawHistoricalGraph() {
