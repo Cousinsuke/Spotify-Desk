@@ -25,11 +25,38 @@ class DashboardPreviewTests(unittest.TestCase):
         css = (ROOT / "static/desk-dashboard.css").read_text(encoding="utf-8")
         for name in ('home', 'spotify', 'weather', 'glucose'):
             self.assertIn("['" + name + "',", js)
-        self.assertIn('geocoding-api.open-meteo.com', js)
         self.assertIn('api.open-meteo.com/v1/forecast', js)
-        self.assertIn('desk_weather_city_v1', js)
+        self.assertIn("name: 'Bournemouth'", js)
+        self.assertIn("latitude: 50.72098, longitude: -1.87669", js)
+        self.assertIn('&forecast_days=3&timezone=Europe%2FLondon', js)
+        self.assertIn('&daily=weather_code,temperature_2m_max,temperature_2m_min,precipitation_probability_max', js)
+        self.assertNotIn('geocoding-api.open-meteo.com', js)
+        self.assertNotIn('desk_weather_city_v1', js)
         self.assertIn('data-desk-page="spotify"', css)
         self.assertIn('desk-panel[hidden]', css)
+
+    def test_weather_fixed_bournemouth_daily_cards(self):
+        js = (ROOT / "static/desk-dashboard.js").read_text(encoding="utf-8")
+        css = (ROOT / "static/desk-dashboard.css").read_text(encoding="utf-8")
+        self.assertIn('id="deskDaily"', js)
+        self.assertIn('3-DAY FORECAST', js)
+        self.assertIn('Math.min(3, dates.length)', js)
+        self.assertIn("day.textContent = i === 0 ? 'Today' : i === 1 ? 'Tomorrow'", js)
+        self.assertIn("timeZone:'Europe/London'", js)
+        for field in ('weather_code', 'temperature_2m_max',
+                      'temperature_2m_min', 'precipitation_probability_max'):
+            self.assertIn('daily.' + field, js)
+        self.assertIn('desk-day-temperatures', js)
+        self.assertIn('desk-day-rain', js)
+        self.assertIn('.screen .desk-days{display:grid;grid-template-columns:repeat(3,minmax(0,1fr))', css)
+        self.assertNotIn('desk-weather-search', css)
+        self.assertNotIn('desk-hourly', css)
+        for old_element in ('deskCity', 'deskWeatherForm', 'deskHourly', 'NEXT HOURS'):
+            self.assertNotIn(old_element, js)
+        self.assertIn('deskWeatherValue', js)
+        self.assertIn('deskWeatherSub', js)
+        self.assertIn("weatherInFlight", js)
+        self.assertIn('15 * 60 * 1000', js)
 
     def test_glucose_only_uses_clearly_labeled_sample_values(self):
         js = (ROOT / "static/desk-dashboard.js").read_text(encoding="utf-8")
