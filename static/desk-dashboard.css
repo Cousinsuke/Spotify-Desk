@@ -447,7 +447,10 @@
 .screen #desk-glucose[data-glucose-view="both"] .desk-glucose-chart-column{
   min-width:0;
   min-height:0;
-  justify-content:stretch;
+  height:100%;
+  max-height:240px;
+  align-self:center;
+  justify-content:center;
 }
 .screen #desk-glucose[data-glucose-view="both"] .desk-chart-head{
   flex:0 0 auto;
@@ -550,6 +553,8 @@
   }
   .screen #desk-glucose[data-glucose-view="both"] .desk-glucose-chart-column{
     flex:1 1 auto;
+    height:auto;
+    max-height:none;
     min-height:0;
   }
   .screen #desk-glucose[data-glucose-view="both"] .desk-plot{
