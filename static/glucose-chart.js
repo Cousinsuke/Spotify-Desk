@@ -82,7 +82,7 @@
       // SVG font size 12: 15 px vertical separation is legible, including
       // the intentionally adjacent 3 and 4 labels in the standard 3–12 view.
       if (selected.some(other => Math.abs(y(other)-y(tick)) < 15)) continue;
-      if (selected.length < 6) selected.push(tick);
+      if (selected.length < 5) selected.push(tick);
     }
     return selected.sort((a,b)=>a-b);
   }
@@ -124,7 +124,7 @@
         '" stroke="'+(targetEdge?'#8ac19a66':'#ffffff23')+
         '" stroke-width="1"'+(targetEdge?' stroke-dasharray="4 5"':'')+'/>');
       lineGrid.push('<text x="'+(LEFT-10)+'" y="'+f(g.y(value)+3.5)+
-        '" fill="#acbeb4" font-size="12" text-anchor="end">'+
+        '" fill="#acbeb4" font-size="11" text-anchor="end">'+
         (options.scale === 'fixed' || value !== TARGET_LOW && value !== TARGET_HIGH
           ? String(value) : value.toFixed(1))+'</text>');
     }
