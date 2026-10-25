@@ -61,6 +61,14 @@ class BridgeTests(unittest.TestCase):
         self.assertEqual(self.client.get('/static/ui.css',environ_overrides=LAN).status_code,200)
         self.assertEqual(self.client.get('/private-desktop',environ_overrides=LOCAL).status_code,200)
 
+    def test_dashboard_static_assets_are_allowed_on_lan(self):
+        for path in ('/static/desk-dashboard.js', '/static/desk-dashboard.css'):
+            r = self.client.get(path, environ_overrides=LAN)
+            self.assertEqual(r.status_code, 200, path)
+        # Adding dashboard assets must not broaden the private API surface.
+        for path in ('/api/pc/status', '/api/devices', '/login'):
+            self.assertEqual(self.client.get(path, environ_overrides=LAN).status_code, 403, path)
+
     def test_pairing_one_time_and_token_authentication(self):
         code=self.store.code
         token=self.pair()
