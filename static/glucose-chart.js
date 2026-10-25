@@ -119,6 +119,14 @@
         (options.scale === 'fixed' ? String(value) : value.toFixed(1))+'</text>');
     }
 
+    // In 3-unit FULL scale, 4 and 7 are not labelled ticks; still outline
+    // the shaded target band with its own subtle boundary lines.
+    const targetEdges = [TARGET_LOW, TARGET_HIGH]
+      .filter(value => !tickValues.some(tick => Math.abs(tick-value)<0.01))
+      .map(value => '<line x1="'+LEFT+'" x2="'+RIGHT+'" y1="'+f(g.y(value))+
+        '" y2="'+f(g.y(value))+
+        '" stroke="#8ac19a66" stroke-width="1" stroke-dasharray="4 5"/>')
+      .join('');
     const bandTop = clamp(g.y(TARGET_HIGH),TOP,BOTTOM);
     const bandBottom = clamp(g.y(TARGET_LOW),TOP,BOTTOM);
     const band = '<rect x="'+LEFT+'" y="'+f(bandTop)+'" width="'+(RIGHT-LEFT)+
@@ -144,7 +152,7 @@
         align+'">'+entry.label+'</text>';
     }).join('');
     const svg = '<rect x="0" y="0" width="'+WIDTH+'" height="196" fill="transparent"/>'+
-      band+lineGrid.join('')+nowLine+traces+dot+xTicks;
+      band+targetEdges+lineGrid.join('')+nowLine+traces+dot+xTicks;
     return {
       svg,
       points: g.points,
