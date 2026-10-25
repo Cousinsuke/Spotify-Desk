@@ -1,5 +1,17 @@
 # ChatGPT handoff — Spotify Desk Thing
 
+## Weather page v1.0 — Bournemouth only, 3-day forecast (2026-10-25; awaiting visual review)
+
+- User explicitly accepted the glucose v0.9 layout ("glucose page now looks good") and moved to Weather. **Do not modify glucose UI without a new request.**
+
+- User requested: remove the location input and hardcode Bournemouth; replace hourly/next-hours tiles with a forecast for the next couple days. Implemented **Today, Tomorrow and following day** (3 daily cards) via Open-Meteo daily endpoint. Fixed location to Bournemouth town centre (50.72098, -1.87669, OS Open Names), timezone Europe/London. No geocoding, browser geolocation or saved city preference. Existing current temperature, feels-like, humidity, wind, precipitation and Home tile remain.
+
+- Weather cards show day/date, condition icon and text, forecast high/low temperatures and maximum precipitation probability, with 15-minute cache/refresh and error fallbacks retained. Weather CSS is compact for the 800×480 screen; script/CSS versions bumped to v1.0 in templates/device.html. Gluroo, glucose local security, Spotify and hardware simulator controls preserved.
+
+- Added offline synthetic DOM renderer check in tests/check_weather_daily.cjs and its Python wrapper; mocked rendering passed assistant-side JavaScript execution, plus static source checks. Actual Windows runtime/browser styling has NOT yet been user-validated.
+
+- Next: User runs Windows git pull and focused dashboard tests, restarts Flask from same PowerShell session to retain private Gluroo settings, refreshes /device Weather tab; review screenshot before further weather features.
+
 ## Glucose BOTH graph alignment — 2026-10-25 (v0.9; pending user screenshot)
 
 - User provided Windows screenshots of v0.8 at 1h/24h AUTO and FULL, confirmed overall square-live-plus-graph layout looks good but noticed the plot top edge **lower than the live reading square**. The chart header (GLUCOSE TREND + time-range/scale buttons) was in the same flex column and consumed height above the plot.
