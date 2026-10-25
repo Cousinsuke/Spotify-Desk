@@ -353,3 +353,206 @@
   .screen #desk-glucose .desk-plot{min-height:45px;padding:1%}
   .screen #desk-glucose .desk-glucose-footer{font-size:clamp(6px,1vw,9px)}
 }
+
+
+/* v0.8 — Spotify-style two-column BOTH layout.
+ * The 800x480 background, header, Gluroo status and existing media controls
+ * remain unchanged. Only the internal Glucose screen layout is affected. */
+.screen #desk-glucose .desk-glucose-layout{
+  display:flex;
+  flex-direction:column;
+  flex:1 1 auto;
+  min-height:0;
+  min-width:0;
+}
+.screen #desk-glucose .desk-glucose-chart-column{
+  display:flex;
+  flex-direction:column;
+  flex:1 1 auto;
+  min-height:0;
+  min-width:0;
+}
+.screen #desk-glucose[data-glucose-view="live"] .desk-glucose-chart-column{
+  display:none;
+}
+.screen #desk-glucose[data-glucose-view="live"] .desk-glucose-layout{
+  flex:1 1 auto;
+}
+.screen #desk-glucose[data-glucose-view="graph"] .desk-glucose-chart-column{
+  flex:1 1 auto;
+}
+.screen #desk-glucose[data-glucose-view="both"] .desk-glucose-layout{
+  display:grid;
+  grid-template-columns:minmax(0, 218px) minmax(0,1fr);
+  align-items:stretch;
+  gap:17px;
+}
+.screen #desk-glucose[data-glucose-view="both"] .desk-glucose-info{
+  display:flex;
+  box-sizing:border-box;
+  aspect-ratio:1/1;
+  width:100%;
+  height:auto;
+  min-height:0;
+  max-height:218px;
+  align-self:center;
+  justify-content:center;
+  padding:15px 14px;
+  background:linear-gradient(135deg,#1e3a2fef,#10231eef 88%);
+  border:1px solid #ffffff20;
+  border-radius:12px;
+}
+.screen #desk-glucose[data-glucose-view="both"] .desk-glucose-primary{
+  width:100%;
+  min-width:0;
+}
+.screen #desk-glucose[data-glucose-view="both"] .desk-glucose-readout{
+  display:grid;
+  grid-template-columns:minmax(0,1fr) auto;
+  grid-template-rows:auto auto;
+  grid-template-areas:"reading trend" "unit trend";
+  align-items:center;
+  gap:0 4px;
+  white-space:nowrap;
+}
+.screen #desk-glucose[data-glucose-view="both"] .desk-glucose-readout strong{
+  grid-area:reading;
+  font-size:62px;
+  line-height:1;
+  letter-spacing:-2.4px;
+  min-width:0;
+}
+.screen #desk-glucose[data-glucose-view="both"] .desk-glucose-unit{
+  grid-area:unit;
+  align-self:start;
+  font-size:13px;
+  margin:5px 0 0;
+  color:#a9c8b6;
+}
+.screen #desk-glucose[data-glucose-view="both"] .desk-glucose-trend{
+  grid-area:trend;
+  align-self:center;
+  margin:0;
+  font-size:43px;
+  line-height:1;
+}
+.screen #desk-glucose[data-glucose-view="both"] .desk-glucose-reading-note{
+  font-size:10px;
+  line-height:1.5;
+  margin-top:17px;
+  white-space:normal;
+  overflow-wrap:break-word;
+  text-overflow:clip;
+}
+.screen #desk-glucose[data-glucose-view="both"] .desk-glucose-chart-column{
+  min-width:0;
+  min-height:0;
+  justify-content:stretch;
+}
+.screen #desk-glucose[data-glucose-view="both"] .desk-chart-head{
+  flex:0 0 auto;
+  margin:3px 0 9px;
+  gap:4px;
+}
+.screen #desk-glucose[data-glucose-view="both"] .desk-chart-head strong{
+  font-size:10px;
+  white-space:nowrap;
+}
+.screen #desk-glucose[data-glucose-view="both"] .desk-chart-tools{gap:5px}
+.screen #desk-glucose[data-glucose-view="both"] .desk-chart-range{gap:3px}
+.screen #desk-glucose[data-glucose-view="both"] .desk-range{
+  min-width:0;
+  padding:5px 6px;
+  font-size:10px;
+}
+.screen #desk-glucose[data-glucose-view="both"] .desk-scale{
+  padding:5px 7px;
+  font-size:10px;
+}
+.screen #desk-glucose[data-glucose-view="both"] .desk-plot{
+  flex:1 1 auto;
+  min-height:170px;
+  max-height:none;
+  margin:0;
+  padding:4px 6px 2px;
+}
+.screen #desk-glucose[data-glucose-view="both"] .desk-plot svg{
+  width:100%;
+  height:100%;
+}
+/* Preserve graph-only, live-only and other dashboard page layouts. */
+@media(max-width:850px){
+  .screen #desk-glucose[data-glucose-view="both"] .desk-glucose-layout{
+    grid-template-columns:minmax(0,31%) minmax(0,1fr);
+    gap:2.2%;
+  }
+  .screen #desk-glucose[data-glucose-view="both"] .desk-glucose-info{
+    max-height:none;
+    padding:5% 6%;
+  }
+  .screen #desk-glucose[data-glucose-view="both"] .desk-glucose-readout strong{
+    font-size:clamp(27px,7.4vw,62px);
+  }
+  .screen #desk-glucose[data-glucose-view="both"] .desk-glucose-trend{
+    font-size:clamp(20px,5.1vw,43px);
+  }
+  .screen #desk-glucose[data-glucose-view="both"] .desk-glucose-unit{
+    font-size:clamp(8px,1.7vw,13px);
+  }
+  .screen #desk-glucose[data-glucose-view="both"] .desk-glucose-reading-note{
+    font-size:clamp(7px,1.25vw,10px);
+    margin-top:9%;
+  }
+  .screen #desk-glucose[data-glucose-view="both"] .desk-chart-head{
+    margin:1% 0 2%;
+  }
+  .screen #desk-glucose[data-glucose-view="both"] .desk-chart-head strong{
+    font-size:clamp(7px,1.2vw,10px);
+  }
+  .screen #desk-glucose[data-glucose-view="both"] .desk-range,
+  .screen #desk-glucose[data-glucose-view="both"] .desk-scale{
+    font-size:clamp(6px,1.1vw,10px);
+    padding:3px 4px;
+  }
+  .screen #desk-glucose[data-glucose-view="both"] .desk-plot{
+    min-height:105px;
+    padding:1%;
+  }
+}
+/* Narrow embedded simulator: stack instead of compressing an unreadable graph. */
+@media(max-width:610px){
+  .screen #desk-glucose[data-glucose-view="both"] .desk-glucose-layout{
+    display:flex;
+    flex-direction:column;
+    gap:4px;
+  }
+  .screen #desk-glucose[data-glucose-view="both"] .desk-glucose-info{
+    width:100%;
+    max-height:none;
+    aspect-ratio:auto;
+    padding:7px 9px;
+  }
+  .screen #desk-glucose[data-glucose-view="both"] .desk-glucose-readout{
+    display:flex;
+    flex-direction:row;
+    align-items:center;
+    gap:4px;
+  }
+  .screen #desk-glucose[data-glucose-view="both"] .desk-glucose-readout strong{
+    font-size:clamp(25px,6vw,37px);
+  }
+  .screen #desk-glucose[data-glucose-view="both"] .desk-glucose-trend{
+    margin-left:8px;
+    font-size:28px;
+  }
+  .screen #desk-glucose[data-glucose-view="both"] .desk-glucose-reading-note{
+    margin-top:3px;
+  }
+  .screen #desk-glucose[data-glucose-view="both"] .desk-glucose-chart-column{
+    flex:1 1 auto;
+    min-height:0;
+  }
+  .screen #desk-glucose[data-glucose-view="both"] .desk-plot{
+    min-height:50px;
+  }
+}
