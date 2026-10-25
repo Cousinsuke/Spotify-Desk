@@ -573,6 +573,19 @@
       drawGraph();
     }
   });
+  // Recalculate the SVG coordinate width when the BOTH/GRAPH column or
+  // simulator viewport changes. ResizeObserver never touches glucose data.
+  if (typeof ResizeObserver !== 'undefined') {
+    let lastChartWidth = 0;
+    const chartObserver = new ResizeObserver(entries => {
+      const width = Math.round(entries[0].contentRect.width);
+      if (width > 0 && width !== lastChartWidth) {
+        lastChartWidth = width;
+        if (currentPage === 'glucose' && glucoseViewMode !== 'live') drawGraph();
+      }
+    });
+    chartObserver.observe(byId('deskGlucosePlot'));
+  }
   updateClock();
   setInterval(updateClock, 1000);
   setInterval(() => {
