@@ -12,7 +12,7 @@ class DashboardPreviewTests(unittest.TestCase):
         html = (ROOT / "templates/device.html").read_text(encoding="utf-8")
         self.assertIn('/static/desk-dashboard.css?v=0.5', html)
         self.assertIn('/static/glucose-history.js?v=0.2', html)
-        self.assertIn('/static/glucose-chart.js?v=0.5', html)
+        self.assertIn('/static/glucose-chart.js?v=0.6', html)
         self.assertIn('/static/desk-dashboard.js?v=0.5', html)
         self.assertLess(html.index('/static/device.js?v=5.2'),
                         html.index('/static/desk-dashboard.js?v=0.5'))
