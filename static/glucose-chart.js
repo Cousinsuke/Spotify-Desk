@@ -31,8 +31,18 @@
   }
 
   function yBounds(points, scale) {
-    if (scale === 'fixed') return {low:0, high:40};
-    const values = points.map(p=>p.mmol);
+    const values = points.map(p => p.mmol);
+    if (scale === 'fixed') {
+      // Libre-style ticks normally run 3, 6, 9 ... 21 mmol/L. If a
+      // valid extreme reading falls outside that range, extend by 3
+      // rather than silently plotting it beyond the visible chart.
+      const minimum = values.length ? Math.min(...values) : 3;
+      const maximum = values.length ? Math.max(...values) : 21;
+      return {
+        low: Math.max(0, Math.min(3, Math.floor(minimum / 3) * 3)),
+        high: Math.max(21, Math.ceil(maximum / 3) * 3)
+      };
+    }
     const rawMin = Math.min(TARGET_LOW, ...values);
     const rawMax = Math.max(TARGET_HIGH, ...values);
     const span = Math.max(2.5,rawMax-rawMin);
@@ -41,6 +51,31 @@
     let high = clamp(Math.ceil((rawMax+pad)*2)/2,low+2.5,40);
     if (high - low < 3.0) high = Math.min(40,low+3);
     return {low,high};
+  }
+
+  function yAxisTicks(bounds, scale) {
+    if (scale === 'fixed') {
+      const ticks = [];
+      for (let value = bounds.low; value <= bounds.high; value += 3) ticks.push(value);
+      return ticks;
+    }
+    // Give the 4.0 and 7.0 target markers priority. Nearby automatically
+    // calculated ticks are omitted if their labels would visually overlap.
+    const y = value => BOTTOM - (value-bounds.low)/(bounds.high-bounds.low)*(BOTTOM-TOP);
+    const selected = [];
+    const candidates = [
+      TARGET_LOW, TARGET_HIGH,
+      bounds.low, bounds.high,
+      (bounds.low+bounds.high)/2,
+      bounds.low+(bounds.high-bounds.low)/4,
+      bounds.low+3*(bounds.high-bounds.low)/4
+    ];
+    for (const tick of candidates) {
+      if (tick < bounds.low || tick > bounds.high) continue;
+      if (selected.some(other => Math.abs(y(other)-y(tick)) < 20)) continue;
+      if (selected.length < 5) selected.push(tick);
+    }
+    return selected.sort((a,b)=>a-b);
   }
 
   function geometry(rows, options) {
@@ -71,11 +106,8 @@
     }
     const g = geometry(rows,options);
     const lineGrid = [];
-    // Include the user's range boundaries and a small number of reference lines.
-    const tickValues = [g.bounds.low,(g.bounds.low+g.bounds.high)/2,g.bounds.high,TARGET_LOW,TARGET_HIGH]
-      .filter((v,i,a)=>v>=g.bounds.low && v<=g.bounds.high &&
-        a.findIndex(other=>Math.abs(other-v)<0.15)===i)
-      .sort((a,b)=>a-b);
+    // Fixed: exact multiples of 3. Auto: spaced labels without collisions.
+    const tickValues = yAxisTicks(g.bounds, options.scale);
     for (const value of tickValues) {
       const y = f(g.y(value));
       const targetEdge = value===TARGET_LOW || value===TARGET_HIGH;
@@ -83,7 +115,8 @@
         '" stroke="'+(targetEdge?'#8ac19a66':'#ffffff23')+
         '" stroke-width="1"'+(targetEdge?' stroke-dasharray="4 5"':'')+'/>');
       lineGrid.push('<text x="'+(LEFT-10)+'" y="'+f(g.y(value)+3.5)+
-        '" fill="#acbeb4" font-size="12" text-anchor="end">'+value.toFixed(1)+'</text>');
+        '" fill="#acbeb4" font-size="12" text-anchor="end">'+
+        (options.scale === 'fixed' ? String(value) : value.toFixed(1))+'</text>');
     }
 
     const bandTop = clamp(g.y(TARGET_HIGH),TOP,BOTTOM);
@@ -117,6 +150,7 @@
       points: g.points,
       segments: g.segments,
       bounds: g.bounds,
+      yTicks:tickValues,
       ticks: labels,
       latest: last || null,
       rangeLow:TARGET_LOW,
@@ -124,5 +158,5 @@
       noData:g.points.length===0
     };
   }
-  return {render,seriesWindow,yBounds,geometry,RANGES,TARGET_LOW,TARGET_HIGH};
+  return {render,seriesWindow,yBounds,yAxisTicks,geometry,RANGES,TARGET_LOW,TARGET_HIGH};
 });
