@@ -74,15 +74,12 @@
       '<div class="desk-hero-note">YOUR DESK THING<strong>Home</strong><span>Swipe to explore</span></div></div>',
       '<div class="desk-cards">',
         '<button type="button" class="desk-card" data-desk-open="spotify"><span class="desk-card-icon" aria-hidden="true">♫</span><strong>Music</strong><span class="desk-card-value" id="deskMusicValue">Spotify</span><small id="deskMusicSub">Open player</small></button>',
-        '<button type="button" class="desk-card" data-desk-open="weather"><span class="desk-card-icon" aria-hidden="true">☀</span><strong>Weather</strong><span class="desk-card-value" id="deskWeatherValue">--°</span><small id="deskWeatherSub">Choose a city</small></button>',
+        '<button type="button" class="desk-card" data-desk-open="weather"><span class="desk-card-icon" aria-hidden="true">☀</span><strong>Weather</strong><span class="desk-card-value" id="deskWeatherValue">--°</span><small id="deskWeatherSub">Bournemouth · checking forecast</small></button>',
         '<button type="button" class="desk-card" data-desk-open="glucose"><span class="desk-card-icon" aria-hidden="true">◇</span><strong>Glucose</strong><span class="desk-card-value">Not connected</span><small>Sample graph only</small></button>',
       '</div>',
     '</section>',
     '<section class="desk-panel" id="desk-weather" role="tabpanel" aria-label="Weather" hidden>',
-      '<div class="desk-panel-head"><div><span class="desk-kicker">FORECAST</span><h2>Weather</h2><p class="desk-muted" id="deskWeatherLocation">Location not loaded</p></div>',
-      '<form class="desk-weather-search" id="deskWeatherForm"><label for="deskCity" class="desk-kicker">City</label>',
-      '<input id="deskCity" type="text" maxlength="70" autocomplete="off" aria-label="Weather city" placeholder="City name" required>',
-      '<button type="submit">Update</button></form></div>',
+      '<div class="desk-panel-head"><div><span class="desk-kicker">LOCAL FORECAST</span><h2>Weather</h2><p class="desk-muted" id="deskWeatherLocation">Bournemouth, United Kingdom</p></div></div>',
       '<div class="desk-weather-current"><div class="desk-weather-focus">',
       '<div class="desk-weather-icon" id="deskWeatherIcon" aria-hidden="true">☁</div><div>',
       '<div class="desk-temp" id="deskWeatherTemp">--°</div><p class="desk-muted" id="deskWeatherCondition">Checking forecast…</p></div></div>',
@@ -91,8 +88,8 @@
       '<div class="desk-stat"><small>Humidity</small><strong id="deskHumidity">--%</strong></div>',
       '<div class="desk-stat"><small>Wind</small><strong id="deskWind">-- km/h</strong></div>',
       '<div class="desk-stat"><small>Rain now</small><strong id="deskRain">-- mm</strong></div>',
-      '</div></div><div class="desk-forecast"><span class="desk-kicker">NEXT HOURS</span>',
-      '<div id="deskHourly" class="desk-hourly" aria-label="Hourly weather forecast"></div></div>',
+      '</div></div><div class="desk-forecast"><span class="desk-kicker">3-DAY FORECAST</span>',
+      '<div id="deskDaily" class="desk-days" aria-label="Three-day Bournemouth weather forecast"></div></div>',
       '<p class="desk-weather-note" id="deskWeatherNote">Weather data: Open-Meteo</p>',
     '</section>',
     '<section class="desk-panel" id="desk-glucose" role="tabpanel" aria-label="Glucose" hidden>',
@@ -303,12 +300,11 @@
   }
 
   let currentPage = 'home';
-  let city = 'London';
-  try {
-    const savedCity = localStorage.getItem('desk_weather_city_v1');
-    if (savedCity && savedCity.length >= 2 && savedCity.length <= 70) city = savedCity;
-  } catch {}
-  byId('deskCity').value = city;
+  // Fixed Bournemouth town-centre coordinates; no location input or geocoding.
+  const WEATHER_LOCATION = Object.freeze({
+    name: 'Bournemouth', country: 'United Kingdom',
+    latitude: 50.72098, longitude: -1.87669
+  });
   let weather = null;
   let weatherUpdated = 0;
   let weatherInFlight = null;
@@ -409,7 +405,7 @@
     if (!weather) return;
     const data = weather.data;
     const current = data.current || {};
-    const place = weather.place;
+    const place = WEATHER_LOCATION;
     const [description, icon] = condition(current.weather_code);
     setText('deskWeatherLocation', place.name + (place.country ? ', ' + place.country : ''));
     setText('deskWeatherSub', place.name + ' · ' + description);
@@ -421,55 +417,87 @@
     setText('deskHumidity', rounded(current.relative_humidity_2m, '%'));
     setText('deskWind', rounded(current.wind_speed_10m, ' km/h'));
     setText('deskRain', finite(current.precipitation) ? current.precipitation.toFixed(1) + ' mm' : '-- mm');
-    const hourly = data.hourly || {};
-    const times = Array.isArray(hourly.time) ? hourly.time : [];
-    const now = typeof current.time === 'string' ? current.time.substring(0, 13) : '';
-    let index = times.findIndex(time => typeof time === 'string' && time.substring(0, 13) >= now);
-    if (index < 0) index = 0;
-    const strip = byId('deskHourly');
+    const daily = data.daily || {};
+    const dates = Array.isArray(daily.time) ? daily.time : [];
+    const strip = byId('deskDaily');
     strip.replaceChildren();
-    for (let i = index; i < Math.min(times.length, index + 5); i++) {
+    // Open-Meteo daily arrays share an index. Days start in Bournemouth's
+    // timezone, including the current day and the following two days.
+    for (let i = 0; i < Math.min(3, dates.length); i++) {
+      if (!/^\d{4}-\d{2}-\d{2}$/.test(dates[i])) continue;
+      const dayDate = new Date(dates[i] + 'T12:00:00Z');
+      if (Number.isNaN(dayDate.getTime())) continue;
       const box = document.createElement('div');
-      box.className = 'desk-hour';
-      const hour = document.createElement('span');
-      hour.textContent = times[i].slice(11, 16);
-      const temp = document.createElement('strong');
-      temp.textContent = rounded((hourly.temperature_2m || [])[i], '°');
+      box.className = 'desk-day';
+      const day = document.createElement('strong');
+      day.className = 'desk-day-name';
+      day.textContent = i === 0 ? 'Today' : i === 1 ? 'Tomorrow' :
+        new Intl.DateTimeFormat('en-GB', {weekday:'short',timeZone:'Europe/London'}).format(dayDate);
+      const date = document.createElement('span');
+      date.className = 'desk-day-date';
+      date.textContent = new Intl.DateTimeFormat('en-GB',
+        {day:'numeric',month:'short',timeZone:'Europe/London'}).format(dayDate);
+      const [summary, dayIcon] = condition((daily.weather_code || [])[i]);
+      const weatherRow = document.createElement('div');
+      weatherRow.className = 'desk-day-conditions';
+      const symbol = document.createElement('span');
+      symbol.className = 'desk-day-icon';
+      symbol.textContent = dayIcon;
+      symbol.setAttribute('aria-hidden', 'true');
+      const description = document.createElement('span');
+      description.className = 'desk-day-description';
+      description.textContent = summary;
+      weatherRow.append(symbol, description);
+      const temperatures = document.createElement('div');
+      temperatures.className = 'desk-day-temperatures';
+      const maximum = (daily.temperature_2m_max || [])[i];
+      const minimum = (daily.temperature_2m_min || [])[i];
+      const high = document.createElement('b');
+      high.textContent = rounded(maximum, '°');
+      high.title = 'Daytime high';
+      const low = document.createElement('span');
+      low.textContent = rounded(minimum, '°');
+      low.title = 'Night-time low';
+      temperatures.append(high, low);
       const rain = document.createElement('small');
-      rain.textContent = rounded((hourly.precipitation_probability || [])[i], '% rain');
-      box.append(hour, temp, rain);
+      rain.className = 'desk-day-rain';
+      const chance = (daily.precipitation_probability_max || [])[i];
+      rain.textContent = finite(chance) ? Math.round(chance) + '% rain' : 'Rain: --';
+      box.append(day, date, weatherRow, temperatures, rain);
       strip.appendChild(box);
+    }
+    if (!strip.children.length) {
+      const unavailable = document.createElement('p');
+      unavailable.className = 'desk-muted';
+      unavailable.textContent = 'Daily forecast currently unavailable.';
+      strip.appendChild(unavailable);
     }
     setText('deskWeatherNote', 'Open-Meteo · Updated ' + new Date(weatherUpdated).toLocaleTimeString('en-GB', {hour:'2-digit',minute:'2-digit'}) + ' · Refreshes every 15 minutes');
   }
   async function refreshWeather() {
     if (weatherInFlight) return weatherInFlight;
-    const requested = city;
-    setText('deskWeatherNote', 'Updating weather from Open-Meteo…');
+    setText('deskWeatherNote', 'Updating Bournemouth forecast from Open-Meteo…');
     weatherInFlight = (async () => {
       try {
-        const geo = await getJson('https://geocoding-api.open-meteo.com/v1/search?name=' +
-          encodeURIComponent(requested) + '&count=1&language=en&format=json');
-        if (!Array.isArray(geo.results) || !geo.results.length) throw Error('City not found. Try a nearby town.');
-        const place = geo.results[0];
-        if (!finite(place.latitude) || !finite(place.longitude)) throw Error('Location data unavailable.');
         const url = 'https://api.open-meteo.com/v1/forecast?latitude=' +
-          encodeURIComponent(place.latitude) + '&longitude=' + encodeURIComponent(place.longitude) +
+          WEATHER_LOCATION.latitude + '&longitude=' + WEATHER_LOCATION.longitude +
           '&current=temperature_2m,relative_humidity_2m,apparent_temperature,weather_code,wind_speed_10m,precipitation' +
-          '&hourly=temperature_2m,precipitation_probability&forecast_days=2&timezone=auto';
+          '&daily=weather_code,temperature_2m_max,temperature_2m_min,precipitation_probability_max' +
+          '&forecast_days=3&timezone=Europe%2FLondon';
         const data = await getJson(url);
         if (!data || !data.current) throw Error('Current forecast unavailable.');
-        if (city !== requested) return;
-        weather = {place, data};
+        weather = {data};
         weatherUpdated = Date.now();
         updateWeatherUI();
       } catch (error) {
         const message = error.name === 'AbortError' ? 'Weather request timed out.' : error.message;
         setText('deskWeatherNote', message + (weather ? ' · Showing previous forecast.' : ' · Check internet access.'));
         if (!weather) {
-          setText('deskWeatherLocation', requested);
+          setText('deskWeatherLocation', 'Bournemouth, United Kingdom');
           setText('deskWeatherCondition', 'Weather unavailable');
-          setText('deskWeatherSub', 'Unavailable');
+          setText('deskWeatherSub', 'Bournemouth · unavailable');
+          const strip = byId('deskDaily');
+          strip.textContent = 'Daily forecast unavailable.';
         }
       } finally {
         weatherInFlight = null;
@@ -477,23 +505,6 @@
     })();
     return weatherInFlight;
   }
-  byId('deskWeatherForm').addEventListener('submit', event => {
-    event.preventDefault();
-    const updated = byId('deskCity').value.trim().replace(/\s+/g, ' ');
-    if (updated.length < 2 || updated.length > 70) {
-      setText('deskWeatherNote', 'Enter a city between 2 and 70 characters.');
-      return;
-    }
-    if (city !== updated) { weather = null; weatherUpdated = 0; }
-    city = updated;
-    try { localStorage.setItem('desk_weather_city_v1', city); } catch {}
-    if (weatherInFlight) {
-      // A pending old-city request will not overwrite the new city; rerun after it finishes.
-      weatherInFlight.finally(() => refreshWeather());
-    } else {
-      refreshWeather();
-    }
-  });
 
 
   function paintGlucoseGraph(readings, endTime, isSample) {
