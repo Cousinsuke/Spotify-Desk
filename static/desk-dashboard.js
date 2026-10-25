@@ -169,6 +169,123 @@
   glucoseHeader.insertBefore(importActions, glucoseBadge);
   let historicalGlucose = null;
 
+  // An independent optional feed: upstream HTTPS on PC, localhost bearer auth
+  // to browser, never served to a LAN client. Browser polling does not bypass
+  // the backend's >=150-second source cache. No direct Abbott connection.
+  let liveGlucose = null;
+  let liveConfigured = false;
+  const TREND_SYMBOLS = {
+    DoubleUp: '↑↑', SingleUp: '↑', FortyFiveUp: '↗', Flat: '→',
+    FortyFiveDown: '↘', SingleDown: '↓', DoubleDown: '↓↓'
+  };
+  const liveAllowed = importAllowed; // Protect health information from HTTP LAN.
+  const glucoseHome = document.querySelector('[data-desk-open="glucose"] .desk-card-value');
+  const glucoseHomeHint = document.querySelector('[data-desk-open="glucose"] small');
+  function historyLabel(timestamp) {
+    return new Date(timestamp).toLocaleString('en-GB', {
+      day:'numeric',month:'short',hour:'2-digit',minute:'2-digit'
+    });
+  }
+  function showLiveStatus(data) {
+    if (historicalGlucose || !data || data.status === 'not_configured') return;
+    liveConfigured = true;
+    const valid = data.latest && Number.isFinite(data.latest.mmol) &&
+      Number.isFinite(data.latest.timestamp);
+    const isLive = data.status === 'live' && valid;
+    liveGlucose = valid ? data : null;
+    if (isLive) {
+      glucoseBadge.textContent = 'LIVE FEED';
+      glucoseSubtitle.textContent = 'Nightscout-compatible source · automatic refresh';
+      glucoseNumber.textContent = data.latest.mmol.toFixed(1) + ' mmol/L ' +
+        (TREND_SYMBOLS[data.latest.direction] || '');
+      glucoseReadingDetails.textContent = 'Reading from ' + historyLabel(data.latest.timestamp) +
+        ' · ' + Math.floor(data.age_seconds / 60) + ' min old. Verify on Libre app.';
+      glucoseChartTitle.textContent = 'Latest received readings';
+      glucoseWatermark.textContent = 'SECONDARY · NOT FOR TREATMENT';
+      glucoseHome.textContent = data.latest.mmol.toFixed(1) + ' mmol/L';
+      glucoseHomeHint.textContent = 'Feed · ' + Math.floor(data.age_seconds / 60) + 'm old';
+    } else {
+      glucoseBadge.textContent = 'STALE / OFFLINE';
+      glucoseSubtitle.textContent = 'Current glucose unavailable · check Libre app';
+      glucoseNumber.textContent = valid ? 'Last: ' + data.latest.mmol.toFixed(1) + ' mmol/L' : '--.- mmol/L';
+      glucoseReadingDetails.textContent = valid
+        ? 'Last received ' + historyLabel(data.latest.timestamp) + ' · NOT CURRENT.'
+        : 'No usable recent glucose reading from source.';
+      glucoseChartTitle.textContent = 'Previous readings (not live)';
+      glucoseWatermark.textContent = 'NOT LIVE';
+      glucoseHome.textContent = 'Not live';
+      glucoseHomeHint.textContent = 'Feed stale or unavailable';
+    }
+    drawGraph();
+  }
+  async function refreshLiveGlucose() {
+    if (!liveAllowed || document.hidden) return;
+    let bearer = '';
+    try { bearer = localStorage.getItem('desk_device_token_v1') || ''; } catch {}
+    if (!bearer) return;
+    try {
+      const controller = new AbortController();
+      const timeout = setTimeout(() => controller.abort(), 14000);
+      let response;
+      try {
+        response = await fetch('/api/device/glucose', {
+          cache:'no-store', headers:{Authorization:'Bearer ' + bearer}, signal:controller.signal
+        });
+      } finally { clearTimeout(timeout); }
+      if (!response.ok) {
+        if (response.status === 401) return;
+        throw Error('Glucose bridge unavailable');
+      }
+      const data = await response.json();
+      if (data.status === 'not_configured') return;
+      showLiveStatus(data);
+    } catch {
+      if (liveConfigured && !historicalGlucose) {
+        showLiveStatus({status:'unavailable',latest:liveGlucose && liveGlucose.latest});
+      }
+    }
+  }
+
+  function drawLiveGraph() {
+    const now = Date.now();
+    const from = now - rangeHours * 3600000;
+    const points = (liveGlucose.readings || []).filter(r =>
+      Number.isFinite(r.mmol) && Number.isFinite(r.timestamp) &&
+      r.timestamp >= from && r.timestamp <= now + 120000);
+    const minimum = Math.max(0, Math.floor(Math.min(3, ...points.map(p => p.mmol)) - 1));
+    const maximum = Math.min(40, Math.ceil(Math.max(12, ...points.map(p => p.mmol)) + 1));
+    const x = timestamp => 34 + (timestamp - from) / (now - from) * 644;
+    const y = value => 132 - (value - minimum) / (maximum - minimum) * 117;
+    const grid = [0,1,2,3,4].map(i => {
+      const n = minimum + (maximum - minimum) * i / 4;
+      return '<line x1="34" x2="682" y1="' + y(n).toFixed(1) + '" y2="' +
+        y(n).toFixed(1) + '" stroke="#ffffff1a"/>' +
+        '<text x="2" y="' + (y(n)+4).toFixed(1) + '" font-size="10" fill="#b6c4bd">' +
+        n.toFixed(1) + '</text>';
+    }).join('');
+    const segments = [];
+    let part = [];
+    for (let i=0;i<points.length;i++) {
+      if (i && points[i].timestamp - points[i-1].timestamp > 20*60000) {
+        if (part.length) segments.push(part);
+        part = [];
+      }
+      part.push(x(points[i].timestamp).toFixed(1) + ',' + y(points[i].mmol).toFixed(1));
+    }
+    if (part.length) segments.push(part);
+    const lines = segments.map(a=>a.length>1?'<polyline points="' + a.join(' ') +
+      '" stroke="#a5f2cd" stroke-width="3" fill="none" stroke-linecap="round"/>':'').join('');
+    const dots = points.map(r=>'<circle cx="' + x(r.timestamp).toFixed(1) +
+      '" cy="' + y(r.mmol).toFixed(1) + '" r="2.5" fill="#d9f8e9"/>').join('');
+    byId('deskGlucosePlot').innerHTML = grid + lines + dots;
+    setText('deskGraphStart', rangeHours + ' hours ago');
+    glucoseAxis.children[1].textContent = 'Received mmol/L';
+    glucoseAxis.children[2].textContent = 'Now';
+    for (const b of view.querySelectorAll('.desk-range')) {
+      b.setAttribute('aria-pressed',String(Number(b.dataset.hours) === rangeHours));
+    }
+  }
+
   let currentPage = 'home';
   let city = 'London';
   try {
@@ -402,6 +519,7 @@
     }
   }
   function drawGraph() {
+    if (liveGlucose && !historicalGlucose) { drawLiveGraph(); return; }
     if (historicalGlucose) { drawHistoricalGraph(); return; }
     const all = Array.from({length:49}, (_, i) =>
       6.3 + 1.05 * Math.sin(i * 0.27) + 0.36 * Math.cos(i * 0.69));
@@ -433,5 +551,7 @@
     if (!document.hidden && (currentPage === 'weather' || currentPage === 'home') &&
       weatherUpdated && Date.now() - weatherUpdated > 15 * 60 * 1000) refreshWeather();
   }, 60 * 1000);
+  refreshLiveGlucose();
+  setInterval(refreshLiveGlucose, 30000);
   setPage('home');
 })();
