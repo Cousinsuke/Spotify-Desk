@@ -58,6 +58,15 @@ class DashboardPreviewTests(unittest.TestCase):
         self.assertIn("weatherInFlight", js)
         self.assertIn('15 * 60 * 1000', js)
 
+    def test_weather_daily_cards_offline_fixture(self):
+        node = shutil.which('node')
+        if not node:
+            self.skipTest('Node.js not installed')
+        result = subprocess.run(
+            [node, str(ROOT / 'tests' / 'check_weather_daily.cjs')],
+            capture_output=True, text=True, timeout=15, check=False)
+        self.assertEqual(result.returncode, 0, result.stderr)
+
     def test_glucose_only_uses_clearly_labeled_sample_values(self):
         js = (ROOT / "static/desk-dashboard.js").read_text(encoding="utf-8")
         self.assertIn('SAMPLE DATA', js)
