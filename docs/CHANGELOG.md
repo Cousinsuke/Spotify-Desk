@@ -1,5 +1,13 @@
 # Changelog / version history
 
+## Weather v1.0: Bournemouth and three-day forecast — 2026-10-25
+
+- After user accepted final Glucose layout, Weather input/city search and browser-saved location were removed. Fixed Bournemouth town-centre coordinates (50.72098, -1.87669) and Europe/London timezone; direct Open-Meteo call without geocoding.
+
+- Replaced NEXT HOURS five hourly tiles with a three-day weather forecast: Today, Tomorrow and following weekday, showing condition, high and low temperatures and daily maximum chance of precipitation. Retained current weather stats, Home weather shortcut, 15-minute refresh and offline error fallback.
+
+- Compact 3-column day cards to fit within 800×480. Added tests/check_weather_daily.cjs offline DOM fixture and expanded tests/test_dashboard_preview.py checks. Mocked JS test passed assistant-side; awaiting actual Windows user screenshot. Dashboard script/CSS versioned v1.0. No media, glucose data or physical hardware changes.
+
 ## Glucose v0.9: Match graph top edge with LIVE square — 2026-10-25
 
 - Visual follow-up: v0.8 square reading tile and plot were not quite top-aligned because GLUCOSE TREND and chart controls contributed to right-column height.
