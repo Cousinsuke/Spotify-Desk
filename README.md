@@ -2,7 +2,7 @@
 
 An experimental desktop music controller and future physical desk accessory, built around an 800 × 480 touchscreen, a **preferred three-key media layout**, and a **push-to-switch-mode rotary volume encoder**.
 
-**Repository status:** Phase 5.2 application source is committed on `main` at [`7172c2e`](https://github.com/Cousinsuke/Spotify-Desk/commit/7172c2ee2f285253507b13c71acb7072adc04067). This is the current checked-in software baseline; hardware firmware has not started.
+**Repository status:** Phase 5.2 is the last **user-accepted playback** baseline (`7172c2e`). An additive Home / Weather / **sample-only** Glucose browser preview was committed on `main` on 2026-10-25, **pending user runtime validation**. Real ESP32 firmware has not started.
 
 ## Direction
 
