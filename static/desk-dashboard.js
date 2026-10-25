@@ -99,9 +99,9 @@
       '<div class="desk-panel-head"><div><span class="desk-kicker">GLUCOSE</span>',
       '<h2>Libre 2 Plus</h2><p class="desk-muted">No live glucose integration configured</p></div>',
       '<span class="desk-demo-badge">SAMPLE DATA</span></div>',
-      '<div class="desk-glucose-info"><div class="desk-glucose-primary"><div class="desk-glucose-readout"><strong>--.-</strong><span class="desk-glucose-unit">mmol/L</span><span class="desk-glucose-trend" aria-label="No trend available"></span></div>',
+      '<div class="desk-glucose-layout"><div class="desk-glucose-info"><div class="desk-glucose-primary"><div class="desk-glucose-readout"><strong>--.-</strong><span class="desk-glucose-unit">mmol/L</span><span class="desk-glucose-trend" aria-label="No trend available"></span></div>',
       '<p class="desk-glucose-reading-note">Current glucose is unavailable.</p></div></div>',
-      '<div class="desk-chart-head"><strong>GLUCOSE TREND · SAMPLE DATA</strong>',
+      '<div class="desk-glucose-chart-column"><div class="desk-chart-head"><strong>GLUCOSE TREND · SAMPLE DATA</strong>',
       '<div class="desk-chart-tools"><div class="desk-chart-range" role="group" aria-label="Glucose chart time range">',
       '<button type="button" class="desk-range" data-hours="1">1h</button>',
       '<button type="button" class="desk-range" data-hours="3">3h</button>',
@@ -111,7 +111,7 @@
       '</div><button type="button" class="desk-scale" id="deskChartScale" aria-label="Chart scale: automatic" title="Toggle automatic or full-range vertical scale">AUTO</button></div></div>',
       '<div class="desk-plot"><svg id="deskGlucosePlot" viewBox="0 0 700 196" preserveAspectRatio="none" role="img" aria-label="Synthetic glucose graph, not a live sensor reading"></svg>',
       '<span class="desk-plot-watermark">SAMPLE</span><span class="desk-plot-empty" hidden>No readings in this period</span></div>',
-      '<div class="desk-plot-axis"><span id="deskGraphStart">6h ago</span><span></span><span>Now</span></div>',
+      '<div class="desk-plot-axis"><span id="deskGraphStart">6h ago</span><span></span><span>Now</span></div></div></div>',
       '<p class="desk-glucose-footer">NOT FOR TREATMENT <span aria-hidden="true">·</span> Use the Libre app for decisions and alarms.</p>',
     '</section>'
   ].join('');
@@ -507,9 +507,12 @@
       return;
     }
     const chart = plotter.render(readings, {
-      hours:rangeHours, endTime, scale:chartScale
+      hours:rangeHours, endTime, scale:chartScale,
+      width: svg.getBoundingClientRect().width >= 320
+        ? Math.round(svg.getBoundingClientRect().width) : 700
     });
     // SVG markup uses numeric samples and fixed static strings only.
+    svg.setAttribute('viewBox', '0 0 ' + chart.width + ' 196');
     svg.innerHTML = chart.svg;
     svg.setAttribute('aria-label',
       (isSample ? 'Illustrative sample ' : 'Received glucose ') + rangeHours +
