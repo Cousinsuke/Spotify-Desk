@@ -1,6 +1,8 @@
 # Multi-dashboard browser preview — Home, Weather and Glucose
 
-**Status:** Implemented in the browser /device simulator on main, **not yet runtime-validated or accepted on Windows/Omarchy**. This is an additive UI proof of concept; real ESP32 firmware does not exist.
+**Status (2026-10-25):** Implemented and **visually/user validated on Windows 11** in the `/device` browser simulator. The user provided screenshots of Home, Spotify, live Bournemouth Weather, and sample Glucose, reported that it looks like it works, and confirmed the device view was PC-paired. This validates screen rendering/navigation and real weather fetching, **not** actual Spotify transport/volume controls, glucose range interactions, Omarchy, physical ESP32 or live Libre 2 Plus readings. Real ESP32 firmware does not exist.
+
+**Windows Python validation (user log, 2026-10-25):** `unittest discover -s tests -v` ran 44 tests: **42 passed, 2 errors** in `test_linux_companion` because its Linux-only code ran under Windows; the four dashboard static tests and new LAN static-allowlist test passed. Node JS syntax check passed. Nonfatal `ResourceWarning` for Flask static-response file handles was observed. Do not report a clean 44/44 suite.
 
 ## Screens
 
