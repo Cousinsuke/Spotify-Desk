@@ -1,5 +1,11 @@
 # Changelog / version history
 
+## Glucose v0.6: Libre 3–21 full scale and readable AUTO ticks — 2026-10-25
+
+- User Windows screenshots verified LIVE, GRAPH and BOTH layouts and exposed two chart-axis issues: FULL stretched to 40 mmol/L rather than matching Libre's 21, and AUTO labels near 7.0 collided in longer plots.
+- FULL now uses **3–21 mmol/L** with labels every three units under normal conditions; extends safely outside that span for extreme readings rather than clipping. Automatic scale preserves target-band references and skips crowded Y labels (minimum 20 px separation). Always draws 4–7 zone boundary lines, including FULL where axis tick labels are multiples of three.
+- Added regressions for tick sequence, auto-label separation and extreme-value behavior. Synthetic JS fixture checks passed; user runtime acceptance is pending. HTML cache versions: chart v0.6; dashboard JS v0.6. No real CGM data or credentials committed.
+
 This is **historical milestone tracking**, not a separate implementation branch for each ZIP. The accepted Phase 5.2 source is committed at `7172c2e`; historical ZIPs are reference snapshots only. Prefer Git commits, tags and releases for future work rather than duplicated source folders.
 
 ## Live CGM feed via Gluroo / Nightscout-compatible HTTPS — 2026-10-25## Glucose Libre-style timeline, target band and 3 layouts — 2026-10-25 (awaiting UI acceptance)
