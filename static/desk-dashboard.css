@@ -561,3 +561,45 @@
     min-height:50px;
   }
 }
+
+
+/* v0.9 — Align the BOTH graph border to the LIVE tile border.
+   Its heading/controls are positioned above the graph, not in the chart
+   column's layout flow. Nothing changes for GRAPH or LIVE view modes. */
+.screen #desk-glucose[data-glucose-view="both"] .desk-glucose-chart-column{
+  position:relative;
+  height:calc(100% - 22px);
+  max-height:218px;
+  align-self:center;
+  justify-content:stretch;
+}
+.screen #desk-glucose[data-glucose-view="both"] .desk-chart-head{
+  position:absolute;
+  left:0;
+  right:0;
+  bottom:calc(100% + 7px);
+  margin:0;
+  min-height:0;
+  z-index:2;
+}
+.screen #desk-glucose[data-glucose-view="both"] .desk-plot{
+  flex:1 1 auto;
+  height:100%;
+  min-height:0;
+}
+/* On tiny embedded previews BOTH stacks; restore normal heading flow. */
+@media(max-width:610px){
+  .screen #desk-glucose[data-glucose-view="both"] .desk-glucose-chart-column{
+    position:static;
+    height:auto;
+    max-height:none;
+  }
+  .screen #desk-glucose[data-glucose-view="both"] .desk-chart-head{
+    position:static;
+    margin:1% 0 2%;
+  }
+  .screen #desk-glucose[data-glucose-view="both"] .desk-plot{
+    height:auto;
+    min-height:50px;
+  }
+}
