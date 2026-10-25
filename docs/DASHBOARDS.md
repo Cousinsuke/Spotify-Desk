@@ -50,9 +50,45 @@ Open http://127.0.0.1:8888/device and pair using http://127.0.0.1:8888/pair if n
 6. The restricted --lan simulator loads new assets but desktop/OAuth endpoints stay blocked.
 7. Repeat appropriate checks in Omarchy and distinguish implementation from actual user acceptance.
 
+
+## Historical LibreView CSV import — implementation added 2026-10-25
+
+**Status:** Implemented in browser code on \`main\`; **not yet tested by the user** with an actual LibreView export or visually accepted. This does not change the existing Windows-validated Home/Weather/Spotify pages. No real-time Libre 2 Plus integration is present.
+
+The new **Import CSV** control appears only when viewing \`http://127.0.0.1:8888/device\` on the **same PC** (localhost or 127.0.0.1). It is deliberately absent if browsing the simulator from a LAN address. The downloaded data is parsed by browser JavaScript entirely in memory; it is **not uploaded to Flask**, not sent to Abbott or Open-Meteo, and not persisted to disk or localStorage by our app. The user-selected CSV remains wherever they saved it (for example Windows Downloads) until they delete it. Closing/reloading the tab or pressing **Clear** discards parsed data from the page.
+
+**Obtaining a supported manual export:**
+1. Open https://www.libreview.com/ in a separate browser tab and sign in using the existing LibreView account credentials **there**. Never enter credentials into Desk Thing.
+2. Open **Glucose History** and choose **Download Glucose Data**, complete the website's verification and download CSV. Menu wording may vary by version.
+3. On the local PC \`/device\` page, open **Glucose**, set CSV timestamp date order **UK D/M/Y** or **US M/D/Y** to match the exported file, and choose **Import CSV**.
+4. The preview shows **last exported historical value**, its **actual timestamp**, and selectable 3h/6h/12h history anchored to the latest available file record. Gaps longer than 20 minutes render as disconnected segments, not interpolated lines. Current sensor status remains **not connected**; neither an automated refresh nor an alarm is provided.
+5. **Clear** returns to synthetic sample data. Refresh the page if you want to reset everything.
+
+The importer understands CSV/TSV with LibreView \`Device Timestamp\`, \`Record Type\` and \`Historic Glucose mmol/L\` or \`Historic Glucose mg/dL\` columns. It uses only **Record Type 0 (historic glucose)**, converts mg/dL into mmol/L where needed, sorts/deduplicates timestamps and skips invalid values. Files are limited to 12 MB through the UI. The export can contain identifying and other medical fields such as name, device serial, food and insulin events; the parser ignores those fields. **Never upload a real CSV to the public repository, GitHub issues or a chat.**
+
+**Limitations:** LibreView historical export is not the same as the sensor's minute-by-minute live display, historical data may be sampled at ~15-minute intervals, and device timestamps have no explicit timezone. Day/month order is user-selected; daylight-saving-time ambiguity can affect local chart placement. This is a graph preview, **not intended for treatment decisions**. The phone app and its alerts remain authoritative.
+
+**Research:**
+- Abbott Libre 2 Plus compatibility: https://pro.freestyle.abbott/uk-en/help-support/faq/question-answer.html?q=FreeStyle+Libre+2+Systemquestion-14
+- Official cloud sharing: https://www.freestyle.abbott/uk-en/managing-your-diabetes/start-your-journey/librelinkup.html
+- Manual LibreView CSV export instructions from Glooko: https://support.glooko.com/hc/en-gb/articles/4531230605843-How-to-import-your-blood-glucose-data-from-an-Abbott-FreeStyle-Libre-1-Libre-2-or-Libre-3
+- Abbott's LibreView user terms restrict automated access: https://files.libreview.io/files/documents/en-US/pat-TOU_2026-07-06.html
+
+**New files:** \`static/glucose-history.js\` (isolated pure parser), \`tests/check_glucose_history.cjs\` (synthetic/offline fixture checks). The existing dashboard JS adds import controls, safe labels and discontinuity-aware historical chart rendering; template and restricted LAN allowlist include the parser JavaScript **but no health API route**. The history CSV never goes through the server.
+
+**Developer checks (PowerShell):**
+
+    node --check .\static\glucose-history.js
+    node --check .\static\desk-dashboard.js
+    node .\tests\check_glucose_history.cjs
+    .\.venv\Scripts\python.exe -m unittest tests.test_dashboard_preview tests.test_device_bridge -v
+
+The broader Windows suite previously reported 42 passes and 2 Linux-only failures; this feature does not claim to fix those unrelated platform tests.
+
+
 ## Next steps
 
 1. User runtime validation and UI polish.
 2. Weather location selection and richer forecasts after first-pass testing.
-3. Research permitted Libre data routes; design a separate secure, mockable bridge before any real connection.
+3. User-test local LibreView CSV import with a real file privately (without sharing it), verify the date order, graph gaps and historical labels; then research permitted live-data routes and an appropriately secured bridge.
 4. Port designs into ESP-IDF/LVGL only after Waveshare hardware and firmware proof-of-concept. Browser CSS/JS cannot run directly on ESP32.
