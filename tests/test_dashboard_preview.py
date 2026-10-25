@@ -88,6 +88,29 @@ class DashboardPreviewTests(unittest.TestCase):
         self.assertIn("segments", renderer)
         self.assertIn("GAP_MS", renderer)
 
+    def test_spotify_inspired_both_layout_is_isolated(self):
+        js = (ROOT / "static/desk-dashboard.js").read_text(encoding="utf-8")
+        css = (ROOT / "static/desk-dashboard.css").read_text(encoding="utf-8")
+        html = (ROOT / "templates/device.html").read_text(encoding="utf-8")
+        self.assertIn('<div class="desk-glucose-layout">', js)
+        self.assertIn('<div class="desk-glucose-chart-column">', js)
+        self.assertIn('data-glucose-view="both"] .desk-glucose-layout', css)
+        self.assertIn('grid-template-columns:minmax(0, 218px) minmax(0,1fr)', css)
+        self.assertIn('aspect-ratio:1/1', css)
+        self.assertIn('max-height:240px', css)
+        self.assertIn('data-glucose-view="live"] .desk-glucose-chart-column', css)
+        self.assertIn('data-glucose-view="graph"] .desk-glucose-info{display:none}', css)
+        self.assertIn('ResizeObserver', js)
+        self.assertIn("chart.width + ' 196'", js)
+        self.assertIn('width: svg.getBoundingClientRect().width >= 320', js)
+        for page in ('home','spotify','weather','glucose'):
+            self.assertIn("['" + page + "',", js)
+        for old_element in ('modeSpotify','modePC','back','play','next','volume'):
+            self.assertIn('id="' + old_element + '"', html)
+        self.assertIn('NOT FOR TREATMENT', js)
+        self.assertIn("glucoseBadge.textContent = 'LIVE'", js)
+        self.assertIn("glucoseBadge.textContent = data.status === 'stale' ? 'STALE' : 'OFFLINE'", js)
+
     def test_libre_style_chart_parser(self):
         node = shutil.which("node")
         if not node:
