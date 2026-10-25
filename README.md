@@ -36,6 +36,10 @@ powershell.exe -NoProfile -ExecutionPolicy Bypass -File "$HOME\Projects\Spotify-
 The archive script places historical ZIPs under `archives/phase-zips/`, strips generated `__pycache__`/`.pyc` entries from stored copies without changing Downloads, records both original and archived SHA-256 checksums in `docs/history/ARCHIVED-PHASE-ZIPS.md`, and commits/pushes to `main`. The ZIPs are historical reference builds, **not** a replacement for current root-level source. The script rejects common private filenames, but cannot guarantee that older archives contain no secrets within source code; review before publishing in this public repository.
 
 
+## Experimental multi-dashboard preview (2026-10-25)
+
+An additive **Home / Weather / Glucose** preview now exists in the paired `/device` browser simulator. Home includes clock, music and weather shortcuts; Weather calls Open-Meteo directly from the browser; Glucose has **clearly labelled synthetic graph data only** with no Libre 2 Plus account connection or live values. The earlier Spotify playback implementation is retained. **This new preview awaits Windows/Omarchy runtime validation and user acceptance; it is not ESP32 firmware.** See [dashboard implementation and test plan](docs/DASHBOARDS.md).
+
 ## Project documentation
 
 - [Current-state handoff](docs/CHATGPT-HANDOFF.md)
