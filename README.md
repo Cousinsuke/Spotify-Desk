@@ -2,7 +2,7 @@
 
 An experimental desktop music controller and future physical desk accessory, built around an 800 × 480 touchscreen, a **preferred three-key media layout**, and a **push-to-switch-mode rotary volume encoder**.
 
-**Repository status:** Phase 5.2 is the last **user-accepted playback** baseline (`7172c2e`). An additive Home / Weather / **sample-only** Glucose browser preview was committed on `main` on 2026-10-25, **pending user runtime validation**. Real ESP32 firmware has not started.
+**Repository status:** Phase 5.2 is the last **user-accepted playback** baseline (`7172c2e`). An additive Home / Weather / **sample-only** Glucose browser preview was committed on `main` on 2026-10-25 and **visually validated by the user on Windows 11**, including a live Bournemouth weather response. Spotify transport controls, Omarchy and live glucose remain unvalidated. Real ESP32 firmware has not started.
 
 ## Direction
 
