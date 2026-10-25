@@ -345,7 +345,7 @@
     if (page === 'weather' || page === 'home') {
       if (!weather || Date.now() - weatherUpdated > 15 * 60 * 1000) refreshWeather();
     }
-    if (page === 'glucose') drawGraph();
+    if (page === 'glucose') { drawGraph(); refreshLiveGlucose(); }
   }
   nav.addEventListener('keydown', event => {
     if (event.key !== 'ArrowLeft' && event.key !== 'ArrowRight') return;
