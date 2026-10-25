@@ -1,5 +1,9 @@
 # Multi-dashboard browser preview — Home, Weather and Glucose
 
+## AUTO Y-axis refinement — 2026-10-25 (v0.7; visual acceptance pending)
+
+On AUTO, the chart now starts at 3–12 mmol/L with whole-number axis labels (normally 3, 4.0, 7.0, 9, 12; 4.0 and 7.0 label the 4–7 shaded display band). Former fractional 9.6 and padded 2.5 are removed. The bounds extend to accommodate true readings below 3 or above 12 without clipping, and crowded labels are suppressed. FULL remains 3–21 mmol/L in increments of 3. Chart tests passed in assistant JavaScript runner; Windows user visual check pending. This changes no source readings, Gluroo polling, medical alerts or media controls.
+
 ## Glucose chart axis correction — 2026-10-25 (v0.6, pending user check)
 
 After inspecting Windows screenshots of the live 800×480 Glucose screen, the user requested a Libre-like full chart axis **3–21 mmol/L in 3-unit increments**, plus a fix for crowded AUTO labels (especially around 7.0 on longer ranges). Updated `static/glucose-chart.js` to draw those FULL ticks and show 4–7 shaded-band boundaries independently, deconflict AUTO tick labels using 20 px minimum SVG Y separation, and expand the fixed axis if a valid extreme reading would fall outside 3–21. Includes synthetic tests for typical values and extremes. **No change to upstream Gluroo polling, pairing, Spotify controls, medical threshold/alarm behavior or data privacy.** The user has validated v0.5 visually; v0.6 awaits a new screenshot or runtime confirmation.
