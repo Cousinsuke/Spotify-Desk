@@ -94,7 +94,11 @@
     const points = seriesWindow(rows, hours, endTime);
     const bounds = yBounds(points, mode);
     const start = endTime - hours * 3600000;
-    const x = ms => LEFT + clamp((ms-start)/(endTime-start),0,1) * (RIGHT-LEFT);
+    // When the chart is alongside the glucose tile, give the SVG an actual
+    // narrower coordinate space rather than horizontally squeezing its text.
+    const width = valid(options.width) ? clamp(Math.round(options.width),320,1000) : WIDTH;
+    const right = width - 22;
+    const x = ms => LEFT + clamp((ms-start)/(endTime-start),0,1) * (right-LEFT);
     const y = value => BOTTOM - (value-bounds.low)/(bounds.high-bounds.low)*(BOTTOM-TOP);
     const segments = [];
     let segment = [];
@@ -106,7 +110,7 @@
       segment.push({x:x(points[i].timestamp), y:y(points[i].mmol)});
     }
     if (segment.length) segments.push(segment);
-    return {points,segments,bounds,start,endTime,hours,x,y};
+    return {points,segments,bounds,start,endTime,hours,x,y,width,right};
   }
 
   function render(rows, options) {
@@ -120,7 +124,7 @@
     for (const value of tickValues) {
       const y = f(g.y(value));
       const targetEdge = value===TARGET_LOW || value===TARGET_HIGH;
-      lineGrid.push('<line x1="'+LEFT+'" x2="'+RIGHT+'" y1="'+y+'" y2="'+y+
+      lineGrid.push('<line x1="'+LEFT+'" x2="'+g.right+'" y1="'+y+'" y2="'+y+
         '" stroke="'+(targetEdge?'#8ac19a66':'#ffffff23')+
         '" stroke-width="1"'+(targetEdge?' stroke-dasharray="4 5"':'')+'/>');
       lineGrid.push('<text x="'+(LEFT-10)+'" y="'+f(g.y(value)+3.5)+
@@ -133,15 +137,15 @@
     // the shaded target band with its own subtle boundary lines.
     const targetEdges = [TARGET_LOW, TARGET_HIGH]
       .filter(value => !tickValues.some(tick => Math.abs(tick-value)<0.01))
-      .map(value => '<line x1="'+LEFT+'" x2="'+RIGHT+'" y1="'+f(g.y(value))+
+      .map(value => '<line x1="'+LEFT+'" x2="'+g.right+'" y1="'+f(g.y(value))+
         '" y2="'+f(g.y(value))+
         '" stroke="#8ac19a66" stroke-width="1" stroke-dasharray="4 5"/>')
       .join('');
     const bandTop = clamp(g.y(TARGET_HIGH),TOP,BOTTOM);
     const bandBottom = clamp(g.y(TARGET_LOW),TOP,BOTTOM);
-    const band = '<rect x="'+LEFT+'" y="'+f(bandTop)+'" width="'+(RIGHT-LEFT)+
+    const band = '<rect x="'+LEFT+'" y="'+f(bandTop)+'" width="'+(g.right-LEFT)+
       '" height="'+f(Math.max(0,bandBottom-bandTop))+'" fill="#83be8e" fill-opacity=".13"/>';
-    const nowLine = '<line x1="'+RIGHT+'" x2="'+RIGHT+'" y1="'+TOP+'" y2="'+BOTTOM+
+    const nowLine = '<line x1="'+g.right+'" x2="'+g.right+'" y1="'+TOP+'" y2="'+BOTTOM+
       '" stroke="#cfdfd2" stroke-opacity=".48" stroke-dasharray="5 5" stroke-width="1"/>';
     const traces = g.segments.map(seg => seg.length>1
       ? '<polyline points="'+seg.map(p=>f(p.x)+','+f(p.y)).join(' ')+
@@ -156,15 +160,16 @@
       return {time:t, label:dateClock.format(new Date(t))};
     });
     const xTicks = labels.map((entry,i)=>{
-      const px = LEFT + (RIGHT-LEFT)*i/4;
+      const px = LEFT + (g.right-LEFT)*i/4;
       const align = i===0?'start':i===4?'end':'middle';
       return '<text x="'+f(px)+'" y="187" fill="#9db4a8" font-size="12" text-anchor="'+
         align+'">'+entry.label+'</text>';
     }).join('');
-    const svg = '<rect x="0" y="0" width="'+WIDTH+'" height="196" fill="transparent"/>'+
+    const svg = '<rect x="0" y="0" width="'+g.width+'" height="196" fill="transparent"/>'+ 
       band+targetEdges+lineGrid.join('')+nowLine+traces+dot+xTicks;
     return {
       svg,
+      width:g.width,
       points: g.points,
       segments: g.segments,
       bounds: g.bounds,
