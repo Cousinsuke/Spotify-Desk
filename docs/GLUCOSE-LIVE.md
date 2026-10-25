@@ -1,6 +1,6 @@
 # Live glucose integration — Libre 2 Plus → LibreLinkUp → Gluroo → Desk Thing
 
-**Stage (2026-10-25):** Backend + browser live-feed integration implemented on `main`. The user ran **all six targeted backend tests successfully on Windows 11** and showed a paired browser simulator receiving **LIVE FEED** readings, a trend arrow and a plotted history from the configured Gluroo GGC source. **Functionality is user-observed on Windows**, while the new minimalist Glucose v0.4 visual design awaits user review; the physical ESP32 and encrypted external-device transport are not implemented. No actual glucose readings or credentials belong in GitHub.
+**Stage (2026-10-25):** Backend + browser live-feed integration implemented on `main`. The user ran **all six targeted backend tests successfully on Windows 11** and showed a paired browser simulator receiving **LIVE FEED** readings, a trend arrow and a plotted history from the configured Gluroo GGC source. **Functionality is user-observed on Windows**, while the new Libre-style Glucose v0.5 timeline and layout selector await user review; the physical ESP32 and encrypted external-device transport are not implemented. No actual glucose readings or credentials belong in GitHub.
 
 ## Why this is the intended live path
 
