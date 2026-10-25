@@ -610,3 +610,44 @@
     min-height:50px;
   }
 }
+
+
+/* Dashboard v1.1 — keep Bournemouth source/updated footer inside the 800x480
+   screen. Scope reductions to Weather so accepted Glucose/Spotify stay intact. */
+.screen #desk-weather{display:flex;flex-direction:column;min-height:0}
+.screen #desk-weather .desk-panel-head{flex:0 0 auto;margin-bottom:8px}
+.screen #desk-weather .desk-weather-current{flex:0 0 auto;gap:10px}
+.screen #desk-weather .desk-weather-focus{min-height:106px;padding:10px 14px}
+.screen #desk-weather .desk-weather-meta{gap:6px}
+.screen #desk-weather .desk-stat{padding:7px 9px}
+.screen #desk-weather .desk-stat small{margin-bottom:5px}
+.screen #desk-weather .desk-forecast{flex:0 0 auto;margin-top:8px}
+.screen #desk-weather .desk-days{margin-top:6px}
+.screen #desk-weather .desk-day{min-height:72px;padding:7px 9px;gap:4px}
+.screen #desk-weather .desk-weather-note{flex:0 0 auto;margin-top:6px;font-size:9px;line-height:1.3;white-space:normal}
+
+/* Actual condition icon beside the Home temperature, not a fixed sunny glyph. */
+.screen .desk-home-weather-reading,
+.screen .desk-home-glucose-reading{
+  display:flex;align-items:center;gap:9px;min-width:0;width:100%;
+}
+.screen .desk-home-weather-reading .desk-card-value,
+.screen .desk-home-glucose-reading .desk-card-value{
+  flex:0 1 auto;width:auto;min-width:0;
+}
+.screen .desk-home-weather-symbol{
+  flex:none;font-size:28px;line-height:1;color:#e6f8ed;
+}
+.screen .desk-home-glucose-arrow{
+  flex:none;font-size:29px;line-height:1;color:#92ecc0;font-weight:650;
+}
+.screen .desk-home-glucose-arrow[hidden]{display:none}
+@media(max-width:850px){
+  .screen #desk-weather .desk-weather-focus{min-height:0;padding:2.3%}
+  .screen #desk-weather .desk-stat{padding:4%}
+  .screen #desk-weather .desk-day{padding:2.3%;min-height:67px;gap:3px}
+  .screen .desk-home-weather-reading,
+  .screen .desk-home-glucose-reading{gap:5px}
+  .screen .desk-home-weather-symbol{font-size:clamp(17px,3.6vw,28px)}
+  .screen .desk-home-glucose-arrow{font-size:clamp(18px,4vw,29px)}
+}
