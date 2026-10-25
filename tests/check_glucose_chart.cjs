@@ -41,6 +41,15 @@ const veryHigh=chart.render([{timestamp:end-120000,mmol:25.4}],{hours:1,endTime:
 const veryLow=chart.render([{timestamp:end-120000,mmol:2.5}],{hours:1,endTime:end,scale:'fixed'});
 assert.deepEqual(veryHigh.bounds,{low:3,high:27});
 assert.deepEqual(veryLow.bounds,{low:0,high:21});
+for (const extreme of [veryHigh,veryLow,chart.render(
+  [{timestamp:end-60000,mmol:40}],{hours:1,endTime:end,scale:'fixed'})]) {
+  const y = tick => 160-(tick-extreme.bounds.low) /
+    (extreme.bounds.high-extreme.bounds.low)*144;
+  for (let i=1;i<extreme.yTicks.length;i++) {
+    assert.ok(Math.abs(y(extreme.yTicks[i])-y(extreme.yTicks[i-1]))>=19.99,
+      'extended full scale tick labels must not overlap');
+  }
+}
 // Labels in AUTO cannot collide at 7.0 vs a nearby rounded centre tick.
 for (const hours of [1,3,6,12,24]) {
   const c=chart.render(rows,{hours,endTime:end,scale:'auto'});
