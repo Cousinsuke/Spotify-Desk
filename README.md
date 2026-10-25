@@ -40,6 +40,10 @@ The archive script places historical ZIPs under `archives/phase-zips/`, strips g
 
 An additive **Home / Weather / Glucose** preview now exists in the paired `/device` browser simulator. Home includes clock, music and weather shortcuts; Weather calls Open-Meteo directly from the browser; Glucose has **clearly labelled synthetic graph data only** with no Libre 2 Plus account connection or live values. The earlier Spotify playback implementation is retained. **This new preview awaits Windows/Omarchy runtime validation and user acceptance; it is not ESP32 firmware.** See [dashboard implementation and test plan](docs/DASHBOARDS.md).
 
+## Live glucose bridge — Gluroo / Nightscout (2026-10-25)
+
+The Glucose screen now has an **opt-in live-capable** HTTPS reader for Gluroo Global Connect / Nightscout-compatible feeds. Pairing and use are **localhost-only**: no personal glucose data is exposed through the prototype HTTP LAN device interface. When configured, it polls at least 150 seconds apart and shows latest mmol/L, trend arrow, timestamp and a time-series graph; delayed readings are explicitly marked **STALE / OFFLINE**. No real Libre 2 Plus account has been connected or end-to-end tested yet. Setup and important privacy caveats: [live glucose integration](docs/GLUCOSE-LIVE.md).
+
 ## Experimental historical LibreView CSV graph (2026-10-25)
 
 The local `/device` Glucose screen can now **import a user-downloaded LibreView CSV in the PC browser** to preview **historical readings** (not live), with explicit record timestamps and graph gaps. The import runs in browser memory only; no readings, credentials or CSV files are sent to Flask or stored in GitHub. This new feature **awaits user runtime testing** and does not replace Abbott's app or glucose alarms. Details: [dashboard documentation](docs/DASHBOARDS.md).
