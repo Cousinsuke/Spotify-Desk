@@ -1,5 +1,15 @@
 # Changelog / version history
 
+## Experimental Spotify-style side-by-side glucose BOTH layout — 2026-10-25 (v0.8)
+
+- User provided a two-column Figma concept: LIVE reading in a square analogous to Spotify album art, time graph in the right column analogous to playback details. LIVE-only and GRAPH-only retained.
+
+- Added structural layout wrappers around the existing reading and chart, scope-limited CSS grid for BOTH with a ~218px square tile and flexible plot, and responsive narrow-screen stacking. Retains current Gluroo reading, trend, timestamp, 4–7 target shading, time range and Auto/Full scale controls. Background and Spotify media player untouched.
+
+- Chart SVG renderer now receives the actual chart column width and draws numerically equivalent lines/time labels within that coordinate system, avoiding horizontally stretched/squashed values. ResizeObserver redraws on layout width changes; test fixture covers both compact and wide geometry. Static V8 tests passed, user runtime visual testing pending.
+
+- Browser cache versions v0.8. No health data, credentials, backend API or actual device changes.
+
 ## Glucose v0.7: Whole-number AUTO chart ticks — 2026-10-25
 
 - AUTO now uses default 3–12 mmol/L with labels 3, 4.0, 7.0, 9, 12 rather than fractional quartiles such as 9.6 or padded floor 2.5. 4/7 shaded reference guides remain. Expand if actual reading is below 3 or above 12.
