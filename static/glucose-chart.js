@@ -43,14 +43,15 @@
         high: Math.max(21, Math.ceil(maximum / 3) * 3)
       };
     }
-    const rawMin = Math.min(TARGET_LOW, ...values);
-    const rawMax = Math.max(TARGET_HIGH, ...values);
-    const span = Math.max(2.5,rawMax-rawMin);
-    const pad = Math.max(0.5,span*0.16);
-    let low = clamp(Math.floor((rawMin-pad)*2)/2,0,38);
-    let high = clamp(Math.ceil((rawMax+pad)*2)/2,low+2.5,40);
-    if (high - low < 3.0) high = Math.min(40,low+3);
-    return {low,high};
+    // Keep a predictable Libre-like auto window until actual samples need
+    // more space. All bounds remain whole mmol/L units. Do not pad the
+    // usual 3–12 view based on arbitrary quartiles or fluctuations.
+    const minimum = values.length ? Math.min(...values) : 3;
+    const maximum = values.length ? Math.max(...values) : 12;
+    return {
+      low: minimum < 3 ? Math.max(0, Math.floor(minimum)) : 3,
+      high: maximum > 12 ? Math.ceil(maximum / 3) * 3 : 12
+    };
   }
 
   function yAxisTicks(bounds, scale) {
@@ -67,21 +68,21 @@
             (bounds.high-bounds.low) >= 20) ticks.push(bounds.high);
       return ticks;
     }
-    // Give the 4.0 and 7.0 target markers priority. Nearby automatically
-    // calculated ticks are omitted if their labels would visually overlap.
+    // Only whole-number AUTO labels. Prefer the bottom/top bounds, target
+    // limits and three-unit reference values. Keep any extra integer labels
+    // a readable distance apart even if an outlier expands the axis.
     const y = value => BOTTOM - (value-bounds.low)/(bounds.high-bounds.low)*(BOTTOM-TOP);
     const selected = [];
-    const candidates = [
-      TARGET_LOW, TARGET_HIGH,
-      bounds.low, bounds.high,
-      (bounds.low+bounds.high)/2,
-      bounds.low+(bounds.high-bounds.low)/4,
-      bounds.low+3*(bounds.high-bounds.low)/4
-    ];
+    const candidates = [bounds.low, bounds.high, TARGET_LOW, TARGET_HIGH];
+    for (let v = Math.floor(bounds.high / 3) * 3; v >= bounds.low; v -= 3) {
+      candidates.push(v);
+    }
     for (const tick of candidates) {
-      if (tick < bounds.low || tick > bounds.high) continue;
-      if (selected.some(other => Math.abs(y(other)-y(tick)) < 20)) continue;
-      if (selected.length < 5) selected.push(tick);
+      if (!Number.isInteger(tick) || tick < bounds.low || tick > bounds.high) continue;
+      // SVG font size 12: 15 px vertical separation is legible, including
+      // the intentionally adjacent 3 and 4 labels in the standard 3–12 view.
+      if (selected.some(other => Math.abs(y(other)-y(tick)) < 15)) continue;
+      if (selected.length < 6) selected.push(tick);
     }
     return selected.sort((a,b)=>a-b);
   }
@@ -124,7 +125,8 @@
         '" stroke-width="1"'+(targetEdge?' stroke-dasharray="4 5"':'')+'/>');
       lineGrid.push('<text x="'+(LEFT-10)+'" y="'+f(g.y(value)+3.5)+
         '" fill="#acbeb4" font-size="12" text-anchor="end">'+
-        (options.scale === 'fixed' ? String(value) : value.toFixed(1))+'</text>');
+        (options.scale === 'fixed' || value !== TARGET_LOW && value !== TARGET_HIGH
+          ? String(value) : value.toFixed(1))+'</text>');
     }
 
     // In 3-unit FULL scale, 4 and 7 are not labelled ticks; still outline
