@@ -102,3 +102,6 @@
   .screen .desk-glucose-actions select,.screen .desk-glucose-actions button,.screen .desk-csv-import{font-size:clamp(6px,1.0vw,10px);padding:3px 4px}
   .screen .desk-glucose-actions select{max-width:68px}
 }
+
+/* When the configured live source takes precedence, hide offline CSV controls. */
+.screen .desk-glucose-actions[hidden]{display:none}
