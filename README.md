@@ -40,6 +40,10 @@ The archive script places historical ZIPs under `archives/phase-zips/`, strips g
 
 An additive **Home / Weather / Glucose** preview now exists in the paired `/device` browser simulator. Home includes clock, music and weather shortcuts; Weather calls Open-Meteo directly from the browser; Glucose has **clearly labelled synthetic graph data only** with no Libre 2 Plus account connection or live values. The earlier Spotify playback implementation is retained. **This new preview awaits Windows/Omarchy runtime validation and user acceptance; it is not ESP32 firmware.** See [dashboard implementation and test plan](docs/DASHBOARDS.md).
 
+## Libre-style glucose timeline preview (2026-10-25)
+
+Glucose v0.5 adds **real clock-time labels**, a user-selected **4–7 mmol/L shaded display band**, responsive auto-scale/full-scale graph controls and **1h / 3h / 6h / 12h / 24h** options. On the Glucose page only, the top-right Wi-Fi/PC control is visually replaced by **LIVE / GRAPH / BOTH** layout choices; Spotify's actual playback mode controls remain unchanged. This UI update is committed but **awaits Windows visual acceptance**. See [dashboard notes](docs/DASHBOARDS.md).
+
 ## Live glucose bridge — Gluroo / Nightscout (2026-10-25)
 
 The Glucose screen now has an **opt-in live-capable** HTTPS reader for Gluroo Global Connect / Nightscout-compatible feeds. Pairing and use are **localhost-only**: no personal glucose data is exposed through the prototype HTTP LAN device interface. When configured, it polls at least 150 seconds apart and shows latest mmol/L, trend arrow, timestamp and a time-series graph; delayed readings are explicitly marked **STALE / OFFLINE**. No real Libre 2 Plus account has been connected or end-to-end tested yet. Setup and important privacy caveats: [live glucose integration](docs/GLUCOSE-LIVE.md).
