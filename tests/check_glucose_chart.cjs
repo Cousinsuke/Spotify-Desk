@@ -28,6 +28,18 @@ assert.equal(hour.ticks[4].label,
   new Intl.DateTimeFormat('en-GB',{hour:'2-digit',minute:'2-digit',hour12:false})
     .format(new Date(end)),'last tick should reflect local clock');
 const six=chart.render(rows,{hours:6,endTime:end,scale:'auto'});
+// In BOTH mode the chart is narrower than GRAPH mode, but its SVG
+// coordinates should adapt instead of compressing the time and value labels.
+const compact=chart.render(rows,{hours:3,endTime:end,scale:'auto',width:410});
+const wide=chart.render(rows,{hours:3,endTime:end,scale:'auto',width:680});
+assert.equal(compact.width,410);
+assert.equal(wide.width,680);
+assert.match(compact.svg,/width="410"/);
+assert.match(wide.svg,/width="680"/);
+assert.ok(compact.svg.includes('x2="388"'),'compact chart right edge should be width - 22');
+assert.ok(wide.svg.includes('x2="658"'),'wide chart right edge should be width - 22');
+assert.deepEqual(compact.yTicks,wide.yTicks,'layout does not alter actual glucose scale');
+assert.equal(compact.points.length,wide.points.length,'layout does not filter readings');
 assert.deepEqual(six.bounds,{low:3,high:12},'AUTO default is 3 to 12');
 assert.deepEqual(six.yTicks,[3,4,7,9,12],'AUTO uses 3, target 4/7, and rounded reference ticks');
 assert.match(six.svg,/>4\.0</,'target 4 keeps decimal');
