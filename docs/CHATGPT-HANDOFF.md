@@ -13,6 +13,14 @@ Updated: 2026-10-25
 - **Next action:** validate actual playback/volume controls and chart time-range switching, address Windows/Linux test isolation, then research a secure, permitted glucose-data integration. The dashboard's Windows visual layout and live weather are user-confirmed. No firmware, physical purchase or enclosure change implied.
 
 
+## LibreView historical CSV import — 2026-10-25 (implemented; Windows runtime test pending)
+
+- User asked to continue with glucose dashboard research after confirming the four-screen Windows browser preview. Abbott confirms Libre 2 Plus + LibreView/LibreLinkUp interoperability; LibreView historical CSV can be manually exported. Abbott terms restrict automated access, so **no unofficial Libre credentials/API scraping** has been added.
+- New local-only in-browser CSV import for `/device` recognises LibreView historic glucose record type 0, DMY/MDY date-order selection, mmol/L or mg/dL, filters invalid records, and plots 3h/6h/12h windows relative to the **last exported timestamp**. Gaps exceeding 20 minutes are shown as gaps, with explicit **HISTORY · NOT LIVE** notices. No upload/storage/transmission by application; no actual personal export or data has been accessed.
+- Source: `static/glucose-history.js`, modified `static/desk-dashboard.js`, `static/desk-dashboard.css`, `templates/device.html`, `device_bridge.py`; offline synthetic fixture checks `tests/check_glucose_history.cjs`, dashboard/allowlist test updates. Pure JS parser and dashboard source passed assistant-side syntax/unit checks in isolated V8; **user Windows/Omarchy/browser test pending**, do not claim implemented live Libre 2 Plus monitoring.
+- Prior Home/Weather/Spotify visual Windows verification retained; previous full Python suite 42/44 with two Linux-only errors remains unresolved. See [dashboard research and private import instructions](DASHBOARDS.md).
+- Next task: user downloads their LibreView CSV **privately** and tests import locally at `127.0.0.1`, then report graph/date labels without sharing glucose values or the CSV. If successful, investigate only permitted and secure options for genuinely live monitoring before extending a LAN device protocol.
+
 ## Repository / checkpoint
 
 - Repository: `Cousinsuke/Spotify-Desk`
