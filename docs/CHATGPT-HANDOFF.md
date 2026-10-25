@@ -4,6 +4,14 @@
 
 Updated: 2026-10-25
 
+## Glucose screen visual refresh — 2026-10-25 (implemented; awaiting user review)
+
+- User ran six glucose backend tests on Windows 11, **all passed**, configured their own Gluroo GGC account in local PowerShell and demonstrated the actual `/device` Glucose tab displaying **LIVE FEED**, a recent mmol/L value/trend and non-synthetic time-series graph. Flask route and pairing were working. Avoid storing the user's actual glucose values or secrets in project docs.
+- User requested a cleaner **Spotify-style minimalist redesign** of that verified live Glucose screen. Source changes on `main`: one large high-contrast number with separate trend arrow/unit, small last-reading timestamp, short LIVE/STALE/OFFLINE pill, simplified chart ticks and last-reading dot, 3/6/12h controls, one unobtrusive but retained non-treatment notice. Dynamic page label changes the topbar suffix only for active page; Spotify page and its controls otherwise unchanged. Offline readings must never be presented as live or silently replaced with sample data.
+- **Implementation and static tests added; new visual design NOT yet runtime-tested/user-accepted.** Next action: Windows `git pull`, restart existing Python server (while keeping private Gluroo env variables available), open `/device`, verify layout, real feed/trend freshness, tab switching and no overflow at 800×480. Obtain visual feedback before further feature scope.
+- Existing `--lan` is HTTP and remains blocked for personal glucose endpoint. No ESP32 CGM firmware, physical-device medical-data connection or credentials added.
+
+
 ## Ad-hoc multi-dashboard preview — 2026-10-25 (Windows visual validation confirmed)
 
 - User asked to start building Home, Weather and glucose monitoring after a review of all repository Markdown files. Existing hardware candidate and current Rev B CAD remain unchanged.
