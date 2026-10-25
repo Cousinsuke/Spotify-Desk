@@ -26,9 +26,6 @@
 .screen .desk-card .desk-card-icon{font-size:20px;line-height:1}
 .screen .desk-panel-head{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:13px}
 .screen .desk-panel-head h2{font-size:23px;line-height:1.15;margin:3px 0 4px}
-.screen .desk-weather-search{display:flex;gap:6px;align-items:center}
-.screen .desk-weather-search input{width:136px;min-width:0;background:#11201c;border:1px solid #3b584e;color:#fff;border-radius:8px;padding:8px;font-size:12px}
-.screen .desk-weather-search button{background:#c7f7d9;color:#10251b;border:0;padding:8px 11px;border-radius:8px;font-size:11px;font-weight:700}
 .screen .desk-weather-current{display:grid;grid-template-columns:1.15fr 1fr;gap:14px}
 .screen .desk-weather-focus{border:1px solid #ffffff19;border-radius:13px;padding:16px;background:#132923bd;display:flex;align-items:center;gap:14px;min-height:126px}
 .screen .desk-weather-icon{font-size:52px;min-width:57px;text-align:center}
@@ -38,11 +35,17 @@
 .screen .desk-stat small{display:block;color:#9eb4aa;font-size:10px;margin-bottom:6px}
 .screen .desk-stat strong{font-size:16px;font-variant-numeric:tabular-nums}
 .screen .desk-forecast{margin-top:13px}
-.screen .desk-hourly{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:8px;margin-top:7px}
-.screen .desk-hour{border:1px solid #ffffff16;border-radius:9px;background:#101d1af0;padding:9px;text-align:center;min-width:0}
-.screen .desk-hour span{display:block;font-size:11px;color:#adc4ba}
-.screen .desk-hour strong{display:block;font-size:16px;margin:4px 0}
-.screen .desk-hour small{display:block;font-size:10px;color:#83bfac}
+.screen .desk-days{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:9px;margin-top:8px}
+.screen .desk-day{display:grid;grid-template-columns:minmax(0,1fr) auto;grid-template-areas:"name date" "condition condition" "temps rain";align-content:space-between;align-items:center;gap:7px 5px;min-width:0;min-height:88px;padding:10px 12px;border:1px solid #ffffff21;border-radius:11px;background:#12241fee}
+.screen .desk-day-name{grid-area:name;font-size:13px;font-weight:750;color:#ecfff3}
+.screen .desk-day-date{grid-area:date;font-size:10px;color:#a5c0b3}
+.screen .desk-day-conditions{grid-area:condition;display:flex;align-items:center;gap:7px;min-width:0}
+.screen .desk-day-icon{font-size:22px;line-height:1;color:#cef1dc}
+.screen .desk-day-description{font-size:11px;color:#bed2c4;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.screen .desk-day-temperatures{grid-area:temps;display:flex;align-items:baseline;gap:8px;font-variant-numeric:tabular-nums}
+.screen .desk-day-temperatures b{font-size:20px;color:#f6fff8}
+.screen .desk-day-temperatures span{font-size:13px;color:#9bb3a8}
+.screen .desk-day-rain{grid-area:rain;font-size:10px;color:#92d8bb;white-space:nowrap}
 .screen .desk-weather-note{margin-top:7px;color:#a2b8ad;font-size:10px}
 .screen .desk-glucose-info{display:flex;gap:15px;align-items:center;justify-content:space-between;padding:13px 17px;border:1px solid #42605a;border-radius:12px;background:#142c29}
 .screen .desk-glucose-info strong{font-size:22px}
@@ -74,9 +77,13 @@
  .screen .desk-weather-icon{font-size:clamp(19px,6vw,52px);min-width:0}
  .screen .desk-temp{font-size:clamp(18px,6vw,49px)}
  .screen .desk-stat{padding:5%}
- .screen .desk-hour{padding:5%}
- .screen .desk-weather-search input{width:clamp(75px,16vw,136px);font-size:9px;padding:5px}
- .screen .desk-weather-search button{font-size:9px;padding:6px}
+ .screen .desk-day{min-height:72px;padding:2.5%;gap:4px}
+ .screen .desk-day-name{font-size:clamp(8px,1.7vw,13px)}
+ .screen .desk-day-date,.screen .desk-day-rain{font-size:clamp(7px,1.25vw,10px)}
+ .screen .desk-day-icon{font-size:clamp(15px,2.8vw,22px)}
+ .screen .desk-day-description{font-size:clamp(7px,1.4vw,11px)}
+ .screen .desk-day-temperatures b{font-size:clamp(13px,2.5vw,20px)}
+ .screen .desk-day-temperatures span{font-size:clamp(9px,1.7vw,13px)}
  .screen .desk-plot{height:clamp(75px,19vw,155px)}
  .screen .desk-glucose-info{padding:2%}
  .screen .desk-glucose-info strong{font-size:clamp(13px,3vw,22px)}
