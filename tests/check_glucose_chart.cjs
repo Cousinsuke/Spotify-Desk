@@ -24,7 +24,9 @@ for (const hours of [1,3,6,12,24]) {
 const hour=chart.render(rows,{hours:1,endTime:end,scale:'auto'});
 assert.equal(hour.points.length,3,'1h range filters old readings');
 assert.equal(hour.segments.length,2,'missing data must break the line');
-assert.equal(hour.ticks[4].label,'19:30');
+assert.equal(hour.ticks[4].label,
+  new Intl.DateTimeFormat('en-GB',{hour:'2-digit',minute:'2-digit',hour12:false})
+    .format(new Date(end)),'last tick should reflect local clock');
 const six=chart.render(rows,{hours:6,endTime:end,scale:'auto'});
 assert.ok(six.bounds.high<13,'auto zoom must emphasize movement');
 assert.ok(six.bounds.low<=4);
