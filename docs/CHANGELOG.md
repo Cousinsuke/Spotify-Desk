@@ -2,7 +2,12 @@
 
 This is **historical milestone tracking**, not a separate implementation branch for each ZIP. The accepted Phase 5.2 source is committed at `7172c2e`; historical ZIPs are reference snapshots only. Prefer Git commits, tags and releases for future work rather than duplicated source folders.
 
-## Live CGM feed via Gluroo / Nightscout-compatible HTTPS — 2026-10-25
+## Live CGM feed via Gluroo / Nightscout-compatible HTTPS — 2026-10-25## Spotify-style minimal glucose dashboard — 2026-10-25 (awaiting UI acceptance)
+- Followed Windows screenshot confirmation of real Gluroo readings in paired simulator and six passing backend tests; no private CGM readings or Gluroo credentials recorded.
+- Simplified only `/device` Glucose view: emphasized large mmol/L number, distinct trend arrow, compact timestamp, clear LIVE/STALE/OFFLINE state, smaller single safety footer, minimal trend graph with reduced grid and a highlighted latest point, 3/6/12h controls. Dynamic active-page name corrects the header suffix; Spotify playback logic preserved.
+- Static/source regression tests expanded, browser CSS/JS cache versions bumped to v0.4. **User visual runtime acceptance pending.**
+
+
 - Added opt-in local-only live glucose bridge, configured through PowerShell environment variables, not stored in the repo. Gluroo supports LibreLinkUp follower data plus an experimental documented Nightscout-compatible API. Python service enforces HTTPS, secret-header access, 150s+ polling, rate-limit handling, freshness checks and unit conversion. Browser auto-displays a current-received reading, trend arrow, time-series chart or explicit STALE / OFFLINE state (no substituted sample data).
 - Added localhost-only, paired-bearer-authenticated `/api/device/glucose`; route excluded from existing HTTP LAN allowlist. No CGM data available to real ESP32 devices through this prototype transport. Added `tests/test_glucose_live.py`; real upstream/GlucoView/Gluroo account validation pending. Full account setup and privacy warnings in `docs/GLUCOSE-LIVE.md`.
 
