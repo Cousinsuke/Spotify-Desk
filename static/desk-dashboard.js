@@ -519,7 +519,11 @@
     }
   }
   function drawGraph() {
-    if (liveGlucose && !historicalGlucose) { drawLiveGraph(); return; }
+    if (liveConfigured && !historicalGlucose) {
+      if (liveGlucose) drawLiveGraph();
+      else byId('deskGlucosePlot').replaceChildren(); // Never show a demo line as live data.
+      return;
+    }
     if (historicalGlucose) { drawHistoricalGraph(); return; }
     const all = Array.from({length:49}, (_, i) =>
       6.3 + 1.05 * Math.sin(i * 0.27) + 0.36 * Math.cos(i * 0.69));
