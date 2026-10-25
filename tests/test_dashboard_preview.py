@@ -44,6 +44,25 @@ class DashboardPreviewTests(unittest.TestCase):
         self.assertNotIn('https://api.libreview', js.lower())
         self.assertNotIn('librelinkup.com', js.lower())
 
+    def test_minimal_glucose_screen_keeps_live_safety_and_chart_controls(self):
+        js = (ROOT / "static/desk-dashboard.js").read_text(encoding="utf-8")
+        css = (ROOT / "static/desk-dashboard.css").read_text(encoding="utf-8")
+        self.assertIn('class="desk-glucose-readout"', js)
+        self.assertIn('class="desk-glucose-trend"', js)
+        self.assertIn('glucoseNumber.textContent = data.latest.mmol.toFixed(1)', js)
+        self.assertIn('glucoseTrend.textContent = TREND_SYMBOLS[data.latest.direction]', js)
+        self.assertIn("glucosePanel.dataset.feedStatus = 'live'", js)
+        self.assertIn("glucoseBadge.textContent = data.status === 'stale' ? 'STALE' : 'OFFLINE'", js)
+        self.assertIn("Never show a demo line as live data", js)
+        self.assertIn('NOT FOR TREATMENT', js)
+        self.assertIn('Use the Libre app for decisions and alarms', js)
+        self.assertIn("['home', 'Home']", js)
+        for hours in ('3','6','12'):
+            self.assertIn('data-hours="' + hours + '"', js)
+        self.assertIn('#desk-glucose[data-feed-status="live"]', css)
+        self.assertIn('#desk-glucose[data-feed-status="offline"]', css)
+        self.assertIn('#desk-glucose[hidden]{display:none}', css)
+
     def test_browser_script_syntax(self):
         node = shutil.which('node')
         if not node:
