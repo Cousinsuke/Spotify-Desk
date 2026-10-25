@@ -19,7 +19,8 @@ from flask import Flask, Response, jsonify, redirect, render_template, request, 
 from spotipy.cache_handler import CacheFileHandler
 from spotipy.exceptions import SpotifyException
 from spotipy.oauth2 import SpotifyPKCE
-from device_bridge import install_device_bridge
+from device_bridge import install_device_bridge, is_loopback
+from glucose_live import LiveGlucose
 
 # One shared Flask interface; select only the platform-specific local adapter.
 if sys.platform == 'win32':
@@ -541,6 +542,25 @@ device_store = install_device_bridge(
     state_cb=_device_state, command_cb=_device_command,
     artwork_cb=local_companion.artwork, meter_cb=_device_meter,
 )
+
+
+# Local-only secondary CGM display. Never expose this to the HTTP LAN device
+# interface: a real physical glucose display requires a separate secured link.
+glucose_live = LiveGlucose.from_environment()
+
+@app.get('/api/device/glucose')
+def device_glucose():
+    if not is_loopback(request.remote_addr):
+        return jsonify({'ok':False, 'error':'Glucose data is local-only.'}), 403
+    origin = request.headers.get('Origin')
+    if origin and origin.rstrip('/') != request.host_url.rstrip('/'):
+        return jsonify({'ok':False, 'error':'Invalid origin.'}), 403
+    if not device_store.get(request.headers.get('Authorization')):
+        return jsonify({'ok':False, 'error':'Pair this device first.'}), 401
+    response = jsonify({'ok':True, **glucose_live.state()})
+    response.headers['Cache-Control'] = 'no-store'
+    return response
+
 
 # Avoid printing Spotify's short-lived OAuth authorization codes in terminal logs.
 from werkzeug.serving import WSGIRequestHandler
