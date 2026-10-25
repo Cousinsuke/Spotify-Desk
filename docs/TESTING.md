@@ -4,6 +4,10 @@ Never conflate **implemented**, **statically checked**, **runtime-tested**, and 
 
 ## Accepted evidence
 
+- **2026-10-25 multi-dashboard browser preview, Windows 11:** user screenshot-validated Home/clock, all four screen tabs, paired PC status, live **Bournemouth Open-Meteo** current/hourly weather data, and a prominently marked sample-only Libre glucose graph at 6h. User stated it looks like it works. This is visual/browser acceptance of the preview, **not** live CGM integration, actual media-control tests, switching glucose ranges, Omarchy or ESP32 validation.
+- **2026-10-25 Windows regression run:** Python 3.13 venv, 44 tests, **42 pass / 2 errors** (`test_linux_companion.test_empty_player_list` and `.test_spotify_track`; Linux-only adapter invoked on Windows, resulting in `KeyError: has_playback`). Dashboard-specific tests and device LAN allowlist test passed. `node --check static/desk-dashboard.js` succeeded. Nonfatal file-handle ResourceWarnings appeared. A cross-platform test-selection fix is deferred; do not claim the whole suite passes.
+- **2026-10-25 Spotify OAuth:** `client_id: Invalid` seen on original `/` login, independent from paired PC device simulator. Spotify app/client ID verification still needed before claiming Spotify Wi-Fi playback functioning on this new Windows checkout.
+
 - Phase 4.2: user confirmed PC/Wi-Fi and Spotify volume synchronization on **Windows and Omarchy**.
 - Phase 5.1: browser simulator UI shown and refined after design regression.
 - Phase 5.2: Omarchy tests returned **39 passed**; user confirmed artwork did not become stuck. The log no longer contained repeated artwork-404 responses during the recorded test.
