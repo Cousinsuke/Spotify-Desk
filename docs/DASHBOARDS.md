@@ -9,6 +9,10 @@
 **Implementation completed, live account validation pending.** The Glucose screen can now consume a frequently updated **Gluroo Global Connect / Nightscout-compatible HTTPS source** through the local PC server, with reading timestamps, trend arrows, 3/6/12h history, caching and stale-data labels. This is not an Abbott API and not a standalone ESP32 connection; it requires setting up a LibreLinkUp follower account, connecting it through Gluroo and supplying private GGC credentials in the PC environment. No personal readings have been tested. **See [GLUCOSE-LIVE.md](GLUCOSE-LIVE.md)** for setup, security and third-party privacy implications. The historical CSV importer remains an optional fallback when no live source is configured. The health endpoint is restricted to localhost and excluded from plain-HTTP device LAN routes.
 
 ## Screens
+## Glucose UI polish — 2026-10-25 (preview awaiting visual review)
+
+User confirmed an authenticated local Gluroo feed delivering recent readings and graph on Windows 11; all six focused Python backend tests passed. The Glucose v0.4 screen now makes **the reading and trend arrow the primary focus**, keeps a compact latest-reading age/time, trims duplicated labels and clutter, and retains a visible LIVE/STALE/OFFLINE pill and one low-profile **NOT FOR TREATMENT** reminder. A simplified graph retains 3/6/12h navigation and gap handling. No CGM data or credentials are committed. This appearance change has **not yet been visually approved**. Other dashboard screens and proven Spotify playback behavior are intended to remain unchanged.
+
 
 - **Home (default):** local clock/date, music shortcut reflecting the existing player, current weather summary once loaded, and glucose connection status.
 - **Spotify:** the unmodified Phase 5.2 paired hardware player, playback/volume actions, artwork retry, album glow, and PC/Wi-Fi mode.
