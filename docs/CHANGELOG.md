@@ -2,6 +2,11 @@
 
 This is **historical milestone tracking**, not a separate implementation branch for each ZIP. The accepted Phase 5.2 source is committed at `7172c2e`; historical ZIPs are reference snapshots only. Prefer Git commits, tags and releases for future work rather than duplicated source folders.
 
+## LibreView historical CSV browser importer (pending user testing) — 2026-10-25
+- Added browser-local, file-only LibreView CSV/TSV importer for the glucose graph: historic record type 0, explicit date-order choice, unit conversion, 3/6/12h history views, timestamp labels, discontinuous line gaps, Clear action. No Abbott login or network API, no glucose upload, no real-time values; explicitly **HISTORY · NOT LIVE**. Restricted to simulator views hosted on 127.0.0.1/localhost on the importing PC. Existing physical media controls and Spotify player preserved.
+- Added pure JS parser and synthetic offline assertions, updated Python static/allowlist tests and cache versions. Assistant-side parser assertions and JS parsing passed; **Windows browser runtime tests for CSV import are pending**.
+- Manual LibreView Glucose History CSV download is documented in `docs/DASHBOARDS.md`. An unofficial automated LibreLinkUp integration is intentionally not included pending lawful and secure integration research.
+
 ## Multi-dashboard browser preview, Windows visual validation — 2026-10-25
 - User pulled additive Home / Spotify / Weather / sample Glucose `/device` preview through `16d78d0`, installed a Windows Python 3.13 virtual environment and dependencies, and provided screenshots of all four screens. Browser device state showed `PC · Paired`/CONNECTED; Home clock and summary rendered, Bournemouth weather retrieved real Open-Meteo data (11°C, 5 hourly tiles in sample screenshot), glucose page showed labelled mock graph with no live value. User indicated preview works.
 - `node --check` and four dashboard-specific Python checks passed, but the **full Windows suite was 42/44 passing**; two pre-existing Linux-only companion tests error on Windows (`KeyError: has_playback`). Nonfatal test file-handle ResourceWarnings remain. Spotify PC playback/buttons, all glucose chart range buttons, Omarchy and ESP32 not freshly runtime tested. The original `/` Spotify OAuth returned `client_id: Invalid` in a separate flow; resolve developer app ID/status later.
