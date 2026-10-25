@@ -1,5 +1,11 @@
 # ChatGPT handoff — Spotify Desk Thing
 
+## Glucose BOTH graph alignment — 2026-10-25 (v0.9; pending user screenshot)
+
+- User provided Windows screenshots of v0.8 at 1h/24h AUTO and FULL, confirmed overall square-live-plus-graph layout looks good but noticed the plot top edge **lower than the live reading square**. The chart header (GLUCOSE TREND + time-range/scale buttons) was in the same flex column and consumed height above the plot.
+- Added narrow scope CSS to `static/desk-dashboard.css`: in Glucose BOTH, position header/controls absolutely above the chart column, shorten and vertically centre the chart column to align plot top with the left square, maintain actual chart SVG width and prior gap-safe glucose rendering. Under a 610px-wide browser, restore normal heading flow for stacked layout. No JS/Gluroo logic or Spotify player changed.
+- Template CSS cache v0.9; Python static dashboard test updated. Source validation performed, live browser screenshot revalidation pending. Next: pull main, reload and compare top boundaries of square and graph for BOTH at 1h/24h.
+
 ## Glucose BOTH mode horizontal experiment — 2026-10-25 (v0.8; user visual validation pending)
 
 - User confirmed v0.7 graph looks good and supplied a Figma-inspired screenshot for an alternative **BOTH** glucose layout patterned after the Spotify player: **square LIVE reading tile on the left**, **wider recent-glucose chart on the right**, keeping all existing backgrounds/details, 800×480 screen, real Gluroo feed, 4–7 range, time and scale buttons. This replaces only the composition inside Glucose BOTH; LIVE-only and GRAPH-only are unchanged.
