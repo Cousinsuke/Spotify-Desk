@@ -67,6 +67,31 @@ class DashboardPreviewTests(unittest.TestCase):
             capture_output=True, text=True, timeout=15, check=False)
         self.assertEqual(result.returncode, 0, result.stderr)
 
+    def test_home_weather_icon_and_glucose_trend_and_footer_fit(self):
+        js = (ROOT / "static/desk-dashboard.js").read_text(encoding="utf-8")
+        css = (ROOT / "static/desk-dashboard.css").read_text(encoding="utf-8")
+        self.assertIn('id="deskHomeWeatherIcon"', js)
+        self.assertIn("setText('deskHomeWeatherIcon', icon)", js)
+        self.assertIn('id="deskHomeGlucoseArrow"', js)
+        self.assertIn('function updateHomeGlucose(status, latest, ageSeconds)', js)
+        self.assertIn("const trend = TREND_SYMBOLS[latest.direction] || ''", js)
+        self.assertIn("updateHomeGlucose('live', data.latest, data.age_seconds)", js)
+        self.assertIn("updateHomeGlucose(data.status, data.latest, data.age_seconds)", js)
+        self.assertNotIn("data.latest.mmol.toFixed(1) + ' mmol/L'", js)
+        self.assertIn('.screen .desk-home-weather-symbol', css)
+        self.assertIn('.screen .desk-home-glucose-arrow[hidden]{display:none}', css)
+        self.assertIn('.screen #desk-weather .desk-weather-note', css)
+        self.assertIn('Every 15 min', js)
+
+    def test_home_glucose_unit_and_stale_safety_offline(self):
+        node = shutil.which('node')
+        if not node:
+            self.skipTest('Node.js not installed')
+        result = subprocess.run(
+            [node, str(ROOT / 'tests' / 'check_home_glucose.cjs')],
+            capture_output=True, text=True, timeout=15, check=False)
+        self.assertEqual(result.returncode, 0, result.stderr)
+
     def test_glucose_only_uses_clearly_labeled_sample_values(self):
         js = (ROOT / "static/desk-dashboard.js").read_text(encoding="utf-8")
         self.assertIn('SAMPLE DATA', js)
