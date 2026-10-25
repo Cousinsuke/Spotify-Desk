@@ -1,5 +1,11 @@
 # Multi-dashboard browser preview — Home, Weather and Glucose
 
+## Spotify-style BOTH layout prototype — 2026-10-25 (v0.8; not yet user-approved)
+
+The Glucose page BOTH layout now uses a square current-reading tile on the left, with the real-time/glucose history chart in a wider adjacent column on the right, following the user's Figma sketch and existing Spotify album-art/player composition. The **background, header, LIVE/STale/OFFLINE status pill, 4–7 shaded target, timestamp, history windows and AUTO/FULL scale choices** remain as before. The update is **presentation only**, not a change to CGM readings or clinical functionality. LIVE-only and GRAPH-only modes stay separate and keep their established layouts.
+
+The chart SVG uses its rendered width rather than compressing a 700px viewBox inside a narrower right column; resizing redraws the geometry. The chart column has a 240px height cap to retain legible proportions in 800×480. At very narrow simulator widths, BOTH stacks rather than squishing the graph. New assistant-side tests passed but **user Windows visual acceptance is pending**.
+
 ## AUTO Y-axis refinement — 2026-10-25 (v0.7; visual acceptance pending)
 
 On AUTO, the chart now starts at 3–12 mmol/L with whole-number axis labels (normally 3, 4.0, 7.0, 9, 12; 4.0 and 7.0 label the 4–7 shaded display band). Former fractional 9.6 and padded 2.5 are removed. The bounds extend to accommodate true readings below 3 or above 12 without clipping, and crowded labels are suppressed. FULL remains 3–21 mmol/L in increments of 3. Chart tests passed in assistant JavaScript runner; Windows user visual check pending. This changes no source readings, Gluroo polling, medical alerts or media controls.
