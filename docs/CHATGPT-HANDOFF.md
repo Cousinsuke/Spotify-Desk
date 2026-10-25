@@ -1,5 +1,15 @@
 # ChatGPT handoff — Spotify Desk Thing
 
+## Glucose v0.7 AUTO axis — 2026-10-25 (awaiting new screenshot)
+
+- User observed AUTO labels 12, 9.6, 7, 4, 2.5 in v0.6. Old code selected an interpolated quartile and a padded lower bound. User requested a baseline of 3–12 mmol/L, whole-number supporting labels, retaining 4–7 reference band, and automatic extension only for actual outlier readings.
+
+- v0.7 defaults to 3–12 with Y ticks 3, 4.0, 7.0, 9, 12. Only 4.0 and 7.0 remain decimal markers for target range. AUTO expands below 3 to a whole number and above 12 to the next multiple of 3 when actual readings demand it. No cropping. Five labels maximum, 15 SVG px minimum spacing with 11px font so default 3/4 pair stays legible.
+
+- FULL is unchanged at 3–21 in steps of 3. Changed static/glucose-chart.js, tests/check_glucose_chart.cjs, template chart script cache to v0.7 and corresponding tests. Assistant-side JS fixture checks passed; user runtime screenshots for v0.7 pending. No Gluroo/API, Spotify, credentials or sensor-data modifications.
+
+- Next: user pulls main, runs chart tests, restarts existing server in same Windows PowerShell session, verifies AUTO 3/6h and FULL in the 800×480 simulator.
+
 ## Glucose chart scale and label fix — 2026-10-25 (v0.6, pending user runtime check)
 
 - User provided live Windows screenshots showing LIVE / GRAPH / BOTH modes and clock-time chart plots at 1h and 3h. All modes looked operational. Requested **FULL scale maximum 21**, with axis markings **21, 18, 15, 12, 9, 6, 3**, and an AUTO y-axis fix: reference numbers near 7.0 overlap when graph time range exceeds one hour.
