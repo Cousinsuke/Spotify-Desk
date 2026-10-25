@@ -1,5 +1,10 @@
 # Changelog / version history
 
+## Glucose v0.9: Match graph top edge with LIVE square — 2026-10-25
+
+- Visual follow-up: v0.8 square reading tile and plot were not quite top-aligned because GLUCOSE TREND and chart controls contributed to right-column height.
+- Scoped BOTH chart heading above the plot using absolute positioning, with a centred plot column; restores normal stacked heading behaviour at narrow widths. Graph scale, real CGM readings, target band, safety labels, and Spotify remain unchanged. CSS cache v0.9; static regression test added. Windows screenshot acceptance pending.
+
 ## Experimental Spotify-style side-by-side glucose BOTH layout — 2026-10-25 (v0.8)
 
 - User provided a two-column Figma concept: LIVE reading in a square analogous to Spotify album art, time graph in the right column analogous to playback details. LIVE-only and GRAPH-only retained.
