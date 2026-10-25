@@ -4,6 +4,16 @@
 
 Updated: 2026-10-25
 
+## Glucose dashboard Libre-style chart + layouts — 2026-10-25 (implemented; not runtime accepted yet)
+
+- User supplied an official Libre app screenshot as visual reference and asked for **real wall-clock labels under chart**, a shaded **4.0–7.0 mmol/L preferred display band**, graph scaling that reveals changes, **1h/3h/6h/12h/24h** time windows, and **Live / Graph / Both** layouts. They want the glucose top-right WI-FI/PC selector replaced by these view choices only while on the Glucose screen. Existing Spotify control semantics **must remain unchanged**.
+- Implemented a standalone **`static/glucose-chart.js`** module: local `en-GB` x-axis clock labels from actual sample timestamps, 4–7 green shaded band, y-axis reference values and boundaries, optional AUTO zoom or FULL 0–40 mmol/L scale, missing-reading segment breaks greater than 20 minutes and latest reading dot. Range selection supports 1,3,6,12,24h. Previous fixed broad y-scale was flattening lines. `static/desk-dashboard.js` now uses this renderer for Gluroo live, imported history and clearly labelled sample data.
+- Glucose-only top-right buttons replace the visible Spotify WI-FI/PC selector with **LIVE / GRAPH / BOTH**; original Spotify controls stay in DOM and reappear unchanged on Spotify and other pages. The view mode preference is localStorage-only; no glucose values stored. Live-only hides chart, Graph-only hides large number, Both shows both. Stale/offline and non-treatment labels remain visible. Browser assets versioned to v0.5; `device_bridge.py` allowlists only the public chart static asset, **not** the private glucose API.
+- Added `tests/check_glucose_chart.cjs` synthetic assertions for time labels, shading, scaling, gaps and five ranges. Updated Python dashboard and LAN static allowlist tests. Assistant-side V8 chart assertions and JS syntax passed; **no new screenshot/runtime user validation yet**.
+- **Live data limits:** provider GGC states history is roughly the previous 24h, **up to 730 records**; thus 24h is a plot window, not a guarantee of complete every-minute values. Target band 4–7 is only this user's graph preference and never used as a medical alert/treatment recommendation. Glucose route remains local-only, not encrypted to physical ESP32.
+- Next: user pulls main in Windows, restarts Flask from the existing credential-configured PowerShell session, runs focused tests, checks v0.5 at 800×480 and switches every view/range while Gluroo stays live. Request feedback before marking UI accepted.
+
+
 ## Glucose screen visual refresh — 2026-10-25 (implemented; awaiting user review)
 
 - User ran six glucose backend tests on Windows 11, **all passed**, configured their own Gluroo GGC account in local PowerShell and demonstrated the actual `/device` Glucose tab displaying **LIVE FEED**, a recent mmol/L value/trend and non-synthetic time-series graph. Flask route and pairing were working. Avoid storing the user's actual glucose values or secrets in project docs.
