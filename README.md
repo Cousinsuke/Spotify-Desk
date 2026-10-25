@@ -42,7 +42,7 @@ An additive **Home / Weather / Glucose** preview now exists in the paired `/devi
 
 ## Libre-style glucose timeline preview (2026-10-25)
 
-Glucose v0.5 adds **real clock-time labels**, a user-selected **4–7 mmol/L shaded display band**, responsive auto-scale/full-scale graph controls and **1h / 3h / 6h / 12h / 24h** options. On the Glucose page only, the top-right Wi-Fi/PC control is visually replaced by **LIVE / GRAPH / BOTH** layout choices; Spotify's actual playback mode controls remain unchanged. This UI update is committed but **awaits Windows visual acceptance**. See [dashboard notes](docs/DASHBOARDS.md).
+Glucose v0.5 adds **real clock-time labels**, a user-selected **4–7 mmol/L shaded display band**, responsive auto-scale/full-scale graph controls and **1h / 3h / 6h / 12h / 24h** options. On the Glucose page only, the top-right Wi-Fi/PC control is visually replaced by **LIVE / GRAPH / BOTH** layout choices; Spotify's actual playback mode controls remain unchanged. The v0.5 layouts were shown running on Windows. A follow-up v0.6 chart fix changes FULL to a Libre-style **3–21 mmol/L axis with 3-unit labels**, removes overlapping AUTO Y-axis ticks and awaits a quick visual check. See [dashboard notes](docs/DASHBOARDS.md).
 
 ## Live glucose bridge — Gluroo / Nightscout (2026-10-25)
 
