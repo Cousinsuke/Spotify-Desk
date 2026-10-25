@@ -2,6 +2,10 @@
 
 This is **historical milestone tracking**, not a separate implementation branch for each ZIP. The accepted Phase 5.2 source is committed at `7172c2e`; historical ZIPs are reference snapshots only. Prefer Git commits, tags and releases for future work rather than duplicated source folders.
 
+## Live CGM feed via Gluroo / Nightscout-compatible HTTPS — 2026-10-25
+- Added opt-in local-only live glucose bridge, configured through PowerShell environment variables, not stored in the repo. Gluroo supports LibreLinkUp follower data plus an experimental documented Nightscout-compatible API. Python service enforces HTTPS, secret-header access, 150s+ polling, rate-limit handling, freshness checks and unit conversion. Browser auto-displays a current-received reading, trend arrow, time-series chart or explicit STALE / OFFLINE state (no substituted sample data).
+- Added localhost-only, paired-bearer-authenticated `/api/device/glucose`; route excluded from existing HTTP LAN allowlist. No CGM data available to real ESP32 devices through this prototype transport. Added `tests/test_glucose_live.py`; real upstream/GlucoView/Gluroo account validation pending. Full account setup and privacy warnings in `docs/GLUCOSE-LIVE.md`.
+
 ## LibreView historical CSV browser importer (pending user testing) — 2026-10-25
 - Added browser-local, file-only LibreView CSV/TSV importer for the glucose graph: historic record type 0, explicit date-order choice, unit conversion, 3/6/12h history views, timestamp labels, discontinuous line gaps, Clear action. No Abbott login or network API, no glucose upload, no real-time values; explicitly **HISTORY · NOT LIVE**. Restricted to simulator views hosted on 127.0.0.1/localhost on the importing PC. Existing physical media controls and Spotify player preserved.
 - Added pure JS parser and synthetic offline assertions, updated Python static/allowlist tests and cache versions. Assistant-side parser assertions and JS parsing passed; **Windows browser runtime tests for CSV import are pending**.
