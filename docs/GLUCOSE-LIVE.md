@@ -24,7 +24,7 @@ Gluroo Global Connect HTTPS Nightscout-compatible API
 Python glucose_live.py on Windows / Omarchy companion
     ↓ authenticated, loopback-only /api/device/glucose
 Browser simulator /device on the SAME PC
-    → live-received mmol/L reading, trend, up to 12h history
+    → live-received mmol/L reading, trend, up to 24h timeline (source-limited)
 ```
 
 The phone still needs to be connected to the internet and uploading sensor readings. Neither this dashboard nor Gluroo replaces the official app or its alarms. This is **near-real-time at best**: sensor updates may be minute-level on the phone, but Gluroo's downstream CGM sync can be 2–5 minutes, and our server polls every **150 seconds**. Do not claim 60-second end-to-end latency.
