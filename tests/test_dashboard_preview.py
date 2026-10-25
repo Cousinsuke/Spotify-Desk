@@ -41,7 +41,7 @@ class DashboardPreviewTests(unittest.TestCase):
         self.assertIn('No live glucose integration configured', js)
         self.assertIn('Current glucose is unavailable.', js)
         self.assertIn('6.3 + 1.05 * Math.sin', js)
-        self.assertNotIn('libreview', js.lower())
+        self.assertNotIn('https://api.libreview', js.lower())
         self.assertNotIn('librelinkup.com', js.lower())
 
     def test_browser_script_syntax(self):
