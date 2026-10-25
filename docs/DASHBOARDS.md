@@ -1,5 +1,9 @@
 # Multi-dashboard browser preview — Home, Weather and Glucose
 
+## Weather v1.0 — fixed Bournemouth, three-day forecast (2026-10-25)
+
+The user accepted the current Glucose layout and requested Weather changes: remove the editable city field, hardcode Bournemouth, and show the next couple of days rather than hourly tiles. The updated browser /device Weather tab uses fixed town-centre coordinates **50.72098, −1.87669** (Ordnance Survey Open Names via [GetTheData](https://www.getthedata.com/bournemouth/where-is-bournemouth)) and the Open-Meteo daily API to display **Today, Tomorrow and the following day**. Each card displays a date, condition icon/summary, day's forecast high and low temperatures and maximum daily chance of precipitation. The existing current-conditions section and 15-minute refresh remain. Only the weather JS/CSS and its source tests changed; Gluroo, Spotify playback, the Home weather tile and private LAN policies remain unchanged. The CSS/JS cache versions are **v1.0**. This is a code-level implementation awaiting the user's Windows screenshot, not yet device-validated.
+
 ## Spotify-style BOTH layout prototype — 2026-10-25 (v0.8; not yet user-approved)
 
 The Glucose page BOTH layout now uses a square current-reading tile on the left, with the real-time/glucose history chart in a wider adjacent column on the right, following the user's Figma sketch and existing Spotify album-art/player composition. The **background, header, LIVE/STale/OFFLINE status pill, 4–7 shaded target, timestamp, history windows and AUTO/FULL scale choices** remain as before. The update is **presentation only**, not a change to CGM readings or clinical functionality. LIVE-only and GRAPH-only modes stay separate and keep their established layouts.
@@ -38,7 +42,7 @@ User confirmed an authenticated local Gluroo feed delivering recent readings and
 
 - **Home (default):** local clock/date, music shortcut reflecting the existing player, current weather summary once loaded, and glucose connection status.
 - **Spotify:** the unmodified Phase 5.2 paired hardware player, playback/volume actions, artwork retry, album glow, and PC/Wi-Fi mode.
-- **Weather:** city search, temperature, condition, feels-like temperature, humidity, wind, rain and five hourly forecast tiles, with a 15-minute in-memory update interval. Open-Meteo geocoding and forecast are fetched directly by the simulator browser over HTTPS. No API key for non-commercial prototype use. **Initial city is example London**; a selected city is remembered locally in the browser. No precise geolocation requested. On errors the app reports the problem and retains the last successful forecast in memory.
+- **Weather (v1.0):** permanently fixed **Bournemouth, UK** (town-centre coordinates); no input, city history, geolocation or geocoding requests. Displays current temperature, condition, feels-like temperature, humidity, wind and precipitation plus a **three-day forecast (Today, Tomorrow, following day)** with daily high/low temperatures, condition and maximum rain probability. Requests Open-Meteo current + daily fields for Europe/London, refreshing every 15 minutes when the view is active. On failure the app shows an error and retains the last successful forecast in memory. The frontend API does not require a key for non-commercial prototype use.
 - **Glucose:** disconnected status and an explicitly identified **synthetic sample graph** with 3h/6h/12h options. The current-reading field deliberately shows --.- mmol/L. **No sensor connection, real Abbott/Libre credentials, live glucose value, LibreLinkUp scraping or real glucose data is stored or transmitted.**
 
 Navigate by touchscreen tabs or horizontal swipes over non-control areas. Existing physical media controls keep their current purpose. The old four-key simulator is deliberately unchanged until separately adapted to the agreed three-key plus push-knob physical layout.
@@ -72,8 +76,8 @@ Run these commands from an existing checkout in your Projects directory:
 
 Open http://127.0.0.1:8888/device and pair using http://127.0.0.1:8888/pair if necessary.
 
-1. Home opens first; clock updates; London weather tile populates when online.
-2. Weather supports another city, shows five hourly tiles, and displays an error if a city is invalid or the weather service cannot be reached.
+1. Home opens first; clock updates; Bournemouth weather tile populates when online.
+2. Weather shows Bournemouth automatically with **three daily forecast cards**, current conditions and an offline/error message if Open-Meteo is unavailable. No city-selection input should be present.
 3. Glucose remains clearly SAMPLE DATA and Not connected; 3/6/12-hour preview graphs change without real readings.
 4. Spotify remains functional: previous/play/next, PC/Wi-Fi, volume routing, artwork, pairing/reconnect.
 5. All tabs and swipe interactions remain within the 800×480 screen.
@@ -120,6 +124,6 @@ The broader Windows suite previously reported 42 passes and 2 Linux-only failure
 ## Next steps
 
 1. User runtime validation and UI polish.
-2. Weather location selection and richer forecasts after first-pass testing.
+2. Validate the fixed Bournemouth three-day forecast and refine visual spacing if needed; avoid adding unused location settings.
 3. User-test local LibreView CSV import with a real file privately (without sharing it), verify the date order, graph gaps and historical labels; then research permitted live-data routes and an appropriately secured bridge.
 4. Port designs into ESP-IDF/LVGL only after Waveshare hardware and firmware proof-of-concept. Browser CSS/JS cannot run directly on ESP32.
