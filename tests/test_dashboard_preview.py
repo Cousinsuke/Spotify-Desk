@@ -111,6 +111,23 @@ class DashboardPreviewTests(unittest.TestCase):
         self.assertIn("glucoseBadge.textContent = 'LIVE'", js)
         self.assertIn("glucoseBadge.textContent = data.status === 'stale' ? 'STALE' : 'OFFLINE'", js)
 
+    def test_both_graph_header_no_longer_pushes_graph_down(self):
+        css = (ROOT / "static/desk-dashboard.css").read_text(encoding="utf-8")
+        start = css.index("/* v0.9 — Align the BOTH graph border")
+        alignment = css[start:]
+        self.assertIn('data-glucose-view="both"] .desk-glucose-chart-column', alignment)
+        self.assertIn('position:relative;', alignment)
+        self.assertIn('height:calc(100% - 22px);', alignment)
+        self.assertIn('bottom:calc(100% + 7px);', alignment)
+        self.assertIn('position:absolute;', alignment)
+        self.assertIn('height:100%;', alignment)
+        self.assertIn('@media(max-width:610px)', alignment)
+        self.assertIn('position:static;', alignment)
+        # The existing views and playback selectors must remain unchanged.
+        self.assertIn('data-glucose-view="live"] .desk-glucose-chart-column', css)
+        self.assertIn('data-glucose-view="graph"] .desk-glucose-info{display:none}', css)
+        self.assertIn('.surface[data-desk-page="glucose"] .topbar .mode-switch{display:none}', css)
+
     def test_libre_style_chart_parser(self):
         node = shutil.which("node")
         if not node:
