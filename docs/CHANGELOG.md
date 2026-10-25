@@ -1,5 +1,11 @@
 # Changelog / version history
 
+## Weather/Home v1.1: footer fit and dynamic Home tiles — 2026-10-25
+
+- User screenshots confirmed Bournemouth current weather and three-day cards render, but Weather's updated-source note was clipped by 800×480 bounds. Reduced Weather-only header/current condition/card spacing and shortened the note to a compact update timestamp and 15-minute refresh descriptor.
+- Home Weather displays the condition icon sourced from the same weather code as the Weather panel, beside the temperature. Home Glucose displays only current mmol/L **numeric value without unit label** and the actual Gluroo trend arrow; an accessible label retains units and a stale/unknown feed never shows a misleading arrow.
+- Added offline Node fixtures for Home CGM trends and Weather condition icon and expanded Python preview tests; checks passed in assistant-side JavaScript runner. Script/CSS caches bumped to v1.1; user Windows visual verification pending. Full Glucose graph, Spotify transport and CGM source remain unchanged.
+
 ## Weather v1.0: Bournemouth and three-day forecast — 2026-10-25
 
 - After user accepted final Glucose layout, Weather input/city search and browser-saved location were removed. Fixed Bournemouth town-centre coordinates (50.72098, -1.87669) and Europe/London timezone; direct Open-Meteo call without geocoding.
