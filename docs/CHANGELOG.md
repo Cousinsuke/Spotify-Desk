@@ -2,6 +2,11 @@
 
 This is **historical milestone tracking**, not a separate implementation branch for each ZIP. The accepted Phase 5.2 source is committed at `7172c2e`; historical ZIPs are reference snapshots only. Prefer Git commits, tags and releases for future work rather than duplicated source folders.
 
+## Multi-dashboard browser preview, Windows visual validation — 2026-10-25
+- User pulled additive Home / Spotify / Weather / sample Glucose `/device` preview through `16d78d0`, installed a Windows Python 3.13 virtual environment and dependencies, and provided screenshots of all four screens. Browser device state showed `PC · Paired`/CONNECTED; Home clock and summary rendered, Bournemouth weather retrieved real Open-Meteo data (11°C, 5 hourly tiles in sample screenshot), glucose page showed labelled mock graph with no live value. User indicated preview works.
+- `node --check` and four dashboard-specific Python checks passed, but the **full Windows suite was 42/44 passing**; two pre-existing Linux-only companion tests error on Windows (`KeyError: has_playback`). Nonfatal test file-handle ResourceWarnings remain. Spotify PC playback/buttons, all glucose chart range buttons, Omarchy and ESP32 not freshly runtime tested. The original `/` Spotify OAuth returned `client_id: Invalid` in a separate flow; resolve developer app ID/status later.
+- Documentation/checkpoint update only; no additional dashboard/firmware code or real Libre 2 Plus integration in this entry.
+
 ## Removable underside hatch and Waveshare LCD mounting reference — 2026-10-23
 - Generated new R5 4mm media-control case STEP with screen support cantilevers, rear/underside seating lip, four attached screw bosses and **separate 2mm lift-out underside lid STEP** with 0.4mm nominal edge allowance; both installed and exploded assembly STEP outputs in separate chat ZIP.
 - Screen stand-off targets from manufacturer's actual 2023 reference: 98×60mm pitch, nominal contact W15.85mm; candidate M2.5 lid/screen fasteners require part-specific pilot/strength verification. **16 assistant-side tests pass** including actual STEP CAD validity and zero lid/case solid overlap. Not print/fabrication approved; board installation through underside hatch and screw access unproven.
