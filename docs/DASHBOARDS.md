@@ -1,5 +1,12 @@
 # Multi-dashboard browser preview — Home, Weather and Glucose
 
+## Home tile and Weather clipping polish — 2026-10-25 (v1.1; pending visual review)
+
+- **Weather:** v1.0 screenshot demonstrated Bournemouth and three days populated but showed its Open-Meteo updated-status footer cut off at the bottom. v1.1 reduces Weather-only vertical spacing and shortens that footer to a single compact line. Current observations and three-day forecast remain.
+- **Home Weather:** dynamic current-condition symbol (the same mapping as Weather) is placed next to the temperature rather than relying on the small static category icon.
+- **Home Glucose:** current number plus Gluroo-reported directional trend arrow without visible `mmol/L` suffix; no arrow when direction is unknown or source stale/offline, never infers arrow from the level. Hidden accessible status retains the reading units. Detailed Glucose panel remains as accepted.
+- Focused offline JS/DOM tests passed; browser CSS/JS are v1.1. The physical 800×480 user screenshot is the next acceptance gate.
+
 ## Weather v1.0 — fixed Bournemouth, three-day forecast (2026-10-25)
 
 The user accepted the current Glucose layout and requested Weather changes: remove the editable city field, hardcode Bournemouth, and show the next couple of days rather than hourly tiles. The updated browser /device Weather tab uses fixed town-centre coordinates **50.72098, −1.87669** (Ordnance Survey Open Names via [GetTheData](https://www.getthedata.com/bournemouth/where-is-bournemouth)) and the Open-Meteo daily API to display **Today, Tomorrow and the following day**. Each card displays a date, condition icon/summary, day's forecast high and low temperatures and maximum daily chance of precipitation. The existing current-conditions section and 15-minute refresh remain. Only the weather JS/CSS and its source tests changed; Gluroo, Spotify playback, the Home weather tile and private LAN policies remain unchanged. The CSS/JS cache versions are **v1.0**. This is a code-level implementation awaiting the user's Windows screenshot, not yet device-validated.
