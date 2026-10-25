@@ -58,21 +58,22 @@
       '<p class="desk-weather-note" id="deskWeatherNote">Weather data: Open-Meteo</p>',
     '</section>',
     '<section class="desk-panel" id="desk-glucose" role="tabpanel" aria-label="Glucose" hidden>',
-      '<div class="desk-panel-head"><div><span class="desk-kicker">GLUCOSE DASHBOARD · PROTOTYPE</span>',
+      '<div class="desk-panel-head"><div><span class="desk-kicker">GLUCOSE</span>',
       '<h2>Libre 2 Plus</h2><p class="desk-muted">No live glucose integration configured</p></div>',
       '<span class="desk-demo-badge">SAMPLE DATA</span></div>',
-      '<div class="desk-glucose-info"><div><strong>--.- mmol/L</strong><p>Sensor status: not connected<br>Current glucose is unavailable.</p></div>',
-      '<span class="desk-demo-badge">NOT FOR TREATMENT</span></div>',
-      '<div class="desk-chart-head"><strong>Illustrative glucose graph (not your readings)</strong>',
+      '<div class="desk-glucose-info"><div class="desk-glucose-primary"><div class="desk-glucose-readout"><strong>--.-</strong><span class="desk-glucose-unit">mmol/L</span><span class="desk-glucose-trend" aria-label="No trend available"></span></div>',
+      '<p class="desk-glucose-reading-note">Current glucose is unavailable.</p></div></div>',
+      '' ,
+      '<div class="desk-chart-head"><strong>GLUCOSE TREND · SAMPLE DATA</strong>',
       '<div class="desk-chart-range" role="group" aria-label="Sample chart time range">',
       '<button type="button" class="desk-range" data-hours="3">3h</button>',
       '<button type="button" class="desk-range" data-hours="6">6h</button>',
       '<button type="button" class="desk-range" data-hours="12">12h</button>',
       '</div></div>',
       '<div class="desk-plot"><svg id="deskGlucosePlot" viewBox="0 0 700 150" preserveAspectRatio="none" role="img" aria-label="Synthetic glucose values for preview only"></svg>',
-      '<span class="desk-plot-watermark">SAMPLE · NOT LIVE</span></div>',
-      '<div class="desk-plot-axis"><span id="deskGraphStart">12 hours ago</span><span>Example data, mmol/L</span><span>Now</span></div>',
-      '<p class="desk-glucose-footer">Your official Libre app remains the source for readings, alarms and treatment decisions.</p>',
+      '<span class="desk-plot-watermark">SAMPLE</span></div>',
+      '<div class="desk-plot-axis"><span id="deskGraphStart">12h ago</span><span></span><span>Now</span></div>',
+      '<p class="desk-glucose-footer">NOT FOR TREATMENT <span aria-hidden="true">·</span> Use the Libre app for decisions and alarms.</p>',
     '</section>'
   ].join('');
   surface.insertBefore(view, surface.querySelector('#pairOverlay'));
@@ -85,6 +86,7 @@
   const glucoseBadge = glucoseHeader.querySelector('.desk-demo-badge');
   const glucoseNumber = glucosePanel.querySelector('.desk-glucose-info strong');
   const glucoseReadingDetails = glucosePanel.querySelector('.desk-glucose-info p');
+  const glucoseTrend = glucosePanel.querySelector('.desk-glucose-trend');
   const glucoseChartTitle = glucosePanel.querySelector('.desk-chart-head strong');
   const glucoseWatermark = glucosePanel.querySelector('.desk-plot-watermark');
   const glucoseAxis = glucosePanel.querySelector('.desk-plot-axis');
@@ -131,12 +133,13 @@
           {day:'numeric',month:'short',year:'numeric',hour:'2-digit',minute:'2-digit'});
         glucoseBadge.textContent = 'HISTORY · NOT LIVE';
         glucoseSubtitle.textContent = parsed.readings.length + ' exported readings loaded locally';
-        glucoseNumber.textContent = latest.mmol.toFixed(1) + ' mmol/L · historical';
-        glucoseReadingDetails.textContent = 'Last exported point: ' + timeLabel +
-          '. Not a current sensor reading.';
-        glucoseChartTitle.textContent = 'Historic glucose (not live)';
-        glucoseWatermark.textContent = 'HISTORY · NOT LIVE';
-        glucoseAxis.children[1].textContent = 'Historic mmol/L';
+        glucoseNumber.textContent = latest.mmol.toFixed(1);
+        glucoseTrend.textContent = '';
+        glucosePanel.dataset.feedStatus = 'history';
+        glucoseReadingDetails.textContent = 'Exported ' + timeLabel + ' · not live';
+        glucoseChartTitle.textContent = 'GLUCOSE TREND';
+        glucoseWatermark.textContent = 'HISTORY';
+        glucoseAxis.children[1].textContent = '';
         glucoseAxis.children[2].textContent = 'Last export';
         document.querySelector('[data-desk-open="glucose"] .desk-card-value').textContent = 'History loaded';
         const glucoseCard = document.querySelector('[data-desk-open="glucose"] small');
@@ -152,11 +155,13 @@
       clearButton.hidden = true;
       glucoseBadge.textContent = 'SAMPLE DATA';
       glucoseSubtitle.textContent = 'No live glucose integration configured';
-      glucoseNumber.textContent = '--.- mmol/L';
-      glucoseReadingDetails.textContent = 'Sensor status: not connected. Current glucose is unavailable.';
-      glucoseChartTitle.textContent = 'Illustrative glucose graph (not your readings)';
-      glucoseWatermark.textContent = 'SAMPLE · NOT LIVE';
-      glucoseAxis.children[1].textContent = 'Example data, mmol/L';
+      glucoseNumber.textContent = '--.-';
+      glucoseTrend.textContent = '';
+      glucosePanel.dataset.feedStatus = 'sample';
+      glucoseReadingDetails.textContent = 'Current glucose is unavailable.';
+      glucoseChartTitle.textContent = 'GLUCOSE TREND · SAMPLE DATA';
+      glucoseWatermark.textContent = 'SAMPLE';
+      glucoseAxis.children[1].textContent = '';
       glucoseAxis.children[2].textContent = 'Now';
       document.querySelector('[data-desk-open="glucose"] .desk-card-value').textContent = 'Not connected';
       const glucoseCard = document.querySelector('[data-desk-open="glucose"] small');
@@ -195,24 +200,29 @@
     const isLive = data.status === 'live' && valid;
     liveGlucose = valid ? data : null;
     if (isLive) {
-      glucoseBadge.textContent = 'LIVE FEED';
-      glucoseSubtitle.textContent = 'Nightscout-compatible source · automatic refresh';
-      glucoseNumber.textContent = data.latest.mmol.toFixed(1) + ' mmol/L ' +
-        (TREND_SYMBOLS[data.latest.direction] || '');
-      glucoseReadingDetails.textContent = 'Reading from ' + historyLabel(data.latest.timestamp) +
-        ' · ' + Math.floor(data.age_seconds / 60) + ' min old. Verify on Libre app.';
-      glucoseChartTitle.textContent = 'Latest received readings';
-      glucoseWatermark.textContent = 'SECONDARY · NOT FOR TREATMENT';
+      glucoseBadge.textContent = 'LIVE';
+      glucoseSubtitle.textContent = '';
+      glucoseNumber.textContent = data.latest.mmol.toFixed(1);
+      glucoseTrend.textContent = TREND_SYMBOLS[data.latest.direction] || '';
+      glucoseTrend.setAttribute('aria-label', data.latest.direction || 'Trend unavailable');
+      glucosePanel.dataset.feedStatus = 'live';
+      glucoseReadingDetails.textContent = 'Updated ' + Math.max(0, Math.floor(data.age_seconds / 60)) +
+        'm ago · ' + historyLabel(data.latest.timestamp);
+      glucoseChartTitle.textContent = 'GLUCOSE TREND';
+      glucoseWatermark.textContent = '';
       glucoseHome.textContent = data.latest.mmol.toFixed(1) + ' mmol/L';
       glucoseHomeHint.textContent = 'Feed · ' + Math.floor(data.age_seconds / 60) + 'm old';
     } else {
-      glucoseBadge.textContent = 'STALE / OFFLINE';
-      glucoseSubtitle.textContent = 'Current glucose unavailable · check Libre app';
-      glucoseNumber.textContent = valid ? 'Last: ' + data.latest.mmol.toFixed(1) + ' mmol/L' : '--.- mmol/L';
+      glucoseBadge.textContent = data.status === 'stale' ? 'STALE' : 'OFFLINE';
+      glucoseTrend.textContent = '';
+      glucoseTrend.setAttribute('aria-label', 'No current trend available');
+      glucosePanel.dataset.feedStatus = data.status === 'stale' ? 'stale' : 'offline';
+      glucoseSubtitle.textContent = 'Check Libre app';
+      glucoseNumber.textContent = valid ? data.latest.mmol.toFixed(1) : '--.-';
       glucoseReadingDetails.textContent = valid
-        ? 'Last received ' + historyLabel(data.latest.timestamp) + ' · NOT CURRENT.'
-        : 'No usable recent glucose reading from source.';
-      glucoseChartTitle.textContent = 'Previous readings (not live)';
+        ? 'Last reading ' + historyLabel(data.latest.timestamp) + ' · not current'
+        : 'No recent readings · check Libre app';
+      glucoseChartTitle.textContent = 'GLUCOSE TREND';
       glucoseWatermark.textContent = 'NOT LIVE';
       glucoseHome.textContent = 'Not live';
       glucoseHomeHint.textContent = 'Feed stale or unavailable';
@@ -279,8 +289,8 @@
     const dots = points.map(r=>'<circle cx="' + x(r.timestamp).toFixed(1) +
       '" cy="' + y(r.mmol).toFixed(1) + '" r="2.5" fill="#d9f8e9"/>').join('');
     byId('deskGlucosePlot').innerHTML = grid + lines + dots;
-    setText('deskGraphStart', rangeHours + ' hours ago');
-    glucoseAxis.children[1].textContent = 'Received mmol/L';
+    setText('deskGraphStart', rangeHours + 'h ago');
+    glucoseAxis.children[1].textContent = '';
     glucoseAxis.children[2].textContent = 'Now';
     for (const b of view.querySelectorAll('.desk-range')) {
       b.setAttribute('aria-pressed',String(Number(b.dataset.hours) === rangeHours));
