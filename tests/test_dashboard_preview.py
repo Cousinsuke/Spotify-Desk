@@ -10,7 +10,7 @@ ROOT = Path(__file__).resolve().parents[1]
 class DashboardPreviewTests(unittest.TestCase):
     def test_device_template_loads_dashboard_after_existing_player(self):
         html = (ROOT / "templates/device.html").read_text(encoding="utf-8")
-        self.assertIn('/static/desk-dashboard.css?v=0.8', html)
+        self.assertIn('/static/desk-dashboard.css?v=0.9', html)
         self.assertIn('/static/glucose-history.js?v=0.2', html)
         self.assertIn('/static/glucose-chart.js?v=0.8', html)
         self.assertIn('/static/desk-dashboard.js?v=0.8', html)
