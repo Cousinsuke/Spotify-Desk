@@ -189,6 +189,7 @@
   function showLiveStatus(data) {
     if (historicalGlucose || !data || data.status === 'not_configured') return;
     liveConfigured = true;
+    importActions.hidden = true; // Live mode takes precedence over CSV upload controls.
     const valid = data.latest && Number.isFinite(data.latest.mmol) &&
       Number.isFinite(data.latest.timestamp);
     const isLive = data.status === 'live' && valid;
