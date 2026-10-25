@@ -28,8 +28,23 @@ assert.equal(hour.ticks[4].label,
   new Intl.DateTimeFormat('en-GB',{hour:'2-digit',minute:'2-digit',hour12:false})
     .format(new Date(end)),'last tick should reflect local clock');
 const six=chart.render(rows,{hours:6,endTime:end,scale:'auto'});
-assert.ok(six.bounds.high<13,'auto zoom must emphasize movement');
-assert.ok(six.bounds.low<=4);
+assert.deepEqual(six.bounds,{low:3,high:12},'AUTO default is 3 to 12');
+assert.deepEqual(six.yTicks,[3,4,7,9,12],'AUTO uses 3, target 4/7, and rounded reference ticks');
+assert.match(six.svg,/>4\.0</,'target 4 keeps decimal');
+assert.match(six.svg,/>7\.0</,'target 7 keeps decimal');
+assert.match(six.svg,/>9</,'whole-number 9 reference');
+assert.doesNotMatch(six.svg,/>9\.6</,'no fractional 9.6 label');
+const autoLow=chart.render([{timestamp:end-120000,mmol:2.7}],
+  {hours:3,endTime:end,scale:'auto'});
+assert.deepEqual(autoLow.bounds,{low:2,high:12},'AUTO expands below 3 when needed');
+const autoHigh=chart.render([{timestamp:end-120000,mmol:12.3}],
+  {hours:3,endTime:end,scale:'auto'});
+assert.deepEqual(autoHigh.bounds,{low:3,high:15},'AUTO expands beyond 12 when needed');
+const autoExtreme=chart.render([{timestamp:end-120000,mmol:35.1}],
+  {hours:3,endTime:end,scale:'auto'});
+assert.deepEqual(autoExtreme.bounds,{low:3,high:36},'extreme actual reading remains visible');
+const autoEmpty=chart.render([],{hours:1,endTime:end,scale:'auto'});
+assert.deepEqual(autoEmpty.bounds,{low:3,high:12},'empty AUTO keeps the default scale');
 const full=chart.render(rows,{hours:6,endTime:end,scale:'fixed'});
 assert.deepEqual(full.bounds,{low:3,high:21},'Libre-style full graph should run from 3 to 21');
 assert.deepEqual(full.yTicks,[3,6,9,12,15,18,21],'3 mmol/L tick spacing');
@@ -55,7 +70,7 @@ for (const hours of [1,3,6,12,24]) {
   const c=chart.render(rows,{hours,endTime:end,scale:'auto'});
   const axisY = tick => 160-(tick-c.bounds.low)/(c.bounds.high-c.bounds.low)*144;
   for (let a=0;a<c.yTicks.length;a++) for (let b=a+1;b<c.yTicks.length;b++) {
-    assert.ok(Math.abs(axisY(c.yTicks[a])-axisY(c.yTicks[b]))>=19.999,
+    assert.ok(Math.abs(axisY(c.yTicks[a])-axisY(c.yTicks[b])) >=14.999,
       'AUTO y-axis label collision at '+c.yTicks[a]+'/'+c.yTicks[b]);
   }
 }
@@ -63,11 +78,11 @@ const crowd=chart.render([{timestamp:end-5*60000,mmol:10.8},{timestamp:end-10*60
   {hours:3,endTime:end,scale:'auto'});
 assert.ok(crowd.yTicks.includes(7),'target 7.0 should take priority over nearby midpoint tick');
 assert.ok(!crowd.yTicks.some((v,i)=>crowd.yTicks.slice(i+1).some(w=>Math.abs(crowd.bounds.high-crowd.bounds.low)>0 &&
-  Math.abs(v-w)/(crowd.bounds.high-crowd.bounds.low)*144<19.999)),'no crowding in 3h AUTO');
+  Math.abs(v-w)/(crowd.bounds.high-crowd.bounds.low)*144<14.999)),'no crowding in 3h AUTO');
 assert.throws(()=>chart.render(rows,{hours:2,endTime:end}),/supported range/);
 const none=chart.render([],{hours:3,endTime:end});
 assert.equal(none.noData,true);
 assert.equal(none.segments.length,0);
 const dedup=chart.seriesWindow([...rows,{timestamp:end-5*60000,mmol:5.1}],3,end);
 assert.equal(dedup[dedup.length-1].mmol,5.1);
-console.log('Glucose chart 3-21 full scale, collision-free auto ticks, outliers and gaps: OK');
+console.log('Glucose graph: whole-number AUTO 3–12, dynamic extremes and 3–21 FULL scale: OK');
