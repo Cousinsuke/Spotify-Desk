@@ -1,5 +1,17 @@
 # ChatGPT handoff — Spotify Desk Thing
 
+## Glucose BOTH mode horizontal experiment — 2026-10-25 (v0.8; user visual validation pending)
+
+- User confirmed v0.7 graph looks good and supplied a Figma-inspired screenshot for an alternative **BOTH** glucose layout patterned after the Spotify player: **square LIVE reading tile on the left**, **wider recent-glucose chart on the right**, keeping all existing backgrounds/details, 800×480 screen, real Gluroo feed, 4–7 range, time and scale buttons. This replaces only the composition inside Glucose BOTH; LIVE-only and GRAPH-only are unchanged.
+
+- Implemented `desk-glucose-layout` and `desk-glucose-chart-column` wrappers in `static/desk-dashboard.js`; BOTH uses two columns (218px square reading tile plus flexible timeline plot) in `static/desk-dashboard.css`. The current mmol/L value, trend and age are retained, including clear STALE/OFFLINE and safety labelling. Chart max-height ~240px to avoid vertical over-stretch. Responsive fallback stacks below viewport width 610px.
+
+- `static/glucose-chart.js` now supports variable SVG width: plot uses the actual measured browser width (not a compressed 700px viewBox), retaining readable axis/time labels and preserving 4–7 shading. ResizeObserver recalculates after layout/viewport changes. Chart fixture now tests compact 410px and full 680px rendering; dashboard static tests cover BOTH wrapper, modes and Spotify controls. Assistant-side JS/chart static checks passed, no browser runtime screenshot yet.
+
+- Cache busting: template imports `desk-dashboard.css?v=0.8`, `glucose-chart.js?v=0.8`, `desk-dashboard.js?v=0.8`. No Gluroo server, auth, API, LAN routing or native firmware changes. Do not commit personal health values.
+
+- Next: user pulls GitHub main on Windows 11 and restarts their configured server in the same PowerShell session, visually verifies BOTH at 800×480 and tests LIVE/GRAPH and all 1/3/6/12/24h chart controls. After user acceptance, record approval; otherwise revise this layout.
+
 ## Glucose v0.7 AUTO axis — 2026-10-25 (awaiting new screenshot)
 
 - User observed AUTO labels 12, 9.6, 7, 4, 2.5 in v0.6. Old code selected an interpolated quartile and a padded lower bound. User requested a baseline of 3–12 mmol/L, whole-number supporting labels, retaining 4–7 reference band, and automatic extension only for actual outlier readings.
