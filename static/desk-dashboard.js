@@ -77,6 +77,98 @@
   ].join('');
   surface.insertBefore(view, surface.querySelector('#pairOverlay'));
 
+  // Historical LibreView CSVs are read entirely in this browser. No upload,
+  // localStorage, backend endpoint, Abbott credential, or LAN glucose API.
+  const glucosePanel = byId('desk-glucose');
+  const glucoseHeader = glucosePanel.querySelector('.desk-panel-head');
+  const glucoseSubtitle = glucoseHeader.querySelector('.desk-muted');
+  const glucoseBadge = glucoseHeader.querySelector('.desk-demo-badge');
+  const glucoseNumber = glucosePanel.querySelector('.desk-glucose-info strong');
+  const glucoseReadingDetails = glucosePanel.querySelector('.desk-glucose-info p');
+  const glucoseChartTitle = glucosePanel.querySelector('.desk-chart-head strong');
+  const glucoseWatermark = glucosePanel.querySelector('.desk-plot-watermark');
+  const glucoseAxis = glucosePanel.querySelector('.desk-plot-axis');
+  const importActions = document.createElement('div');
+  importActions.className = 'desk-glucose-actions';
+  const importAllowed = location.hostname === '127.0.0.1' || location.hostname === 'localhost';
+  if (importAllowed) {
+    const dateFormat = document.createElement('select');
+    dateFormat.id = 'deskCsvDateOrder';
+    dateFormat.setAttribute('aria-label', 'CSV day month order');
+    dateFormat.innerHTML = '<option value="DMY">UK D/M/Y</option><option value="MDY">US M/D/Y</option>';
+    importActions.appendChild(dateFormat);
+    const label = document.createElement('label');
+    label.className = 'desk-csv-import';
+    label.textContent = 'Import CSV';
+    const fileInput = document.createElement('input');
+    fileInput.type = 'file';
+    fileInput.accept = '.csv,.tsv,text/csv,text/tab-separated-values';
+    fileInput.id = 'deskHistoryInput';
+    label.appendChild(fileInput);
+    importActions.appendChild(label);
+    const clearButton = document.createElement('button');
+    clearButton.type = 'button';
+    clearButton.textContent = 'Clear';
+    clearButton.id = 'deskClearHistory';
+    clearButton.hidden = true;
+    importActions.appendChild(clearButton);
+    fileInput.addEventListener('change', async () => {
+      const file = fileInput.files && fileInput.files[0];
+      fileInput.value = '';
+      if (!file) return;
+      if (!window.DeskGlucoseHistory) {
+        glucoseSubtitle.textContent = 'Glucose history parser unavailable.';
+        return;
+      }
+      try {
+        if (file.size > 12000000) throw Error('Export is larger than 12 MB.');
+        const text = await file.text();
+        const parsed = window.DeskGlucoseHistory.parseLibreViewCsv(text, {dateOrder:dateFormat.value});
+        historicalGlucose = parsed;
+        clearButton.hidden = false;
+        const latest = parsed.readings[parsed.readings.length - 1];
+        const timeLabel = new Date(latest.timestamp).toLocaleString('en-GB',
+          {day:'numeric',month:'short',year:'numeric',hour:'2-digit',minute:'2-digit'});
+        glucoseBadge.textContent = 'HISTORY · NOT LIVE';
+        glucoseSubtitle.textContent = parsed.readings.length + ' exported readings loaded locally';
+        glucoseNumber.textContent = latest.mmol.toFixed(1) + ' mmol/L · historical';
+        glucoseReadingDetails.textContent = 'Last exported point: ' + timeLabel +
+          '. Not a current sensor reading.';
+        glucoseChartTitle.textContent = 'Historic glucose (not live)';
+        glucoseWatermark.textContent = 'HISTORY · NOT LIVE';
+        glucoseAxis.children[1].textContent = 'Historic mmol/L';
+        glucoseAxis.children[2].textContent = 'Last export';
+        document.querySelector('[data-desk-open="glucose"] .desk-card-value').textContent = 'History loaded';
+        const glucoseCard = document.querySelector('[data-desk-open="glucose"] small');
+        if (glucoseCard) glucoseCard.textContent = 'Exported CSV · not live';
+        drawGraph();
+      } catch (error) {
+        // Do not log file contents, names, glucose records or personally identifying data.
+        glucoseSubtitle.textContent = 'Import failed: ' + String(error.message || 'Invalid CSV');
+      }
+    });
+    clearButton.addEventListener('click', () => {
+      historicalGlucose = null;
+      clearButton.hidden = true;
+      glucoseBadge.textContent = 'SAMPLE DATA';
+      glucoseSubtitle.textContent = 'No live glucose integration configured';
+      glucoseNumber.textContent = '--.- mmol/L';
+      glucoseReadingDetails.textContent = 'Sensor status: not connected. Current glucose is unavailable.';
+      glucoseChartTitle.textContent = 'Illustrative glucose graph (not your readings)';
+      glucoseWatermark.textContent = 'SAMPLE · NOT LIVE';
+      glucoseAxis.children[1].textContent = 'Example data, mmol/L';
+      glucoseAxis.children[2].textContent = 'Now';
+      document.querySelector('[data-desk-open="glucose"] .desk-card-value').textContent = 'Not connected';
+      const glucoseCard = document.querySelector('[data-desk-open="glucose"] small');
+      if (glucoseCard) glucoseCard.textContent = 'Sample graph only';
+      drawGraph();
+    });
+  } else {
+    glucoseSubtitle.textContent = 'Import CSV on the PC using 127.0.0.1 · no live connection';
+  }
+  glucoseHeader.insertBefore(importActions, glucoseBadge);
+  let historicalGlucose = null;
+
   let currentPage = 'home';
   let city = 'London';
   try {
@@ -268,7 +360,49 @@
     }
   });
 
+
+  function drawHistoricalGraph() {
+    const values = historicalGlucose.readings;
+    const latest = values[values.length - 1].timestamp;
+    const from = latest - rangeHours * 3600000;
+    const points = window.DeskGlucoseHistory.historyWindow(values, rangeHours);
+    const numbers = points.map(p => p.mmol);
+    const low = Math.max(0, Math.floor(Math.min(3, ...numbers) - 1));
+    const high = Math.min(40, Math.ceil(Math.max(12, ...numbers) + 1));
+    const x = timestamp => 34 + (timestamp - from) / (latest - from) * 644;
+    const y = value => 132 - (value - low) / (high - low) * 117;
+    const steps = [0,1,2,3,4];
+    const grid = steps.map(n => {
+      const value = low + (high - low) * n / 4;
+      const pos = y(value);
+      return '<line x1="34" y1="' + pos.toFixed(1) + '" x2="682" y2="' + pos.toFixed(1) +
+        '" stroke="#ffffff1a" stroke-width="1"/><text x="2" y="' + (pos + 4).toFixed(1) +
+        '" font-size="10" fill="#b6c4bd">' + value.toFixed(1) + '</text>';
+    }).join('');
+    const segments = [];
+    let segment = [];
+    points.forEach((point, index) => {
+      // A missing sample is a gap, never a straight extrapolated glucose line.
+      if (index && point.timestamp - points[index - 1].timestamp > 20 * 60000) {
+        if (segment.length) segments.push(segment);
+        segment = [];
+      }
+      segment.push(x(point.timestamp).toFixed(1) + ',' + y(point.mmol).toFixed(1));
+    });
+    if (segment.length) segments.push(segment);
+    const traces = segments.map(part => part.length > 1
+      ? '<polyline fill="none" stroke="#a5f2cd" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" points="' + part.join(' ') + '"/>'
+      : '').join('');
+    const dots = points.map(p => '<circle cx="' + x(p.timestamp).toFixed(1) + '" cy="' +
+      y(p.mmol).toFixed(1) + '" r="2.5" fill="#d9f8e9"/>').join('');
+    byId('deskGlucosePlot').innerHTML = grid + traces + dots;
+    setText('deskGraphStart', rangeHours + 'h before last exported point');
+    for (const button of view.querySelectorAll('.desk-range')) {
+      button.setAttribute('aria-pressed', String(Number(button.dataset.hours) === rangeHours));
+    }
+  }
   function drawGraph() {
+    if (historicalGlucose) { drawHistoricalGraph(); return; }
     const all = Array.from({length:49}, (_, i) =>
       6.3 + 1.05 * Math.sin(i * 0.27) + 0.36 * Math.cos(i * 0.69));
     const data = all.slice(-(rangeHours * 4 + 1));
