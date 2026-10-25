@@ -58,7 +58,8 @@ assert.deepEqual(dailyElement.children.map(c=>c.children[4].textContent),['5% ra
 assert.equal(values.deskWeatherLocation,'Bournemouth, United Kingdom');
 assert.equal(values.deskWeatherValue,'11°');
 assert.equal(values.deskWeatherCondition,'Clear sky');
-assert.ok(values.deskWeatherNote.includes('Refreshes every 15 minutes'));
+assert.equal(values.deskHomeWeatherIcon,'☀','Home icon matches current clear sky');
+assert.ok(values.deskWeatherNote.includes('Every 15 min'),'short footer preserves refresh cadence');
 
 // No daily data should give an explicit fallback without inventing forecast.
 const renderWithoutDaily = makeRender(
@@ -74,4 +75,18 @@ const renderWithoutDaily = makeRender(
 renderWithoutDaily();
 assert.equal(dailyElement.children.length,1);
 assert.equal(dailyElement.children[0].textContent,'Daily forecast currently unavailable.');
+const rainy = JSON.parse(JSON.stringify(fixture));
+rainy.current.weather_code = 61;
+const rainyRender = makeRender(
+  {data:rainy},
+  {name:'Bournemouth',country:'United Kingdom'},
+  getCondition, (n,u)=>Number.isFinite(n)?Math.round(n)+u:'--'+u,
+  (id,value)=>values[id]=value,
+  n=>typeof n==='number'&&Number.isFinite(n),
+  id=>id==='deskDaily'?dailyElement:undefined,
+  fakeDocument, new Date('2026-10-25T19:00:00Z').getTime()
+);
+rainyRender();
+assert.equal(values.deskHomeWeatherIcon,'☂','Home icon changes with current conditions');
+
 console.log('Bournemouth 3-day forecast cards and missing-data fallback: OK');
