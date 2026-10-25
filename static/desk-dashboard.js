@@ -11,6 +11,7 @@
   const tabs = [
     ['home', 'Home'], ['spotify', 'Spotify'], ['weather', 'Weather'], ['glucose', 'Glucose']
   ];
+  const brandSub = topbar.querySelector('.brand-sub');
   const nav = document.createElement('nav');
   nav.className = 'desk-tabs';
   nav.setAttribute('role', 'tablist');
@@ -63,7 +64,6 @@
       '<span class="desk-demo-badge">SAMPLE DATA</span></div>',
       '<div class="desk-glucose-info"><div class="desk-glucose-primary"><div class="desk-glucose-readout"><strong>--.-</strong><span class="desk-glucose-unit">mmol/L</span><span class="desk-glucose-trend" aria-label="No trend available"></span></div>',
       '<p class="desk-glucose-reading-note">Current glucose is unavailable.</p></div></div>',
-      '' ,
       '<div class="desk-chart-head"><strong>GLUCOSE TREND · SAMPLE DATA</strong>',
       '<div class="desk-chart-range" role="group" aria-label="Sample chart time range">',
       '<button type="button" class="desk-range" data-hours="3">3h</button>',
@@ -81,6 +81,7 @@
   // Historical LibreView CSVs are read entirely in this browser. No upload,
   // localStorage, backend endpoint, Abbott credential, or LAN glucose API.
   const glucosePanel = byId('desk-glucose');
+  glucosePanel.dataset.feedStatus = 'sample';
   const glucoseHeader = glucosePanel.querySelector('.desk-panel-head');
   const glucoseSubtitle = glucoseHeader.querySelector('.desk-muted');
   const glucoseBadge = glucoseHeader.querySelector('.desk-demo-badge');
@@ -267,8 +268,8 @@
     const maximum = Math.min(40, Math.ceil(Math.max(12, ...points.map(p => p.mmol)) + 1));
     const x = timestamp => 34 + (timestamp - from) / (now - from) * 644;
     const y = value => 132 - (value - minimum) / (maximum - minimum) * 117;
-    const grid = [0,1,2,3,4].map(i => {
-      const n = minimum + (maximum - minimum) * i / 4;
+    const grid = [0,0.5,1].map(fraction => {
+      const n = minimum + (maximum - minimum) * fraction;
       return '<line x1="34" x2="682" y1="' + y(n).toFixed(1) + '" y2="' +
         y(n).toFixed(1) + '" stroke="#ffffff1a"/>' +
         '<text x="2" y="' + (y(n)+4).toFixed(1) + '" font-size="10" fill="#b6c4bd">' +
@@ -285,9 +286,10 @@
     }
     if (part.length) segments.push(part);
     const lines = segments.map(a=>a.length>1?'<polyline points="' + a.join(' ') +
-      '" stroke="#a5f2cd" stroke-width="3" fill="none" stroke-linecap="round"/>':'').join('');
-    const dots = points.map(r=>'<circle cx="' + x(r.timestamp).toFixed(1) +
-      '" cy="' + y(r.mmol).toFixed(1) + '" r="2.5" fill="#d9f8e9"/>').join('');
+      '" stroke="#a5f2cd" stroke-width="3" fill="none" stroke-linecap="round" stroke-linejoin="round"/>':'').join('');
+    const lastPoint = points[points.length - 1];
+    const dots = lastPoint ? '<circle cx="' + x(lastPoint.timestamp).toFixed(1) +
+      '" cy="' + y(lastPoint.mmol).toFixed(1) + '" r="4" fill="#d9f8e9" stroke="#264637" stroke-width="1.5"/>' : '';
     byId('deskGlucosePlot').innerHTML = grid + lines + dots;
     setText('deskGraphStart', rangeHours + 'h ago');
     glucoseAxis.children[1].textContent = '';
@@ -344,6 +346,7 @@
     if (!tabs.some(tab => tab[0] === page)) return;
     currentPage = page;
     surface.dataset.deskPage = page;
+    if (brandSub) brandSub.textContent = '/ ' + page.toUpperCase();
     for (const button of nav.querySelectorAll('button')) {
       const selected = button.dataset.deskOpen === page;
       button.setAttribute('aria-selected', String(selected));
@@ -524,7 +527,7 @@
     const dots = points.map(p => '<circle cx="' + x(p.timestamp).toFixed(1) + '" cy="' +
       y(p.mmol).toFixed(1) + '" r="2.5" fill="#d9f8e9"/>').join('');
     byId('deskGlucosePlot').innerHTML = grid + traces + dots;
-    setText('deskGraphStart', rangeHours + 'h before last exported point');
+    setText('deskGraphStart', rangeHours + 'h before export');
     for (const button of view.querySelectorAll('.desk-range')) {
       button.setAttribute('aria-pressed', String(Number(button.dataset.hours) === rangeHours));
     }
