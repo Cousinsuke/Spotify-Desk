@@ -82,3 +82,23 @@
  .screen .desk-glucose-info strong{font-size:clamp(13px,3vw,22px)}
  .screen .desk-glucose-info p,.screen .desk-glucose-footer{font-size:clamp(7px,1.2vw,11px)}
 }
+
+/* Local-only historical import controls: do not send CSV to the device API. */
+.screen .desk-glucose-actions{display:flex;align-items:center;gap:6px;margin-left:auto;flex-shrink:0}
+.screen .desk-glucose-actions select,.screen .desk-glucose-actions button,.screen .desk-csv-import{
+  border:1px solid #6b9682;background:#142d25;color:#d1f3e0;border-radius:7px;
+  padding:6px 8px;font-size:10px;font-weight:700;white-space:nowrap;cursor:pointer
+}
+.screen .desk-glucose-actions select{max-width:100px}
+.screen .desk-csv-import{position:relative;display:inline-flex;align-items:center}
+.screen .desk-csv-import input{
+  position:absolute;width:1px;height:1px;overflow:hidden;opacity:0;pointer-events:none
+}
+.screen .desk-csv-import:focus-within{outline:2px solid #fff;outline-offset:2px}
+.screen .desk-glucose-actions button[hidden]{display:none}
+.screen .desk-glucose-info p{white-space:normal}
+@media(max-width:850px) {
+  .screen .desk-glucose-actions{gap:2px}
+  .screen .desk-glucose-actions select,.screen .desk-glucose-actions button,.screen .desk-csv-import{font-size:clamp(6px,1.0vw,10px);padding:3px 4px}
+  .screen .desk-glucose-actions select{max-width:68px}
+}
