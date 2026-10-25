@@ -26,6 +26,43 @@
     nav.appendChild(button);
   });
   topbar.insertBefore(nav, topbar.querySelector('.topright'));
+  // Substitute the Spotify Wi-Fi/PC switch visually ONLY on the glucose page.
+  // Never remove or modify the actual playback-mode buttons or their listeners.
+  const topright = topbar.querySelector('.topright');
+  const playbackModes = topright.querySelector('.mode-switch');
+  const glucoseModes = document.createElement('div');
+  glucoseModes.className = 'desk-glucose-modes';
+  glucoseModes.setAttribute('role', 'group');
+  glucoseModes.setAttribute('aria-label', 'Glucose display layout');
+  for (const [mode, label] of [['live', 'LIVE'], ['graph', 'GRAPH'], ['both', 'BOTH']]) {
+    const b = document.createElement('button');
+    b.type = 'button';
+    b.className = 'desk-glucose-mode';
+    b.dataset.glucoseView = mode;
+    b.textContent = label;
+    glucoseModes.appendChild(b);
+  }
+  topright.insertBefore(glucoseModes, playbackModes);
+  let glucoseViewMode = 'both';
+  try {
+    const previousMode = localStorage.getItem('desk_glucose_layout_v1');
+    if (['live', 'graph', 'both'].includes(previousMode)) glucoseViewMode = previousMode;
+  } catch {}
+  function setGlucoseView(mode) {
+    if (!['live', 'graph', 'both'].includes(mode)) return;
+    glucoseViewMode = mode;
+    const panel = byId('desk-glucose');
+    if (panel) panel.dataset.glucoseView = mode;
+    glucoseModes.querySelectorAll('button').forEach(b => {
+      b.setAttribute('aria-pressed', String(b.dataset.glucoseView === mode));
+    });
+    try { localStorage.setItem('desk_glucose_layout_v1', mode); } catch {}
+    if (mode !== 'live' && panel && surface.dataset.deskPage === 'glucose') drawGraph();
+  }
+  glucoseModes.addEventListener('click', event => {
+    const target = event.target.closest('[data-glucose-view]');
+    if (target) setGlucoseView(target.dataset.glucoseView);
+  });
 
   const view = document.createElement('div');
   view.className = 'desk-view';
@@ -65,14 +102,16 @@
       '<div class="desk-glucose-info"><div class="desk-glucose-primary"><div class="desk-glucose-readout"><strong>--.-</strong><span class="desk-glucose-unit">mmol/L</span><span class="desk-glucose-trend" aria-label="No trend available"></span></div>',
       '<p class="desk-glucose-reading-note">Current glucose is unavailable.</p></div></div>',
       '<div class="desk-chart-head"><strong>GLUCOSE TREND · SAMPLE DATA</strong>',
-      '<div class="desk-chart-range" role="group" aria-label="Sample chart time range">',
+      '<div class="desk-chart-tools"><div class="desk-chart-range" role="group" aria-label="Glucose chart time range">',
+      '<button type="button" class="desk-range" data-hours="1">1h</button>',
       '<button type="button" class="desk-range" data-hours="3">3h</button>',
       '<button type="button" class="desk-range" data-hours="6">6h</button>',
       '<button type="button" class="desk-range" data-hours="12">12h</button>',
-      '</div></div>',
-      '<div class="desk-plot"><svg id="deskGlucosePlot" viewBox="0 0 700 150" preserveAspectRatio="none" role="img" aria-label="Synthetic glucose values for preview only"></svg>',
-      '<span class="desk-plot-watermark">SAMPLE</span></div>',
-      '<div class="desk-plot-axis"><span id="deskGraphStart">12h ago</span><span></span><span>Now</span></div>',
+      '<button type="button" class="desk-range" data-hours="24">24h</button>',
+      '</div><button type="button" class="desk-scale" id="deskChartScale" aria-label="Chart scale: automatic" title="Toggle automatic or full-range vertical scale">AUTO</button></div></div>',
+      '<div class="desk-plot"><svg id="deskGlucosePlot" viewBox="0 0 700 196" preserveAspectRatio="none" role="img" aria-label="Synthetic glucose graph, not a live sensor reading"></svg>',
+      '<span class="desk-plot-watermark">SAMPLE</span><span class="desk-plot-empty" hidden>No readings in this period</span></div>',
+      '<div class="desk-plot-axis"><span id="deskGraphStart">6h ago</span><span></span><span>Now</span></div>',
       '<p class="desk-glucose-footer">NOT FOR TREATMENT <span aria-hidden="true">·</span> Use the Libre app for decisions and alarms.</p>',
     '</section>'
   ].join('');
@@ -82,6 +121,7 @@
   // localStorage, backend endpoint, Abbott credential, or LAN glucose API.
   const glucosePanel = byId('desk-glucose');
   glucosePanel.dataset.feedStatus = 'sample';
+  setGlucoseView(glucoseViewMode);
   const glucoseHeader = glucosePanel.querySelector('.desk-panel-head');
   const glucoseSubtitle = glucoseHeader.querySelector('.desk-muted');
   const glucoseBadge = glucoseHeader.querySelector('.desk-demo-badge');
@@ -259,44 +299,7 @@
   }
 
   function drawLiveGraph() {
-    const now = Date.now();
-    const from = now - rangeHours * 3600000;
-    const points = (liveGlucose.readings || []).filter(r =>
-      Number.isFinite(r.mmol) && Number.isFinite(r.timestamp) &&
-      r.timestamp >= from && r.timestamp <= now + 120000);
-    const minimum = Math.max(0, Math.floor(Math.min(3, ...points.map(p => p.mmol)) - 1));
-    const maximum = Math.min(40, Math.ceil(Math.max(12, ...points.map(p => p.mmol)) + 1));
-    const x = timestamp => 34 + (timestamp - from) / (now - from) * 644;
-    const y = value => 132 - (value - minimum) / (maximum - minimum) * 117;
-    const grid = [0,0.5,1].map(fraction => {
-      const n = minimum + (maximum - minimum) * fraction;
-      return '<line x1="34" x2="682" y1="' + y(n).toFixed(1) + '" y2="' +
-        y(n).toFixed(1) + '" stroke="#ffffff1a"/>' +
-        '<text x="2" y="' + (y(n)+4).toFixed(1) + '" font-size="10" fill="#b6c4bd">' +
-        n.toFixed(1) + '</text>';
-    }).join('');
-    const segments = [];
-    let part = [];
-    for (let i=0;i<points.length;i++) {
-      if (i && points[i].timestamp - points[i-1].timestamp > 20*60000) {
-        if (part.length) segments.push(part);
-        part = [];
-      }
-      part.push(x(points[i].timestamp).toFixed(1) + ',' + y(points[i].mmol).toFixed(1));
-    }
-    if (part.length) segments.push(part);
-    const lines = segments.map(a=>a.length>1?'<polyline points="' + a.join(' ') +
-      '" stroke="#a5f2cd" stroke-width="3" fill="none" stroke-linecap="round" stroke-linejoin="round"/>':'').join('');
-    const lastPoint = points[points.length - 1];
-    const dots = lastPoint ? '<circle cx="' + x(lastPoint.timestamp).toFixed(1) +
-      '" cy="' + y(lastPoint.mmol).toFixed(1) + '" r="4" fill="#d9f8e9" stroke="#264637" stroke-width="1.5"/>' : '';
-    byId('deskGlucosePlot').innerHTML = grid + lines + dots;
-    setText('deskGraphStart', rangeHours + 'h ago');
-    glucoseAxis.children[1].textContent = '';
-    glucoseAxis.children[2].textContent = 'Now';
-    for (const b of view.querySelectorAll('.desk-range')) {
-      b.setAttribute('aria-pressed',String(Number(b.dataset.hours) === rangeHours));
-    }
+    paintGlucoseGraph(liveGlucose.readings || [], Date.now(), false);
   }
 
   let currentPage = 'home';
@@ -310,6 +313,7 @@
   let weatherUpdated = 0;
   let weatherInFlight = null;
   let rangeHours = 6;
+  let chartScale = 'auto';
 
   const setText = (id, value) => { const el = byId(id); if (el) el.textContent = value; };
   const finite = n => typeof n === 'number' && Number.isFinite(n);
@@ -492,76 +496,79 @@
   });
 
 
-  function drawHistoricalGraph() {
-    const values = historicalGlucose.readings;
-    const latest = values[values.length - 1].timestamp;
-    const from = latest - rangeHours * 3600000;
-    const points = window.DeskGlucoseHistory.historyWindow(values, rangeHours);
-    const numbers = points.map(p => p.mmol);
-    const low = Math.max(0, Math.floor(Math.min(3, ...numbers) - 1));
-    const high = Math.min(40, Math.ceil(Math.max(12, ...numbers) + 1));
-    const x = timestamp => 34 + (timestamp - from) / (latest - from) * 644;
-    const y = value => 132 - (value - low) / (high - low) * 117;
-    const steps = [0,1,2,3,4];
-    const grid = steps.map(n => {
-      const value = low + (high - low) * n / 4;
-      const pos = y(value);
-      return '<line x1="34" y1="' + pos.toFixed(1) + '" x2="682" y2="' + pos.toFixed(1) +
-        '" stroke="#ffffff1a" stroke-width="1"/><text x="2" y="' + (pos + 4).toFixed(1) +
-        '" font-size="10" fill="#b6c4bd">' + value.toFixed(1) + '</text>';
-    }).join('');
-    const segments = [];
-    let segment = [];
-    points.forEach((point, index) => {
-      // A missing sample is a gap, never a straight extrapolated glucose line.
-      if (index && point.timestamp - points[index - 1].timestamp > 20 * 60000) {
-        if (segment.length) segments.push(segment);
-        segment = [];
-      }
-      segment.push(x(point.timestamp).toFixed(1) + ',' + y(point.mmol).toFixed(1));
-    });
-    if (segment.length) segments.push(segment);
-    const traces = segments.map(part => part.length > 1
-      ? '<polyline fill="none" stroke="#a5f2cd" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" points="' + part.join(' ') + '"/>'
-      : '').join('');
-    const dots = points.map(p => '<circle cx="' + x(p.timestamp).toFixed(1) + '" cy="' +
-      y(p.mmol).toFixed(1) + '" r="2.5" fill="#d9f8e9"/>').join('');
-    byId('deskGlucosePlot').innerHTML = grid + traces + dots;
-    setText('deskGraphStart', rangeHours + 'h before export');
-    for (const button of view.querySelectorAll('.desk-range')) {
-      button.setAttribute('aria-pressed', String(Number(button.dataset.hours) === rangeHours));
+  function paintGlucoseGraph(readings, endTime, isSample) {
+    const svg = byId('deskGlucosePlot');
+    const empty = glucosePanel.querySelector('.desk-plot-empty');
+    const plotter = window.DeskGlucoseChart;
+    if (!plotter) {
+      svg.replaceChildren();
+      empty.hidden = false;
+      empty.textContent = 'Graph renderer unavailable';
+      return;
     }
+    const chart = plotter.render(readings, {
+      hours:rangeHours, endTime, scale:chartScale
+    });
+    // SVG markup uses numeric samples and fixed static strings only.
+    svg.innerHTML = chart.svg;
+    svg.setAttribute('aria-label',
+      (isSample ? 'Illustrative sample ' : 'Received glucose ') + rangeHours +
+      '-hour graph, target band from 4 to 7 mmol/L with local time along the bottom');
+    empty.hidden = !chart.noData || isSample;
+    empty.textContent = 'No readings in this period';
+    setText('deskGraphStart', rangeHours + (historicalGlucose ? 'h before export' : 'h ago'));
+    // The actual x-axis is drawn from reading timestamps within the SVG.
+    glucoseAxis.children[0].textContent = '';
+    glucoseAxis.children[1].textContent = '';
+    glucoseAxis.children[2].textContent = '';
+    for (const b of view.querySelectorAll('.desk-range')) {
+      b.setAttribute('aria-pressed',String(Number(b.dataset.hours) === rangeHours));
+    }
+    const scaleButton = byId('deskChartScale');
+    scaleButton.textContent = chartScale === 'auto' ? 'AUTO' : 'FULL';
+    scaleButton.setAttribute('aria-label', chartScale === 'auto'
+      ? 'Automatic vertical scale. Select full 0 to 40 mmol/L scale'
+      : 'Full 0 to 40 mmol/L scale. Select automatic vertical scale');
+    scaleButton.setAttribute('aria-pressed',String(chartScale === 'fixed'));
+  }
+  function drawHistoricalGraph() {
+    const readings = historicalGlucose.readings;
+    const end = readings[readings.length-1].timestamp;
+    paintGlucoseGraph(readings, end, false);
   }
   function drawGraph() {
     if (liveConfigured && !historicalGlucose) {
       if (liveGlucose) drawLiveGraph();
-      else byId('deskGlucosePlot').replaceChildren(); // Never show a demo line as live data.
+      else {
+        // Never show a demo line as live data, including during a failure.
+        paintGlucoseGraph([], Date.now(), false);
+      }
       return;
     }
     if (historicalGlucose) { drawHistoricalGraph(); return; }
-    const all = Array.from({length:49}, (_, i) =>
-      6.3 + 1.05 * Math.sin(i * 0.27) + 0.36 * Math.cos(i * 0.69));
-    const data = all.slice(-(rangeHours * 4 + 1));
-    const xAt = i => 34 + i * 644 / (data.length - 1);
-    const yAt = v => 132 - (v - 3) * 14.2;
-    const points = data.map((value,i) => xAt(i).toFixed(1) + ',' + yAt(value).toFixed(1)).join(' ');
-    const grid = [4,6,8,10].map(n => '<line x1="34" y1="' + yAt(n) +
-      '" x2="682" y2="' + yAt(n) + '" stroke="#ffffff1a" stroke-width="1"/>' +
-      '<text x="2" y="' + (yAt(n)+4) + '" font-size="11" fill="#b6c4bd">' + n + '</text>').join('');
-    byId('deskGlucosePlot').innerHTML = grid +
-      '<polyline fill="none" stroke="#a5f2cd" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" points="' + points + '"/>' +
-      '<circle cx="' + xAt(data.length-1) + '" cy="' + yAt(data[data.length-1]) +
-      '" r="4" fill="#dffcec" stroke="#18332a" stroke-width="2"/>';
-    setText('deskGraphStart', rangeHours + ' hours ago');
-    for (const button of view.querySelectorAll('.desk-range')) {
-      button.setAttribute('aria-pressed', String(Number(button.dataset.hours) === rangeHours));
-    }
+    // Explicitly labelled SAMPLE chart; sample points never become live values.
+    const end = Date.now();
+    const samples = Array.from({length:145}, (_, i) => {
+      const t = end - (144-i) * 10 * 60000;
+      const mmol = 6.3 + 1.05 * Math.sin(i * 0.27) + 0.36 * Math.cos(i * 0.69);
+      return {timestamp:t,mmol};
+    });
+    paintGlucoseGraph(samples, end, true);
   }
   view.addEventListener('click', event => {
-    const button = event.target.closest('[data-hours]');
-    if (!button) return;
-    const requested = Number(button.dataset.hours);
-    if ([3,6,12].includes(requested)) { rangeHours = requested; drawGraph(); }
+    const rangeButton = event.target.closest('[data-hours]');
+    if (rangeButton) {
+      const requested = Number(rangeButton.dataset.hours);
+      if ([1,3,6,12,24].includes(requested)) {
+        rangeHours = requested;
+        drawGraph();
+      }
+      return;
+    }
+    if (event.target.closest('#deskChartScale')) {
+      chartScale = chartScale === 'auto' ? 'fixed' : 'auto';
+      drawGraph();
+    }
   });
   updateClock();
   setInterval(updateClock, 1000);
