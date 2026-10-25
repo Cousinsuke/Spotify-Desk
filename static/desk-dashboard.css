@@ -105,3 +105,192 @@
 
 /* When the configured live source takes precedence, hide offline CSV controls. */
 .screen .desk-glucose-actions[hidden]{display:none}
+
+
+/* Glucose v0.4: Spotify-inspired, compact hero and uncluttered trend chart.
+   Intentionally scoped to Glucose; Home/Weather/Spotify are untouched. */
+.screen #desk-glucose{
+  display:flex;
+  flex-direction:column;
+  min-height:0;
+}
+.screen #desk-glucose[hidden]{display:none}
+.screen #desk-glucose .desk-panel-head{
+  flex:none;
+  min-height:46px;
+  margin-bottom:10px;
+  align-items:center;
+}
+.screen #desk-glucose .desk-panel-head h2{
+  margin:4px 0 0;
+  font-size:23px;
+  line-height:1.1;
+  letter-spacing:-.65px;
+}
+.screen #desk-glucose .desk-panel-head .desk-muted{
+  margin-top:3px;
+  font-size:10px;
+  max-width:250px;
+}
+.screen #desk-glucose .desk-panel-head .desk-muted:empty{display:none}
+.screen #desk-glucose .desk-demo-badge{
+  border:1px solid #8f7860;
+  background:#4f3e272e;
+  color:#eed2a2;
+  border-radius:999px;
+  padding:7px 11px;
+  font-size:10px;
+  font-weight:800;
+  letter-spacing:.6px;
+  line-height:1;
+}
+.screen #desk-glucose[data-feed-status="live"] .desk-demo-badge{
+  color:#9cf5c1;
+  border-color:#56846a;
+  background:#163526;
+}
+.screen #desk-glucose[data-feed-status="live"] .desk-demo-badge::before{
+  content:"";
+  display:inline-block;
+  vertical-align:middle;
+  width:6px;
+  height:6px;
+  border-radius:50%;
+  background:#5ef5a3;
+  margin-right:7px;
+  box-shadow:0 0 10px #40dc884d;
+}
+.screen #desk-glucose[data-feed-status="stale"] .desk-demo-badge,
+.screen #desk-glucose[data-feed-status="offline"] .desk-demo-badge{
+  color:#ffd6a2;
+  border-color:#997a52;
+  background:#50301c54;
+}
+.screen #desk-glucose .desk-glucose-info{
+  flex:none;
+  min-height:116px;
+  background:linear-gradient(110deg,#19352bde,#0e201df0 90%);
+  border:1px solid #ffffff20;
+  border-radius:13px;
+  padding:16px 22px 13px;
+  align-items:center;
+  justify-content:flex-start;
+}
+.screen #desk-glucose .desk-glucose-primary{min-width:0;width:100%}
+.screen #desk-glucose .desk-glucose-readout{
+  display:flex;
+  align-items:baseline;
+  gap:10px;
+  white-space:nowrap;
+}
+.screen #desk-glucose .desk-glucose-readout strong{
+  display:block;
+  font-size:66px;
+  line-height:1;
+  font-weight:750;
+  letter-spacing:-2.4px;
+  font-variant-numeric:tabular-nums;
+  color:#f4fff8;
+}
+.screen #desk-glucose .desk-glucose-unit{
+  color:#a5c0b5;
+  font-size:15px;
+  font-weight:600;
+  letter-spacing:0;
+  margin-left:1px;
+}
+.screen #desk-glucose .desk-glucose-trend{
+  font-size:48px;
+  line-height:.8;
+  font-weight:500;
+  color:#7fe8b0;
+  margin-left:15px;
+  align-self:center;
+}
+.screen #desk-glucose .desk-glucose-reading-note{
+  margin-top:7px;
+  color:#9ab7a9;
+  font-size:11px;
+  font-variant-numeric:tabular-nums;
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+}
+.screen #desk-glucose[data-feed-status="stale"] .desk-glucose-readout strong,
+.screen #desk-glucose[data-feed-status="offline"] .desk-glucose-readout strong{
+  color:#c4c8c5;
+}
+.screen #desk-glucose .desk-chart-head{
+  flex:none;
+  margin:13px 0 8px;
+  min-height:24px;
+}
+.screen #desk-glucose .desk-chart-head strong{
+  color:#a9bcaf;
+  font-size:10px;
+  letter-spacing:1.3px;
+  font-weight:800;
+}
+.screen #desk-glucose .desk-range{
+  min-width:38px;
+  background:transparent;
+  color:#b8c5be;
+  border:1px solid #52645b7d;
+  border-radius:7px;
+  padding:6px 9px;
+  font-size:11px;
+  font-weight:700;
+}
+.screen #desk-glucose .desk-range[aria-pressed="true"]{
+  color:#0b2918;
+  background:#a8f0c6;
+  border-color:#a8f0c6;
+}
+.screen #desk-glucose .desk-plot{
+  flex:1 1 130px;
+  min-height:105px;
+  max-height:162px;
+  padding:10px 11px 6px;
+  background:linear-gradient(180deg,#102923b0,#0a1716ce);
+  border-color:#ffffff19;
+  border-radius:11px;
+}
+.screen #desk-glucose .desk-plot-watermark{
+  top:10px;
+  right:15px;
+  font-size:9px;
+  letter-spacing:.6px;
+  color:#d5bf8c;
+}
+.screen #desk-glucose .desk-plot-watermark:empty{display:none}
+.screen #desk-glucose .desk-plot-axis{
+  flex:none;
+  margin-top:6px;
+  font-size:10px;
+  color:#7e9a8b;
+  font-variant-numeric:tabular-nums;
+}
+.screen #desk-glucose .desk-glucose-footer{
+  flex:none;
+  margin-top:9px;
+  font-size:10px;
+  line-height:1.2;
+  color:#87a090;
+  letter-spacing:.05px;
+}
+.screen #desk-glucose .desk-glucose-footer span{padding:0 5px;color:#647c70}
+@media(max-width:850px){
+  .screen #desk-glucose .desk-panel-head{margin-bottom:1%;min-height:0}
+  .screen #desk-glucose .desk-panel-head h2{font-size:clamp(13px,2.7vw,23px)}
+  .screen #desk-glucose .desk-glucose-info{min-height:0;padding:2% 3%;border-radius:10px}
+  .screen #desk-glucose .desk-glucose-readout strong{font-size:clamp(28px,7.2vw,66px);letter-spacing:-1px}
+  .screen #desk-glucose .desk-glucose-trend{font-size:clamp(21px,5.4vw,48px);margin-left:2%}
+  .screen #desk-glucose .desk-glucose-unit{font-size:clamp(8px,2vw,15px)}
+  .screen #desk-glucose .desk-glucose-reading-note{font-size:clamp(7px,1.3vw,11px);margin-top:1%}
+  .screen #desk-glucose .desk-chart-head{margin:2% 0 1%;min-height:0}
+  .screen #desk-glucose .desk-range{min-width:0;padding:3px 6px;font-size:clamp(7px,1.3vw,11px)}
+  .screen #desk-glucose .desk-plot{flex:1 1 auto;min-height:55px;max-height:none;padding:1.5%}
+  .screen #desk-glucose .desk-plot-axis{margin-top:1%;font-size:clamp(7px,1vw,10px)}
+  .screen #desk-glucose .desk-glucose-footer{margin-top:1%;font-size:clamp(6px,1.2vw,10px)}
+  .screen #desk-glucose .desk-demo-badge{font-size:clamp(7px,1.2vw,10px);padding:5px 7px}
+}
