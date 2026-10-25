@@ -31,7 +31,7 @@
   }
 
   function yBounds(points, scale) {
-    if (scale === 'fixed') return {low:2, high:16};
+    if (scale === 'fixed') return {low:0, high:40};
     const values = points.map(p=>p.mmol);
     const rawMin = Math.min(TARGET_LOW, ...values);
     const rawMax = Math.max(TARGET_HIGH, ...values);
