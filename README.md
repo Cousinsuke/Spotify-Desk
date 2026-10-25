@@ -5,6 +5,10 @@ An experimental desktop music controller and future physical desk accessory, bui
 **Repository status:** Phase 5.2 is the last **user-accepted playback** baseline (`7172c2e`). An additive Home / Weather / **sample-only** Glucose browser preview was committed on `main` on 2026-10-25 and **visually validated by the user on Windows 11**, including a live Bournemouth weather response. Spotify transport controls, Omarchy and live glucose remain unvalidated. Real ESP32 firmware has not started.
 
 ## Direction
+## Weather dashboard — Bournemouth (2026-10-25)
+
+The /device Weather screen is now fixed to **Bournemouth, UK** (no city input). It displays live current conditions plus a **three-day forecast covering today and the following two days** with daily high/low temperatures and rain probability, sourced from Open-Meteo. Forecast refresh interval is 15 minutes; the new UI is committed but awaits Windows browser visual acceptance. See [docs/DASHBOARDS.md](docs/DASHBOARDS.md).
+
 
 - Spotify **Wi-Fi mode**: Spotify Web API and Spotify Connect.
 - **PC mode**: local Windows 11 media sessions or Linux MPRIS/playerctl, with PC audio visualisation.
