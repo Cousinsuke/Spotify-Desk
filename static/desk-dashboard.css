@@ -417,9 +417,9 @@
 }
 .screen #desk-glucose[data-glucose-view="both"] .desk-glucose-readout strong{
   grid-area:reading;
-  font-size:62px;
+  font-size:54px;
   line-height:1;
-  letter-spacing:-2.4px;
+  letter-spacing:-1.8px;
   min-width:0;
 }
 .screen #desk-glucose[data-glucose-view="both"] .desk-glucose-unit{
@@ -494,7 +494,7 @@
     padding:5% 6%;
   }
   .screen #desk-glucose[data-glucose-view="both"] .desk-glucose-readout strong{
-    font-size:clamp(27px,7.4vw,62px);
+    font-size:clamp(27px,6.7vw,54px);
   }
   .screen #desk-glucose[data-glucose-view="both"] .desk-glucose-trend{
     font-size:clamp(20px,5.1vw,43px);
