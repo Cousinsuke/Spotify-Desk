@@ -74,8 +74,8 @@
       '<div class="desk-hero-note">YOUR DESK THING<strong>Home</strong><span>Swipe to explore</span></div></div>',
       '<div class="desk-cards">',
         '<button type="button" class="desk-card" data-desk-open="spotify"><span class="desk-card-icon" aria-hidden="true">♫</span><strong>Music</strong><span class="desk-card-value" id="deskMusicValue">Spotify</span><small id="deskMusicSub">Open player</small></button>',
-        '<button type="button" class="desk-card" data-desk-open="weather"><span class="desk-card-icon" aria-hidden="true">☀</span><strong>Weather</strong><span class="desk-card-value" id="deskWeatherValue">--°</span><small id="deskWeatherSub">Bournemouth · checking forecast</small></button>',
-        '<button type="button" class="desk-card" data-desk-open="glucose"><span class="desk-card-icon" aria-hidden="true">◇</span><strong>Glucose</strong><span class="desk-card-value">Not connected</span><small>Sample graph only</small></button>',
+        '<button type="button" class="desk-card" data-desk-open="weather"><span class="desk-card-icon" aria-hidden="true">☀</span><strong>Weather</strong><span class="desk-home-weather-reading"><span class="desk-home-weather-symbol" id="deskHomeWeatherIcon" aria-hidden="true">☁</span><span class="desk-card-value" id="deskWeatherValue">--°</span></span><small id="deskWeatherSub">Bournemouth · checking forecast</small></button>',
+        '<button type="button" class="desk-card" data-desk-open="glucose"><span class="desk-card-icon" aria-hidden="true">◇</span><strong>Glucose</strong><span class="desk-home-glucose-reading"><span class="desk-card-value">Not connected</span><span id="deskHomeGlucoseArrow" class="desk-home-glucose-arrow" aria-label="Trend unavailable" hidden></span></span><small>Sample graph only</small></button>',
       '</div>',
     '</section>',
     '<section class="desk-panel" id="desk-weather" role="tabpanel" aria-label="Weather" hidden>',
@@ -179,7 +179,10 @@
         glucoseWatermark.textContent = 'HISTORY';
         glucoseAxis.children[1].textContent = '';
         glucoseAxis.children[2].textContent = 'Last export';
-        document.querySelector('[data-desk-open="glucose"] .desk-card-value').textContent = 'History loaded';
+        glucoseHome.textContent = 'History loaded';
+        glucoseHomeArrow.textContent = '';
+        glucoseHomeArrow.hidden = true;
+        glucoseHomeReading.setAttribute('aria-label', 'Historic glucose data only');
         const glucoseCard = document.querySelector('[data-desk-open="glucose"] small');
         if (glucoseCard) glucoseCard.textContent = 'Exported CSV · not live';
         drawGraph();
@@ -201,7 +204,10 @@
       glucoseWatermark.textContent = 'SAMPLE';
       glucoseAxis.children[1].textContent = '';
       glucoseAxis.children[2].textContent = 'Now';
-      document.querySelector('[data-desk-open="glucose"] .desk-card-value').textContent = 'Not connected';
+      glucoseHome.textContent = 'Not connected';
+      glucoseHomeArrow.textContent = '';
+      glucoseHomeArrow.hidden = true;
+      glucoseHomeReading.setAttribute('aria-label', 'Glucose not connected');
       const glucoseCard = document.querySelector('[data-desk-open="glucose"] small');
       if (glucoseCard) glucoseCard.textContent = 'Sample graph only';
       drawGraph();
@@ -224,6 +230,31 @@
   const liveAllowed = importAllowed; // Protect health information from HTTP LAN.
   const glucoseHome = document.querySelector('[data-desk-open="glucose"] .desk-card-value');
   const glucoseHomeHint = document.querySelector('[data-desk-open="glucose"] small');
+  const glucoseHomeArrow = byId('deskHomeGlucoseArrow');
+  const glucoseHomeReading = glucoseHome.parentElement;
+  // The arrow comes from Gluroo's reported trend, never from the absolute
+  // glucose number or an inferred change. Suppress it on stale/offline data.
+  function updateHomeGlucose(status, latest, ageSeconds) {
+    const valid = status === 'live' && latest && Number.isFinite(latest.mmol);
+    if (!valid) {
+      glucoseHome.textContent = 'Not live';
+      glucoseHomeArrow.textContent = '';
+      glucoseHomeArrow.hidden = true;
+      glucoseHomeArrow.setAttribute('aria-label', 'Trend unavailable');
+      glucoseHomeReading.setAttribute('aria-label', 'Current glucose unavailable');
+      glucoseHomeHint.textContent = 'Feed stale or unavailable';
+      return;
+    }
+    const number = latest.mmol.toFixed(1);
+    const trend = TREND_SYMBOLS[latest.direction] || '';
+    glucoseHome.textContent = number;
+    glucoseHomeArrow.textContent = trend;
+    glucoseHomeArrow.hidden = !trend;
+    glucoseHomeArrow.setAttribute('aria-label', trend ? 'Trend: ' + latest.direction : 'Trend unavailable');
+    glucoseHomeReading.setAttribute('aria-label', 'Current glucose ' + number +
+      ' millimoles per litre' + (trend ? ', trend ' + latest.direction : ''));
+    glucoseHomeHint.textContent = 'Feed · ' + Math.max(0,Math.floor(ageSeconds / 60)) + 'm old';
+  }
   function historyLabel(timestamp) {
     return new Date(timestamp).toLocaleString('en-GB', {
       day:'numeric',month:'short',hour:'2-digit',minute:'2-digit'
@@ -248,8 +279,7 @@
         'm ago · ' + historyLabel(data.latest.timestamp);
       glucoseChartTitle.textContent = 'GLUCOSE TREND';
       glucoseWatermark.textContent = '';
-      glucoseHome.textContent = data.latest.mmol.toFixed(1) + ' mmol/L';
-      glucoseHomeHint.textContent = 'Feed · ' + Math.floor(data.age_seconds / 60) + 'm old';
+      updateHomeGlucose('live', data.latest, data.age_seconds);
     } else {
       glucoseBadge.textContent = data.status === 'stale' ? 'STALE' : 'OFFLINE';
       glucoseTrend.textContent = '';
@@ -262,8 +292,7 @@
         : 'No recent readings · check Libre app';
       glucoseChartTitle.textContent = 'GLUCOSE TREND';
       glucoseWatermark.textContent = 'NOT LIVE';
-      glucoseHome.textContent = 'Not live';
-      glucoseHomeHint.textContent = 'Feed stale or unavailable';
+      updateHomeGlucose(data.status, data.latest, data.age_seconds);
     }
     drawGraph();
   }
@@ -411,6 +440,7 @@
     setText('deskWeatherSub', place.name + ' · ' + description);
     setText('deskWeatherValue', rounded(current.temperature_2m, '°'));
     setText('deskWeatherIcon', icon);
+    setText('deskHomeWeatherIcon', icon);
     setText('deskWeatherTemp', rounded(current.temperature_2m, '°'));
     setText('deskWeatherCondition', description);
     setText('deskFeels', rounded(current.apparent_temperature, '°'));
@@ -472,7 +502,7 @@
       unavailable.textContent = 'Daily forecast currently unavailable.';
       strip.appendChild(unavailable);
     }
-    setText('deskWeatherNote', 'Open-Meteo · Updated ' + new Date(weatherUpdated).toLocaleTimeString('en-GB', {hour:'2-digit',minute:'2-digit'}) + ' · Refreshes every 15 minutes');
+    setText('deskWeatherNote', 'Open-Meteo · Updated ' + new Date(weatherUpdated).toLocaleTimeString('en-GB', {hour:'2-digit',minute:'2-digit'}) + ' · Every 15 min');
   }
   async function refreshWeather() {
     if (weatherInFlight) return weatherInFlight;
@@ -495,6 +525,7 @@
         if (!weather) {
           setText('deskWeatherLocation', 'Bournemouth, United Kingdom');
           setText('deskWeatherCondition', 'Weather unavailable');
+          setText('deskHomeWeatherIcon', '☁');
           setText('deskWeatherSub', 'Bournemouth · unavailable');
           const strip = byId('deskDaily');
           strip.textContent = 'Daily forecast unavailable.';
