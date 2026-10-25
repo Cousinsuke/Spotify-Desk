@@ -55,8 +55,16 @@
 
   function yAxisTicks(bounds, scale) {
     if (scale === 'fixed') {
+      // The normal 3..21 extent fits every three-unit label. If an extreme
+      // reading expands the extent, thin *labels* by multiples of three to
+      // prevent crowding; never crop the reading or reduce the 4..7 band.
+      const tickSpacing = 3 * (BOTTOM-TOP) / (bounds.high-bounds.low);
+      const stride = Math.max(1, Math.ceil(20 / tickSpacing));
       const ticks = [];
-      for (let value = bounds.low; value <= bounds.high; value += 3) ticks.push(value);
+      for (let value = bounds.low; value <= bounds.high; value += 3 * stride) ticks.push(value);
+      if (bounds.high - ticks[ticks.length-1] >= 3 &&
+          (bounds.high - ticks[ticks.length-1]) * (BOTTOM-TOP) /
+            (bounds.high-bounds.low) >= 20) ticks.push(bounds.high);
       return ticks;
     }
     // Give the 4.0 and 7.0 target markers priority. Nearby automatically
