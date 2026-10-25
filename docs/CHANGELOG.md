@@ -2,7 +2,13 @@
 
 This is **historical milestone tracking**, not a separate implementation branch for each ZIP. The accepted Phase 5.2 source is committed at `7172c2e`; historical ZIPs are reference snapshots only. Prefer Git commits, tags and releases for future work rather than duplicated source folders.
 
-## Live CGM feed via Gluroo / Nightscout-compatible HTTPS — 2026-10-25## Spotify-style minimal glucose dashboard — 2026-10-25 (awaiting UI acceptance)
+## Live CGM feed via Gluroo / Nightscout-compatible HTTPS — 2026-10-25## Glucose Libre-style timeline, target band and 3 layouts — 2026-10-25 (awaiting UI acceptance)
+
+- Added **real local clock labels** inside glucose time-series plot, **shaded 4–7 mmol/L** preferred graph band (not an alarm setting), automatically zoomed Y-axis plus full-range option, end marker, gap-aware traces and 1h/3h/6h/12h/24h range buttons. Source data unchanged from existing Gluroo live reader. The API offers at most ~730 records across ~24h, so plots may have partial coverage.
+- Replaced top-right PC/Wi-Fi mode buttons **visually on Glucose only** with **LIVE / GRAPH / BOTH** layout selector. Restored original mode controls automatically on other pages, without altering underlying Spotify functions. Live-only focuses on one number, Graph-only expands graph, Both combines.
+- Added pure `static/glucose-chart.js` renderer and synthetic test fixture `tests/check_glucose_chart.cjs`; updated dashboard and device bridge tests; cache version bumped to v0.5. No medical data/credentials added. Assistant-side JS parser and chart assertion checks passed; Windows runtime screenshots and user acceptance outstanding.
+
+## Spotify-style minimal glucose dashboard — 2026-10-25 (awaiting UI acceptance)
 - Followed Windows screenshot confirmation of real Gluroo readings in paired simulator and six passing backend tests; no private CGM readings or Gluroo credentials recorded.
 - Simplified only `/device` Glucose view: emphasized large mmol/L number, distinct trend arrow, compact timestamp, clear LIVE/STALE/OFFLINE state, smaller single safety footer, minimal trend graph with reduced grid and a highlighted latest point, 3/6/12h controls. Dynamic active-page name corrects the header suffix; Spotify playback logic preserved.
 - Static/source regression tests expanded, browser CSS/JS cache versions bumped to v0.4. **User visual runtime acceptance pending.**
