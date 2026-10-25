@@ -1,5 +1,13 @@
 # Changelog / version history
 
+## Glucose v0.7: Whole-number AUTO chart ticks — 2026-10-25
+
+- AUTO now uses default 3–12 mmol/L with labels 3, 4.0, 7.0, 9, 12 rather than fractional quartiles such as 9.6 or padded floor 2.5. 4/7 shaded reference guides remain. Expand if actual reading is below 3 or above 12.
+
+- Capped AUTO at five labels, 15 SVG px separation and 11px tick font, maintaining readability. FULL remains 3–21 with ticks every 3, including extreme-readings extension.
+
+- Added JS test cases for typical chart, no overlapping labels, below/above baseline and extreme data. v0.7 chart script cache; no health data or credentials committed. Implementation tested by assistant JS runner but Windows runtime UI acceptance pending.
+
 ## Glucose v0.6: Libre 3–21 full scale and readable AUTO ticks — 2026-10-25
 
 - User Windows screenshots verified LIVE, GRAPH and BOTH layouts and exposed two chart-axis issues: FULL stretched to 40 mmol/L rather than matching Libre's 21, and AUTO labels near 7.0 collided in longer plots.
