@@ -307,6 +307,7 @@
 .screen #desk-glucose[data-glucose-view="live"] .desk-chart-head,
 .screen #desk-glucose[data-glucose-view="live"] .desk-plot,
 .screen #desk-glucose[data-glucose-view="live"] .desk-plot-axis{display:none}
+.screen #desk-glucose[data-glucose-view="both"] .desk-glucose-info{display:flex}
 .screen #desk-glucose[data-glucose-view="graph"] .desk-glucose-info{display:none}
 .screen #desk-glucose[data-glucose-view="graph"] .desk-chart-head{margin-top:10px}
 .screen #desk-glucose[data-glucose-view="live"] .desk-glucose-info{
