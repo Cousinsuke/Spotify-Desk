@@ -17,7 +17,7 @@ from flask import Response, jsonify, render_template, request
 
 EXPOSED = frozenset({
     '/device', '/static/device.css', '/static/device.js', '/static/ui.css',
-    '/static/desk-dashboard.css', '/static/desk-dashboard.js',
+    '/static/desk-dashboard.css', '/static/desk-dashboard.js', '/static/glucose-history.js',
     '/api/device/pair', '/api/device/state', '/api/device/action',
     '/api/device/artwork', '/api/device/events',
 })
