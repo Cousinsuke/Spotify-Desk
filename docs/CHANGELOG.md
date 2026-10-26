@@ -1,5 +1,11 @@
 # Changelog / version history
 
+## Proposed control PCB and split rear shell — 2026-10-26
+
+- User proposed attaching screen and hardware controls to an accessible front PCB/carrier assembly, replacing the restrictive bottom opening with a **removable rear half** using hidden hooks/snaps or short-slide registration.
+- Created [split-case/controls PCB concept](HARDWARE-REV-B-SPLIT-CASE-CONTROL-PCB-CONCEPT.md) and decision D012 (**proposal**, no CAD approval). Preferred first study is a structural front fascia carrying the existing ESP32-S3 Waveshare screen on its four mounts and a separate small custom PCB for three MX keys plus rotary push encoder; a full-size shared mounting PCB remains an alternate pending height and load checks. Rear shell attaches after front electronics bench assembly.
+- The previous 156 mm R5 / 55° / USB-left / 4 mm keycap exterior, original V2 case/lid STEP, Spotify software, wiring and BOM are unchanged. No new fitted two-piece CAD, PCB Gerbers or 3D-print production approval.
+
 ## Rev B sampled extraction: vertical/forward routes obstructed; face-normal alternatives — 2026-10-26
 
 - User ran local full 693-solid extraction study on Windows after **6/6 synthetic tests passed**. All three initial tested paths collided at first -3.5 mm Z offset: vertical (dy=0), forward (dy=-1), and forward +1.5° pitch (dy=-1). Final seated pose still clears (693/693), so the obstruction concerns **approach/exit**, not confirmed final seating.
