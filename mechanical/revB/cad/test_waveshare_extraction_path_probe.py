@@ -23,6 +23,36 @@ class WaypointTests(unittest.TestCase):
         self.assertEqual((seq[-1]["dy_mm"], seq[-1]["dz_mm"], seq[-1]["pitch_deg"]),
                          (-8.0, -28.0, 12.0))
 
+    def test_face_normal_direction_uses_case_slope(self):
+        import math
+        from waveshare_extraction_path_probe import FACE_TILT_DEG
+        end = poses_for_profile(PROFILES["normal_in_4"])[-1]
+        self.assertAlmostEqual(end["dy_mm"], 4 * math.sin(math.radians(FACE_TILT_DEG)), delta=0.0001)
+        self.assertAlmostEqual(end["dz_mm"], -4 * math.cos(math.radians(FACE_TILT_DEG)), delta=0.0001)
+        self.assertGreater(end["dy_mm"], 0)
+        self.assertLess(end["dz_mm"], 0)
+
+    def test_two_stage_profile_withdraws_before_lowering(self):
+        first = poses_for_profile(PROFILES["normal_in_4"])
+        both = poses_for_profile(PROFILES["normal_in_4_then_down_12"])
+        self.assertEqual(len(first), 7)
+        self.assertEqual(len(both), 13)
+        self.assertEqual(both[6]["dy_mm"], first[-1]["dy_mm"])
+        self.assertEqual(both[6]["dz_mm"], first[-1]["dz_mm"])
+        self.assertEqual(both[-1]["dy_mm"], first[-1]["dy_mm"])
+        self.assertAlmostEqual(both[-1]["dz_mm"], first[-1]["dz_mm"] - 12, places=4)
+        self.assertTrue(all(a["fraction"] < b["fraction"] for a, b in zip(both, both[1:])))
+
+    def test_segment_interruption_never_approves_path(self):
+        first = poses_for_profile(PROFILES["normal_in_4"])
+        def probe(p):
+            return {"status": ("SAMPLED_SOLID_COLLISION"
+                               if p["dz_mm"] < first[-1]["dz_mm"] - 1
+                               else "SAMPLED_POSE_CLEAR")}
+        result = check_profiles(("normal_in_4_then_down_12",), probe)
+        self.assertEqual(result["path_results"][0]["status"], "SAMPLED_SOLID_COLLISION")
+        self.assertFalse(result["continuous_entry_path_certified"])
+
     def test_unknown_profile(self):
         with self.assertRaises(ValueError):
             check_profiles(("unknown",), lambda pose: {"status": "SAMPLED_POSE_CLEAR"})
