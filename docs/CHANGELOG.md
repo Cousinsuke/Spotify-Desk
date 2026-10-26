@@ -1,5 +1,10 @@
 # Changelog / version history
 
+## Rev B sampled extraction: vertical/forward routes obstructed; face-normal alternatives — 2026-10-26
+
+- User ran local full 693-solid extraction study on Windows after **6/6 synthetic tests passed**. All three initial tested paths collided at first -3.5 mm Z offset: vertical (dy=0), forward (dy=-1), and forward +1.5° pitch (dy=-1). Final seated pose still clears (693/693), so the obstruction concerns **approach/exit**, not confirmed final seating.
+- Added `normal_in_4`, `normal_in_8`, and staged `normal_in_4_then_down_12` to independent screen extraction probe. These use selected 55° enclosure face geometry to initially move the board along its inward normal rather than straight down; script also prints first intersection XYZ bounds. Extended synthetic tests and docs; new full manufacturer-model runs pending user validation. This does not alter the original enclosure, V2 lid, or Spotify software.
+
 ## Rev B true Waveshare seated clearance and extraction-probe planning — 2026-10-26
 
 - On user's Windows CadQuery 2.8.0 environment, the physically 180°-rotated manufacturer STEP and unchanged hook-click V2 R5 case were checked at the nominal seated pose using **693 of 693 exact solid intersections**; no solid intersection above **0.05 mm³** was detected. New pose test suite **8/8 passed**. This resolves the earlier final-pose compute limit but does not demonstrate actual LCD installation or fastening.
