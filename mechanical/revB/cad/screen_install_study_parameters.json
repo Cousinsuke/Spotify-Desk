@@ -1,0 +1,21 @@
+{
+  "status": "Experimental manufacturer measured bounding-box insertion and tool access study. Not an installation proof or manufacturing approval.",
+  "selected_case": "R5 156mm USB LEFT hook-click V2, 4mm MX keys, four screwed Waveshare targets",
+  "rotation_deg": 180,
+  "trial_glass_recess_inward_w_mm": 3.25,
+  "cover_removed_during_installation": true,
+  "vertical_staging_offsets_z_mm": [-110.0, -90.0, -70.0, -50.0, -35.0, -20.0, -10.0, -5.0, 0.0],
+  "sampled_tilt_angles_about_global_x_deg": [-15.0, 0.0, 15.0],
+  "tool_shank_radius_mm": 2.0,
+  "tool_lengths_mm": [12.0, 25.0, 40.0],
+  "screen_standoff_fastener_count": 4,
+  "case_step_basename": "SpotifyDesk_R5_hook_click_v2_CASE.step",
+  "warnings": [
+    "Board represented by component AABB envelopes measured from real 2023 manufacturer's 693-body STEP; component occupancy is conservative, not the full STEP shape",
+    "Case nominal physical-rotation/display-mount datum W=3.25mm unconfirmed",
+    "No mating USB cable, I2C harness, chosen fasteners, touch adhesive, antenna clearance, screw head orientation or real tool body",
+    "Rigid sample sweeps are limited poses, NOT proof any continuous insertion path exists or cannot exist",
+    "Approx straight tool cylinders are illustrative, no verified screw access or tightening torque",
+    "Cap 4mm and hook-click cover V2 unchanged; no hardware purchased or physical tests"
+  ]
+}

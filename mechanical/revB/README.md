@@ -123,6 +123,14 @@ The [bottom-cover mechanisms comparison](../../docs/HARDWARE-REV-B-BOTTOM-COVER-
 - The downloadable chat ZIP contains separate full-size lid and case STEP (the latter matches V1), installed/exploded assemblies, **two STL small coupon parts cropped from the actual keeper and actual latch**, and documentation. No cover screws; LCD mounting screws retained. Real spring click force/durability/filament/print tolerance/installation path unproven.
 
 
+## Waveshare board installation screening (2026-10-26)
+
+- [Independent screen insertion projection, 27 pose checks and screwdriver access report](../../docs/HARDWARE-REV-B-WAVESHARE-SCREEN-INSTALLATION-PATH.md) with `cad/screen_install_path_study.py`, `cad/screen_install_study_parameters.json`, `cad/test_screen_install_path_study.py` and `cad/waveshare_{underside_projection,installation_side_section}.svg`.
+- User V2 latch Python suite: **16 passed / 10 optional CAD skips** on Windows. New installation screening: **20 assistant-side tests PASS** including 5 actual pre-existing case STEP collision checks; Windows user tests not yet run. Nominal full board bounding prism projects **53.01mm desk Y** inside 59.09mm Y underside hole, but its seated alignment overhangs rear opening ~4.04mm. 27 sampled rigid pose checks have clashes, 4mm trial shaft collides near two bracket axes. Actual 693-solid board **not** moved/collision-tested. No insertion path certified and no shell edits.
+- Chat ZIP contains unchanged current case with simplified board/glass *envelopes* at seated and staged positions, plus report/drawings, no manufacturer raw STEP. Four screwed LCD support target positions and zero bottom-lid screws remain intact. Real screw head direction and tool length, component physical revision and mating cables still unknown.
+
+
+
 ## Checks before manufacturing
 
 1. Confirm exact MX switch model and actual depths/mount clips.

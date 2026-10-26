@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1100" height="690" viewBox="0 0 1100 690">
+<rect width="1100" height="690" fill="#121a24"/>
+<text x="36" y="46" font-family="Arial" font-size="24" fill="#f0f5fb">Screen / enclosure Y–Z reference section (side view)</text>
+<text x="36" y="71" font-family="Arial" font-size="15" fill="#adbfcc">R5 shell silhouette = conceptual cross-section; 2023 Waveshare bounding rectangles (not real PCB geometry)</text>
+<polygon points="160.0,590.0 160.0,519.6 437.6,123.1 525.6,123.1 525.6,590.0 472.8,590.0 472.8,554.8 212.8,554.8 212.8,590.0" fill="#343f4c" stroke="#93aabc" stroke-width="3"/>
+<polygon points="257.4,405.5 318.3,448.1 490.6,202.1 429.7,159.4" fill="#f1aa60" fill-opacity="0.25" stroke="#f7b36c" stroke-width="2.5"/>
+<polygon points="258.0,404.5 290.6,427.4 462.1,182.6 429.4,159.7" fill="#9be3d9" fill-opacity="0.30" stroke="#95f4df" stroke-width="2"/>
+<path d="M 212.8 554.8 V 607.6 M 472.8 554.8 V 607.6" stroke="#a9dbf1" stroke-width="2" stroke-dasharray="6 4"/>
+<text x="227.8" y="572.4" font-family="Arial" font-size="11" fill="#b3e0f4">Underside access (lid removed)</text>
+<text x="590" y="182" font-family="Arial" font-size="16" fill="#f0be81">Orange: FULL 3D envelope projected onto Y/Z</text>
+<text x="590" y="208" font-family="Arial" font-size="16" fill="#a3e9dd">Green: touch-glass envelope</text>
+<text x="590" y="244" font-family="Arial" font-size="15" fill="#d6e6ee">Screw shafts: simple straight W-axis probes</text>
+<path d="M 475.95 213.36 L 620.12 314.31" stroke="#ff7790" stroke-width="2" stroke-dasharray="5 4"/>
+<path d="M 475.95 213.36 L 620.12 314.31" stroke="#ff7790" stroke-width="2" stroke-dasharray="5 4"/>
+<path d="M 324.53 429.62 L 468.70 530.56" stroke="#ff7790" stroke-width="2" stroke-dasharray="5 4"/>
+<path d="M 324.53 429.62 L 468.70 530.56" stroke="#ff7790" stroke-width="2" stroke-dasharray="5 4"/>
+<text x="590" y="278" font-family="Arial" font-size="14" fill="#ff9bad">Red dashed = trial straight screwdriver axis, not verified access</text>
+<text x="36" y="645" fill="#f7c08d" font-family="Arial" font-size="15">Bounds overlap in this projection and case-solid probe warns of material clashes. NO complete insertion path proven.</text>
+<text x="36" y="670" fill="#b0bfca" font-family="Arial" font-size="13">Section is an illustrative Y/Z union silhouette, not a manufacturing cross-section or accurate threaded screw drawing.</text>
+</svg>

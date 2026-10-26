@@ -96,6 +96,10 @@ This roadmap tracks **planned phases**, not every ad-hoc fix. Actual latest work
 **2026-10-26 hook-click V2 latch refinement and small printed test samples:** user asked to improve prior 2-hook/1-flex rear lid. Built [new R5/4mm screwless V2 CAD](HARDWARE-REV-B-HOOK-CLICK-LATCH-V2.md) with **0.68mm concave beam-root fillets**, **1.5mm upper lead-in cam** and square lower catch shoulder, **underside 7.7×2.85mm finger pad**. Case itself geometrically unchanged (boolean symmetric difference 0mm³) with original four LCD M2.5 screw targets, 0 underside screws. Added two **actual-cropped** latch/keeper small printer-test STLs and STEP reference, three assemblies. **26 local tests PASS** incl. four valid independent STEP solids and no closed clash; *not* physically inserted, elastically solved or fatigue rated. User Windows/physical fit pending; full manufacturer board access unresolved.
 
 
+**2026-10-26 manufacturer screen installation check:** user verified hook-click V2 scripts on Windows (**16 passed/10 optional CAD skipped**). Assistant completed [board installation and screw reach screening](HARDWARE-REV-B-WAVESHARE-SCREEN-INSTALLATION-PATH.md) with **20 passing tests** and unchanged actual previous case STEP. Board assembly projects only **53.01mm desk-Y** versus **59.09mm underside opening**, but at nominal seat its conservative envelope extends **4.04mm past rear hatch edge**. Sampled unshifted Z entry clashes; 4mm trial driver along W intersects near V11.8 support row. Full 693-solid manufacturer board **not motion-simulated**, boxes can false-positive; no certified insertion trajectory or screw path, no case changes. Next physical path/fastener study and compare hidden split-body/front-frame variants if needed.
+
+
+
 ## Phase 7 — Standalone mode and secure provisioning
 - [ ] Define what 'standalone' means: remote Spotify Connect control vs direct audio playback
 - [ ] Confirm Spotify API/SDK constraints and provisioning/refresh-token storage approach

@@ -41,6 +41,12 @@ The latch beam remains nominally **26mm long × 2.2mm wide** with a **1.6mm prop
 4. Repeatedly latch/unlatch while observing whether force or alignment changes. Record material, nozzle size, layer height, orientation, observed engagement and any damage. We can then parameterize the next nose/beam/keeper adjustment instead of guessing.
 5. Before full enclosure print, separately solve **how the 68.3mm overall Waveshare assembly can enter the current ~59mm-deep underside hatch and be screwed to its standoffs**, plus USB cable routing, actual switch/keycap envelope, screw depth and cable service. **None are resolved here**.
 
+## Windows user checks and subsequent screen-installation investigation (2026-10-26)
+
+User pulled `48c19d9` and ran the **V2 latch test suite on Windows: 16 passed and 10 optional CadQuery tests skipped**, generating/previewing the report-only SVG. This verifies the parameters and mathematical checks on the user's machine, **not** actual spring mechanics. The [subsequent Waveshare installation and screw-tool accessibility study](HARDWARE-REV-B-WAVESHARE-SCREEN-INSTALLATION-PATH.md) found the **53.01mm desk-Y projection** of a conservative 2023 manufacturer's board box within the 59.09mm underside hatch, but a **4.04mm rear projection overhang at the nominal seat** and potential enclosure interferences on sampled rigid poses. Full screen ingress remains unproved; no V2 case or lid alterations were made.
+
+
+
 ## Validation
 
 - **26/26 assistant-side new tests passed**: 16 Python geometry/parameter checks and 10 optional CadQuery/STEP solid checks. Four distinct source STEP solids exported, independently reopened and validated; zero installed lid-to-case and coupon-to-keeper solid overlap; the cropped retention shoulder produces rigid interference if the lid is artificially pulled down 0.65mm (not a force/strength check). Two coupon STLs and three reference assemblies exported.

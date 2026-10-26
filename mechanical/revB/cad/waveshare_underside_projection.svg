@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1100" height="470" viewBox="0 0 1100 470">
+<rect width="1100" height="470" fill="#121a24"/>
+<text x="45" y="47" font-family="Arial" fill="#f0f5fc" font-size="24">Rev B Waveshare installation: bottom hatch DESK-Y projection</text>
+<text x="45" y="71" font-family="Arial" fill="#a7becf" font-size="15">Manufacturer 2023 full assembly bounding prism / physical 180-degree board flip / trial W=3.25mm</text>
+<text x="45" y="111" font-family="Arial" fill="#e7e8ec" font-size="18">Rear toward right →       (X width is 106.1mm, inside 134mm opening)</text>
+<rect x="90" y="166" width="747.8406719875356" height="142" rx="8" fill="#313c4b" stroke="#91a4b9"/>
+<rect x="198.0" y="167" width="531.8406719875356" height="140" fill="#0c1824" stroke="#8fb8cb" stroke-width="3"/>
+<rect x="289.161" y="206" width="477.054" height="59" fill="#d58c49" fill-opacity=".85" stroke="#ffca81" stroke-width="2"/>
+<text x="302.161" y="242" fill="#111820" font-family="Arial" font-size="14">Projected full module: 53.01mm</text>
+<path d="M 729.8 151 V 320" stroke="#96d5ec" stroke-dasharray="6 5"/>
+<text x="739.8" y="153" font-size="14" fill="#b9e8f6">Hatch rear boundary</text>
+<text x="289.2" y="330" font-size="14" fill="#e8b46e">Board face projection</text>
+<text x="198.0" y="357" font-size="14" fill="#9fe1f9">Hatch 59.09mm</text>
+<text x="45" y="410" font-size="17" fill="#f0bd88" font-family="Arial">Nominal board extends 4.04mm past rear hatch edge; it could fit in projection after shifting forward, not a solved 3D path.</text>
+<text x="45" y="440" fill="#b4c9dc" font-size="14" font-family="Arial">NOTE: projected footprint is necessary but NOT sufficient. 3D case/screen support and screwdriver clashes evaluated separately.</text>
+</svg>
