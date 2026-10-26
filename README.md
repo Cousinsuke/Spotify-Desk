@@ -74,6 +74,8 @@ The local `/device` Glucose screen can now **import a user-downloaded LibreView 
 - [Angled wedge 3D shape, internal packaging and input-PCB proposal](docs/HARDWARE-WEDGE-CASE-PROPOSAL.md)
 - [Parametric 3D reference model (not a print-ready case)](mechanical/wedge_packaging_concept.scad)
 - [Rev B sharp and R5-rounded CAD package, ZIP and coordinates](mechanical/revB/README.md)
+- [Selected hook-and-click screwless cover CAD alternative: two front hooks, rear release and LCD screw mounts](docs/HARDWARE-REV-B-HOOK-CLICK-COVER.md)
+
 - [Research: screwless underside cover alternatives — hook-and-click, slide-detent, magnetic and other designs](docs/HARDWARE-REV-B-BOTTOM-COVER-ALTERNATIVES.md)
 - [Rev B screwless slide-in bottom cover (new trial, screen mounts keep screws)](docs/HARDWARE-REV-B-SCREWLESS-SLIDING-COVER.md)
 - [Rev B removable underside cover and screen mounting prototype (separate STEP download; not print-ready)](docs/HARDWARE-REV-B-REAR-COVER-AND-SCREEN-MOUNTS.md)

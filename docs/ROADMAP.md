@@ -91,6 +91,8 @@ This roadmap tracks **planned phases**, not every ad-hoc fix. Actual latest work
 
 **2026-10-26 screwless bottom-cover mechanism research (no CAD change):** user requested alternatives to existing unsecured slider. Documented [six closure choices](HARDWARE-REV-B-BOTTOM-COVER-ALTERNATIVES.md), provisionally preferring **two front hooks + one rear accessible click latch** to remove long rear-wall feed opening, or slide-in rails with a positive detent if user prefers continuous sliding. Magnetic locating hook lid feasible with added hardware. Supplier-agnostic printed clearances, latch fatigue, PETG print orientation and previously unresolved Waveshare installation path remain explicit gates. Await user mechanism choice; preserve previous CAD and selected 4mm keycap design.
 
+**2026-10-26 hook-and-click bottom closure CAD:** User explicitly chose two front locating hooks + single finger-release rear latch; LCD screen remains on four nominal screwed supports, no bottom cover screws. New [independent rounded R5 USB-left 4mm STEP case/cover study](HARDWARE-REV-B-HOOK-CLICK-COVER.md) includes shallow front hook pockets and one local rear keeper, without the slider's long rear-wall slot. 29 assistant tests pass including 9 optional B-Rep and STEP reopen checks. **Physical elastic click force/durability, actual insertion through screen hatch, tolerances and Windows user validation remain open.** Old slider/screwed CAD preserved.
+
 ## Phase 7 — Standalone mode and secure provisioning
 - [ ] Define what 'standalone' means: remote Spotify Connect control vs direct audio playback
 - [ ] Confirm Spotify API/SDK constraints and provisioning/refresh-token storage approach

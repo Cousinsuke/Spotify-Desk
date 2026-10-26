@@ -1,0 +1,64 @@
+{
+  "status": "PROVISIONAL FDM closure geometry, not a rated snap design and not print approved",
+  "rotation_deg": 180,
+  "cap_rest_height_mm": 4.0,
+  "hatch_inset_x_mm": 11.0,
+  "hatch_inset_y_mm": 12.0,
+  "cover": {
+    "perimeter_gap_mm": 0.4,
+    "bottom_z_mm": 0.55,
+    "thickness_mm": 2.0,
+    "corner_radius_mm": 1.3,
+    "support_lip_z_min_mm": 2.9,
+    "support_lip_height_mm": 1.6,
+    "lip_inner_overlap_mm": 2.0,
+    "lip_outer_anchor_mm": 2.0
+  },
+  "front_hooks": {
+    "x_centers_mm": [
+      46.5,
+      109.5
+    ],
+    "tongue_width_mm": 10.0,
+    "tongue_front_projection_mm": 2.2,
+    "tongue_z_bottom_mm": 2.1,
+    "tongue_z_top_mm": 2.65,
+    "pocket_depth_y_mm": 2.6,
+    "pocket_width_extra_mm": 0.8,
+    "pocket_z_bottom_mm": 1.9,
+    "pocket_z_top_mm": 2.9
+  },
+  "rear_latch": {
+    "beam_root_x_mm": 63.0,
+    "beam_free_x_mm": 89.0,
+    "beam_front_y_mm": 65.25,
+    "beam_depth_y_mm": 2.2,
+    "slot_gap_mm": 1.0,
+    "root_overlap_mm": 2.0,
+    "notch_left_x_mm": 85.5,
+    "notch_right_x_mm": 92.5,
+    "finger_tab_center_x_mm": 89.0,
+    "finger_tab_reach_y_mm": 3.0,
+    "tongue_engagement_rear_mm": 1.1,
+    "rear_pocket_extra_width_mm": 0.8,
+    "rear_pocket_z_bottom_mm": 1.35,
+    "rear_pocket_z_top_mm": 2.95,
+    "nominal_rear_release_stroke_mm": 1.6,
+    "trial_beam_thickness_mm": 2.0,
+    "release_pad_width_mm": 8.0,
+    "release_pad_length_mm": 4.4
+  },
+  "screen": {
+    "four_screw_mounts": true,
+    "fastener_diameter_mm": 2.9,
+    "uses_existing_98x60mm_standoff_reference": true
+  },
+  "warnings": [
+    "No physical proof of beam elasticity, fatigue life, catch engagement force or printed layer orientation",
+    "The hook-and-click install trajectory is conceptual; test actual flexed latch path on a small coupon",
+    "0.4mm trial side gap and 1.6mm release travel require PETG/PLA printer-specific coupon",
+    "Actual Waveshare PCB insertion path through underside hatch unresolved; screw driver access not validated",
+    "Manufacturer STEP 2023 may differ from purchased exact touch board and M2.5 standoff positions",
+    "Actual Tech Toppers Cherry row and keycap skirt not confirmed; USB male connector not modelled"
+  ]
+}

@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1050" height="500" viewBox="0 0 1050 500">
+<rect width="1050" height="500" fill="#121922"/>
+<text x="45" y="38" font-family="Arial" font-size="24" fill="#f5f8fb">Hook-and-click bottom panel: operating sequence</text>
+<text x="45" y="69" font-family="Arial" font-size="14" fill="#b7cad8">XY diagrams are schematic, NOT dimensioned bend-radius/force certification.</text>
+<rect x="45" y="100" width="315" height="285" rx="12" fill="#243240" stroke="#465a6a"/>
+<text x="61" y="136" font-family="Arial" font-size="20" fill="#fafafa">1. LOCATE FRONT</text>
+<text x="61" y="166" font-family="Arial" font-size="13" fill="#c7d2dc">Two rigid tongues slide under frame lip</text>
+<rect x="88" y="226" width="222" height="84" rx="4" fill="#718fa5" stroke="#e4edf4"/>
+<rect x="132" y="205" width="22" height="29" fill="#8edbb2"/>
+<rect x="263" y="205" width="22" height="29" fill="#8edbb2"/>
+<path d="M 200 349 V 302" stroke="#8edbb2" stroke-width="4"/>
+<rect x="380" y="100" width="315" height="285" rx="12" fill="#243240" stroke="#465a6a"/>
+<text x="396" y="136" font-family="Arial" font-size="20" fill="#fafafa">2. CLICK REAR</text>
+<text x="396" y="166" font-family="Arial" font-size="13" fill="#c7d2dc">Flexible in-plane arm bends and enters pocket</text>
+<rect x="423" y="226" width="222" height="84" rx="4" fill="#718fa5" stroke="#e4edf4"/>
+<rect x="515" y="299" width="52" height="26" fill="#f1b766"/>
+<path d="M 541 335 V 308" stroke="#f1b766" stroke-width="4"/>
+<rect x="715" y="100" width="315" height="285" rx="12" fill="#243240" stroke="#465a6a"/>
+<text x="731" y="136" font-family="Arial" font-size="20" fill="#fafafa">3. PRESS TO RELEASE</text>
+<text x="731" y="166" font-family="Arial" font-size="13" fill="#c7d2dc">Push free tip toward FRONT, lift lid</text>
+<rect x="758" y="226" width="222" height="84" rx="4" fill="#718fa5" stroke="#e4edf4"/>
+<rect x="850" y="299" width="52" height="26" fill="#f1b766"/>
+<path d="M 879 319 V 276" stroke="#f1b766" stroke-width="4"/>
+<text x="47" y="437" fill="#d7e7f1" font-size="16" font-family="Arial">Four screen standoffs retain M2.5 reference screw holes; underside cover has NONE.</text>
+<text x="47" y="466" fill="#f0b37b" font-size="15" font-family="Arial">IMPORTANT: actual PETG flexure travel and mechanical click strength require a coupon print.</text>
+</svg>

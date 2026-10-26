@@ -70,6 +70,11 @@ This is **historical milestone tracking**, not a separate implementation branch 
 - `node --check` and four dashboard-specific Python checks passed, but the **full Windows suite was 42/44 passing**; two pre-existing Linux-only companion tests error on Windows (`KeyError: has_playback`). Nonfatal test file-handle ResourceWarnings remain. Spotify PC playback/buttons, all glucose chart range buttons, Omarchy and ESP32 not freshly runtime tested. The original `/` Spotify OAuth returned `client_id: Invalid` in a separate flow; resolve developer app ID/status later.
 - Documentation/checkpoint update only; no additional dashboard/firmware code or real Libre 2 Plus integration in this entry.
 
+## Hook-and-click screwless bottom cover CAD — 2026-10-26
+- User chose two front hooks plus one rear release catch instead of slide-in design. Created separate R5/4mm USB-left case and 2mm removable cover with built-in 26mm flexible arm and a short 7mm local rear wall pocket. No cover screws; four nominal LCD screw targets remain.
+- 29 assistant-side checks passed, including STEP B-Rep export/re-import and no closed assembly intersection; downward cover pull geometrically contacts keeper. Delivered independent case/cover/assembly STEP package, annotated drawings and source. All former variants preserved.
+- Spring click force, material fatigue, user installation motion and manufacturer PCB ingress/access remain unverified. Not fabrication-approved.
+
 ## Alternative screwless bottom-cover closure research — 2026-10-26
 - Researched six non-screw closure approaches against R5 156mm USB-left enclosure: front-hook/rear-click (recommended provisional), slide+detent, hook+magnet, perimeter multi-snap, rear hinge/catch, friction-only (discouraged).
 - Added [technical side-by-side options](HARDWARE-REV-B-BOTTOM-COVER-ALTERNATIVES.md) with printed-fit caveats and external references. No new case STEP generated or approved; older screw-on and screwless sliders kept intact. Current catch retention and Waveshare insertion path remain unverified.

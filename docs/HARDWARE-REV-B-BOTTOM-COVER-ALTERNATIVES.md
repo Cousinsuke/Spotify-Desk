@@ -37,6 +37,10 @@
 - [MakerWorld parametric sliding magnetic box](https://makerworld.com/en/models/1576534-customizable-parametric-sliding-magnetic-box): real maker-style model demonstrating magnetic slide retention (not proven by us).
 - [Additive Inn build case study](https://www.additiveinn.com/projects/slider-modular-response-box): explicit trial-and-reprint iterations for magnetic/sliding electronics case demonstrating why real lid retention cannot be certified by CAD alone.
 
+## User selected option A (2026-10-26)
+
+The user explicitly selected two fixed front hooks with one accessible rear click/release tab, instead of the older slide-in lid. A separate [real CAD and STEP engineering prototype](HARDWARE-REV-B-HOOK-CLICK-COVER.md) exists with 29 locally passing geometry tests, including STEP reimport. Earlier four-screw and slider CAD preserved. Printing and elastic snap behaviour unverified; the options below are historical selection context.
+
 ## Proposed next task (needs design preference)
 
 Before modifying the CAD further, compare **A: front-hook + rear finger-release click lid**, **B: captured slide + retention detent**, and **C: front-hook + magnet hold**. Recommendation A on simplicity and shell strength, B if the user prefers sliding action. User has not chosen between those alternatives in this study. On selection: create distinct geometry files in `mechanical/revB/cad/`; retain the 2026-10-26 sliding and prior four-screw designs; run CAD clash/swept motion tests; provide drawings and a small printable tolerance coupon. **No case is print-approved.**

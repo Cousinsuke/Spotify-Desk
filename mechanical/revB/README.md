@@ -110,6 +110,12 @@ The user asked for exactly LCD-centred MX keys, a narrower knob-side case and sh
 
 The [bottom-cover mechanisms comparison](../../docs/HARDWARE-REV-B-BOTTOM-COVER-ALTERNATIVES.md) compares six choices. Current rail lid has no positive latch. **Recommended concept only:** two rigid front hooks and one accessible rear click latch, which would avoid cutting a rear-wall slide-through slot. Alternative: keep rails and add positive detent, or use tabs/magnets. User mechanism decision pending; no case geometry changed, no measured material-fit acceptance or guarantee that the Waveshare display fits through the bottom access hole.
 
+## User-selected hook-and-click underside cover CAD alternative (2026-10-26)
+
+- [Full mechanical study, STEP assets and no-false-fit warnings](../../docs/HARDWARE-REV-B-HOOK-CLICK-COVER.md). Two front 10mm locating tongues engage shallow slots; one rear integral 26×2.2mm horizontal flexure operates a ~7mm local keeper pocket, replacing long slide-in feed slot. No bottom cover screws; **four nominal M2.5 LCD screw target locations kept** at 98×60mm.
+- Files: cad/hook_click_cover_study.py, cad/hook_click_cover_parameters.json, cad/test_hook_click_cover_study.py, cad/hook_click_underside_plan.svg and cad/hook_click_operation.svg. **29 assistant tests pass (9 CadQuery/STEP)**; Windows user checks pending. Pre-generated STEP pair and assembly files delivered in chat ZIP. Earlier screwed and sliding covers remain unchanged.
+- **Physical latch elasticity, repeated service, printer tolerances, module installation path and exact screw access not proven.**
+
 ## Checks before manufacturing
 
 1. Confirm exact MX switch model and actual depths/mount clips.

@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1050" height="555" viewBox="0 0 1050 555">
+<rect width="1050" height="555" fill="#101820"/>
+<text x="55" y="43" font-family="Arial" font-size="24" fill="#ecf2f5">Rounded Spotify Desk / hook-and-click underside cover</text>
+<text x="55" y="69" font-family="Arial" font-size="14" fill="#b9c7d3">Two green front locating tongues + one gold rear finger release; zero cover screws</text>
+<rect x="62" y="92" width="577.20" height="307.45" rx="16" fill="#3c4c5b" stroke="#acc0d1"/>
+<rect x="104.18" y="137.88" width="492.84" height="215.69" rx="5" fill="#7e98af" stroke="#e8edf4"/>
+<rect x="215.55" y="128.26" width="37.00" height="14.06" fill="#7dd4a7" stroke="white"/>
+<rect x="448.65" y="128.26" width="37.00" height="14.06" fill="#7dd4a7" stroke="white"/>
+<rect x="295.10" y="333.43" width="96.20" height="8.14" fill="#efc072"/>
+<rect x="382.05" y="341.57" width="18.50" height="17.55" fill="#f3bf64"/>
+<text x="65" y="463" fill="#b4e5c6" font-family="Arial" font-size="17">FRONT → insert rigid tongues first</text>
+<text x="65" y="492" fill="#f2c68c" font-family="Arial" font-size="17">REAR → press to click; press latch toward FRONT to release</text>
+<text x="65" y="520" fill="#e2a676" font-family="Arial" font-size="13">Schematic geometry; elastically flexed latch travel and printed retention force unverified</text>
+</svg>
