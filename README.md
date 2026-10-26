@@ -75,6 +75,7 @@ The local `/device` Glucose screen can now **import a user-downloaded LibreView 
 - [Parametric 3D reference model (not a print-ready case)](mechanical/wedge_packaging_concept.scad)
 - [Rev B sharp and R5-rounded CAD package, ZIP and coordinates](mechanical/revB/README.md)
 - [Waveshare next-step study: 72 angled insertion poses and preassembled, underside-serviceable screen carrier rails](docs/HARDWARE-REV-B-SCREEN-PREASSEMBLY-AND-ENTRY-OPTIONS.md)
+- [Next-stage experimental 693-solid manufacturer STEP pose screening (local Windows run pending)](docs/HARDWARE-REV-B-WAVESHARE-TRUE-SOLIDS-SCREENING.md)
 
 - [Waveshare module insertion and screwdriver access: manufacturer-derived envelope/STEP collision screening](docs/HARDWARE-REV-B-WAVESHARE-SCREEN-INSTALLATION-PATH.md)
 
