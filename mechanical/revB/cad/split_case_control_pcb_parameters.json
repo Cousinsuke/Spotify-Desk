@@ -1,0 +1,53 @@
+{
+  "status": "EXPERIMENTAL split R5 front carrier / detachable rear shell; NOT fitted or approved",
+  "physical_rotation_deg": 180,
+  "keycap_rest_height_mm": 4,
+  "wall_mm": 3,
+  "seam_inward_w_mm": 24,
+  "seam_gap_mm": 0.4,
+  "control_pcb_front_w_mm": 18,
+  "control_pcb_thickness_mm": 1.6,
+  "control_pcb_outline_xv_mm": [
+    [
+      17,
+      80
+    ],
+    [
+      117,
+      80
+    ],
+    [
+      117,
+      36
+    ],
+    [
+      149,
+      36
+    ],
+    [
+      149,
+      57
+    ],
+    [
+      124,
+      57
+    ],
+    [
+      124,
+      105
+    ],
+    [
+      17,
+      105
+    ]
+  ],
+  "encoder_trial_bore_mm": 7.3,
+  "usb_c1_left_trial_local_xv_w_mm": [
+    -2,
+    9.244,
+    36.073,
+    49.655,
+    8.889,
+    17.051
+  ]
+}
