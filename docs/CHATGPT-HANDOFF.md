@@ -1,5 +1,11 @@
 # ChatGPT handoff — Spotify Desk Thing
 
+## 2026-10-26 Full Waveshare STEP pose screening script — local run pending
+
+- After the user's **20/20 full Windows CadQuery PASS**, committed independent read-only `mechanical/revB/cad/waveshare_true_solids_pose_study.py` and `test_waveshare_true_solids_pose_study.py`. The tool imports the real manufacturer STEP (expects 693 solids), maps original STEP axes to the physically rotated 180°/55° Rev B seating plane, and tests six *discrete* Y/Z sampled poses against the unchanged original V2 case STEP. Bounds are only broad-phase; potential overlaps use actual CAD-solid intersections. Positively proven collisions, sampled clear poses and INDETERMINATE compute/error states are explicitly distinct.
+- This new script has **not yet been run on the user's Windows reference STEP**, and the new regression test suite has **not yet been reported as passing by the user**. No continuous insertion route, cable/tool access, bracket-case fixing, or printability has been certified. Base case/lid/CAD generator and browser software untouched.
+- Instructions and caveats in `docs/HARDWARE-REV-B-WAVESHARE-TRUE-SOLIDS-SCREENING.md`. User should pull `main`, run synthetic Python tests via the existing isolated CadQuery 2.8.0 virtual environment, execute the true-solid local CLI against `C:\Users\lukeb\Downloads\SpotifyDesk-Waveshare-Official-3D\extracted\esp32-s3-touch-lcd-4_3.stp` and `C:\Users\lukeb\Documents\SpotifyDesk-CAD\References\HookClick-V2\output\SpotifyDesk_R5_hook_click_v2_CASE.step`, and provide status/results **without uploading private account information**.
+
 ## 2026-10-26 Windows full CAD checks now executed — user confirmation
 
 - User extracted `SpotifyDesk_R5_hook_click_v2_CASE.step` to `C:\Users\lukeb\Documents\SpotifyDesk-CAD\References\HookClick-V2\output\SpotifyDesk_R5_hook_click_v2_CASE.step`.
