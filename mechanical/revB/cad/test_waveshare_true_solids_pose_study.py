@@ -80,6 +80,12 @@ class CADTests(unittest.TestCase):
         r = screen_pose(self.case, self.parts, 0, 0, 3)
         self.assertEqual(r["status"], "SAMPLED_SOLID_COLLISION")
         self.assertGreater(r["first_intersection_mm3"], 0)
+        self.assertEqual(len(r["first_intersection_bbox_xyz_mm"]), 6)
+        self.assertEqual(len(r["first_colliding_solid_bbox_xyz_mm"]), 6)
+        x0,y0,z0,x1,y1,z1 = r["first_intersection_bbox_xyz_mm"]
+        self.assertGreater(x1, x0)
+        self.assertGreater(y1, y0)
+        self.assertGreater(z1, z0)
 
     def test_pose_translation_clear(self):
         r = screen_pose(self.case, self.parts, 50, 0, 3)
@@ -97,6 +103,7 @@ class CADTests(unittest.TestCase):
         r2 = screen_pose(far_shell, parts, 0, 0, 1)
         self.assertEqual(r2["status"], "INDETERMINATE_LIMIT")
         self.assertTrue(r2["uncertified"])
+        self.assertNotIn("first_intersection_bbox_xyz_mm", r2)
 
 
 if __name__ == "__main__":
