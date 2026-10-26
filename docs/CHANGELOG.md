@@ -1,5 +1,10 @@
 # Changelog / version history
 
+## Rev B true Waveshare seated clearance and extraction-probe planning — 2026-10-26
+
+- On user's Windows CadQuery 2.8.0 environment, the physically 180°-rotated manufacturer STEP and unchanged hook-click V2 R5 case were checked at the nominal seated pose using **693 of 693 exact solid intersections**; no solid intersection above **0.05 mm³** was detected. New pose test suite **8/8 passed**. This resolves the earlier final-pose compute limit but does not demonstrate actual LCD installation or fastening.
+- Existing sampled shifted straight-entry stages remain obstructed. Added a separate read-only **three-profile short extraction waypoint probe** with optional pitch/alternative direction and bounded exact CAD calculations; synthetic local unit tests passed, but the new full STEP probe remains pending Windows execution. No original case/lid or UI changes. See `docs/HARDWARE-REV-B-WAVESHARE-EXTRACTION-PATH.md`.
+
 ## Weather/Home v1.1: footer fit and dynamic Home tiles — 2026-10-25
 
 - User screenshots confirmed Bournemouth current weather and three-day cards render, but Weather's updated-source note was clipped by 800×480 bounds. Reduced Weather-only header/current condition/card spacing and shortened the note to a compact update timestamp and 15-minute refresh descriptor.
