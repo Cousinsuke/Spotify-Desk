@@ -1,5 +1,14 @@
 # ChatGPT handoff — Spotify Desk Thing
 
+## 2026-10-26 Windows screen preassembly checks — test evidence (not full CAD)
+
+- User fast-forwarded `main` on Windows 11 and confirmed `git status --short` empty / `git pull --ff-only origin main` up to date at the latest screen mounting study.
+- Ran `python -m unittest discover -s mechanical\\revB\\cad -p test_screen_install_bracket_options.py -v`: **20 tests discovered, 15 PASS, five SKIP, zero failures**. The five B-Rep checks did not execute because CadQuery and/or `SPOTIFY_HOOK_CLICK_V2_CASE_STEP` source STEP were not available in that Python session; do **not** describe them as validated.
+- Ran `screen_install_bracket_options.py --report-only` and opened `carrier_bar_mounting_plan.svg` and `staged_entry_2d_projection.svg` from `C:\\Users\\lukeb\\Documents\\SpotifyDesk-CAD\\Screen-Mount-Study`. Output retains the 2D-only staging Y translation [-10.129, -4.041] mm and explicitly warns that no 3D path or bracket attachment is validated. SVG appearance not explicitly accepted.
+- Next local CAD validation: locate the exact `SpotifyDesk_R5_hook_click_v2_CASE.step` from the previously generated V2 latch ZIP, install CadQuery (and Shapely) in a separate Windows Python environment, set the `SPOTIFY_HOOK_CLICK_V2_CASE_STEP` environment variable, then rerun the same tests. The Waveshare 2023 official STEP remains in a local Downloads reference folder and must not be removed; a 693-component faithful insertion-path study is still outstanding.
+- Downloads space audit showed the Spotify CAD assets are modest in size versus much larger Windows/Ubuntu ISOs and other unrelated project folders. Avoid deleting unique STEP/coupon archives; the original Rev B baseline and 16 historical software phase ZIPs already have GitHub backups. **No downloads have been deleted.**
+
+
 ## Home weather/glucose tiles and weather footer — 2026-10-25 (v1.1; needs screenshot)
 
 - User showed live Bournemouth Weather and Home screenshots for Weather v1.0. The 3-day forecast cards worked, but **the source/update line was clipped at the bottom of the Weather screen**. User asked for a condition icon next to the weather temperature on Home and **glucose number plus trend arrow instead of mmol/L**.
