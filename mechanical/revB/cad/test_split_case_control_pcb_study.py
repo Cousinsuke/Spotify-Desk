@@ -52,7 +52,7 @@ class Layout(unittest.TestCase):
         with tempfile.TemporaryDirectory() as t:
             d=Path(t);r=generate(self.dim,self.cfg,d,report_only=True)
             self.assertFalse((d/'SpotifyDesk_RevBC_FRONT_CARRIER_TRIAL.step').exists())
-            self.assertIn('L PCB', (d/'split_case_control_pcb_concept.svg').read_text(encoding='utf-8') if False else 'L PCB')
+            self.assertIn('PCB', (d/'split_case_control_pcb_concept.svg').read_text(encoding='utf-8'))
             self.assertEqual(json.loads((d/'split_case_control_pcb_report.json').read_text())['physical_print_approved'],False)
 
 try:
