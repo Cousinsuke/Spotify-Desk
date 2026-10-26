@@ -1,5 +1,13 @@
 # ChatGPT handoff — Spotify Desk Thing
 
+## 2026-10-26 Complete real-Waveshare STEP run — user evidence and next action
+
+- On Windows 11 the user pulled `5278323` and ran the new synthetic transform/intersection test: **8/8 PASS**. The separate actual manufacturer-model CLI imported **693 solids**, reference STEP bbox matched within **0.0031mm**, and used the unchanged original V2 case.
+- Six poses: at `(desk Y shift=-7, Z=-110)`, `SAMPLED_POSE_CLEAR` (0 potential intersections; far below case). The four closer Y=-7 stages at Z=-75/-40/-20/0 reported **true model-solid collisions** at first solid 0 with intersection volumes **49.6198 / 44.2904 / 347.2754 / 4354.9805mm³** respectively. **Final nominal `dy=0,dz=0`: `INDETERMINATE_LIMIT` after 160/693 checks**; NOT established clear nor colliding.
+- Detailed local JSON generated at `C:\Users\lukeb\Documents\SpotifyDesk-CAD\Waveshare-True-Solid-Study\waveshare_true_solids_pose_report.json`. A blocked sampled straight staged path does NOT prove every curved/angled insertion route is blocked. Cables, screws, carrier rails and print tolerances unmodeled; no hardware approval.
+- Next standalone code refinement pushed to `main`: in `waveshare_true_solids_pose_study.py`, `--seated-only --max-booleans-per-pose 1000` checks nominal seated pose exhaustively (up to 693 booleans) and adds world XYZ clash bounding boxes on positive collision; related synthetic tests updated. See `docs/HARDWARE-REV-B-WAVESHARE-TRUE-SOLIDS-SCREENING.md`. **New option and updated tests await user Windows run**, not yet acceptance.
+- Preserve current R5 exterior, lid V2, 4mm media keys, left USB-C and manufacturer original local STEP. If seated clearance is established, next find viable continuous ingress; if clash, use spatial location to distinguish mounts vs glass and evaluate separate accessible supports or removable front bezel without modifying original STEP.
+
 ## 2026-10-26 Full Waveshare STEP pose screening script — local run pending
 
 - After the user's **20/20 full Windows CadQuery PASS**, committed independent read-only `mechanical/revB/cad/waveshare_true_solids_pose_study.py` and `test_waveshare_true_solids_pose_study.py`. The tool imports the real manufacturer STEP (expects 693 solids), maps original STEP axes to the physically rotated 180°/55° Rev B seating plane, and tests six *discrete* Y/Z sampled poses against the unchanged original V2 case STEP. Bounds are only broad-phase; potential overlaps use actual CAD-solid intersections. Positively proven collisions, sampled clear poses and INDETERMINATE compute/error states are explicitly distinct.
