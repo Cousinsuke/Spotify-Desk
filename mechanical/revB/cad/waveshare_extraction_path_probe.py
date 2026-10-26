@@ -9,6 +9,7 @@ from __future__ import annotations
 import argparse
 import hashlib
 import json
+import math
 from pathlib import Path
 
 from waveshare_true_solids_pose_study import (
@@ -25,7 +26,29 @@ PROFILES = {
     "forward_pitch_minus": {"end_dy_mm": -8.0, "end_dz_mm": -28.0, "end_pitch_deg": -12.0},
     "rearward": {"end_dy_mm": 6.0, "end_dz_mm": -28.0, "end_pitch_deg": 0.0},
 }
-DEFAULT_PROFILES = ("vertical", "forward", "forward_pitch_plus")
+# For a 55-degree front face, +local W points inward/backward and down.
+# Trying vertical-down first can drive the board into the sloped face lip.
+# Use the CURRENT dimensioned face angle instead of a hardcoded world direction.
+FACE_TILT_DEG = float(json.loads(DIM.read_text(encoding="utf-8"))["face_tilt_deg"])
+NORMAL_Y = math.sin(math.radians(FACE_TILT_DEG))
+NORMAL_Z = -math.cos(math.radians(FACE_TILT_DEG))
+PROFILES.update({
+    "normal_in_4": {
+        "end_dy_mm": 4.0 * NORMAL_Y, "end_dz_mm": 4.0 * NORMAL_Z, "end_pitch_deg": 0.0
+    },
+    "normal_in_8": {
+        "end_dy_mm": 8.0 * NORMAL_Y, "end_dz_mm": 8.0 * NORMAL_Z, "end_pitch_deg": 0.0
+    },
+    # Only after withdrawing 4mm along the face normal, try 12mm further down.
+    # This is a two-stage waypoint hypothesis, NOT a verified extraction route.
+    "normal_in_4_then_down_12": {
+        "stages": [
+            {"end_dy_mm": 4.0 * NORMAL_Y, "end_dz_mm": 4.0 * NORMAL_Z, "end_pitch_deg": 0.0},
+            {"end_dy_mm": 4.0 * NORMAL_Y, "end_dz_mm": 4.0 * NORMAL_Z - 12.0, "end_pitch_deg": 0.0}
+        ]
+    }
+})
+DEFAULT_PROFILES = ("normal_in_4", "normal_in_8", "normal_in_4_then_down_12")
 
 
 def poses_for_profile(profile, fractions=FRACTIONS):
@@ -34,13 +57,29 @@ def poses_for_profile(profile, fractions=FRACTIONS):
         raise ValueError("Fraction sequence must start 0 and finish 1")
     if any(not 0 <= t <= 1 for t in fractions) or any(a >= b for a, b in zip(fractions, fractions[1:])):
         raise ValueError("Fractions must increase strictly within [0,1]")
-    return [{"fraction": t,
-             "dy_mm": round(profile["end_dy_mm"] * t, 4),
-             "dz_mm": round(profile["end_dz_mm"] * t, 4),
-             "pitch_deg": round(profile["end_pitch_deg"] * t, 4)} for t in fractions]
+    def lerp(a, b, t):
+        return round(a + (b-a)*t, 4)
+    start = {"end_dy_mm": 0.0, "end_dz_mm": 0.0, "end_pitch_deg": 0.0}
+    stages = profile.get("stages", [profile])
+    if not stages:
+        raise ValueError("Profile has no motion stages")
+    result = []
+    for stage_index, end in enumerate(stages):
+        for t in fractions:
+            if stage_index and t == 0:
+                continue  # Do not repeat the preceding segment endpoint.
+            result.append({
+                "fraction": round((stage_index + t)/len(stages), 4),
+                "stage": stage_index + 1,
+                "dy_mm": lerp(start["end_dy_mm"], end["end_dy_mm"], t),
+                "dz_mm": lerp(start["end_dz_mm"], end["end_dz_mm"], t),
+                "pitch_deg": lerp(start["end_pitch_deg"], end["end_pitch_deg"], t),
+            })
+        start = end
+    return result
 
 
-def check_profiles(names, probe, max_poses=20):
+def check_profiles(names, probe, max_poses=24):
     """probe(pose)-> status dict. Cache duplicate origins. Never call incomplete routes clear."""
     if not names or not 1 <= max_poses <= 500:
         raise ValueError("Must supply profiles and a reasonable pose limit")
@@ -85,7 +124,7 @@ def rotated_at_pose(base, pivot, pose):
 
 
 def run(manufacturer, case_file, out_dir, profiles=DEFAULT_PROFILES,
-        max_poses=20, max_booleans=700):
+        max_poses=24, max_booleans=700):
     import cadquery as cq
     dim = json.loads(DIM.read_text(encoding="utf-8"))
     ref = json.loads(REF.read_text(encoding="utf-8"))
@@ -112,9 +151,12 @@ def run(manufacturer, case_file, out_dir, profiles=DEFAULT_PROFILES,
         if len(parts) != ref["source"]["solid_count"]:
             raise ValueError("Lost model solids during rigid pose rotation")
         result = screen_pose(case, parts, 0, 0, max_booleans)
+        clash = result.get("first_intersection_bbox_xyz_mm")
+        where = f"; XYZ clash bounds={clash}" if clash is not None else ""
         print(f"dy={pose['dy_mm']:+6.2f}, dz={pose['dz_mm']:+6.2f}, "
               f"pitch={pose['pitch_deg']:+5.2f}: {result['status']} "
-              f"({result['exact_booleans_run']}/{result['potentially_intersecting_parts']} Booleans)", flush=True)
+              f"({result['exact_booleans_run']}/{result['potentially_intersecting_parts']} Booleans)"
+              f"{where}", flush=True)
         # Original solver sees part-already-transformed so its internal 0,0 offsets are not route offsets.
         return {k:v for k,v in result.items() if k not in ("dy_mm", "dz_mm")}
 
@@ -135,6 +177,7 @@ def run(manufacturer, case_file, out_dir, profiles=DEFAULT_PROFILES,
         "fabrication_approved": False,
         "warnings": [
             "The reverse extraction waypoints do not test swept motion between poses.",
+            "Inward face-normal motion (Y+ and Z- for selected 55 degree face) may itself clash with existing LCD supports.",
             "A blocked sampled position rejects only that particular rigid pose/route.",
             "No cable, screw head, driver, carrier rail, print tolerances or fitted hardware modeled.",
             "Any clear path waypoints are NOT physical insertion proof or measured minimum clearance.",
@@ -154,7 +197,7 @@ def main():
     ap.add_argument("--case-step", required=True, type=Path)
     ap.add_argument("--out-dir", required=True, type=Path)
     ap.add_argument("--profiles", nargs="+", choices=tuple(PROFILES), default=list(DEFAULT_PROFILES))
-    ap.add_argument("--max-total-poses", type=int, default=20)
+    ap.add_argument("--max-total-poses", type=int, default=24)
     ap.add_argument("--max-booleans-per-pose", type=int, default=700)
     a = ap.parse_args()
     if not 1 <= a.max_total_poses <= 500 or not 1 <= a.max_booleans_per_pose <= 1000:
