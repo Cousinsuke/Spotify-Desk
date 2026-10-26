@@ -77,6 +77,7 @@ The local `/device` Glucose screen can now **import a user-downloaded LibreView 
 - [Waveshare next-step study: 72 angled insertion poses and preassembled, underside-serviceable screen carrier rails](docs/HARDWARE-REV-B-SCREEN-PREASSEMBLY-AND-ENTRY-OPTIONS.md)
 - [Manufacturer 693-solid nominal seated position validated on Windows; insertion still open](docs/HARDWARE-REV-B-WAVESHARE-TRUE-SOLIDS-SCREENING.md)
 - [Experimental rigid screen extraction waypoint study (Windows validation pending)](docs/HARDWARE-REV-B-WAVESHARE-EXTRACTION-PATH.md)
+- [**New proposal: front-mounted display/control PCB with removable rear clamshell**](docs/HARDWARE-REV-B-SPLIT-CASE-CONTROL-PCB-CONCEPT.md)
 
 - [Waveshare module insertion and screwdriver access: manufacturer-derived envelope/STEP collision screening](docs/HARDWARE-REV-B-WAVESHARE-SCREEN-INSTALLATION-PATH.md)
 
