@@ -1,6 +1,6 @@
 # Waveshare true-solid STEP pose screening
 
-**Status: manufacturer-model Windows run completed; final seated pose unresolved at prior 160-Boolean limit. Follow-up seated-only diagnostic committed but awaiting execution. NOT fabrication approved.** This is a separate study: the accepted R5 case, four LCD mounts, 4 mm keycaps, left USB-C and hook-click V2 lid remain unchanged.
+**Status: manufacturer-model Windows run completed; nominal final seated position fully evaluated and clear above 0.05 mm³ penetration threshold (693/693 booleans). Screen installation and fastening are still unverified. NOT fabrication approved.** This is a separate study: the accepted R5 case, four LCD mounts, 4 mm keycaps, left USB-C and hook-click V2 lid remain unchanged.
 
 ## Scope and interpretation
 
@@ -43,6 +43,14 @@ $outSeated = "$HOME\Documents\SpotifyDesk-CAD\Waveshare-Seated-Only"
   --max-booleans-per-pose 1000
 Get-Content "$outSeated\waveshare_true_solids_pose_report.json"
 ```
+
+## Nominal seated clearance confirmed by Windows (2026-10-26)
+
+- User pulled `bdbc5ad`, then re-ran `test_waveshare_true_solids_pose_study.py` on Windows: **8/8 passed**, no skipped or failed tests.
+- User ran `--seated-only --max-booleans-per-pose 1000` on the official local 693-solid 2023 manufacturer STEP and unmodified V2 R5 case STEP. Result: **`SAMPLED_POSE_CLEAR`**, **693/693 exact solid intersections completed**; **no model-material intersection above 0.05 mm³** for the final position `(dy=0,dz=0)` with assumed 3.25 mm glass recess.
+- SHA-256 values match the earlier recorded manufacturer STEP `d535d0e3b561c8f3d45a39f51eb2f1210d5e1d4875d104c339eb33e190a161c2` and baseline V2 case `87bf153a0bd2c48f1e896d8d84b6cd88f77e74aa3c8eaa4440c1669148f72b73`; case/manufacturer reference bounds unchanged.
+- The earlier `INDETERMINATE_LIMIT` at 160 of 693 booleans is **resolved for nominal seating only**. This does *not* prove there is a continuous installation path or safe fastener access; zero or near-zero surface clearance, optional rails, cables and hardware revision are not established.
+- **Next experimental stage:** inspect sampled near-seat extraction motions in [the separate path probe](HARDWARE-REV-B-WAVESHARE-EXTRACTION-PATH.md). Keep baseline enclosure, mounts and V2 lid intact.
 
 ## Windows PowerShell
 
