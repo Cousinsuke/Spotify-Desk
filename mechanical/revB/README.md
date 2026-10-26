@@ -100,6 +100,12 @@ The user asked for exactly LCD-centred MX keys, a narrower knob-side case and sh
 - Case support lip and four physical cover-screw bosses added; separate inset 2mm service lid, 0.4mm nominal all-edge clearance, four M2.5 candidate clearance holes and *untested* 2mm pilot bosses. Four cantilevered screen alignment brackets match 98x60mm 2023 Waveshare STEP standoff centres. **16 assistant-side tests pass** and lid has zero computed intersection with case. Screen installation through ~59mm underside hatch and cable/tool reach **unresolved**; not fabrication ready.
 - **Source publishing status:** [`cad/rear_cover_screen_mount_study.py`](cad/rear_cover_screen_mount_study.py), [settings](cad/rear_cover_screen_mount_study.json), [16-case regression suite](cad/test_rear_cover_screen_mount_study.py) and the two SVGs are now natively tracked. User can `git pull` and use `--report-only` without CadQuery; two to four optional B-Rep tests skip when optional CadQuery/Shapely are absent. Full STEP case/cover/assembly files remain in the separate chat ZIP.
 
+## Screwless sliding underside cover (next experimental alternative, 2026-10-26)
+
+- Following user preference, the bottom lid is now a **screwless slide-in cover**, not the older four-screw lift-out hatch. The Waveshare screen retains **four nominal M2.5 screw locations**, based on 98×60mm manufacturer centres. See [CAD study and cautions](../../docs/HARDWARE-REV-B-SCREWLESS-SLIDING-COVER.md).
+- Source `cad/slide_in_rear_cover_study.py`, spec `cad/slide_in_rear_cover_study.json`, tests `cad/test_slide_in_rear_cover_study.py`; plans `cad/slide_cover_underside_plan.svg`, `cad/slide_cover_rail_section.svg`. Two side captured guide tracks, opening through the rear underside wall and small rear thumb tab permit Y-axis insertion; 0.4mm nominal side gap, 2mm cover thickness. No lid screws or lid screw bosses.
+- **21 assistant-side tests passed** including four CAD-specific cases and 10 sampled zero-overlap slide positions; downloadable STEP assemblies in a separate conversation ZIP. **WARNING:** no positive detent has yet been verified, so lid can potentially slide out unintentionally. Print-test catch/tolerance, rear-wall strength and screen insertion/access before accepting.
+
 ## Checks before manufacturing
 
 1. Confirm exact MX switch model and actual depths/mount clips.

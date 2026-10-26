@@ -68,6 +68,10 @@ The **separately supplied STEP package** opens in FreeCAD even if Windows Python
 python mechanical\revB\cad\rear_cover_screen_mount_study.py --out-dir "$HOME\Downloads\SpotifyDesk-RevB-Rear-Cover-STEP"
 ```
 
+## Replacement for the four-screw lid — screwless sliding concept (2026-10-26)
+
+The user reviewed the four-screw bottom cover described here and requested a **slide-in, slide-out underside panel with zero lid screws**, while agreeing to retain **screw-fastened touchscreen mounts**. The [separate sliding-lid CAD study](HARDWARE-REV-B-SCREWLESS-SLIDING-COVER.md) now represents the preferred exploration path, with guide rails and a rear entry. This original four-screw prototype is **preserved for history only**, not assumed to be accepted. No positive retention catch or physical assembly/print validation has yet been completed.
+
 ## Remaining gates before physical manufacture
 
 1. **Screen insertion route:** the display module is approximately 106.1 × 68.3 mm, but the bottom access opening's Y width is approximately **59.1 mm**. An angled installation motion might work, but the actual insertion trajectory and access to four rear screws **are not demonstrated**. This is a critical next mechanical study. Enlarging the hatch or separating the case's front/rear could be required.

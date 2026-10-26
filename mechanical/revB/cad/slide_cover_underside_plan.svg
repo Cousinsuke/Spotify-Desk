@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1050" height="550" viewBox="0 0 1050 550">
+<rect width="1050" height="550" fill="#121923"/>
+<text x="58" y="38" fill="#ffffff" font-size="24" font-family="Arial">Spotify Desk R5 / screwless sliding underside panel</text>
+<text x="58" y="66" fill="#cad4de" font-size="15" font-family="Arial">Slides out toward the REAR (+Y). Side guide lips capture the cover; no rear-panel screws.</text>
+<rect x="60" y="95" width="561.6" height="299.1362687950143" rx="15" fill="#374653" stroke="#93abbf" stroke-width="2"/>
+<rect x="99.6" y="138.2" width="482.40000000000003" height="212.7362687950143" fill="#131d27" stroke="#d4dbe0"/>
+<rect x="101.03999999999999" y="139.64" width="479.52" height="209.85626879501427" fill="#667f94" stroke="#e5f0f6" stroke-width="1.4"/>
+<rect x="304.8" y="345.8962687950143" width="72.0" height="51.12000000000001" fill="#8495a5"/>
+<rect x="92.4" y="138.2" width="18.0" height="212.7362687950143" fill="#c6a46c" opacity=".78"/>
+<rect x="571.2" y="138.2" width="18.0" height="212.7362687950143" fill="#c6a46c" opacity=".78"/>
+<text x="220" y="455.3362687950143" font-family="Arial" font-size="17" fill="#efc28d">Slide OUT ↓ toward rear</text>
+<text x="60" y="489" font-family="Arial" font-size="15" fill="#d8e1e9">Gold = captured side rail zones (underside). Pull tab is centered at rear. Screen screws remain.</text>
+<text x="60" y="513" font-family="Arial" font-size="14" fill="#e9b779">No latch durability or full physical cable/board insertion proof. Do not fabricate as final design.</text>
+</svg>

@@ -70,6 +70,11 @@ This is **historical milestone tracking**, not a separate implementation branch 
 - `node --check` and four dashboard-specific Python checks passed, but the **full Windows suite was 42/44 passing**; two pre-existing Linux-only companion tests error on Windows (`KeyError: has_playback`). Nonfatal test file-handle ResourceWarnings remain. Spotify PC playback/buttons, all glucose chart range buttons, Omarchy and ESP32 not freshly runtime tested. The original `/` Spotify OAuth returned `client_id: Invalid` in a separate flow; resolve developer app ID/status later.
 - Documentation/checkpoint update only; no additional dashboard/firmware code or real Libre 2 Plus integration in this entry.
 
+## Screwless slide-in underside cover instead of four lid screws — 2026-10-26
+- User requested simplifying the bottom access lid to slide in/out without screws, keeping screws for the touchscreen mounting.
+- Generated separate R5/USB-left/4mm enclosure with genuine rear-wall feed slot, two captured side rail tracks and ~2mm slider with thumb pull. No lid fastener holes or bosses; 4 nominal M2.5 screen mounting holes retained at manufacturer 98×60mm centres. Older four-screw case/lid preserved.
+- **21 assistant-side tests passed**, including separate B-Rep STEP roundtrips, zero closed-position material intersection and 10 sampled collision-free translation positions. A positive anti-slide latch, print tolerance, rear slot strength and access to the physical Waveshare mount remain open, not fabrication-approved. Separate CAD STEP ZIP delivered; generator+tests+drawings tracked in GitHub.
+
 ## Removable underside hatch and Waveshare LCD mounting reference — 2026-10-23
 - Generated new R5 4mm media-control case STEP with screen support cantilevers, rear/underside seating lip, four attached screw bosses and **separate 2mm lift-out underside lid STEP** with 0.4mm nominal edge allowance; both installed and exploded assembly STEP outputs in separate chat ZIP.
 - Screen stand-off targets from manufacturer's actual 2023 reference: 98×60mm pitch, nominal contact W15.85mm; candidate M2.5 lid/screen fasteners require part-specific pilot/strength verification. **16 assistant-side tests pass** including actual STEP CAD validity and zero lid/case solid overlap. Not print/fabrication approved; board installation through underside hatch and screw access unproven.

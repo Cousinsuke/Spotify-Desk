@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1000" height="450" viewBox="0 0 1000 450">
+<rect width="1000" height="450" fill="#141b25"/>
+<text x="45" y="39" fill="white" font-family="Arial" font-size="23">Slide cover section: side guide rails and open rear entrance</text>
+<text x="45" y="65" fill="#c7d7e6" font-family="Arial" font-size="15">Looking along rear-to-front slide path. Inward Z is upward in diagram.</text>
+<rect x="155" y="115" width="145" height="210" fill="#506575"/>
+<rect x="700" y="115" width="145" height="210" fill="#506575"/>
+<rect x="290" y="265" width="420" height="60" fill="#647c8e" stroke="#eaf1fa" stroke-width="3"/>
+<rect x="290" y="132" width="420" height="35" fill="#647c8e"/>
+<rect x="250" y="188" width="500" height="67" fill="#9cb1c2" stroke="white" stroke-width="2"/>
+<text x="375" y="225" font-family="Arial" font-size="16" fill="#172333">2 mm sliding cover</text>
+<text x="45" y="371" font-family="Arial" font-size="15" fill="#d4e3ed">Lower rails Z ≤ 0.30 mm / lid Z 0.55…2.55 / upper rails start Z 2.85 mm</text>
+<text x="45" y="400" font-family="Arial" font-size="15" fill="#d5ae79">Rear wall throat is cut up to Z 2.80 mm for access. Dimensions conceptual.</text>
+</svg>

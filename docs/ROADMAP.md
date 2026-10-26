@@ -87,6 +87,8 @@ This roadmap tracks **planned phases**, not every ad-hoc fix. Actual latest work
 
 **2026-10-23 experimental underside hatch + screen mounting study:** Built independent **4mm key R5 USB-left STEP case**, removable lid, 4 case-connected screw bosses, 4 screen support cantilevers aligned to the Waveshare 98×60mm hardware standoffs, exploded/assembled STEP views. [Design note](HARDWARE-REV-B-REAR-COVER-AND-SCREEN-MOUNTS.md), offline source and STEP files in chat ZIP. **16 assistant-side tests pass** including STEP roundtrips and 0 case/lid intersection. User Windows testing/physical screen insertion and screw-tool clearance remain open; 59.1mm hatch depth may complicate insertion of ~68mm board. New generator, settings, tests and schematic SVGs committed to GitHub (source SHA verified); binary case/lid STEP ZIP remains separate, earlier 4mm shell preserved.
 
+**2026-10-26 slide-in underside cover redesign:** User rejected four bottom-cover screws as overengineered, retaining display screws. Created [separate slide-in cover/rail CAD](HARDWARE-REV-B-SCREWLESS-SLIDING-COVER.md) with rear entry slot, guide rails and thumb pull, preserving rounded R5, 4mm cap height, USB-left and 4 manufacturer standoff-aligned screw mounts. **21 new assistant-side tests PASS** including STEP export/reimport, 0mm³ closed interference and 10 sampled withdrawal poses. Critical: **no verified positive latch**, printer-fit, wall strength or module assembly path; old four-screw CAD unchanged, Windows user validation pending.
+
 ## Phase 7 — Standalone mode and secure provisioning
 - [ ] Define what 'standalone' means: remote Spotify Connect control vs direct audio playback
 - [ ] Confirm Spotify API/SDK constraints and provisioning/refresh-token storage approach

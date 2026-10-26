@@ -1,0 +1,53 @@
+{
+  "status": "DESIGN STAGE / screwless bottom slide-in cover; screen still uses 4 trial M2.5 screw positions; do not print for assembly yet",
+  "physical_rotation_deg": 180,
+  "cap_rest_height_mm": 4.0,
+  "rear_opening": {"x_edge_mm": 11.0, "y_edge_mm": 12.0, "cut_height_mm": 8.0},
+  "cover": {
+    "perimeter_clearance_mm": 0.4,
+    "bottom_z_mm": 0.55,
+    "thickness_mm": 2.0,
+    "pull_tab_width_mm": 20.0,
+    "pull_tab_rear_projection_mm": 0.8,
+    "pull_tab_overlap_mm": 1.0,
+    "thumb_grip_groove_count": 3,
+    "thumb_grip_groove_width_mm": 0.8,
+    "thumb_grip_groove_depth_mm": 0.3
+  },
+  "sliding_rails": {
+    "overhang_into_opening_mm": 3.0,
+    "outer_overlap_into_case_mm": 2.0,
+    "lower_rail_z_min_mm": -0.05,
+    "lower_rail_z_max_mm": 0.30,
+    "upper_rail_z_min_mm": 2.85,
+    "upper_rail_z_max_mm": 3.50,
+    "mouth_cut_upper_z_mm": 2.80,
+    "mouth_y_overlap_mm": 0.80,
+    "grip_clearance_mm": 0.15
+  },
+  "screen_brackets": {
+    "flange_diameter_mm": 8.7,
+    "fastener_diameter_mm": 2.9,
+    "flange_front_clearance_mm": 0.10,
+    "flange_thickness_mm": 2.8,
+    "beam_width_mm": 8.5,
+    "anchor_width_mm": 8.5,
+    "anchor_front_w_mm": 2.8,
+    "anchor_v_top_mm": 4.2,
+    "anchor_v_bottom_mm": 80.0,
+    "anchor_v_length_mm": 6.0,
+    "anchor_to_flange_rear_extension_mm": 0.3
+  },
+  "retention_note": "Guide rails plus trial 0.4mm plan gap; no proven positive latch. Anti-rattle friction / clip detent must be designed and print-fit tested to prevent the lid sliding out if moved.",
+  "hardware_unverified": [
+    "slide-in rail friction and snap catch retention; this model has NO positive locking catch",
+    "rear throat weakens a long wall: FDM print direction, strength and local wall minimum must be assessed",
+    "bottom plate might slide out when controller is tilted or picked up if only lightly friction retained",
+    "physical sliding motion with chosen printer/material; expansion, warp and interference from hardware",
+    "screen insertion path through bottom opening and tool/screw access; 98x60 measured STEP centres do not prove actual module can be fitted",
+    "exact Waveshare touch module revision and M2.5 screw orientation, washers and service gap",
+    "MX keycap profiles and 4mm at rest; actual caps and switches not purchased",
+    "right-side I2C cable, left-side actual USB-C plug strain relief and nearby antenna",
+    "case feet and clearance of thumb-pull tab when placed on a desk"
+  ]
+}
