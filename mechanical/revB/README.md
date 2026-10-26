@@ -106,6 +106,10 @@ The user asked for exactly LCD-centred MX keys, a narrower knob-side case and sh
 - Source `cad/slide_in_rear_cover_study.py`, spec `cad/slide_in_rear_cover_study.json`, tests `cad/test_slide_in_rear_cover_study.py`; plans `cad/slide_cover_underside_plan.svg`, `cad/slide_cover_rail_section.svg`. Two side captured guide tracks, opening through the rear underside wall and small rear thumb tab permit Y-axis insertion; 0.4mm nominal side gap, 2mm cover thickness. No lid screws or lid screw bosses.
 - **21 assistant-side tests passed** including four CAD-specific cases and 10 sampled zero-overlap slide positions; downloadable STEP assemblies in a separate conversation ZIP. **WARNING:** no positive detent has yet been verified, so lid can potentially slide out unintentionally. Print-test catch/tolerance, rear-wall strength and screen insertion/access before accepting.
 
+## Screwless underside closure options review (2026-10-26)
+
+The [bottom-cover mechanisms comparison](../../docs/HARDWARE-REV-B-BOTTOM-COVER-ALTERNATIVES.md) compares six choices. Current rail lid has no positive latch. **Recommended concept only:** two rigid front hooks and one accessible rear click latch, which would avoid cutting a rear-wall slide-through slot. Alternative: keep rails and add positive detent, or use tabs/magnets. User mechanism decision pending; no case geometry changed, no measured material-fit acceptance or guarantee that the Waveshare display fits through the bottom access hole.
+
 ## Checks before manufacturing
 
 1. Confirm exact MX switch model and actual depths/mount clips.

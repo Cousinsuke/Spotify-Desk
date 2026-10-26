@@ -70,6 +70,10 @@ This is **historical milestone tracking**, not a separate implementation branch 
 - `node --check` and four dashboard-specific Python checks passed, but the **full Windows suite was 42/44 passing**; two pre-existing Linux-only companion tests error on Windows (`KeyError: has_playback`). Nonfatal test file-handle ResourceWarnings remain. Spotify PC playback/buttons, all glucose chart range buttons, Omarchy and ESP32 not freshly runtime tested. The original `/` Spotify OAuth returned `client_id: Invalid` in a separate flow; resolve developer app ID/status later.
 - Documentation/checkpoint update only; no additional dashboard/firmware code or real Libre 2 Plus integration in this entry.
 
+## Alternative screwless bottom-cover closure research — 2026-10-26
+- Researched six non-screw closure approaches against R5 156mm USB-left enclosure: front-hook/rear-click (recommended provisional), slide+detent, hook+magnet, perimeter multi-snap, rear hinge/catch, friction-only (discouraged).
+- Added [technical side-by-side options](HARDWARE-REV-B-BOTTOM-COVER-ALTERNATIVES.md) with printed-fit caveats and external references. No new case STEP generated or approved; older screw-on and screwless sliders kept intact. Current catch retention and Waveshare insertion path remain unverified.
+
 ## Screwless slide-in underside cover instead of four lid screws — 2026-10-26
 - User requested simplifying the bottom access lid to slide in/out without screws, keeping screws for the touchscreen mounting.
 - Generated separate R5/USB-left/4mm enclosure with genuine rear-wall feed slot, two captured side rail tracks and ~2mm slider with thumb pull. No lid fastener holes or bosses; 4 nominal M2.5 screen mounting holes retained at manufacturer 98×60mm centres. Older four-screw case/lid preserved.

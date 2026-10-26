@@ -89,6 +89,8 @@ This roadmap tracks **planned phases**, not every ad-hoc fix. Actual latest work
 
 **2026-10-26 slide-in underside cover redesign:** User rejected four bottom-cover screws as overengineered, retaining display screws. Created [separate slide-in cover/rail CAD](HARDWARE-REV-B-SCREWLESS-SLIDING-COVER.md) with rear entry slot, guide rails and thumb pull, preserving rounded R5, 4mm cap height, USB-left and 4 manufacturer standoff-aligned screw mounts. **21 new assistant-side tests PASS** including STEP export/reimport, 0mm³ closed interference and 10 sampled withdrawal poses. Critical: **no verified positive latch**, printer-fit, wall strength or module assembly path; old four-screw CAD unchanged, Windows user validation pending.
 
+**2026-10-26 screwless bottom-cover mechanism research (no CAD change):** user requested alternatives to existing unsecured slider. Documented [six closure choices](HARDWARE-REV-B-BOTTOM-COVER-ALTERNATIVES.md), provisionally preferring **two front hooks + one rear accessible click latch** to remove long rear-wall feed opening, or slide-in rails with a positive detent if user prefers continuous sliding. Magnetic locating hook lid feasible with added hardware. Supplier-agnostic printed clearances, latch fatigue, PETG print orientation and previously unresolved Waveshare installation path remain explicit gates. Await user mechanism choice; preserve previous CAD and selected 4mm keycap design.
+
 ## Phase 7 — Standalone mode and secure provisioning
 - [ ] Define what 'standalone' means: remote Spotify Connect control vs direct audio playback
 - [ ] Confirm Spotify API/SDK constraints and provisioning/refresh-token storage approach
