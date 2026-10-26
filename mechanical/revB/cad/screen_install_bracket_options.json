@@ -1,0 +1,51 @@
+{
+  "status": "Separate installation and accessible-fastening trial only; no shell changes/real assembly proof",
+  "rotation_deg": 180,
+  "rest_keycap_mm": 4.0,
+  "trial_rear_glass_w_mm": 3.25,
+  "entry_samples": {
+    "temporary_y_shifts_mm": [
+      -10.0,
+      -7.0,
+      -4.5,
+      0.0
+    ],
+    "temporary_tilt_deg": [
+      -12.0,
+      0.0,
+      12.0
+    ],
+    "approach_z_offsets_mm": [
+      -125.0,
+      -110.0,
+      -75.0,
+      -40.0,
+      -20.0,
+      0.0
+    ]
+  },
+  "preassembled_carrier": {
+    "bar_width_x_mm": 8.0,
+    "bar_start_v_mm": 9.8,
+    "length_v_mm": 64.0,
+    "bar_thickness_w_mm": 2.8,
+    "board_hole_diameter_mm": 2.9,
+    "ear_v_mm": 41.8,
+    "ear_inset_x_mm": 10.0,
+    "vertical_ear_diameter_mm": 8.0,
+    "vertical_ear_hole_mm": 2.9
+  },
+  "access_screw_trial": {
+    "shaft_diameter_mm": 4.0,
+    "tool_length_mm": 75.0
+  },
+  "warnings": [
+    "The original V2 case, front 4mm keycaps and hook-click cover are unchanged; no screw bosses for new bars are designed in it",
+    "2023 Waveshare full board is modelled only as a conservative oriented bounding prism in 3D motion samples",
+    "The bar design is schematic; potential existing-bracket and PCB collision must be screened, and real purchased board/bolts/cables checked",
+    "Preassembly of LCD into rails before insertion may reduce in-case screwdriver needs but could worsen physical insertion clearance",
+    "72 independent pose samples (4 shifts \u00d7 3 pitch angles \u00d7 6 Z offsets) are not a certified continuous rigid-body installation trajectory",
+    "Vertical screw paths ignore screw heads, socket drivers, wiring, antenna, board components and hand clearance",
+    "Screen fixing and carrier-to-case fixing must have known bearing faces, boss strength and actual fastener lengths prior to manufacturing"
+  ]
+}

@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1150" height="645" viewBox="0 0 1150 645">
+<rect width="1150" height="645" fill="#0d131c"/>
+<text x="42" y="37" fill="#f5f7fb" font-family="Arial" font-size="24">Waveshare carrier-bars concept - board screws on bench first</text>
+<text x="42" y="64" fill="#c7d4e5" font-family="Arial" font-size="15">Two rails along full display height; NOT compatible with the unchanged case mounting arms without redesign</text>
+<rect x="92.0" y="127.0" width="424.4" height="271.2" rx="8" fill="#223e53" stroke="#95bed4" stroke-width="2"/>
+<rect x="92.2" y="134.2" width="32.0" height="256.0" rx="3" fill="#65b7a2" fill-opacity=".5" stroke="#8de3ce" stroke-width="2"/>
+<circle cx="108.2" cy="142.2" r="6" fill="#101820" stroke="#e5edf2" stroke-width="2"/>
+<circle cx="108.2" cy="382.2" r="6" fill="#101820" stroke="#e5edf2" stroke-width="2"/>
+<circle cx="148.2" cy="262.2" r="10" fill="#dcaf6a" stroke="#fbd292" stroke-width="2"/>
+<rect x="484.2" y="134.2" width="32.0" height="256.0" rx="3" fill="#65b7a2" fill-opacity=".5" stroke="#8de3ce" stroke-width="2"/>
+<circle cx="500.2" cy="142.2" r="6" fill="#101820" stroke="#e5edf2" stroke-width="2"/>
+<circle cx="500.2" cy="382.2" r="6" fill="#101820" stroke="#e5edf2" stroke-width="2"/>
+<circle cx="460.2" cy="262.2" r="10" fill="#dcaf6a" stroke="#fbd292" stroke-width="2"/>
+<text x="590" y="132" font-family="Arial" fill="#b5f1df" font-size="19">4 existing Waveshare screw axes (98 x 60mm)</text>
+<text x="590" y="172" font-family="Arial" fill="#ffcf8d" font-size="19">2 trial vertical fastening ears (gold)</text>
+<text x="590" y="220" font-family="Arial" fill="#e0e7f3" font-size="16">Assemble LCD into twin bars on a bench,</text>
+<text x="590" y="246" font-family="Arial" fill="#e0e7f3" font-size="16">then insert assembly and screw to CASE using</text>
+<text x="590" y="272" font-family="Arial" fill="#e0e7f3" font-size="16">accessible UNDERBODY fasteners.</text>
+<text x="590" y="318" font-family="Arial" fill="#ffbeaa" font-size="16">Case-side attachment seats not built!</text>
+<text x="590" y="345" font-family="Arial" fill="#ffbeaa" font-size="16">Interference, screw access and cable fit unverified.</text>
+<text x="590" y="415" font-family="Arial" fill="#c5d3e0" font-size="14">Same R5 body, USB-left, 4mm caps, hook-click V2 lid</text>
+<text x="46" y="530" font-family="Arial" fill="#a9c2da" font-size="17">CONCEPT ONLY - rails do not alter source CAD shell or replace its fixed brackets.</text>
+<text x="46" y="560" font-family="Arial" fill="#e4ae7a" font-size="16">A carrier could make LCD fastening on a workbench possible - but needs an assembly route and case anchors.</text>
+</svg>

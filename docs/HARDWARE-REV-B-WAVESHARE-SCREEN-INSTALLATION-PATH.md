@@ -30,6 +30,12 @@ At its nominal *seated* position, that whole rectangular envelope extends to des
 
 **Do not read any of these results as the actual full 693-body STEP tested against the case.** Full STEP import was attempted but exceeded this environment's run time; these checks deliberately use manufacturer-extracted box bounds instead. As a result a collision *can be conservative/false* and a noncollision may omit real cables, fastener heads or board variations.
 
+## Follow-up: 72 angled candidate poses and preattached carrier bracket option (2026-10-26)
+
+A subsequent [independent study](HARDWARE-REV-B-SCREEN-PREASSEMBLY-AND-ENTRY-OPTIONS.md) samples **72** Y-shift/pitch/Z positions against the same real case and manufacturer-derived *filled bounding prism*. All **24 zero-overlap positions are far below the enclosure**; none of 48 sampled near-approach positions are box-clear. This still does **not** prove a path is impossible because a rectangular prism fills unused PCB space and the positions do not establish continuous motion. Two valid STEP side-rail mounting options were generated with aligned 98×60mm four WaveShare standoff pattern and underside screw ears. **Each trial bar clashes with current case mounting arms by ~214.56mm³**, so this is not a drop-in solution; two trial vertical tool shafts clear the case. Earlier housing and hook-click V2 lid were not modified; a new internally revised screen carrier case would be necessary *only after* verifying actual assembly route and component geometry.
+
+
+
 ## Recommended engineering decision (before cutting any new case)
 
 1. **Keep the 4mm R5 case and hook-click V2 latch unchanged for now.** The hatch could be adequate for a *carefully tilted and shifted* insertion, but a collision-free rigid 3D trajectory has not been demonstrated. Keep the case's original strength and appearance until we find a concrete reason to change it.

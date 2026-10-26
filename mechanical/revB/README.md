@@ -131,6 +131,14 @@ The [bottom-cover mechanisms comparison](../../docs/HARDWARE-REV-B-BOTTOM-COVER-
 
 
 
+## Waveshare preassembled carrier bar and angled installation screening (2026-10-26)
+
+- [Source-grounded screen assembly and accessible bracket study](../../docs/HARDWARE-REV-B-SCREEN-PREASSEMBLY-AND-ENTRY-OPTIONS.md). New files `cad/screen_install_bracket_options.py`, `cad/screen_install_bracket_options.json`, `cad/test_screen_install_bracket_options.py`, `cad/carrier_bar_mounting_plan.svg`, `cad/staged_entry_2d_projection.svg`.
+- **No existing case or hook-click lid geometry changed**. Two trial preattachable side rails (each 8×64×2.8mm with 2 Ø2.9mm standoff holes) may let four screen bolts be attached OUTSIDE enclosure, then use two easier underside-facing case attachments. **BUT each rail clashes 214.56mm³ with unchanged fixed case mounts, so NOT a usable drop-in assembly.** Two 4mm vertical shank tool paths at case underside were 0mm³ clash; no case receiving bosses or tool head geometry implemented. R5 156mm body, USB-left, four M2.5 screen targets, 4mm keycaps and zero lid screws preserved.
+- **72 conservative manufacturer BOX pose checks**: 24 clear only when board is far below body; no certified path near installed state. **20 assistant-side tests PASS**, 5 require optional CadQuery V2 case STEP; Windows user run pending. Full true 693-solid manufacturer body, staged cables, real bracket fastening/load and physical print tests remain unsolved. Generated two rail STEP files + two reference assembly STEP files delivered only as separate ZIP, not the manufacturer's original model.
+
+
+
 ## Checks before manufacturing
 
 1. Confirm exact MX switch model and actual depths/mount clips.

@@ -100,6 +100,10 @@ This roadmap tracks **planned phases**, not every ad-hoc fix. Actual latest work
 
 
 
+**2026-10-26 Waveshare access-friendly mounting study:** user requested angled insertion and accessible screen mounts. [New 72 sampled 3D case/prism poses plus true STEP preassembly rails](HARDWARE-REV-B-SCREEN-PREASSEMBLY-AND-ENTRY-OPTIONS.md). The 2023 whole-module bounding prism staged 2D Y shift range is −10.129…−4.041mm; **24/72 poses collision-free only when entirely below case**, none near seated entry. Two 8×64×2.8mm sidebar STEP models reopen valid and match four 98×60mm mounting points, but each clashes with *current* case arms by **214.56mm³**; two trial underside vertical screwdriver cylinders pass unchanged case (0mm³). **20 assistant-side tests pass**; physical entry and attachment NOT proven, no case modification. Explore separate internally revised screen carrier supports only after accurate full Waveshare geometry/path checks.
+
+
+
 ## Phase 7 — Standalone mode and secure provisioning
 - [ ] Define what 'standalone' means: remote Spotify Connect control vs direct audio playback
 - [ ] Confirm Spotify API/SDK constraints and provisioning/refresh-token storage approach

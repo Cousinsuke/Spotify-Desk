@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1100" height="580" viewBox="0 0 1100 580">
+<rect width="1100" height="580" fill="#0f1720"/>
+<text x="35" y="39" font-family="Arial" fill="#f3f7fb" font-size="24">Underbody entry: staging a 3D box is not the same as installing the real LCD</text>
+<text x="35" y="68" font-family="Arial" fill="#acccdf" font-size="16">Desk Y (front to rear, mm), box rotated with the fitted 55 degree screen face</text>
+<rect x="78.0" y="175" width="415.46500000000003" height="146" fill="#334457" stroke="#93b3cc" stroke-width="2"/>
+<rect x="138.0" y="176" width="295.46500000000003" height="143" fill="#101820" stroke="#8de1db" stroke-width="2"/>
+<rect x="188.645" y="207" width="265.03" height="65" fill="#eab46e" fill-opacity=".65" stroke="#efc48c"/>
+<text x="195.645" y="248" fill="#18202a" font-size="14">SEATED screen bbox</text>
+<rect x="153.645" y="354" width="265.03" height="65" fill="#65b8ae" fill-opacity=".6" stroke="#9ae1d5"/>
+<text x="83" y="464" fill="#acdcdb" font-family="Arial" font-size="15">Blue-green rectangle: -7mm desk-Y shift to pass theoretical 2D hatch footprint.</text>
+<text x="83" y="492" fill="#efc28d" font-family="Arial" font-size="15">Orange rectangle: nominal seated screen extends 4.04mm past rear hatch edge.</text>
+<text x="83" y="530" fill="#dfe5ed" font-family="Arial" font-size="14">Neither projected rectangle is a swept 3D rigid-body path, nor the actual PCB silhouette.</text>
+</svg>
