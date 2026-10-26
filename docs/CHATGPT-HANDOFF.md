@@ -1,5 +1,14 @@
 # ChatGPT handoff — Spotify Desk Thing
 
+## 2026-10-26 Windows full CAD checks now executed — user confirmation
+
+- User extracted `SpotifyDesk_R5_hook_click_v2_CASE.step` to `C:\Users\lukeb\Documents\SpotifyDesk-CAD\References\HookClick-V2\output\SpotifyDesk_R5_hook_click_v2_CASE.step`.
+- Installed isolated Windows CAD virtual environment at `C:\Users\lukeb\Documents\SpotifyDesk-CAD\.venv`, with **CadQuery 2.8.0** and **Shapely 2.2.0**; import verified.
+- User ran `test_screen_install_bracket_options.py` with the V2 case environment variable set: **20/20 passed, 0 skipped, 0 errors, 2.215 s**, including five real case/STEP B-Rep tests. The warning about deprecated `Assembly.save` was non-blocking.
+- The 72 *bounding-prism* samples still demonstrate **no validated continuous installation path**, two carrier bars each intersect case by **214.56 mm³**, two underbody tool shaft probes intersect by **0.0 mm³**. Passing tests are verification of the study code, not of physical screen assembly.
+- User verified the official 2023 Waveshare `esp32-s3-touch-lcd-4_3.stp` is present locally at `C:\Users\lukeb\Downloads\SpotifyDesk-Waveshare-Official-3D\extracted\esp32-s3-touch-lcd-4_3.stp` (**31,338,066 bytes**). This full STEP must remain local and not be pushed to public GitHub.
+- **Next:** implement/reproduce separate faithful-solid collision screening against exact local Waveshare STEP using the unchanged V2 case, with conservative reporting on tested poses and no inference about continuous assembled insertion. Existing case/lid/CAD exports remain intact.
+
 ## 2026-10-26 Windows screen preassembly checks — test evidence (not full CAD)
 
 - User fast-forwarded `main` on Windows 11 and confirmed `git status --short` empty / `git pull --ff-only origin main` up to date at the latest screen mounting study.
