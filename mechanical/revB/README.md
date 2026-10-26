@@ -116,6 +116,13 @@ The [bottom-cover mechanisms comparison](../../docs/HARDWARE-REV-B-BOTTOM-COVER-
 - Files: cad/hook_click_cover_study.py, cad/hook_click_cover_parameters.json, cad/test_hook_click_cover_study.py, cad/hook_click_underside_plan.svg and cad/hook_click_operation.svg. **29 assistant tests pass (9 CadQuery/STEP)**; Windows user checks pending. Pre-generated STEP pair and assembly files delivered in chat ZIP. Earlier screwed and sliding covers remain unchanged.
 - **Physical latch elasticity, repeated service, printer tolerances, module installation path and exact screw access not proven.**
 
+## Hook-and-click refined V2 testable latch (2026-10-26)
+
+- [V2 guide and physical coupon procedure](../../docs/HARDWARE-REV-B-HOOK-CLICK-LATCH-V2.md). New source files `cad/hook_click_latch_refinement_v2.py`, `cad/hook_click_latch_refinement_v2.json`, `cad/test_hook_click_latch_refinement_v2.py` and `cad/hook_click_latch_v2_design.svg`. Reuses existing hook-click generator as dependency without modifying it.
+- Rounded R0.68 spring-beam root, top cam retreat 1.50mm, lower square retention shoulder and reachable underside pad. Original 26×2.2mm nominal beam/1.6mm trial release and case unchanged; case boolean difference 0mm³. **26 local checks pass incl. 10 optional STEP/B-Rep**, Windows unrun.
+- The downloadable chat ZIP contains separate full-size lid and case STEP (the latter matches V1), installed/exploded assemblies, **two STL small coupon parts cropped from the actual keeper and actual latch**, and documentation. No cover screws; LCD mounting screws retained. Real spring click force/durability/filament/print tolerance/installation path unproven.
+
+
 ## Checks before manufacturing
 
 1. Confirm exact MX switch model and actual depths/mount clips.

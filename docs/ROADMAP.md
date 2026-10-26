@@ -93,6 +93,9 @@ This roadmap tracks **planned phases**, not every ad-hoc fix. Actual latest work
 
 **2026-10-26 hook-and-click bottom closure CAD:** User explicitly chose two front locating hooks + single finger-release rear latch; LCD screen remains on four nominal screwed supports, no bottom cover screws. New [independent rounded R5 USB-left 4mm STEP case/cover study](HARDWARE-REV-B-HOOK-CLICK-COVER.md) includes shallow front hook pockets and one local rear keeper, without the slider's long rear-wall slot. 29 assistant tests pass including 9 optional B-Rep and STEP reopen checks. **Physical elastic click force/durability, actual insertion through screen hatch, tolerances and Windows user validation remain open.** Old slider/screwed CAD preserved.
 
+**2026-10-26 hook-click V2 latch refinement and small printed test samples:** user asked to improve prior 2-hook/1-flex rear lid. Built [new R5/4mm screwless V2 CAD](HARDWARE-REV-B-HOOK-CLICK-LATCH-V2.md) with **0.68mm concave beam-root fillets**, **1.5mm upper lead-in cam** and square lower catch shoulder, **underside 7.7×2.85mm finger pad**. Case itself geometrically unchanged (boolean symmetric difference 0mm³) with original four LCD M2.5 screw targets, 0 underside screws. Added two **actual-cropped** latch/keeper small printer-test STLs and STEP reference, three assemblies. **26 local tests PASS** incl. four valid independent STEP solids and no closed clash; *not* physically inserted, elastically solved or fatigue rated. User Windows/physical fit pending; full manufacturer board access unresolved.
+
+
 ## Phase 7 — Standalone mode and secure provisioning
 - [ ] Define what 'standalone' means: remote Spotify Connect control vs direct audio playback
 - [ ] Confirm Spotify API/SDK constraints and provisioning/refresh-token storage approach

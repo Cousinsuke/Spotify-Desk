@@ -1,0 +1,27 @@
+{
+  "status": "EXPERIMENTAL V2 SNAP-LATCH, NOT A TESTED OR CERTIFIED ELASTIC FIT",
+  "original_variant": "R5 rounded USB-left, 4 mm keycap, hook_click_cover_study 2026-10-26",
+  "unchanged_case": true,
+  "front_locating_hooks_unchanged": true,
+  "screen_mount_screw_positions_unchanged": true,
+  "latch": {
+    "root_inside_fillet_mm": 0.68,
+    "cam_y_retraction_at_top_mm": 1.50,
+    "cam_full_ledge_below_z_mm": 1.90,
+    "cam_tip_top_z_mm": 2.50,
+    "release_stroke_mm_assumed": 1.60,
+    "beam_width_in_plane_mm": 2.20,
+    "beam_length_mm": 26.0,
+    "finger_pad": {"x_min":85.0,"x_max":92.7,"y_min":66.5,"y_max":69.35,"z_min":0.55,"z_max":1.25},
+    "coupon_lid_bbox": {"x_min":53.0,"x_max":99.0,"y_min":54.0,"y_max":73.0,"z_min":0.4,"z_max":2.75},
+    "coupon_frame_bbox": {"x_min":52.0,"x_max":100.0,"y_min":71.093408,"y_max":82.0,"z_min":0.0,"z_max":4.5}
+  },
+  "warnings": [
+    "V2 does not confirm actual elastic insertion, clip force, repeated release life, or FDM print success",
+    "Beam strain is a simple ideal cantilever estimate, not FEA or a rated material result",
+    "Print-layer orientation, PETG brand, root fatigue and thumb access require physical coupon verification",
+    "Rigid closed STEP geometry includes an undercut; cam does not flex in the STEP file",
+    "Screen insertion through underside ~59 mm hatch, 68.3 mm Waveshare body and tool clearance still unresolved",
+    "No final Tech Toppers keycap skirt, MX switch or USB cable geometry is available"
+  ]
+}

@@ -70,6 +70,11 @@ Optional CAD regeneration with CadQuery installed:
 python mechanical\revB\cad\hook_click_cover_study.py --out-dir "$HOME\Downloads\SpotifyDesk-Hook-Click-STEP"
 ```
 
+## Successor CAD: improved V2 latch and matching trial coupons (2026-10-26)
+
+After reviewing this original concept, the user asked for refinement. A new **independently generated [V2 latch design](HARDWARE-REV-B-HOOK-CLICK-LATCH-V2.md)** rounds the spring-beam root, adds an *upper entry cam* while retaining the lower catch, and provides an underside press pad. Full case geometry, four screen screw mounts and two front hooks are identical to this V1 model, but the removable lid now has improved latch features. **Two separate small STL coupons** are true CAD crops of that latch and its case keeper for later printer tests. The present V1 model and the older screw/slider options are preserved. V2 is not print/elastic/fit approved; Windows and physical sample results pending.
+
+
 ## Next acceptance gates
 
 1. Review the bottom closed/open STEP assemblies in FreeCAD. Confirm the style and location of the fingertip release versus the two hooks; the new pocket is only 7 mm wide, avoiding the long rear-wall slot.

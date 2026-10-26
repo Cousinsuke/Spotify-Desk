@@ -70,6 +70,11 @@ This is **historical milestone tracking**, not a separate implementation branch 
 - `node --check` and four dashboard-specific Python checks passed, but the **full Windows suite was 42/44 passing**; two pre-existing Linux-only companion tests error on Windows (`KeyError: has_playback`). Nonfatal test file-handle ResourceWarnings remain. Spotify PC playback/buttons, all glucose chart range buttons, Omarchy and ESP32 not freshly runtime tested. The original `/` Spotify OAuth returned `client_id: Invalid` in a separate flow; resolve developer app ID/status later.
 - Documentation/checkpoint update only; no additional dashboard/firmware code or real Libre 2 Plus integration in this entry.
 
+## Hook-and-click latch V2 — rounded roots, cam lead-in and small fit coupons — 2026-10-26
+- Refined only experimental **removable lid**; rounded two sharp beam-root corners at R0.68, added top closing bevel (1.50mm Y retreat), retained square lower anti-withdrawal shoulder, and added a small 7.7×2.85mm underside press surface. Base R5/USB-left/4mm case and its four screwed LCD supports unchanged at geometric symmetric difference 0mm³; zero underside lid screws.
+- Exported 4 valid standalone STEP solids, assembled/detached/coupon STEP references, 2 small latch/keeper test STLs cut directly from real CAD, previews and test guide in separate chat ZIP. **26 new assistant-side tests PASS** (16 maths +10 CadQuery). Snap spring physics/print cycle force, physical release and actual manufacturer display insertion remain unverified; no older CAD replaced.
+
+
 ## Hook-and-click screwless bottom cover CAD — 2026-10-26
 - User chose two front hooks plus one rear release catch instead of slide-in design. Created separate R5/4mm USB-left case and 2mm removable cover with built-in 26mm flexible arm and a short 7mm local rear wall pocket. No cover screws; four nominal LCD screw targets remain.
 - 29 assistant-side checks passed, including STEP B-Rep export/re-import and no closed assembly intersection; downward cover pull geometrically contacts keeper. Delivered independent case/cover/assembly STEP package, annotated drawings and source. All former variants preserved.

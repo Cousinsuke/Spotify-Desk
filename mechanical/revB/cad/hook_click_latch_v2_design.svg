@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1100" height="510" viewBox="0 0 1100 510">
+<rect width="1100" height="510" fill="#141b24"/>
+<text x="35" y="39" font-family="Arial" font-size="23" fill="white">Rev B latch V2 — top cam, rounded spring root and thumb pad</text>
+<text x="35" y="67" font-family="Arial" font-size="15" fill="#adc1d1">Conceptual cross-section; pressing underside lid upward (+Z) is NOT an elastic snap simulation</text>
+<g transform="translate(62 140)">
+<rect x="0" y="0" width="445" height="300" rx="10" fill="#263643" stroke="#536a7b"/>
+<text x="16" y="31" fill="#fff" font-family="Arial" font-size="19">CAM + LOCKING SHOULDER</text>
+<rect x="120" y="82" width="225" height="32" fill="#728a9e"/>
+<rect x="304" y="114" width="41" height="89" fill="#728a9e"/>
+<path d="M240 100 L292 135 L292 195 L240 195Z" fill="#e2aa63" stroke="#ffe0a6" stroke-width="2"/>
+<path d="M240 131 L292 167" stroke="#fef4df" stroke-width="2.5"/>
+<text x="22" y="236" fill="#dce6eb" font-family="Arial" font-size="16">Upper bevel guides closing</text>
+<text x="22" y="258" fill="#dce6eb" font-family="Arial" font-size="16">Lower square edge retains lid</text>
+</g>
+<g transform="translate(560 140)">
+<rect width="490" height="300" rx="10" fill="#263643" stroke="#536a7b"/>
+<text x="17" y="31" fill="#fff" font-family="Arial" font-size="19">FLEX BEAM + TEST COUPON</text>
+<rect x="45" y="105" width="60" height="80" rx="8" fill="#879eaf"/>
+<path d="M105 145 L333 145" stroke="#e3b66a" stroke-width="21" stroke-linecap="round"/>
+<rect x="322" y="124" width="50" height="42" rx="6" fill="#e3b66a"/>
+<path d="M341 192 L341 171" stroke="#ffdf9e" stroke-width="3"/>
+<text x="24" y="227" fill="#dce6eb" font-family="Arial" font-size="15">Root fillet: 0.68 mm</text>
+<text x="24" y="250" fill="#dce6eb" font-family="Arial" font-size="15">Trial deflection: 1.6 mm</text>
+<text x="24" y="273" fill="#f3c48c" font-family="Arial" font-size="13">Ideal beam strain ~0.78% (not a rating)</text>
+</g>
+<text x="34" y="487" fill="#f0ad7c" font-family="Arial" font-size="15">No proof of click force, flex durability, printer tolerances or Waveshare installation. Print small coupon first.</text>
+</svg>
