@@ -102,6 +102,12 @@ def check_original_bounds(shape, reference, tol=0.30):
             "max_reference_box_deviation_mm": round(delta, 4)}
 
 
+def bbox_xyz_mm(shape):
+    """Six world-coordinate bounding extents, useful for local collision diagnosis."""
+    b = shape.BoundingBox()
+    return [round(v, 3) for v in (b.xmin, b.ymin, b.zmin, b.xmax, b.ymax, b.zmax)]
+
+
 def screen_pose(case, solids, dy, dz, max_booleans):
     """Broad-phase rejection and exact solid booleans for a *single* sampled pose.
 
@@ -122,7 +128,8 @@ def screen_pose(case, solids, dy, dz, max_booleans):
                     "potentially_intersecting_parts": len(candidates),
                     "exact_booleans_run": booleans, "uncertified": True}
         try:
-            volume = float(case.intersect(part).Volume())
+            intersected = case.intersect(part)
+            volume = float(intersected.Volume())
         except Exception as exc:
             errors.append(f"part {i}: {type(exc).__name__}: {str(exc)[:160]}")
             return {"dy_mm": dy, "dz_mm": dz, "status": "INDETERMINATE_BOOLEAN_ERROR",
@@ -132,6 +139,8 @@ def screen_pose(case, solids, dy, dz, max_booleans):
         if volume > 0.05:
             return {"dy_mm": dy, "dz_mm": dz, "status": "SAMPLED_SOLID_COLLISION",
                     "first_colliding_solid_index": i, "first_intersection_mm3": round(volume, 4),
+                    "first_colliding_solid_bbox_xyz_mm": bbox_xyz_mm(part),
+                    "first_intersection_bbox_xyz_mm": bbox_xyz_mm(intersected),
                     "potentially_intersecting_parts": len(candidates),
                     "exact_booleans_run": booleans, "uncertified": True}
     return {"dy_mm": dy, "dz_mm": dz, "status": "SAMPLED_POSE_CLEAR",
@@ -169,6 +178,7 @@ def run(screen_step, case_step, out_dir, max_booleans=160, positions=DEFAULT_POS
         "manufacturer_step_sha256": screen_sha,
         "case_step_sha256": hashlib.sha256(case_step.read_bytes()).hexdigest(),
         "manufacturer_solid_count": len(solids),
+        "collision_volume_threshold_mm3": 0.05,
         "source_bbox_verification": source_measure,
         "trial_glass_inward_w_mm": 3.25,
         "physical_screen_rotation_deg": 180,
@@ -182,7 +192,8 @@ def run(screen_step, case_step, out_dir, max_booleans=160, positions=DEFAULT_POS
         "fabrication_approved": False,
         "warnings": [
             "Discrete stationary rigid poses are not a continuous insertion path.",
-            "SAMPLED_POSE_CLEAR applies only to exact model at one sampled pose, not adjoining motion.",
+            "SAMPLED_POSE_CLEAR applies only to exact model at one sampled pose above a 0.05 mm3 penetration threshold, not adjoining motion.",
+            "First-collision BBOX values show WHERE model material intersects, not whether the interference is an intentional mount or a manufactured tolerance issue.",
             "No male USB, I2C plug, cable bending, screws, hand clearance or extra carrier rails modeled.",
             "Manufacturer model is from 2023 and may not match board revision supplied.",
             "Only a physical assembly mock-up and measured mating hardware can validate a manufacturable case."
@@ -203,11 +214,14 @@ def main():
     ap.add_argument("--out-dir", type=Path, required=True)
     ap.add_argument("--max-booleans-per-pose", type=int, default=160,
                     help="Limit exact per-solid intersections per sampled pose; hitting limit means INDETERMINATE")
+    ap.add_argument("--seated-only", action="store_true",
+                    help="Skip staging samples; exhaustively check final seated (dy=0,dz=0) only")
     args = ap.parse_args()
     if not 1 <= args.max_booleans_per_pose <= 1000:
         ap.error("--max-booleans-per-pose must be 1..1000")
     run(args.manufacturer_step, args.case_step, args.out_dir,
-        max_booleans=args.max_booleans_per_pose)
+        max_booleans=args.max_booleans_per_pose,
+        positions=((0.0, 0.0),) if args.seated_only else DEFAULT_POSES)
 
 
 if __name__ == "__main__":
