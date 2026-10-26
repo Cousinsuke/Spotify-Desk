@@ -1,5 +1,10 @@
 # Changelog / version history
 
+## Rev B-C split R5 enclosure and conceptual controls PCB generator — 2026-10-26
+
+- User approved exploring a front-built electronics assembly instead of inserting the display through the restrictive old V2 bottom hatch. Created **new independent CAD source**, trial parameters and unit tests: separate rounded front face carrier shell, detachable rear shell body without a bottom hatch, and a **one-piece L-shaped unpopulated control PCB envelope**. Original 156mm R5 external wedge, 55° slope, USB-left, three MX key positions, 4mm caps target and encoder positions retained.
+- Locally generated and reimported valid B-Rep STEP solids with **zero volumetric overlap** between the two half-shells and trial PCB. Reference assembly, SVG and CAD screenshots delivered as a separate chat ZIP. Existing hook-click V2 case/lid files and manufacturer STEP were not altered. **No physical screen standoff/support, clips, control PCB footprint/traces or real 693-part screen clearance yet; not print/fabrication approved.** See [CAD trial](HARDWARE-REV-BC-SPLIT-CASE-CAD-TRIAL.md). Windows unit test execution and user geometry feedback pending.
+
 ## Proposed control PCB and split rear shell — 2026-10-26
 
 - User proposed attaching screen and hardware controls to an accessible front PCB/carrier assembly, replacing the restrictive bottom opening with a **removable rear half** using hidden hooks/snaps or short-slide registration.
