@@ -42,7 +42,7 @@ See [PRE-ARRIVAL.md](PRE-ARRIVAL.md) for safe preparation.
 - [x] User accepted Home default B, fixed layout first, selectable clock styles, conditional lightweight presets/backgrounds, and no inactivity page switching.
 - [x] User accepted Spotify visual direction, controls, floating device selector; requested physical volume and Echo mode subject to feasibility.
 - [ ] Approve Weather and other remaining layouts, exact Home/Spotify details, rail sizing, defaults and drawer visuals.
-- [ ] Test physical +/- key events and mode-aware volume popup, safe privacy/power behavior, on-screen fallback, no double volume changes or navigation side effects.
+- [ ] Test physical +/- key events and mode-aware volume popup, safe privacy/power behavior, non-permanent fallback if necessary, no permanent volume icon/slider, extended device selector and far-right save button, no double volume changes or navigation side effects.
 - [ ] Verify Spotify seek/shuffle/repeat/save permissions and endpoint/device support; test floating device selector and last-track paused/disconnected states.
 - [ ] Experiment with official Spotify Android app/Connect on Echo Show, speaker output and background playback alongside kiosk; measure RAM; keep Echo mode unavailable until verified.
 - [ ] Test one active Home layout/preset at a time, wallpaper sizing, settings persistence, clock styles, and verify idle never changes page; measure resource use on device.

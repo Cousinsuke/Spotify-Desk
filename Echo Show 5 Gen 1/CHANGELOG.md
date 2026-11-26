@@ -1,5 +1,9 @@
 # Echo Show 5 Gen 1 changelog
 
+## 2026-11-26 — Spotify bottom row refinement
+
+- User removed the permanent volume icon from the Spotify design; move save-song action to its position on the far right, extend the tappable playback-device selector across the remaining space. Physical volume keys and transient popup preferred. Hardware forwarding remains unverified; consider non-permanent fallback only if necessary. Documentation only; next Weather review.
+
 ## 2026-11-26 — Spotify direction accepted; physical controls and local audio research
 
 - User selected current web player's left artwork/right controls with immersive styling, selectable backgrounds, previous/play/pause/next, seeking, shuffle/repeat and like/save; floating device selector.
