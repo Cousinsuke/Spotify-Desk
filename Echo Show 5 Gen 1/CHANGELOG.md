@@ -1,5 +1,11 @@
 # Echo Show 5 Gen 1 changelog
 
+## 2026-11-26 — App drawer and Settings direction accepted
+
+- User selected right-side floating drawer, close/outside/app-selection dismissal, Settings Centre plus quick settings, reorder/pin apps, immediate apply and reset defaults. Initial additional apps: Settings, Calendar, System Information.
+- User delegated preference storage for resource efficiency; recommend Pi-authoritative non-sensitive preferences/assets plus small local fallback. Apps label and protected Home/Apps access proposed, not individually approved. Calendar/System scope and quick settings details pending.
+- Next final themes, animations and display behavior review. Documentation only, no application or hardware implementation.
+
 ## 2026-11-26 — Final Glucose layout locked for prototyping
 
 - User requested no redundant Glucose/Libre 2 Plus or demo header in normal live UI, dark green background and lighter green cards, compact view selector top-right and graph duration/scale dropdowns within graph card.

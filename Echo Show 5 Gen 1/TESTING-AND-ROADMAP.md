@@ -46,7 +46,9 @@ See [PRE-ARRIVAL.md](PRE-ARRIVAL.md) for safe preparation.
 - [x] User accepted existing Glucose layouts and range/scale functionality; existing renderer and reader reviewed.
 - [x] User accepted compact Glucose view dropdown, selectable green/default and optional dynamic backgrounds, 6h/AUTO reload and unchanged chart interaction.
 - [x] User accepted final Glucose 40/60 equal-height BOTH cards, minimal headers, no graph title, compact view and graph duration/scale dropdowns.
-- [ ] Approve drawer/Settings, remaining visual details and defaults.
+- [x] User accepted drawer/Settings layout, dismissal, reorder/pinning, immediate apply/reset and initial Settings/Calendar/System Information apps; delegated preference storage.
+- [ ] Approve final themes, animation/display defaults and quick settings access/content; define Calendar/System Information scope before implementing.
+- [ ] Test drawer dismissal without page change, intentional navigation, pin/order persistence and protected access; immediate settings apply, reset scope, save failure/retry, Pi/local non-sensitive preference recovery, no private data in cache.
 - [ ] Test dynamic background boundaries with synthetic data, neutral stale/offline state, static green default, preference selection and 6h/AUTO reset; no clinical alert semantics or change to readings.
 - [ ] Regression test all three Glucose views at 960 x 480 in both rail states; 1/3/6/12/24h time filtering, gaps, AUTO/FULL bounds and readable ticks; no extra upstream calls on changing range, no private data persisted; verify equal-height 40/60 cards, dropdown placement/targets, no clipping, no redundant titles, and clear stale/offline/sample labeling.
 - [ ] Test physical +/- key events and mode-aware volume popup, safe privacy/power behavior, non-permanent fallback if necessary, no permanent volume icon/slider, extended device selector and far-right save button, no double volume changes or navigation side effects.
