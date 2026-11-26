@@ -30,7 +30,17 @@ CGM -> official phone app -> sharing cloud -> Gluroo GGC HTTPS -> Pi reader
 Optional Windows/Omarchy PC companion <-> authenticated service
 ```
 
-The Pi is preferred because it can remain on when Windows is off and has 8 GB RAM; it is already used for Nextcloud, so inspect capacity/ports and isolate the service. No paid hosting or new hardware planned (existing internet/services and power still required). Direct native Android app is a possible later alternative but not validated on 1 GB RAM. No Home Assistant required unless a selected kiosk app cannot function without it.
+The Pi is preferred because it can remain on when Windows is off and has 8 GB RAM; the user clarified on 2026-11-26 that it is powered off and Nextcloud is no longer used. It can potentially be dedicated to this project; inspect existing OS/storage and preserve old data unless user approves wiping. No paid hosting or new hardware planned (existing internet/services and power still required). Direct native Android app is a possible later alternative but not validated on 1 GB RAM. No Home Assistant required unless a selected kiosk app cannot function without it.
+
+## Hosting alternatives (2026-11-26)
+
+- Pi (recommended first): existing Python code, separate always-on Linux host, protected Gluroo secret, less CPU/memory burden on Echo Show. Requires Pi power/network and secure local TLS/device authorization. No extra purchase assumed if working storage/power available.
+- Native Android app: potential fully standalone Wi-Fi Spotify/weather/CGM via HTTPS and PKCE, with Android Keystore-backed storage. Needs a port of backend and interface, compatible app auth, stale-state/restart tests and evaluation of security on unlocked old Android. No external server required in principle; untested.
+- Termux: Android >=7 is supported by upstream; potential to run modified Python headless backend on device loopback and a kiosk frontend, avoiding a LAN data hop. Not tested on checkers. Memory, package architecture, lifecycle/autostart, browser/origin authorization and credential protection must be evaluated. Do not expose service beyond loopback.
+- Free external hosting: technically possible but quotas/sleep, data privacy, credentials and public exposure add complexity. Not preferred for personal CGM data.
+- Desktop host: useful for development only; must be on to serve dashboard.
+
+Keep API/data model portable so a native/Termux experiment later does not require discarding Pi work. No change to requirement for official sensor-phone connection, internet and upstream cloud. Sources: https://github.com/termux/termux-app ; https://developer.spotify.com/documentation/web-api/concepts/authorization ; https://gluroo.com/support/gluroo-global-connect-ggc-nightscout-compatible-api/ .
 
 ## Existing code and known limitations
 

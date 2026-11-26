@@ -4,7 +4,7 @@
 
 ## 1. Omarchy workstation
 
-USB utilities are installed (confirmed by earlier lsusb output). Check Android platform tools:
+**Completed 2026-11-26:** user verified ADB 1.0.41 / 37.0.0p1, Fastboot 37.0.0p1, usbutils 019 on Arch x86_64 (kernel 7.2.2-arch1-1); android-tools 37.0.0.p1-1 was already current. No device attached, so this proves tool availability only. Reference commands:
 
 ```bash
 command -v adb
@@ -17,7 +17,7 @@ If missing, use `sudo pacman -S --needed android-tools` (on a current Arch syste
 
 ## 2. Raspberry Pi read-only preflight (next action)
 
-SSH into existing Raspberry Pi using its known hostname/user; do not guess credentials. Run on the Pi, not Omarchy workstation:
+The user clarified the Pi is powered off on a shelf, no longer used for Nextcloud. Power it on and inspect the existing OS before deciding whether to reuse it or install a fresh Raspberry Pi OS Lite on separate storage. Do not erase existing data without explicit approval. SSH into existing Raspberry Pi using its known hostname/user; do not guess credentials. Run on the Pi, not Omarchy workstation:
 
 ```bash
 echo '=== OS ==='

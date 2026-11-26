@@ -10,6 +10,7 @@ Updated 2026-11-26. Order confirmed by user; device and Pi checks pending until 
 - [ ] Confirm delivered unit, adapter, condition and final total if relevant.
 - [ ] Test physical condition without updating stock Fire OS.
 - [x] Install usbutils on Omarchy (user observed lsusb now runs).
+- [x] Verify ADB/Fastboot 37.0.0p1 and usbutils 019 on Omarchy (2026-11-26).
 - [ ] Test a data-capable cable/adapter with the actual device.
 - [ ] Record redacted Fastboot product and exact LK.
 - [ ] Check current upstream supported build; decide whether to proceed.
@@ -27,7 +28,7 @@ Updated 2026-11-26. Order confirmed by user; device and Pi checks pending until 
 
 See [PRE-ARRIVAL.md](PRE-ARRIVAL.md) for safe preparation.
 
-- [ ] Inspect Pi OS/architecture, resources, ports and Nextcloud.
+- [ ] Power on unused Pi; inspect OS/architecture, resources, ports and any retained Nextcloud files. Decide whether to reuse existing OS or use separate clean storage; no wipe without approval.
 - [ ] Implement isolated headless backend and authenticated HTTPS device endpoints; preserve existing localhost-only behavior by default.
 - [ ] Add negative tests: unauthorized requests, revoked credentials, spoofed proxy headers, blocked admin/OAuth paths, unencrypted requests, origin/CSRF and no-store.
 - [ ] Verify protected credentials and no sensitive logging or persistent CGM data.

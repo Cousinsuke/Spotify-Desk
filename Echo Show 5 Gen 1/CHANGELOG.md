@@ -1,5 +1,11 @@
 # Echo Show 5 Gen 1 changelog
 
+## 2026-11-26 — Omarchy tools verified; hosting alternatives reviewed
+
+- User verified installed ADB 1.0.41 / 37.0.0p1, Fastboot 37.0.0p1 and usbutils 019 on Arch x86_64. Tool availability confirmed, not physical USB compatibility.
+- User clarified Pi is powered off and Nextcloud is no longer used. Pi remains recommended initial host; native Android and Termux are possible later experiments without a separate server. Free cloud hosting is not preferred for private CGM data. See SOFTWARE-AND-PI.md.
+- Next action: power on and inspect existing Pi OS/storage; no reimage without permission. No application or device changes performed.
+
 ## 2026-11-26 — Order confirmed; pre-arrival preparation
 
 - User reported ordering the Echo Show 5; awaiting delivery. No bootloader or actual hardware result yet.

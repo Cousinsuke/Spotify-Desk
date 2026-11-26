@@ -11,14 +11,14 @@ Branch: main (documentation baseline). Read the actual latest files before actin
 - Repurpose a charcoal-black 5.5-inch Echo Show 5 (2019), not an 8-inch model, as the Spotify Desk touchscreen.
 - Home dashboard, Spotify, Bournemouth weather, supplementary live CGM display; expandable to more widgets later.
 - Spotify Wi-Fi mode must control the active Spotify Connect device (including Xbox) with the PC off. PC mode remains separate and optional; it controls local Windows/Omarchy media, system volume and audio meter when its companion is running.
-- Prefer existing Raspberry Pi 4 (8 GB) as always-on host alongside existing Nextcloud; no extra hardware or paid hosting if avoidable. No Home Assistant requirement.
+- Prefer existing Raspberry Pi 4 (8 GB) as always-on host; user clarified the Pi is currently powered off and Nextcloud is no longer in use; no extra hardware or paid hosting if avoidable. No Home Assistant requirement.
 - Reuse existing interface and code; keep old CAD/PCB and software baselines intact. Design for the 960 x 480 screen and 1 GB RAM.
 - Follow the upstream exact-model guide; the stock firmware/bootloader must be checked first. Keep stock device offline until then.
 - Use clear OS-specific commands (Omarchy/Arch Linux preferred for firmware checks; Windows 11 and Pi Linux are distinct). Never advise destructive steps before compatibility and prerequisites are known.
 
 ## Current checkpoint
 
-The £45.99 used H23K37 candidate has a pictured UK 15 W adapter, seller condition Very Good, screenshot listing two units available, and a reported 30-day returns policy. A previous £42.29 unit sold. User confirmed ordering the Echo Show on 2026-11-26; awaiting delivery. Final price, exact shipped unit, condition, bootloader, cable capability and return eligibility after modification remain unverified. Existing Micro-USB cables cannot be tested on their own; an unbranded USB-C female to Micro-USB male adapter is available but data capability is unverified. USB utilities are now installed on Omarchy; a bare-cable lsusb test returned no new device, which is expected.
+The £45.99 used H23K37 candidate has a pictured UK 15 W adapter, seller condition Very Good, screenshot listing two units available, and a reported 30-day returns policy. A previous £42.29 unit sold. User confirmed ordering the Echo Show on 2026-11-26; awaiting delivery. Final price, exact shipped unit, condition, bootloader, cable capability and return eligibility after modification remain unverified. Existing Micro-USB cables cannot be tested on their own; an unbranded USB-C female to Micro-USB male adapter is available but data capability is unverified. Omarchy tool checks passed on 2026-11-26: android-tools 37.0.0.p1-1, ADB 1.0.41 / 37.0.0p1, Fastboot 37.0.0p1, usbutils 019; physical USB detection remains pending. USB utilities are installed on Omarchy; a bare-cable lsusb test returned no new device, which is expected.
 
 The primary source for installation is the current Kiosk Satellite unlocking guide; model-specific firmware analysis is in HARDWARE-AND-FIRMWARE.md. A 2024 LK build is documented as supported, a 2019 LK is unsupported by Fastbrick USB, and the 2026 LK is not confirmed. Do not update Fire OS just to try to get a different LK. Do not assume stock firmware downgrades are possible.
 
@@ -26,7 +26,7 @@ The existing Gluroo reader and dashboard are already in the repository; a prior 
 
 ## Next step
 
-While awaiting delivery, start with the read-only Pi preflight in PRE-ARRIVAL.md and check the Omarchy Android tools. Pi OS, capacity, ports, Nextcloud installation and current service status are unknown; do not assume a deployment architecture until preflight results arrive. Next build an isolated headless backend and synthetic-data browser preview, then secure and test it before enabling real data. On delivery, keep stock Fire OS offline, inspect the device and follow INSTALLATION-AND-USB.md; request redacted product and LK version only. Do not flash until compatibility and the current guide are checked.
+While awaiting delivery, start with the read-only Pi preflight in PRE-ARRIVAL.md (Omarchy tool checks are complete). Pi is off and unused; existing OS/storage and whether old Nextcloud data should be preserved are unknown; do not assume a deployment architecture until preflight results arrive. Pi remains the recommended initial host, not a hard requirement. Native Android APK or Termux loopback server are later alternatives; neither is tested. Do not erase existing storage without explicit approval. Next build an isolated headless backend and synthetic-data browser preview, then secure and test it before enabling real data. On delivery, keep stock Fire OS offline, inspect the device and follow INSTALLATION-AND-USB.md; request redacted product and LK version only. Do not flash until compatibility and the current guide are checked.
 
 ## Copy/paste prompt for a new chat
 
