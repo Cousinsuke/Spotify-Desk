@@ -1,5 +1,10 @@
 # Echo Show 5 Gen 1 changelog
 
+## 2026-11-26 — Final display choices accepted; design baseline complete
+
+- User selected Graphite/Black only, rail styles/transparency, 10s default hide, selectable animations, manual brightness, manual/configurable auto night mode, always-on display, top-edge swipe-down quick settings with per-app controls, and Home on startup.
+- Proposed shared context-aware quick settings and Graphite default; exact shortcuts and night schedule pending. Backlight/always-on/gestures need device verification. All seven main design stages accepted; next isolated synthetic browser prototype on echo-show/prototype, alongside read-only Pi preflight. No app or hardware changes in this documentation commit.
+
 ## 2026-11-26 — App drawer and Settings direction accepted
 
 - User selected right-side floating drawer, close/outside/app-selection dismissal, Settings Centre plus quick settings, reorder/pin apps, immediate apply and reset defaults. Initial additional apps: Settings, Calendar, System Information.

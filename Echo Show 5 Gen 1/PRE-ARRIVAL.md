@@ -48,11 +48,11 @@ These are read-only diagnostics; no package installs or configuration changes. I
 
 ## 3. Software while waiting
 
-User confirmed Pi hosting and supplied a rough right-side navigation concept. Before UI implementation, review [UI-DESIGN.md](UI-DESIGN.md) and agree exact Home, Spotify, Weather, Glucose and More layouts. Preserve existing functionality and use synthetic data for design previews.
+User confirmed Pi hosting and supplied a rough right-side navigation concept. All seven main design stages accepted; read [UI-DESIGN.md](UI-DESIGN.md) for latest requirements. Begin isolated synthetic-data frontend prototype on echo-show/prototype while Pi preflight remains pending. Preserve existing functionality and use synthetic data for design previews.
 
 Proposed implementation order:
 1. Review existing root UI and Python code; preserve desktop baseline. Use an isolated development branch for application changes, keep original CAD intact.
-2. Create a headless server mode with Wi-Fi Spotify playback independent from local Linux audio/PC mode. Ensure the current OAuth loopback flow can be completed securely via an SSH tunnel or other reviewed local setup, and verify current Spotify app restrictions. No public callback/Flask debug exposure.
+2. In parallel with UI prototyping, create a headless server mode with Wi-Fi Spotify playback independent from local Linux audio/PC mode. Ensure the current OAuth loopback flow can be completed securely via an SSH tunnel or other reviewed local setup, and verify current Spotify app restrictions. No public callback/Flask debug exposure.
 3. Reuse Home/Spotify/Weather/Glucose views in a 960 x 480 browser test. Test at 100% scaling with touch emulation, graph legibility, overflow, navigation, reduced animation and clear unavailable states. Actual Echo Show performance is a later gate.
 4. Implement a distinct authenticated HTTPS device boundary on the Pi; protect existing admin/OAuth paths and do not expose existing loopback-only glucose route simply by proxying it. Test using synthetic data first. See SOFTWARE-AND-PI.md for security requirements.
 5. Once preflight and security tests pass, deploy isolated service, verify Nextcloud unchanged, authorize Spotify locally, test playback on Xbox with PC off, and enable real Gluroo feed only after protected credential setup. Official glucose app remains authoritative; no real data or tokens in logs or Git.

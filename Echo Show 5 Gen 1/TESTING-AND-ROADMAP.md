@@ -47,7 +47,9 @@ See [PRE-ARRIVAL.md](PRE-ARRIVAL.md) for safe preparation.
 - [x] User accepted compact Glucose view dropdown, selectable green/default and optional dynamic backgrounds, 6h/AUTO reload and unchanged chart interaction.
 - [x] User accepted final Glucose 40/60 equal-height BOTH cards, minimal headers, no graph title, compact view and graph duration/scale dropdowns.
 - [x] User accepted drawer/Settings layout, dismissal, reorder/pinning, immediate apply/reset and initial Settings/Calendar/System Information apps; delegated preference storage.
-- [ ] Approve final themes, animation/display defaults and quick settings access/content; define Calendar/System Information scope before implementing.
+- [x] User accepted final themes, animation/display behavior, 10s hide, swipe-down contextual quick settings and Home startup.
+- [ ] Review exact contextual controls and default palette/schedule; define Calendar/System Information scope before implementing.
+- [ ] Test Graphite/Black, rail style/opacity, animation settings/reduced motion, 10s default, gesture conflicts, always-on behavior and Home startup; verify actual backlight via supported Android integration, not CSS alone.
 - [ ] Test drawer dismissal without page change, intentional navigation, pin/order persistence and protected access; immediate settings apply, reset scope, save failure/retry, Pi/local non-sensitive preference recovery, no private data in cache.
 - [ ] Test dynamic background boundaries with synthetic data, neutral stale/offline state, static green default, preference selection and 6h/AUTO reset; no clinical alert semantics or change to readings.
 - [ ] Regression test all three Glucose views at 960 x 480 in both rail states; 1/3/6/12/24h time filtering, gaps, AUTO/FULL bounds and readable ticks; no extra upstream calls on changing range, no private data persisted; verify equal-height 40/60 cards, dropdown placement/targets, no clipping, no redundant titles, and clear stale/offline/sample labeling.

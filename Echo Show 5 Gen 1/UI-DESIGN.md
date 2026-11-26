@@ -1,6 +1,6 @@
 # Echo Show 5 — dashboard UI direction
 
-2026-11-26. User supplied rough visual reference in chat. **Global navigation, default Home, Spotify, Weather, Glucose and drawer/Settings design directions accepted by user; remaining pages and hardware-dependent features pending, no implementation or device validation.**
+2026-11-26. User supplied rough visual reference in chat. **All seven main design stages accepted by user; prototype review, optional app scope and hardware-dependent features pending, no implementation or device validation.**
 
 ## Reference and user decisions
 
@@ -20,7 +20,7 @@ The user explicitly selected all five choices:
 - More uses a grid icon opening a floating app drawer, not a dedicated full-screen page.
 - Auto-hide configurable per page.
 
-Implementation details still proposed: default delay 10 seconds; reset timer on relevant interaction, suspend while drawer is open or navigation has focus, keep a large touch target around the subtle arrow, avoid stealing graph/media gestures, lightweight short transition. No automatic page changes. Exact default delay, dimensions, styling and settings design not selected yet.
+Accepted default delay 10 seconds. Implementation details still proposed: reset timer on relevant interaction, suspend while drawer is open or navigation has focus, keep a large touch target around the subtle arrow, avoid stealing graph/media gestures, lightweight short transition. No automatic page changes. Exact dimensions remain for prototype review; see final display choices below.
 
 ## Navigation slots
 
@@ -44,7 +44,7 @@ The user selected a grid icon opening a floating app drawer. If future features 
 - Background options conditional on low resource cost: abstract wallpaper, gradient, solid colour, scheduled/time-of-day changes, custom static wallpaper. Pi stores assets/settings, serve appropriately resized image and load only selected background, no animated wallpaper by default. Actual memory and responsiveness remain unmeasured. Keep a basic fallback.
 - **Stay on current page during inactivity.** Only deliberate user navigation changes page. Auto-hide rail does not return Home. Startup/wake after app restart or screen sleep remains a separate design/implementation detail.
 - Fixed default layout and hard-coded adjustments first; optional lightweight preset/visibility settings if resource use permits. No freeform editor planned for initial version. Do not promise zero RAM/storage overhead; test one active layout, image decoding, navigation and idle memory.
-- Night mode was suggested, not approved; defer brightness/schedule/dim clock choices to Settings.
+- Night mode manual/configurable automatic modes accepted; see final display choices below.
 
 ## Accepted Spotify design direction (2026-11-26)
 
@@ -97,10 +97,22 @@ User requested a cleaner page after reviewing the illustrative preview, and expl
 - User selected right-side floating app drawer opened by the grid icon. Dismiss with close button, tap outside, or selecting an app. Opening/dismissing does not navigate away from current page; selecting a destination deliberately navigates. Suspend rail hide timer while drawer is open. No expensive blur required.
 - User wants a general name for the expandable collection; **Apps** is the recommended simple label (exact label can be reviewed in prototype). Initial additional apps selected: Settings, Calendar, System Information. These are planned features, not implemented. Calendar source/integration and System Information scope remain to be defined; prioritize core dashboard and Settings before optional integrations. No placeholder apps presented as functional.
 - User wants reorderable apps and choice of main navigation rail pins. Proposed lightweight registry with stable IDs, labels, icons and capabilities; only enabled/implemented apps appear. Keep Home and Apps accessible when expanded (proposed guard against lockout); unpinned destinations remain discoverable in Apps. Cap visible slots to readable touch targets and use scrolling or overflow rather than shrinking. Exact pin limit/order controls pending prototype.
-- User selected full-page Settings Centre (left category list, right detail pane) PLUS quick settings panel. Quick settings content/access gesture not yet approved; propose a small button or deliberate gesture and controls for brightness (if supported), navigation timeout, theme and night mode. Settings Centre categories proposed: General/Display, Navigation, Home, Spotify, Weather, Glucose, Connections, System. Keep previously agreed per-page controls, no exposure of secrets or real CGM data.
+- User selected full-page Settings Centre (left category list, right detail pane) PLUS quick settings panel. Quick settings access by swipe down from top accepted; page-specific controls requested, see final display choices below. Settings Centre categories proposed: General/Display, Navigation, Home, Spotify, Weather, Glucose, Connections, System. Keep previously agreed per-page controls, no exposure of secrets or real CGM data.
 - User selected immediate apply with reset-to-default. Proposed per-category reset plus confirmed global preferences-only reset; no factory wipe, credential deletion or other destructive action. Show save failure and retry, validate input server side; retain last known preferences on temporary disconnect.
 - User delegated preference storage choice to resource efficiency. Selected architecture recommendation: Pi authoritative persistent store for non-sensitive versioned preferences and assets, small bounded local cache of non-sensitive preferences for startup/offline fallback. Load only active layout/background; no persistent CGM data or upstream secrets in browser preferences. Use authenticated HTTPS and scoped device authorization. Synchronize after connection recovers, handle conflicting updates and version migration. Actual resource impact and offline behavior need testing; local cache is not a promise of full offline data functionality.
-- Remaining decisions: global theme/accent, rail appearance and default timeout, animation behavior, brightness/night mode and screen wake/sleep, quick settings access/content, and calendar/system scope. Use Own idea option for each design question. No app code or device changes.
+- Calendar/System scope, exact quick settings controls and visual sizing remain for prototype review. No app code or device changes at this design checkpoint.
+
+## Accepted final themes and display behavior (2026-11-26)
+
+- Global themes: Graphite and Black only. Proposed Graphite default; no Forest/Slate global presets. Page-specific backgrounds remain independent.
+- Selectable navigation styles and adjustable transparency. Default auto-hide 10 seconds, with earlier per-page control, arrow and edge swipe preserved.
+- Selectable animation style and speed in Settings. Proposed instant/fade/slide and short duration presets; no expensive continuous animations or live blur by default; honor reduced-motion preference.
+- Manual brightness slider only. Actual hardware backlight access requires a supported native/kiosk integration; browser prototype can demonstrate visual dimming but must not claim hardware brightness control.
+- Night mode manual and configurable automatic modes; proposed off/manual/scheduled options, sunset/sunrise optional if cached data available. Exact schedule, dim level and colors pending prototype. No medical alert or page navigation side effects.
+- Always keep display on during inactivity; no automatic blank/sleep or page switch. Explicit hardware power/privacy behavior retained. Actual kiosk keep-awake behavior and screen wake require device validation.
+- Always start on Home after device/app restart. No idle auto-return.
+- Quick settings access: swipe down starting at top edge. User requests context-sensitive panel: Home/general brightness and other controls, other apps can have customized shortcuts. Proposed shared panel with per-page control registry; Home brightness/night/theme/rail, Spotify device/mode/background, Weather forecast/icon style, Glucose view/range/scale/background. Exact controls not yet individually selected; retain access to full Settings. Avoid gesture conflicts with Android notification shade, graph/slider and rail reveal. One shared settings state; no duplicate state or secret exposure.
+- Prototype first on a separate development branch with synthetic data and no network integrations; preserve original /device and root app. Main design baseline is accepted, not a claim of implementation.
 
 ## Page layouts (review before implementation)
 
@@ -122,6 +134,6 @@ User proposed hiding the right rail after inactivity to reclaim screen area and 
 
 Design discussion question set: reveal method (edge handle, background tap, swipe, own idea); auto-hide delay (5/10/15/30 seconds or own idea); layout (reflow, overlay, hybrid, own idea); More (grid/chevron, own idea); Home content (clock-only, subtle summaries, cards, own idea). Historical question set; navigation answers are recorded above. Home direction accepted above; exact details remain for prototype review. No app code changed.
 
-## Next design task — final themes, animations and display behavior
+## Next task — browser prototype and Pi preflight
 
-Review shared UI theme/accent, rail style, configurable hide delay default, lightweight animations, brightness and night mode, screen timeout/wake behavior (no idle page navigation), and quick settings access/content. Include Own idea in every question. Hardware brightness, sleep/wake and physical key integration remain unverified; distinguish web dimming overlay from actual backlight control. Propose settings defaults rather than silently treating them as approved. Calendar source and System Information scope can be reviewed separately before implementation. Then create a synthetic-data 960 x 480 browser prototype and inspect Pi via PRE-ARRIVAL.md; preserve existing desktop baseline. No application or physical-device implementation yet.
+All seven design stages accepted. Begin isolated 960 x 480 browser prototype on development branch echo-show/prototype; start with shared shell, Home, navigation, Apps drawer and contextual quick settings, then integrate Spotify/Weather/Glucose layouts and existing chart renderer, Settings and optional apps in reviewable increments. Use synthetic data only and label preview. Calendar source and System Information scope remain open. No actual hardware control until verified. Pi preflight remains independent; read PRE-ARRIVAL.md. Preserve root application, CAD and existing desktop baseline. Record prototype code/test status and user review in handoff/changelog.
