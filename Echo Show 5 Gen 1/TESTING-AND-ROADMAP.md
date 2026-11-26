@@ -43,7 +43,9 @@ See [PRE-ARRIVAL.md](PRE-ARRIVAL.md) for safe preparation.
 - [x] User accepted Spotify visual direction, controls, floating device selector and compact mode dropdown (replacing three permanent buttons); requested physical volume and Echo mode subject to feasibility.
 - [ ] Test mode dropdown current-mode display, selection/dismissal, unavailable mode handling and distinction from playback-device selector.
 - [x] User accepted Weather B, selected current metrics, configurable forecast duration/icon styles, static weather backgrounds, Bournemouth and tap-day details.
-- [ ] Approve Glucose and remaining layouts, exact Home/Spotify/Weather details, rail sizing, defaults and drawer visuals.
+- [x] User accepted existing Glucose layouts and range/scale functionality; existing renderer and reader reviewed.
+- [ ] Resolve minor Glucose consistency preferences; approve drawer/Settings, remaining visual details and defaults.
+- [ ] Regression test all three Glucose views at 960 x 480 in both rail states; 1/3/6/12/24h time filtering, gaps, AUTO/FULL bounds and readable ticks; no extra upstream calls on changing range, no private data persisted.
 - [ ] Test physical +/- key events and mode-aware volume popup, safe privacy/power behavior, non-permanent fallback if necessary, no permanent volume icon/slider, extended device selector and far-right save button, no double volume changes or navigation side effects.
 - [ ] Verify Spotify seek/shuffle/repeat/save permissions and endpoint/device support; test floating device selector and last-track paused/disconnected states.
 - [ ] Experiment with official Spotify Android app/Connect on Echo Show, speaker output and background playback alongside kiosk; measure RAM; keep Echo mode unavailable until verified.

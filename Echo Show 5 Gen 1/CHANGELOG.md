@@ -1,5 +1,10 @@
 # Echo Show 5 Gen 1 changelog
 
+## 2026-11-26 — Existing Glucose layout retained
+
+- User supplied existing browser screenshots and requested same appearance/behavior rather than a full redesign. Preserve LIVE/GRAPH/BOTH, visible 1/3/6/12/24h buttons, AUTO/FULL toggle and original chart geometry/data semantics; adapt to 960 x 480 and right rail. Reviewed actual renderer, frontend, reader and docs. No private screenshots/readings copied into Git.
+- Documented existing defaults (BOTH, remembered view, 6h, AUTO), time filtering, gaps, scale rules and backend limitations. Proposed minor visual consistency choices; not approved yet. Next complete these and review app drawer/Settings. No application or Pi changes.
+
 ## 2026-11-26 — Weather direction accepted
 
 - User selected B large current weather above daily cards; temperature/condition, feels-like, rain probability, humidity and sunrise/sunset; configurable forecast duration and icon styles, condition-themed static backgrounds, always Bournemouth, tap day for details.
