@@ -13,6 +13,8 @@ class LocalTests(unittest.TestCase):
         s.devices_cache=None
         s.saved_cache.clear()
         s.last_snapshot=None
+        s.last_seen=None
+        s.resume_blocked=False
         self.url=s.ORIGIN
         self.headers={"X-Desk-Preview":"1","Origin":self.url}
     def test_requires_header(self):
@@ -121,4 +123,53 @@ class LocalTests(unittest.TestCase):
             r=self.client.post("/api/spotify/command",base_url=self.url,headers=self.headers,json={"action":"toggle","device":"d","value":True})
             self.assertEqual(r.status_code,200)
             api.assert_called_once_with("PUT","/me/player/play",{"device_id":"d"})
+    def remember_device(self, age=0):
+        s.last_snapshot={"title":"Last track","device":"Phone","deviceId":"d","controllable":True,"playing":False,"position":12}
+        s.last_seen=s.time.monotonic()-age
+    def test_recent_unlisted_device_keeps_resume_enabled(self):
+        s.token={"access_token":"test"}
+        self.remember_device()
+        with patch.object(s,"player",return_value={}),patch.object(s,"devices",return_value=[]):
+            data=self.client.get("/api/spotify/state",base_url=self.url,headers=self.headers).json
+            self.assertTrue(data["controllable"])
+            self.assertEqual(data["recovery"],"recent")
+            self.assertEqual(data["deviceId"],"d")
+            self.assertFalse(data["playing"])
+            self.assertTrue(data["disallows"]["skipping_next"])
+    def test_recent_unlisted_device_explicit_resume(self):
+        self.remember_device()
+        with patch.object(s,"player",return_value={}),patch.object(s,"devices",return_value=[]),patch.object(s,"spotify") as api:
+            r=self.client.post("/api/spotify/command",base_url=self.url,headers=self.headers,json={"action":"toggle","device":"d","value":True})
+            self.assertEqual(r.status_code,200)
+            api.assert_called_once_with("PUT","/me/player/play",{"device_id":"d"})
+    def test_recent_unlisted_device_no_skip(self):
+        self.remember_device()
+        with patch.object(s,"player",return_value={}),patch.object(s,"devices",return_value=[]),patch.object(s,"spotify") as api:
+            r=self.client.post("/api/spotify/command",base_url=self.url,headers=self.headers,json={"action":"next","device":"d"})
+            self.assertEqual(r.status_code,409)
+            api.assert_not_called()
+    def test_expired_recent_device(self):
+        self.remember_device(age=301)
+        self.assertIsNone(s.recovery_target("d",[]))
+    def test_recent_other_active_or_restricted_device(self):
+        self.remember_device()
+        self.assertIsNone(s.recovery_target("d",[{"id":"other","active":True,"restricted":False}]))
+        self.assertIsNone(s.recovery_target("d",[{"id":"d","active":False,"restricted":True}]))
+        self.assertIsNone(s.recovery_target("unseen",[]))
+    def test_resume_404_blocks_unlisted_fallback(self):
+        self.remember_device()
+        with patch.object(s,"player",return_value={}),patch.object(s,"devices",return_value=[]),patch.object(s,"spotify",side_effect=s.ApiError(404,"Not found")) as api:
+            r=self.client.post("/api/spotify/command",base_url=self.url,headers=self.headers,json={"action":"toggle","device":"d","value":True})
+            self.assertEqual(r.status_code,404)
+            self.assertTrue(s.resume_blocked)
+            self.assertIsNone(s.recovery_target("d",[]))
+            api.assert_called_once()
+    def test_verified_target_restores_recovery_after_rejection(self):
+        self.remember_device()
+        s.resume_blocked=True
+        s.token={"access_token":"test"}
+        with patch.object(s,"player",return_value={}),patch.object(s,"devices",return_value=[{"id":"d","name":"Phone","active":False,"restricted":False}]):
+            data=self.client.get("/api/spotify/state",base_url=self.url,headers=self.headers).json
+            self.assertEqual(data["recovery"],"verified")
+            self.assertFalse(s.resume_blocked)
 if __name__=="__main__":unittest.main()

@@ -26,6 +26,9 @@ saved_cache = {}
 playback_cache = None
 devices_cache = None
 last_snapshot = None
+last_seen = None
+resume_grace = 300
+resume_blocked = False
 logging.getLogger("werkzeug").disabled = True
 
 class ApiError(Exception):
@@ -118,13 +121,14 @@ def login():
 
 @app.get("/spotify/callback")
 def callback():
-    global pending,playback_cache,devices_cache,last_snapshot
+    global pending,playback_cache,devices_cache,last_snapshot,last_seen,resume_blocked
     item,pending=pending,None
     if not item or time.monotonic()>item[2] or not secrets.compare_digest(request.args.get("state",""),item[0]) or not secrets.compare_digest(request.cookies.get("desk_oauth_state",""),item[0]) or not request.args.get("code"):
         raise ApiError(400,"Authorization cancelled, expired or state mismatch. Open /spotify/login again.")
     exchange({"grant_type":"authorization_code","code":request.args["code"],"redirect_uri":REDIRECT,"code_verifier":item[1]})
     saved_cache.clear()
-    playback_cache=devices_cache=last_snapshot=None
+    playback_cache=devices_cache=last_snapshot=last_seen=None
+    resume_blocked=False
     response=redirect("/?live=1")
     response.delete_cookie("desk_oauth_state",path="/spotify/callback")
     return response
@@ -162,11 +166,27 @@ def saved_status(uri):
     saved_cache[uri]=(now,value)
     return value
 
+def recovery_target(expected, rows):
+    """Return verified, recent, or unavailable. Never guess another device."""
+    if not isinstance(expected,str) or not expected:
+        return None
+    if any(row["active"] and row["id"]!=expected for row in rows):
+        return None
+    match=next((row for row in rows if row["id"]==expected),None)
+    if match:
+        return None if match["restricted"] else "verified"
+    if (last_snapshot and last_snapshot.get("deviceId")==expected
+        and last_snapshot.get("controllable") and last_seen is not None
+        and time.monotonic()-last_seen<resume_grace and not resume_blocked):
+        return "recent"
+    return None
+
 @app.get("/api/spotify/state")
 def state():
-    global last_snapshot
+    global last_snapshot,last_seen,resume_blocked
     if not token:
-        last_snapshot=None
+        last_snapshot=last_seen=None
+        resume_blocked=False
         return jsonify(connected=False,saved=None)
     try:
         p=player(request.args.get("fresh")=="1")
@@ -178,24 +198,30 @@ def state():
             last=last_snapshot or {}
             expected=last.get("deviceId")
             rows=devices() if expected else []
-            match=next((row for row in rows if expected and row["id"]==expected and not row["restricted"]),None)
-            other_active=any(row["active"] and row["id"]!=expected for row in rows)
-            if other_active:
-                match=None
+            recovery=recovery_target(expected,rows)
+            if recovery=="verified":
+                last_seen=time.monotonic()
+                resume_blocked=False
+            match=next((row for row in rows if row["id"]==expected),None) if recovery=="verified" else None
             return jsonify(**{**last,"connected":True,"playing":False,"inactive":True,
-                "controllable":bool(match),"device":match["name"] if match else None,
-                "deviceId":expected if match else None,"saved":None,"disallows":{"seeking":True,
-                "pausing":True,"toggling_shuffle":True,"toggling_repeat_context":True}})
+                "controllable":bool(recovery),"recovery":recovery,
+                "device":(match["name"] if match else last.get("device")) if recovery else None,
+                "deviceId":expected if recovery else None,"saved":None,"disallows":{"seeking":True,
+                "pausing":True,"skipping_prev":recovery=="recent","skipping_next":recovery=="recent",
+                "toggling_shuffle":True,"toggling_repeat_context":True}})
         uri=item.get("uri") if item.get("type")=="track" and not item.get("is_local") else None
         disallows=(p.get("actions") or {}).get("disallows") or p.get("actions") or {}
         snapshot=dict(connected=True,title=item.get("name"),artist=", ".join(a.get("name","") for a in item.get("artists",[])),art=safe_art(item),uri=uri,position=max(0,(p.get("progress_ms") or 0)//1000),positionMs=max(0,p.get("progress_ms") or 0),duration=max(0,(item.get("duration_ms") or 0)//1000),playing=bool(p.get("is_playing")),device=d.get("name"),deviceId=d.get("id"),controllable=bool(d.get("id") and not d.get("is_restricted")),shuffle=bool(p.get("shuffle_state")),repeat=p.get("repeat_state","off"),saved=saved_status(uri),disallows=disallows,inactive=False)
         if item and d.get("id"):
             last_snapshot=snapshot.copy()
+            last_seen=time.monotonic() if snapshot["controllable"] else None
+            resume_blocked=False
         elif d.get("id") and last_snapshot and d.get("id")!=last_snapshot.get("deviceId"):
-            last_snapshot=None
+            last_snapshot=last_seen=None
+            resume_blocked=False
         return jsonify(**snapshot)
     except ApiError as e:
-        if not token:last_snapshot=None
+        if not token:last_snapshot=last_seen=None
         return jsonify(connected=bool(token),saved=None,error=e.message)
 
 
@@ -214,7 +240,7 @@ def list_devices():
 
 @app.post("/api/spotify/command")
 def command():
-    global playback_cache,devices_cache,last_snapshot
+    global playback_cache,devices_cache,last_snapshot,last_seen,resume_blocked
     data=request.get_json(silent=True)
     if not isinstance(data,dict):raise ApiError(400,"Invalid command.")
     a,v=data.get("action"),data.get("value")
@@ -225,7 +251,9 @@ def command():
             raise ApiError(400,"Device no longer available.")
         spotify("PUT","/me/player",body={"device_ids":[v],"play":False})
         devices_cache=None
-        if last_snapshot and last_snapshot.get("deviceId")!=v:last_snapshot=None
+        if last_snapshot and last_snapshot.get("deviceId")!=v:
+            last_snapshot=last_seen=None
+        resume_blocked=False
     else:
         p=player(True); playback_cache=None; d=p.get("device") or {};item=p.get("item") or {}
         if a=="save":
@@ -238,6 +266,7 @@ def command():
             saved_cache.pop(uri,None)
         else:
             expected=data.get("device")
+            recovery=None
             if d.get("id"):
                 if d.get("is_restricted") or d["id"]!=expected:
                     raise ApiError(409,"Active device changed. Select the intended playback device again.")
@@ -246,15 +275,29 @@ def command():
                 if p.get("is_playing") or not isinstance(expected,str) or not expected or a not in ("toggle","next","previous") or (a=="toggle" and v is not True):
                     raise ApiError(409,"No active playback. Open Spotify on your device or select it again.")
                 rows=devices(True)
-                match=next((row for row in rows if row["id"]==expected and not row["restricted"]),None)
-                if not match or any(row["active"] and row["id"]!=expected for row in rows):
-                    raise ApiError(409,"Playback device is unavailable or changed. Select it again.")
+                recovery=recovery_target(expected,rows)
+                if not recovery or (recovery=="recent" and not (a=="toggle" and v is True)):
+                    raise ApiError(409,"Playback device is unavailable or changed. Open Spotify on it or select it again.")
             params={"device_id":expected}
             if a=="toggle":
                 # Explicit requested state avoids an inverted toggle on a delayed read.
                 desired=v if type(v) is bool else not bool(p.get("is_playing"))
                 if not d.get("id") or desired!=bool(p.get("is_playing")):
-                    spotify("PUT","/me/player/"+("play" if desired else "pause"),params)
+                    try:
+                        spotify("PUT","/me/player/"+("play" if desired else "pause"),params)
+                    except ApiError as e:
+                        if recovery=="recent" and e.status in (403,404):
+                            resume_blocked=True
+                            devices_cache=None
+                            raise ApiError(e.status,"Spotify cannot reach the last device. Open Spotify on it, then select it again.")
+                        raise
+                if not desired and last_snapshot and last_snapshot.get("deviceId")==expected:
+                    last_snapshot["playing"]=False
+                    if item.get("uri")==last_snapshot.get("uri") and isinstance(p.get("progress_ms"),int):
+                        last_snapshot["positionMs"]=max(0,p["progress_ms"])
+                        last_snapshot["position"]=last_snapshot["positionMs"]//1000
+                    if d.get("id"):
+                        last_seen=time.monotonic()
             elif a in ("next","previous"):spotify("POST","/me/player/"+a,params)
             elif a=="seek":
                 if type(v) not in (int,float) or not 0<=v<=((item.get("duration_ms") or 0)/1000) or item.get("uri")!=data.get("uri"):raise ApiError(400,"Invalid seek or track changed.")

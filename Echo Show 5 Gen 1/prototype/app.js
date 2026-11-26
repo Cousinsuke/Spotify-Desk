@@ -52,7 +52,7 @@ function renderLiveState(){
 const s=live.state,home=$('homeTrack');if(home)home.textContent=s.connected?(s.inactive?'No active playback':s.title||'No playback'):'Spotify — not connected';
 if(active!=='spotify'||!$('album'))return;
 const text=(id,v)=>{$(id).textContent=v};
-text('playStatus',!s.connected?'NOT CONNECTED':s.error?'UNAVAILABLE':live.pending?(s.playing?'PLAYING · SYNCING':'PAUSED · SYNCING'):s.inactive?(s.title?'LAST TRACK · NO ACTIVE PLAYBACK':'NO ACTIVE PLAYBACK'):s.playing?'NOW PLAYING':s.title?'PAUSED':'NO ACTIVE PLAYBACK');
+text('playStatus',!s.connected?'NOT CONNECTED':s.error?'UNAVAILABLE':live.pending?(s.playing?'PLAYING · SYNCING':'PAUSED · SYNCING'):s.inactive?(s.recovery==='recent'?'PAUSED · LAST DEVICE':s.recovery==='verified'?'PAUSED · DEVICE AVAILABLE':s.title?'LAST TRACK · DEVICE UNAVAILABLE':'NO ACTIVE PLAYBACK'):s.playing?'NOW PLAYING':s.title?'PAUSED':'NO ACTIVE PLAYBACK');
 text('songTitle',s.title||'No music playing');text('songArtist',s.artist||'Start Spotify on your Xbox, phone or PC');
 text('duration',music.time(s.duration||0));
 const seek=$('seek');seek.max=s.duration||1;seek.disabled=live.pending||s.inactive||!!s.error||!s.controllable||!s.duration||!!s.disallows?.seeking;updateLiveProgress();
@@ -61,7 +61,7 @@ const p=$('playToggle');p.innerHTML=transportIcon(s.playing?'pause':'play');p.se
 $('shuffle').setAttribute('aria-pressed',String(!!s.shuffle));$('repeat').setAttribute('aria-pressed',String(!!s.repeat&&s.repeat!=='off'));$('repeatOne').hidden=s.repeat!=='track';$('repeat').setAttribute('aria-label','Repeat: '+(s.repeat||'off'));
 const save=$('saveSong');save.innerHTML=transportIcon(s.saved?'saved':'save');save.setAttribute('aria-pressed',String(!!s.saved));save.setAttribute('aria-label',s.saved?'Remove saved song':'Save song');save.disabled=live.pending||s.inactive||!s.uri||s.saved===null||!s.connected||!!s.error;
 for(const b of page.querySelectorAll('[data-music]')){if(b===save)continue;const key={toggle:s.playing?'pausing':'resuming',previous:'skipping_prev',next:'skipping_next',shuffle:'toggling_shuffle',repeat:'toggling_repeat_context'}[b.dataset.music];b.disabled=live.pending||!!s.error||!s.controllable||!!s.disallows?.[key]}
-text('deviceLabel',s.device?(s.playing?'Playing on ':'Selected: ')+s.device:'Select playback device');$('deviceSelect').disabled=live.pending||!s.connected||!!s.error;
+text('deviceLabel',s.device?(s.playing?'Playing on ':s.recovery==='recent'?'Last device: ':'Selected: ')+s.device:'Select playback device');$('deviceSelect').disabled=live.pending||!s.connected||!!s.error;
 const err=$('liveError');err.replaceChildren();if(!s.connected){const a=document.createElement('a');a.href='/spotify/login';a.className='live-link';a.textContent='Connect Spotify';err.append(a)}if(s.error||live.message){const span=document.createElement('span');span.textContent=' '+(live.message||s.error);err.append(span)}
 }
 function updateLiveProgress(){if(!liveEnabled||active!=='spotify'||!$('seek')||seeking)return;const pos=live.position(),seek=$('seek');seek.value=Math.floor(pos);const elapsed=music.time(Math.floor(pos));if($('elapsed').textContent!==elapsed)$('elapsed').textContent=elapsed;}
