@@ -23,9 +23,7 @@ Live mode is an isolated loopback Flask server, PKCE with in-memory access/refre
 ```bash
 python3 -m venv .venv
 ./.venv/bin/python -m pip install -r requirements-ui.txt
-read -r 'SPOTIPY_CLIENT_ID?Spotify Client ID: '
-export SPOTIPY_CLIENT_ID
-./.venv/bin/python 'Echo Show 5 Gen 1/prototype/live_server.py'
+env SPOTIPY_CLIENT_ID='YOUR_CLIENT_ID' ./.venv/bin/python 'Echo Show 5 Gen 1/prototype/live_server.py'
 ```
 
-The `read` example is zsh; bash uses `read -rp 'Spotify Client ID: ' SPOTIPY_CLIENT_ID`. Open http://127.0.0.1:8765/?live=1 then Spotify and Connect Spotify. Premium and app user permission required. Real Wi-Fi playback only; PC/Echo disabled. Current library URI endpoints used. Tokens disappear on process exit; no LAN/CGM connection. Live artwork uses original Spotify CDN with neutral background until colour extraction is implemented. No real account or runtime server test yet. Static demo remains available on /.
+Replace YOUR_CLIENT_ID locally (no client secret). Open http://127.0.0.1:8765/?live=1 then Spotify and Connect Spotify. Premium and app user permission required. Real Wi-Fi playback only; PC/Echo disabled. Current library URI endpoints used. Tokens disappear on process exit; no LAN/CGM connection. Live artwork uses original Spotify CDN with neutral background until colour extraction is implemented. No real account or runtime server test yet. Static demo remains available on /.

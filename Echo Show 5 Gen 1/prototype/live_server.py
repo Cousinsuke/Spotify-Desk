@@ -97,23 +97,29 @@ def spotify(method,path,params=None,body=None):
 @app.get("/spotify/login")
 def login():
     global pending
+    if request.headers.get("Sec-Fetch-Site") not in (None,"same-origin","none"):
+        raise ApiError(403,"Open Spotify login from the local dashboard.")
     if not CLIENT: raise ApiError(400,"Start the server with your Spotify Client ID.")
     verifier=secrets.token_urlsafe(64)
     challenge=base64.urlsafe_b64encode(hashlib.sha256(verifier.encode()).digest()).decode().rstrip("=")
     state=secrets.token_urlsafe(32)
     pending=(state,verifier,time.monotonic()+600)
-    return redirect("https://accounts.spotify.com/authorize?"+urlencode({"response_type":"code","client_id":CLIENT,"scope":SCOPES,"redirect_uri":REDIRECT,"state":state,"code_challenge_method":"S256","code_challenge":challenge}))
+    response = redirect("https://accounts.spotify.com/authorize?"+urlencode({"response_type":"code","client_id":CLIENT,"scope":SCOPES,"redirect_uri":REDIRECT,"state":state,"code_challenge_method":"S256","code_challenge":challenge}))
+    response.set_cookie("desk_oauth_state",state,max_age=600,httponly=True,samesite="Lax",path="/spotify/callback")
+    return response
 
 @app.get("/spotify/callback")
 def callback():
     global pending,playback_cache,devices_cache
     item,pending=pending,None
-    if not item or time.monotonic()>item[2] or not secrets.compare_digest(request.args.get("state",""),item[0]) or not request.args.get("code"):
+    if not item or time.monotonic()>item[2] or not secrets.compare_digest(request.args.get("state",""),item[0]) or not secrets.compare_digest(request.cookies.get("desk_oauth_state",""),item[0]) or not request.args.get("code"):
         raise ApiError(400,"Authorization cancelled, expired or state mismatch. Open /spotify/login again.")
     exchange({"grant_type":"authorization_code","code":request.args["code"],"redirect_uri":REDIRECT,"code_verifier":item[1]})
     saved_cache.clear()
     playback_cache=devices_cache=None
-    return redirect("/?live=1")
+    response=redirect("/?live=1")
+    response.delete_cookie("desk_oauth_state",path="/spotify/callback")
+    return response
 
 def player(force=False):
     global playback_cache
@@ -180,7 +186,8 @@ def command():
     data=request.get_json(silent=True)
     if not isinstance(data,dict):raise ApiError(400,"Invalid command.")
     a,v=data.get("action"),data.get("value")
-    if not isinstance(a,str):raise ApiError(400,"Invalid command.")
+    if a not in ("device","save","toggle","next","previous","seek","shuffle","repeat"):
+        raise ApiError(400,"Invalid command.")
     if a=="device":
         if not isinstance(v,str) or not any(d["id"]==v and not d["restricted"] for d in devices(True)):
             raise ApiError(400,"Device no longer available.")
