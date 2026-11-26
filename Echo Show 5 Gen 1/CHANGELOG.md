@@ -1,5 +1,9 @@
 # Echo Show 5 Gen 1 changelog
 
+## 2026-11-26 — Spotify mode dropdown refinement
+
+- User requested replacing the three permanent Wi-Fi/PC/Echo buttons with a compact dropdown and down arrow to reduce clutter. Display the active mode when closed; show available modes when opened, keep the playback-device selector separate. Echo mode and hardware volume remain unverified. Documentation only; Weather review next.
+
 ## 2026-11-26 — Spotify bottom row refinement
 
 - User removed the permanent volume icon from the Spotify design; move save-song action to its position on the far right, extend the tappable playback-device selector across the remaining space. Physical volume keys and transient popup preferred. Hardware forwarding remains unverified; consider non-permanent fallback only if necessary. Documentation only; next Weather review.
