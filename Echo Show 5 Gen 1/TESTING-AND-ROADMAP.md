@@ -38,7 +38,9 @@ See [PRE-ARRIVAL.md](PRE-ARRIVAL.md) for safe preparation.
 ## Gate D — functions
 
 - [x] User selected Pi hosting and supplied rough clock-first, right-rail UI concept (2026-11-26).
-- [ ] Approve exact page layouts, icons, rail sizing and More interaction (see UI-DESIGN.md).
+- [x] User accepted arrow + swipe reveal, configurable timeout, content expansion, floating More drawer and per-page auto-hide.
+- [ ] Approve exact Home and other page layouts, remaining icons, rail sizing, defaults and drawer visuals (see UI-DESIGN.md).
+- [ ] Validate navigation reflow, swipe/arrow, timer, per-page setting and drawer interactions in browser and on device.
 - [ ] Build browser prototype at 960 x 480 with synthetic test data and review before hardware deployment.
 
 - [ ] Spotify authorization and active-device metadata.

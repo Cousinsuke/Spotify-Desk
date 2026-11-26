@@ -1,6 +1,6 @@
 # Echo Show 5 — dashboard UI direction
 
-2026-11-26. User supplied rough visual reference in chat. **Design direction recorded; exact pages and icons not yet approved, no implementation or device validation.**
+2026-11-26. User supplied rough visual reference in chat. **Global navigation behavior accepted by user; individual page layouts and remaining visual details pending, no implementation or device validation.**
 
 ## Reference and user decisions
 
@@ -10,9 +10,21 @@
 - User explicitly stated icons are approximate and the question mark is a placeholder. They suggested a down arrow that could reveal all additional features as the project grows.
 - The reference is a design concept, not actual device screenshot. Text description retained here; original image not uploaded.
 
-## Proposed navigation
+## Accepted navigation behavior (2026-11-26)
 
-Keep central content area and a right-side rail that can collapse (user proposed auto-hide on inactivity, with tap or edge arrow to reopen; exact timing/trigger pending). Aim for five visible slots, with consistent icon sizes and touch targets, active-page indication and accessible labels. Proposed top-to-bottom:
+The user explicitly selected all five choices:
+
+- Reveal via a small right-edge arrow **and** inward swipe from the right edge.
+- Auto-hide timeout configurable in Settings.
+- Content expands to fill the space when the rail is hidden; reflows when revealed.
+- More uses a grid icon opening a floating app drawer, not a dedicated full-screen page.
+- Auto-hide configurable per page.
+
+Implementation details still proposed: default delay 10 seconds; reset timer on relevant interaction, suspend while drawer is open or navigation has focus, keep a large touch target around the subtle arrow, avoid stealing graph/media gestures, lightweight short transition. No automatic page changes. Exact default delay, dimensions, styling and settings design not selected yet.
+
+## Navigation slots
+
+Keep central content area and collapsible right-side rail following the accepted behavior above. Aim for five visible slots, with consistent icon sizes and touch targets, active-page indication and accessible labels. Proposed top-to-bottom:
 
 | Page | Suggested icon | Purpose |
 | --- | --- | --- |
@@ -20,9 +32,9 @@ Keep central content area and a right-side rail that can collapse (user proposed
 | Spotify | Spotify logo | Playback and active device |
 | Weather | Cloud / weather | Bournemouth forecast |
 | Glucose | Droplet | Supplementary current value and trend |
-| More | Grid (recommended), chevron/down arrow alternative | Additional widgets |
+| More | Grid (accepted) | Floating app drawer for additional widgets |
 
-For More, a grid indicates app/widget selection, a chevron indicates expandable content, and ellipsis tends to imply options. Recommendation: a grid icon opening a separate More page first; possible slide-out drawer later. User has not yet selected the final icon or interaction. If future features exceed available rail slots, list them in More rather than crowding or shrinking main touch targets.
+The user selected a grid icon opening a floating app drawer. If future features exceed available rail slots, list them in the drawer rather than crowding or shrinking main touch targets. Its exact size, placement and dismissal behavior remain for review.
 
 ## Proposed page layouts (review before implementation)
 
@@ -30,7 +42,7 @@ For More, a grid indicates app/widget selection, a chevron indicates expandable 
 - Spotify: album art, track/artist, progress, previous/play-pause/next, active playback device; volume if supported. Preserve Wi-Fi Spotify Connect and optional PC mode, clearly identify current mode/device, and keep PC-off behavior graceful.
 - Weather: fixed Bournemouth, current conditions, today/tomorrow/following day. Hourly details only as optional future refinement if space allows.
 - Glucose: prominent current value, source trend, age/timestamp, visible stale/offline status and graph. Retain previous LIVE/GRAPH/BOTH layouts and graph configuration from existing dashboard docs. This is a supplementary display, not medical alarms or a treatment-decision tool. Synthetic data only for design tests.
-- More: proposed simple grid/list of additional pages; settings, calendar, timers, reminders and system info are examples, not committed features.
+- More: floating app drawer with a proposed grid/list of additional pages; settings, calendar, timers, reminders and system info are examples, not committed features.
 
 ## Visual and performance principles
 
@@ -40,10 +52,10 @@ Minimal, dark/neutral rail with consistent icons; wallpaper can vary on Home. La
 
 User requested a clean design process with ideas/questions for each page and an explicit **Own idea** option for every choice, including variations or entirely different concepts. Work through global navigation, Home, Spotify, Weather, Glucose, More/Settings, then themes/animations. Record selections as accepted only when user confirms them.
 
-User proposed hiding the right rail after inactivity to reclaim screen area and revealing it by touch or a small arrow on the right. This supersedes the earlier always-visible rail concept. Candidate design (not yet accepted): rail slides away after a configurable idle delay, content uses full width, small left-facing edge handle opens it; lightweight transition; current page and data updates unaffected. Alternative reveal methods: edge swipe, tap empty background or hybrid. Avoid stealing media/graph interactions, hiding while a user is interacting with navigation, or making the control inaccessible. Decide global versus per-page behavior, timeout, whether it overlays or reflows content, reveal control and More behavior before implementation. Prefer a comfortably sized invisible touch area around a small visible handle. No automatic page switching as a side effect of collapse.
+User proposed hiding the right rail after inactivity to reclaim screen area and revealing it by touch or a small arrow on the right. This supersedes the earlier always-visible rail concept. Original candidate design (subsequently accepted with arrow + swipe): rail slides away after a configurable idle delay, content uses full width, small left-facing edge handle opens it; lightweight transition; current page and data updates unaffected. Alternative reveal methods: edge swipe, tap empty background or hybrid. Avoid stealing media/graph interactions, hiding while a user is interacting with navigation, or making the control inaccessible. These behavior choices have now been resolved above; exact defaults and visuals remain pending. Prefer a comfortably sized invisible touch area around a small visible handle. No automatic page switching as a side effect of collapse.
 
-Design discussion question set: reveal method (edge handle, background tap, swipe, own idea); auto-hide delay (5/10/15/30 seconds or own idea); layout (reflow, overlay, hybrid, own idea); More (grid/chevron, own idea); Home content (clock-only, subtle summaries, cards, own idea). These are candidates, not final choices. No app code changed.
+Design discussion question set: reveal method (edge handle, background tap, swipe, own idea); auto-hide delay (5/10/15/30 seconds or own idea); layout (reflow, overlay, hybrid, own idea); More (grid/chevron, own idea); Home content (clock-only, subtle summaries, cards, own idea). Historical question set; navigation answers are recorded above. Home content remains open. No app code changed.
 
-## Next design task
+## Next design task — Home
 
-Define exact layouts of all five pages, including rail dimensions, navigation behavior, typography, spacing, wallpaper, Home summary density and More interaction. Review with user using a browser prototype at 960 x 480; preserve previous desktop UI and code, test with synthetic data first. Then connect the Pi backend over authenticated HTTPS (see SOFTWARE-AND-PI.md). Record screenshots only if appropriate and without private data. No claim of implementation until tested.
+Present clock-first minimal, subtle summary and split/widget-rich Home alternatives with illustrative mockups. Ask the user about preferred layout, wallpaper, clock style, summary content and idle/wake behavior, always including Own idea and optional modifications. No Home choice has been approved yet. Then review Spotify, Weather, Glucose and floating app drawer/Settings, including remaining rail sizing and visual details. Review with user using a browser prototype at 960 x 480; preserve previous desktop UI and code, test with synthetic data first. Then connect the Pi backend over authenticated HTTPS (see SOFTWARE-AND-PI.md). Record screenshots only if appropriate and without private data. No claim of implementation until tested.

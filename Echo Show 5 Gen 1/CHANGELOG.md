@@ -1,5 +1,10 @@
 # Echo Show 5 Gen 1 changelog
 
+## 2026-11-26 — Navigation behavior accepted
+
+- User selected right-edge arrow + inward swipe to reveal; configurable inactivity timeout; full-width content when hidden; grid icon opens floating app drawer; per-page auto-hide settings.
+- Updated UI-DESIGN.md, handoff, README and roadmap to supersede the earlier proposals. Default timeout and exact visual design not selected. Next review Home with Own idea options. No implementation or hardware changes.
+
 ## 2026-11-26 — Collapsible navigation proposal and design review process
 
 - User proposed automatically hiding the right navigation icons after inactivity to reclaim screen space, with tap or small right-edge arrow to reveal.
