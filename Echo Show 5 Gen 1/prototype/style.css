@@ -47,3 +47,17 @@ button,select,input{font:inherit;color:inherit}button,select{background:var(--co
 #screen[data-page=spotify] #reveal{background:#15151585}
 #screen[data-page=spotify] .album img{display:block;width:100%;height:100%;object-fit:contain}
 .live-link{color:#e3f1e8;text-decoration:underline;font-size:14px;display:inline-block;margin-top:10px}.live-error{font-size:13px;color:#ffd5ac;margin:0;min-height:0}.live-error:empty{display:none}
+
+/* Real album artwork: small colour sample, no live blur. */
+#screen[data-page=spotify][data-spotify-background=art]{
+ background-color:var(--album-dark,#15171a);
+ background-image:linear-gradient(110deg,rgba(10,12,14,.76),rgba(10,12,14,.91)),var(--album-image,none),radial-gradient(ellipse at 15% 25%,var(--album-color,#40434c),var(--album-dark,#15171a));
+ background-position:center;
+ background-size:cover;
+ background-repeat:no-repeat;
+}
+#screen[data-page=spotify][data-spotify-background=album]{
+ background:linear-gradient(125deg,var(--album-color,#40434c),var(--album-dark,#15171a) 78%);
+}
+#screen[data-page=spotify] .album{background:rgba(255,255,255,.04)}
+#screen[data-page=spotify] .album .placeholder{height:100%;display:grid;place-items:center;margin:0;max-width:none}
