@@ -1,0 +1,16 @@
+'use strict';
+const assert=require('node:assert/strict'),w=require('./weather-preview.js');
+assert.equal(w.validDuration('5'),5);
+assert.equal(w.validDuration('99'),3);
+assert.equal(w.forecast('3').length,3);
+assert.equal(w.forecast('7').length,7);
+assert.equal(w.dayLabel(0),'Today');
+assert.equal(w.dayLabel(1),'Tomorrow');
+assert.equal(w.fullDate(1,new Date('2026-12-31T23:30:00Z')),'Friday 1 January');
+assert.equal(w.hourly(1).length,6);
+assert.deepEqual(w.hourly(99),[]);
+assert.ok(w.hourly(1).every(x=>x.rain>=0&&x.rain<=100));
+assert.ok(w.forecast(7).every(d=>d.low<=d.high&&w.conditions[d.condition]));
+assert.notEqual(w.icon('partly','colour'),w.icon('partly','outline'));
+assert.ok(w.icon('rain').includes('<svg'));
+console.log('13 weather preview assertions passed');

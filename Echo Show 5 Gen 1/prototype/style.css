@@ -61,3 +61,32 @@ button,select,input{font:inherit;color:inherit}button,select{background:var(--co
 }
 #screen[data-page=spotify] .album{background:rgba(255,255,255,.04)}
 #screen[data-page=spotify] .album .placeholder{height:100%;display:grid;place-items:center;margin:0;max-width:none}
+
+/* Weather, fixed 960x480 preview. Static local vector scene, no animated filters. */
+#screen[data-page=weather]{background:linear-gradient(130deg,#152a41a8,#101e34dc),url("weather-sky.svg") center/cover no-repeat,#395b78;color:#f7fbff;touch-action:auto}
+#screen[data-page=weather][data-weather-condition=clear]{background-color:#437899}
+#screen[data-page=weather][data-weather-condition=rain],#screen[data-page=weather][data-weather-condition=storm]{background:linear-gradient(135deg,#24384b,#101a29)}
+#screen[data-page=weather][data-weather-condition=night]{background:linear-gradient(135deg,#293759,#111625)}
+#screen[data-page=weather][data-weather-condition=snow],#screen[data-page=weather][data-weather-condition=fog]{background:linear-gradient(135deg,#627689,#233447)}
+#screen[data-page=weather] #page{padding:18px 44px 26px 26px;gap:8px}
+.weather-title{display:flex;justify-content:space-between;align-items:center;font-size:13px;letter-spacing:1.7px;flex-shrink:0}
+.weather-title small{font-size:11px;letter-spacing:0;color:#d4e0ee}
+.weather-current{display:flex;align-items:center;justify-content:center;gap:20px;flex:1;min-height:110px}
+.weather-current .weather-symbol{width:112px;height:112px;flex:none}
+.weather-temp{font-size:82px;font-weight:300;line-height:.98;letter-spacing:-4px}
+.weather-condition{font-size:18px;margin-top:5px;color:#e0eaf4}
+.weather-stats{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:8px;flex:none}
+.weather-stats>div{background:#13253b80;border:1px solid #ffffff18;border-radius:10px;min-width:0;text-align:center;padding:9px 4px;display:grid;gap:5px}
+.weather-stats span{font-size:12px;color:#c9dbed}.weather-stats strong{font-size:20px;font-weight:550;white-space:nowrap}
+.forecast-heading{display:flex;align-items:center;justify-content:space-between;letter-spacing:1.2px;font-size:11px;color:#d6e5f3;min-height:28px;flex:none}
+.forecast-heading>div{display:flex;gap:5px}.forecast-heading button{height:30px;width:38px;padding:0;font-size:22px;background:#ffffff12;border-color:#ffffff30;line-height:1}
+.forecast-days{display:flex;gap:10px;overflow-x:auto;scroll-snap-type:x proximity;scrollbar-width:thin;touch-action:pan-x;flex:none;padding:2px 0 5px}
+.forecast-day{flex:0 0 calc((100% - 20px)/3);min-width:0;scroll-snap-align:start;display:flex;align-items:center;flex-direction:column;gap:2px;height:132px;padding:8px 5px;background:#13253bad;border-color:#ffffff24;color:#f4faff}
+.forecast-day>span{font-size:14px}.forecast-day .weather-symbol{width:42px;height:42px}.forecast-day strong{font-size:22px;font-weight:600;white-space:nowrap}.forecast-day small{font-size:12px;color:#c4d6e7}.forecast-day strong small{font-size:16px;font-weight:400}
+#weatherDetails{inset:22px 50px;max-height:calc(100% - 44px);background:#1d2e41;border-color:#64788b}
+#weatherDetails header{margin-bottom:8px}.weather-detail-summary{display:flex;gap:17px;align-items:center;padding:6px 10px 12px;border-bottom:1px solid #ffffff22}
+.weather-detail-summary .weather-symbol{width:80px;height:80px;flex:none}.weather-detail-summary strong{display:block;font-size:34px;font-weight:500}.weather-detail-summary span{font-size:15px;color:#c8d9e9}.detail-rain{margin-left:auto;text-align:right}
+.hourly-days{display:grid;grid-template-columns:repeat(6,1fr);gap:7px}.hourly-days>div{display:grid;justify-items:center;gap:5px;padding:10px 2px;border-radius:10px;background:#ffffff09}
+.hourly-days span,.hourly-days small{font-size:12px;color:#c8d9e9}.hourly-days strong{font-size:20px}.hourly-days .weather-symbol{width:40px;height:40px}
+.weather-detail-footer{display:flex;justify-content:space-between;padding-top:16px;font-size:13px;color:#c8d9e9}
+.tile .home-weather{display:flex;align-items:center;gap:6px}.tile .home-weather .weather-symbol{width:28px;height:28px;flex:none}.tile .home-weather span{font-size:inherit;color:inherit;overflow:hidden;text-overflow:ellipsis}
