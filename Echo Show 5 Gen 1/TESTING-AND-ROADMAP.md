@@ -86,3 +86,7 @@ See [PRE-ARRIVAL.md](PRE-ARRIVAL.md) for safe preparation.
 Date | component | exact version | test/action | expected | actual (redacted) | status | source/commit | next action.
 
 For troubleshooting, record the first error, command, OS, reproducibility and resolution. Do not log personal readings, serials, credentials or unredacted network information. For medical display testing use synthetic cases and report only pass/fail or status/freshness, not actual values. Existing desktop test evidence belongs in existing docs; do not claim Pi/Echo Show validation from it.
+
+- [x] User ran 19 Python tests successfully; paused-device dropout remains in live test.
+- [x] Commit bounded last-device resume fallback; JS syntax checked.
+- [ ] Run 26 Python tests and verify explicit resume after 10–15 seconds paused on iPhone (foreground and locked). Compare PC and capture redacted status if still unavailable.
