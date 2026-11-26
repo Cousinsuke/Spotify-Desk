@@ -89,7 +89,9 @@ For troubleshooting, record the first error, command, OS, reproducibility and re
 
 - [x] User ran 19 Python tests successfully; paused-device dropout remains in live test.
 - [x] Commit bounded last-device resume fallback; JS syntax checked.
-- [ ] Run 26 Python tests and verify explicit resume after 10–15 seconds paused on iPhone (foreground and locked). Compare PC and capture redacted status if still unavailable.
+- [x] Run 26 Python tests and diagnose paused-device dropout via redacted logs; iPhone recovery not supported when Spotify returns 404. Further phone tests deferred by user.
 
 - [x] Review original Spotify Desk playback code and port bounded optimistic feedback; 29 JS assertions passed.
-- [ ] Run 26 Python tests, compare original Wi-Fi mode on same iPhone, then retest new preview with opt-in diagnostics. Determine source of dropout before additional device-recovery changes.
+- [x] User ran 26 Python tests (0.015s, OK), compared original Wi-Fi mode, and supplied diagnostics showing 204/no devices/404 resume. User reports Xbox works perfectly and accepts iPhone limitation.
+- [ ] Implement actual album-art-derived background colors, reuse original Desk extraction logic; review before Weather.
+- [ ] Validate individual remaining Spotify controls and later Pi-hosted Xbox playback with PC off; actual Echo hardware pending.
