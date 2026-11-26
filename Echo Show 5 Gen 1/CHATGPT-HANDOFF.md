@@ -18,7 +18,7 @@ Branch: main (documentation baseline). Read the actual latest files before actin
 
 ## Current checkpoint
 
-The £45.99 used H23K37 candidate has a pictured UK 15 W adapter, seller condition Very Good, screenshot listing two units available, and a reported 30-day returns policy. A previous £42.29 unit sold. Purchase, physical condition, exact shipped unit, bootloader, cable capability and return eligibility after modification are not confirmed. Existing Micro-USB cables cannot be tested on their own; an unbranded USB-C female to Micro-USB male adapter is available but data capability is unverified. USB utilities are now installed on Omarchy; a bare-cable lsusb test returned no new device, which is expected.
+The £45.99 used H23K37 candidate has a pictured UK 15 W adapter, seller condition Very Good, screenshot listing two units available, and a reported 30-day returns policy. A previous £42.29 unit sold. User confirmed ordering the Echo Show on 2026-11-26; awaiting delivery. Final price, exact shipped unit, condition, bootloader, cable capability and return eligibility after modification remain unverified. Existing Micro-USB cables cannot be tested on their own; an unbranded USB-C female to Micro-USB male adapter is available but data capability is unverified. USB utilities are now installed on Omarchy; a bare-cable lsusb test returned no new device, which is expected.
 
 The primary source for installation is the current Kiosk Satellite unlocking guide; model-specific firmware analysis is in HARDWARE-AND-FIRMWARE.md. A 2024 LK build is documented as supported, a 2019 LK is unsupported by Fastbrick USB, and the 2026 LK is not confirmed. Do not update Fire OS just to try to get a different LK. Do not assume stock firmware downgrades are possible.
 
@@ -26,7 +26,7 @@ The existing Gluroo reader and dashboard are already in the repository; a prior 
 
 ## Next step
 
-If the hardware has not been purchased, assess listing condition, adapter, returns and total cost. If it arrives, leave it off Wi-Fi and follow the read-only checks in INSTALLATION-AND-USB.md. Ask for the product and LK version outputs, with serial/unique identifiers redacted. Do not flash until the exact build and current guide have been checked. Separately, inspect the Pi's OS/resources/ports without changing Nextcloud.
+While awaiting delivery, start with the read-only Pi preflight in PRE-ARRIVAL.md and check the Omarchy Android tools. Pi OS, capacity, ports, Nextcloud installation and current service status are unknown; do not assume a deployment architecture until preflight results arrive. Next build an isolated headless backend and synthetic-data browser preview, then secure and test it before enabling real data. On delivery, keep stock Fire OS offline, inspect the device and follow INSTALLATION-AND-USB.md; request redacted product and LK version only. Do not flash until compatibility and the current guide are checked.
 
 ## Copy/paste prompt for a new chat
 

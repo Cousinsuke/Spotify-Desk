@@ -1,6 +1,6 @@
 # Echo Show 5 Gen 1 — Spotify Desk
 
-**Last updated: 2026-11-26. Status: planning and pre-purchase research; no Echo Show installation or Pi deployment confirmed.**
+**Last updated: 2026-11-26. Status: ordered by user; awaiting delivery. Pre-arrival software and Pi preparation; no Echo Show installation or Pi deployment confirmed.**
 
 This is a separate hardware/deployment path within Spotify-Desk, not a replacement for the existing Windows/Omarchy software or ESP32/Waveshare CAD work. The aim is a small, black, touchscreen desk dashboard with no separate physical media buttons required. Reuse the current software rather than rebuilding it unnecessarily.
 
@@ -11,6 +11,7 @@ This is a separate hardware/deployment path within Spotify-Desk, not a replaceme
 - [INSTALLATION-AND-USB.md](INSTALLATION-AND-USB.md) — cable checks, read-only bootloader identification, gated installation and recovery.
 - [SOFTWARE-AND-PI.md](SOFTWARE-AND-PI.md) — dashboard requirements, host architecture, Spotify and privacy-preserving CGM integration.
 - [TESTING-AND-ROADMAP.md](TESTING-AND-ROADMAP.md) — validation gates and next steps.
+- [PRE-ARRIVAL.md](PRE-ARRIVAL.md) — preparation tasks that do not require the physical device.
 - [CHANGELOG.md](CHANGELOG.md) — dated research, decisions, fixes and results.
 
 ## Current direction

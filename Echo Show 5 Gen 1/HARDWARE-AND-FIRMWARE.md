@@ -20,6 +20,8 @@ Alternative: second-generation Show 5 (2021), C76N8S / cronos, also has its own 
 
 ## Purchase history (not live stock information)
 
+2026-11-26: User confirmed ordering an Echo Show 5. Delivery pending; the exact received device, final total and bootloader have not been verified. The discussed candidate is recorded below; the order details have not been independently inspected.
+
 - Earlier eBay item 158301832586: £42.29, black H23K37, power supply pictured; subsequently reported sold.
 - Current candidate eBay item 365443653119: £45.99, seller Excelstuff (99.2% positive, 31,731 feedback in screenshot), Very Good used condition, label H23K37 visible, UK 15 W plug pictured, two available at screenshot time, seller reportedly accepts returns in 30 days. Source: user screenshots/report. Actual purchase, postage, condition, accessories included and return eligibility are not independently verified. Multi-unit listing may not ship the exact photographed device.
 - Direct listing: https://www.ebay.co.uk/itm/365443653119

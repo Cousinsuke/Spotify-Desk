@@ -1,5 +1,11 @@
 # Echo Show 5 Gen 1 changelog
 
+## 2026-11-26 — Order confirmed; pre-arrival preparation
+
+- User reported ordering the Echo Show 5; awaiting delivery. No bootloader or actual hardware result yet.
+- Prioritized read-only Raspberry Pi inspection and Omarchy tool verification, followed by an isolated headless dashboard, synthetic-data UI tests at 960 x 480, and secure connectivity. See PRE-ARRIVAL.md.
+- No Pi installations, firmware changes or root application changes made. Next step: obtain redacted Pi preflight output and verify tools.
+
 ## 2026-11-26 — Documentation baseline
 
 - Created dedicated project folder for the Echo Show direction, preserving the existing root code, CAD/PCB work and documentation.

@@ -1,12 +1,13 @@
 # Validation checklist and roadmap
 
-Updated 2026-11-26. All hardware and Pi items are pending until actual evidence is recorded.
+Updated 2026-11-26. Order confirmed by user; device and Pi checks pending until actual evidence is recorded.
 
 ## Gate A — acquisition and read-only checks
 
 - [x] Selected target model H23K37 / checkers, charcoal black.
 - [x] Documented candidate listing and reported return period.
-- [ ] Confirm order, delivery cost, actual unit and adapter.
+- [x] User confirmed ordering an Echo Show 5 (2026-11-26).
+- [ ] Confirm delivered unit, adapter, condition and final total if relevant.
 - [ ] Test physical condition without updating stock Fire OS.
 - [x] Install usbutils on Omarchy (user observed lsusb now runs).
 - [ ] Test a data-capable cable/adapter with the actual device.
@@ -22,7 +23,9 @@ Updated 2026-11-26. All hardware and Pi items are pending until actual evidence 
 - [ ] Check boot, touch, screen, sound, Wi-Fi, restart and stability.
 - [ ] Test kiosk without Home Assistant, or select a standalone alternative.
 
-## Gate C — Pi deployment
+## Gate C — Pi deployment (can start before delivery)
+
+See [PRE-ARRIVAL.md](PRE-ARRIVAL.md) for safe preparation.
 
 - [ ] Inspect Pi OS/architecture, resources, ports and Nextcloud.
 - [ ] Implement isolated headless backend and authenticated HTTPS device endpoints; preserve existing localhost-only behavior by default.
