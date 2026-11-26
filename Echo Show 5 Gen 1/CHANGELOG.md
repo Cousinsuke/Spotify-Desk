@@ -1,5 +1,11 @@
 # Echo Show 5 Gen 1 changelog
 
+## 2026-11-26 — Final Glucose refinements accepted
+
+- User selected compact view dropdown, selectable backgrounds with green default and optional dynamic red/green/yellow-orange/orange colours, 6h/AUTO reset on reload and unchanged graph interaction.
+- Recorded proposed aesthetic colour boundaries based on existing display band and requested 15+ orange, neutral stale/offline appearance and low-cost CSS implementation. No clinical thresholds or new alerts; exact palette and device performance pending.
+- Next review floating app drawer and Settings; documentation only, no application or Pi changes.
+
 ## 2026-11-26 — Existing Glucose layout retained
 
 - User supplied existing browser screenshots and requested same appearance/behavior rather than a full redesign. Preserve LIVE/GRAPH/BOTH, visible 1/3/6/12/24h buttons, AUTO/FULL toggle and original chart geometry/data semantics; adapt to 960 x 480 and right rail. Reviewed actual renderer, frontend, reader and docs. No private screenshots/readings copied into Git.
