@@ -12,6 +12,7 @@ class LocalTests(unittest.TestCase):
         s.playback_cache=None
         s.devices_cache=None
         s.saved_cache.clear()
+        s.last_snapshot=None
         self.url=s.ORIGIN
         self.headers={"X-Desk-Preview":"1","Origin":self.url}
     def test_requires_header(self):
@@ -81,4 +82,43 @@ class LocalTests(unittest.TestCase):
             with self.assertRaises(s.ApiError) as err:
                 s.spotify("PUT","/me/player/pause")
             self.assertEqual(err.exception.status,403)
+    def test_inactive_keeps_last_track_and_verified_device(self):
+        s.token={"access_token":"test"}
+        s.last_snapshot={"title":"Last track","deviceId":"d","playing":True,"position":12}
+        with patch.object(s,"player",return_value={}),patch.object(s,"devices",return_value=[{"id":"d","name":"Phone","restricted":False,"active":False}]):
+            data=self.client.get("/api/spotify/state",base_url=self.url,headers=self.headers).json
+            self.assertEqual(data["title"],"Last track")
+            self.assertTrue(data["inactive"])
+            self.assertFalse(data["playing"])
+            self.assertTrue(data["controllable"])
+            self.assertEqual(data["deviceId"],"d")
+            self.assertIsNone(data["saved"])
+    def test_inactive_unavailable_device_disables_controls(self):
+        s.token={"access_token":"test"}
+        s.last_snapshot={"title":"Last track","deviceId":"d"}
+        with patch.object(s,"player",return_value={}),patch.object(s,"devices",return_value=[]):
+            data=self.client.get("/api/spotify/state",base_url=self.url,headers=self.headers).json
+            self.assertFalse(data["controllable"])
+            self.assertIsNone(data["deviceId"])
+    def test_skip_after_empty_playback_uses_verified_same_device(self):
+        with patch.object(s,"player",return_value={}),patch.object(s,"devices",return_value=[{"id":"d","name":"Phone","restricted":False,"active":False}]),patch.object(s,"spotify") as api:
+            r=self.client.post("/api/spotify/command",base_url=self.url,headers=self.headers,json={"action":"previous","device":"d"})
+            self.assertEqual(r.status_code,200)
+            api.assert_called_once_with("POST","/me/player/previous",{"device_id":"d"})
+    def test_skip_never_targets_other_active_device(self):
+        rows=[{"id":"d","restricted":False,"active":False},{"id":"other","restricted":False,"active":True}]
+        with patch.object(s,"player",return_value={}),patch.object(s,"devices",return_value=rows),patch.object(s,"spotify") as api:
+            r=self.client.post("/api/spotify/command",base_url=self.url,headers=self.headers,json={"action":"previous","device":"d"})
+            self.assertEqual(r.status_code,409)
+            api.assert_not_called()
+    def test_explicit_pause_does_not_invert_stale_state(self):
+        with patch.object(s,"player",return_value={"device":{"id":"d"},"is_playing":False}),patch.object(s,"spotify") as api:
+            r=self.client.post("/api/spotify/command",base_url=self.url,headers=self.headers,json={"action":"toggle","device":"d","value":False})
+            self.assertEqual(r.status_code,200)
+            api.assert_not_called()
+    def test_resume_on_verified_device_without_active_playback(self):
+        with patch.object(s,"player",return_value={}),patch.object(s,"devices",return_value=[{"id":"d","restricted":False,"active":False}]),patch.object(s,"spotify") as api:
+            r=self.client.post("/api/spotify/command",base_url=self.url,headers=self.headers,json={"action":"toggle","device":"d","value":True})
+            self.assertEqual(r.status_code,200)
+            api.assert_called_once_with("PUT","/me/player/play",{"device_id":"d"})
 if __name__=="__main__":unittest.main()
