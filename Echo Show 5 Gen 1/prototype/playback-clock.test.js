@@ -1,0 +1,15 @@
+'use strict';
+const assert=require('node:assert/strict');
+const {position}=require('./playback-clock.js');
+const s={connected:true,playing:true,position:80,positionMs:80250,duration:200};
+assert.equal(position(s,1000,1000),80.25);
+assert.equal(position(s,1000,2000),81.25);
+assert.equal(position(s,1000,5000),84.25);
+assert.equal(position({...s,playing:false},1000,5000),80.25);
+assert.equal(position({...s,positionMs:199000},1000,5000),200);
+assert.equal(position({...s,connected:false},1000,5000),0);
+assert.equal(position({...s,error:'offline'},1000,5000),0);
+assert.equal(position(s,1000,6000,2000),81.25);
+assert.equal(position(s,1000,31000),95.25);
+assert.equal(position({...s,position:40,positionMs:40000},5000,6000),41);
+console.log('10 playback clock assertions passed');

@@ -92,7 +92,14 @@ def spotify(method,path,params=None,body=None):
         raise ApiError(401,"Spotify session expired; reconnect.")
     if r.status_code>=400 or 300<=r.status_code<400:
         raise ApiError(r.status_code if r.status_code<600 and r.status_code>=400 else 502,"Spotify rejected the request ("+str(r.status_code)+"). Check Premium, app access and device support.")
-    return r.json() if r.content else None
+    # Playback/library writes acknowledge success; their response body is not data.
+    # Spotify may return 204, an empty response, or a non-JSON success body.
+    if method.upper() != "GET" or r.status_code == 204 or not r.content.strip():
+        return None
+    try:
+        return r.json()
+    except ValueError:
+        raise ApiError(502,"Spotify returned an unreadable playback response.")
 
 @app.get("/spotify/login")
 def login():
@@ -127,7 +134,7 @@ def player(force=False):
     if not force and playback_cache and now-playback_cache[0]<3:
         return playback_cache[1]
     p=spotify("GET","/me/player") or {}
-    playback_cache=(now,p)
+    playback_cache=(time.monotonic(),p)
     return p
 
 def safe_art(item):
@@ -163,7 +170,7 @@ def state():
         d=p.get("device") or {}
         uri=item.get("uri") if item.get("type")=="track" and not item.get("is_local") else None
         disallows=(p.get("actions") or {}).get("disallows") or p.get("actions") or {}
-        return jsonify(connected=True,title=item.get("name"),artist=", ".join(a.get("name","") for a in item.get("artists",[])),art=safe_art(item),uri=uri,position=max(0,(p.get("progress_ms") or 0)//1000),duration=max(0,(item.get("duration_ms") or 0)//1000),playing=bool(p.get("is_playing")),device=d.get("name"),deviceId=d.get("id"),controllable=bool(d.get("id") and not d.get("is_restricted")),shuffle=bool(p.get("shuffle_state")),repeat=p.get("repeat_state","off"),saved=saved_status(uri),disallows=disallows)
+        return jsonify(connected=True,title=item.get("name"),artist=", ".join(a.get("name","") for a in item.get("artists",[])),art=safe_art(item),uri=uri,position=max(0,(p.get("progress_ms") or 0)//1000),positionMs=max(0,p.get("progress_ms") or 0),duration=max(0,(item.get("duration_ms") or 0)//1000),playing=bool(p.get("is_playing")),device=d.get("name"),deviceId=d.get("id"),controllable=bool(d.get("id") and not d.get("is_restricted")),shuffle=bool(p.get("shuffle_state")),repeat=p.get("repeat_state","off"),saved=saved_status(uri),disallows=disallows)
     except ApiError as e:
         return jsonify(connected=bool(token),saved=None,error=e.message)
 
@@ -194,7 +201,7 @@ def command():
         spotify("PUT","/me/player",body={"device_ids":[v],"play":False})
         devices_cache=None
     else:
-        p=player(True); d=p.get("device") or {};item=p.get("item") or {}
+        p=player(True); playback_cache=None; d=p.get("device") or {};item=p.get("item") or {}
         if a=="save":
             uri=item.get("uri")
             if not isinstance(uri,str) or not re.fullmatch(r"spotify:track:[A-Za-z0-9]+",uri) or uri!=data.get("uri") or item.get("is_local"):
@@ -223,7 +230,7 @@ def index():return send_from_directory(ROOT,"index.html")
 
 @app.get("/<name>")
 def asset(name):
-    if name not in {"style.css","app.js","spotify-preview.js","spotify-live.js","favicon.svg"}:return "",404
+    if name not in {"style.css","app.js","spotify-preview.js","spotify-live.js","playback-clock.js","favicon.svg"}:return "",404
     return send_from_directory(ROOT,name)
 
 if __name__=="__main__":

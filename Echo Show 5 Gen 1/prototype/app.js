@@ -52,18 +52,19 @@ function renderLiveState(){
 const s=live.state,home=$('homeTrack');if(home)home.textContent=s.connected?(s.title||'No playback'):'Spotify — not connected';
 if(active!=='spotify'||!$('album'))return;
 const text=(id,v)=>{$(id).textContent=v};
-text('playStatus',!s.connected?'NOT CONNECTED':s.error?'UNAVAILABLE':s.playing?'NOW PLAYING':s.title?'PAUSED':'NO ACTIVE PLAYBACK');
+text('playStatus',!s.connected?'NOT CONNECTED':s.error?'UNAVAILABLE':live.pending?'UPDATING…':s.playing?'NOW PLAYING':s.title?'PAUSED':'NO ACTIVE PLAYBACK');
 text('songTitle',s.title||'No music playing');text('songArtist',s.artist||'Start Spotify on your Xbox, phone or PC');
-text('elapsed',music.time(s.position||0));text('duration',music.time(s.duration||0));
-const seek=$('seek');seek.max=s.duration||1;if(!seeking)seek.value=s.position||0;seek.disabled=!s.controllable||!s.duration||!!s.disallows?.seeking;
+text('duration',music.time(s.duration||0));
+const seek=$('seek');seek.max=s.duration||1;seek.disabled=live.pending||!!s.error||!s.controllable||!s.duration||!!s.disallows?.seeking;updateLiveProgress();
 const album=$('album');if(album.dataset.url!==(s.art||'')||!album.firstChild){album.dataset.url=s.art||'';album.replaceChildren();if(s.art){const img=document.createElement('img');img.alt='Album artwork';img.src=s.art;img.referrerPolicy='no-referrer';album.append(img)}else{album.innerHTML='<div class="placeholder">Spotify</div>'}}
 const p=$('playToggle');p.innerHTML=transportIcon(s.playing?'pause':'play');p.setAttribute('aria-label',s.playing?'Pause':'Play');
 $('shuffle').setAttribute('aria-pressed',String(!!s.shuffle));$('repeat').setAttribute('aria-pressed',String(!!s.repeat&&s.repeat!=='off'));$('repeatOne').hidden=s.repeat!=='track';$('repeat').setAttribute('aria-label','Repeat: '+(s.repeat||'off'));
-const save=$('saveSong');save.innerHTML=transportIcon(s.saved?'saved':'save');save.setAttribute('aria-pressed',String(!!s.saved));save.setAttribute('aria-label',s.saved?'Remove saved song':'Save song');save.disabled=!s.uri||s.saved===null||!s.connected||!!s.error;
-for(const b of page.querySelectorAll('[data-music]')){if(b===save)continue;const key={toggle:s.playing?'pausing':'resuming',previous:'skipping_prev',next:'skipping_next',shuffle:'toggling_shuffle',repeat:'toggling_repeat_context'}[b.dataset.music];b.disabled=!s.controllable||!!s.disallows?.[key]}
-text('deviceLabel',s.device?(s.playing?'Playing on ':'Selected: ')+s.device:'Select playback device');$('deviceSelect').disabled=!s.connected||!!s.error;
+const save=$('saveSong');save.innerHTML=transportIcon(s.saved?'saved':'save');save.setAttribute('aria-pressed',String(!!s.saved));save.setAttribute('aria-label',s.saved?'Remove saved song':'Save song');save.disabled=live.pending||!s.uri||s.saved===null||!s.connected||!!s.error;
+for(const b of page.querySelectorAll('[data-music]')){if(b===save)continue;const key={toggle:s.playing?'pausing':'resuming',previous:'skipping_prev',next:'skipping_next',shuffle:'toggling_shuffle',repeat:'toggling_repeat_context'}[b.dataset.music];b.disabled=live.pending||!!s.error||!s.controllable||!!s.disallows?.[key]}
+text('deviceLabel',s.device?(s.playing?'Playing on ':'Selected: ')+s.device:'Select playback device');$('deviceSelect').disabled=live.pending||!s.connected||!!s.error;
 const err=$('liveError');err.replaceChildren();if(!s.connected){const a=document.createElement('a');a.href='/spotify/login';a.className='live-link';a.textContent='Connect Spotify';err.append(a)}if(s.error||live.message){const span=document.createElement('span');span.textContent=' '+(live.message||s.error);err.append(span)}
 }
+function updateLiveProgress(){if(!liveEnabled||active!=='spotify'||!$('seek')||seeking)return;const pos=live.position(),seek=$('seek');seek.value=Math.floor(pos);const elapsed=music.time(Math.floor(pos));if($('elapsed').textContent!==elapsed)$('elapsed').textContent=elapsed;}
 apply();renderPage();setRail(true);
-if(liveEnabled){$('demo').textContent='LOCAL SPOTIFY TEST · OTHER DATA IS SAMPLE';screen.style.setProperty('--album-color','#40434c');screen.style.setProperty('--album-dark','#15171a');live.onChange=renderLiveState;live.refresh();setInterval(()=>{if(active==='spotify'||active==='home')live.refresh()},5000)}
+if(liveEnabled){$('demo').textContent='LOCAL SPOTIFY TEST · OTHER DATA IS SAMPLE';screen.style.setProperty('--album-color','#40434c');screen.style.setProperty('--album-dark','#15171a');live.onChange=renderLiveState;live.refresh();setInterval(()=>{if(active==='spotify'||active==='home')live.refresh()},5000);setInterval(updateLiveProgress,200)}
 setInterval(()=>{clock();if(!liveEnabled){playback=music.reduce(playback,'tick');if(active==='spotify'&&!overlay)updateSpotify()}},1000);

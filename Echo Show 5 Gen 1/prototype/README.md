@@ -27,3 +27,7 @@ env SPOTIPY_CLIENT_ID='YOUR_CLIENT_ID' ./.venv/bin/python 'Echo Show 5 Gen 1/pro
 ```
 
 Replace YOUR_CLIENT_ID locally (no client secret). Open http://127.0.0.1:8765/?live=1 then Spotify and Connect Spotify. Premium and app user permission required. Real Wi-Fi playback only; PC/Echo disabled. Current library URI endpoints used. Tokens disappear on process exit; no LAN/CGM connection. Live artwork uses original Spotify CDN with neutral background until colour extraction is implemented. No real account or runtime server test yet. Static demo remains available on /.
+
+## Increment 4 — live playback response and progress fixes
+
+User corrected the callback URI and reported real Spotify worked until Pause. The command crashed parsing a non-JSON success body. All successful non-GET acknowledgements and 204/empty responses now bypass JSON parsing; invalid GET JSON produces a controlled error. Frontend distinguishes server errors from a missing live API, serializes commands against in-flight polls, and projects time locally with monotonic clock, duration clamp, 15-second extrapolation cap, pause/disconnect freeze and seek drag protection. Poll interval remains five seconds. Ten pure clock assertions passed in assistant JS runtime; four additional mocked Python tests authored (13 total), pending local run. No real account retest yet. Restart live server, reconnect, hard refresh, then test play/pause/skip/seek and timer.
