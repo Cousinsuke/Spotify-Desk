@@ -1,5 +1,10 @@
 # Echo Show 5 Gen 1 changelog
 
+## 2026-11-26 — Local Spotify server tests passed
+
+- User successfully installed dependencies in separate Omarchy preview worktree, ran nine mocked Python tests (0.039s, OK) and started loopback Flask server.
+- Screenshot shows NOT CONNECTED and Connect Spotify link while user reports playing music on iPhone. Client ID alone does not authorize Spotify. Next complete OAuth via Connect Spotify and reopen Spotify page after redirect; no actual account or playback validation yet. No identifiers, screenshot or private playback data saved.
+
 ## 2026-11-26 — Spotify visual refinements and opt-in live testing
 
 - User reviewed sample player screenshot, confirmed auto-hide delay works, requested tap empty content to hide rail, borderless save circle with green saved tick, neutral translucent mode/device controls. Changes committed, re-review pending.
