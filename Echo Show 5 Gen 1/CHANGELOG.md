@@ -1,5 +1,11 @@
 # Echo Show 5 Gen 1 changelog
 
+## 2026-11-26 — Spotify connected; pause response and timer fixes
+
+- User confirmed callback URI caused initial connection failure and real Spotify worked until Pause. Traceback located JSON decode of command response; exact upstream status/body unknown.
+- Code eeaea4d023d508d391513c2cd12feb1aaa2fe433: successful command responses no longer parsed as JSON, 204/empty responses handled, malformed GET controlled error, command cache invalidation, browser error classification and monotonic playback clock with pause/disconnect/seek handling. API polling remains 5 seconds.
+- Ten clock assertions and JS syntax passed; four new Python regression tests (13 total) pending local run. Restart/reconnect required; fixed live playback not yet verified. No private credentials or account data committed.
+
 ## 2026-11-26 — Local Spotify server tests passed
 
 - User successfully installed dependencies in separate Omarchy preview worktree, ran nine mocked Python tests (0.039s, OK) and started loopback Flask server.

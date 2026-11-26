@@ -65,7 +65,9 @@ See [PRE-ARRIVAL.md](PRE-ARRIVAL.md) for safe preparation.
 - [x] User reviewed sample Spotify screenshot and confirmed auto-hide delay works; refinements requested.
 - [ ] Verify blank-area dismissal (without swallowing controls), bare save circle/green tick, neutral selectors in both rail states.
 - [x] User ran nine mocked Python tests successfully (0.039s, OK) and started loopback server on Omarchy.
-- [ ] Complete PKCE authorization through Connect Spotify (screenshot currently NOT CONNECTED), test Wi-Fi real metadata/artwork, commands, device selection and library URI endpoints; real account and hardware still pending.
+- [x] User corrected callback URI and reported real Spotify connected/working before pause failure.
+- [x] Commit shared successful command response parsing fix and local playback progress clock; JS syntax and 10 pure clock tests passed.
+- [ ] Run expanded 13 Python tests and live retest pause/resume, skip, seek, external changes, progress, device selection and library URI endpoints; hardware still pending.
 - [ ] Complete Spotify, Weather, Glucose, contextual quick controls and pin/reorder; full browser review before hardware deployment.
 
 - [ ] Spotify authorization and active-device metadata.
