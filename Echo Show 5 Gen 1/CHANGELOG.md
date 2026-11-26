@@ -1,5 +1,12 @@
 # Echo Show 5 Gen 1 changelog
 
+## 2026-11-26 — Home visual approval and Spotify preview
+
+- User launched first preview on Omarchy, HTML/CSS/JS HTTP 200, screenshot shows Home clock/date, sample tiles and collapsed rail; user said looks good. Other shell interactions not separately verified. Favicon 404 harmless; SVG favicon now added.
+- Original checkout has local static/desk-dashboard.css change; leave intact, use separate preview worktree.
+- Spotify preview code commit 3d8f26b6e8b403205d097808d548c629e15913dd: split artwork/player, synthetic controls, mode dropdown with Echo disabled, floating device selector, far-right save, no volume icon, selectable backgrounds and contextual quick settings. JS syntax and 17 pure-state assertions passed in assistant runtime; browser and hardware tests pending. No real service connection, Pi changes or private data.
+- Next user Spotify review; then Weather and Glucose. See PROTOTYPE-STATUS.md for update command.
+
 ## 2026-11-26 — First isolated prototype increment committed
 
 - Development branch echo-show/prototype, commit fceb8653d337645ac9df93ec17c162c3b9cd7024, static files in Echo Show 5 Gen 1/prototype/. Home, right rail/auto-hide, arrow/swipe reveal, Apps drawer, basic quick settings and General/Navigation Settings shell. Existing main root code unchanged.

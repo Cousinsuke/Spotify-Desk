@@ -59,7 +59,10 @@ See [PRE-ARRIVAL.md](PRE-ARRIVAL.md) for safe preparation.
 - [ ] Test one active Home layout/preset at a time, wallpaper sizing, settings persistence, clock styles, and verify idle never changes page; measure resource use on device.
 - [ ] Validate navigation reflow, swipe/arrow, timer, per-page setting and drawer interactions in browser and on device.
 - [x] Commit first isolated synthetic-data Home/navigation/Settings shell on echo-show/prototype; JS parse verified, not executed.
-- [ ] User browser review first shell at 960 x 480; test timer, gesture, drawer, theme/reset and reload.
+- [x] User visually approved Home on Omarchy; HTML/CSS/JS HTTP 200, clock/date/tiles and collapsed rail shown.
+- [ ] Remaining first shell interaction tests: timer, gesture, drawer, theme/reset and reload.
+- [x] Spotify synthetic UI committed on preview branch; JS parse and 17 pure-state assertions passed.
+- [ ] User Spotify visual and interaction test; real playback and hardware still pending.
 - [ ] Complete Spotify, Weather, Glucose, contextual quick controls and pin/reorder; full browser review before hardware deployment.
 
 - [ ] Spotify authorization and active-device metadata.
