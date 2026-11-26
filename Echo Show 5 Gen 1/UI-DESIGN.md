@@ -136,4 +136,6 @@ Design discussion question set: reveal method (edge handle, background tap, swip
 
 ## Next task — browser prototype and Pi preflight
 
+First shell committed to echo-show/prototype; see PROTOTYPE-STATUS.md for scope and launch. Browser validation pending. The design above remains the target, not a claim that all features are implemented.
+
 All seven design stages accepted. Begin isolated 960 x 480 browser prototype on development branch echo-show/prototype; start with shared shell, Home, navigation, Apps drawer and contextual quick settings, then integrate Spotify/Weather/Glucose layouts and existing chart renderer, Settings and optional apps in reviewable increments. Use synthetic data only and label preview. Calendar source and System Information scope remain open. No actual hardware control until verified. Pi preflight remains independent; read PRE-ARRIVAL.md. Preserve root application, CAD and existing desktop baseline. Record prototype code/test status and user review in handoff/changelog.

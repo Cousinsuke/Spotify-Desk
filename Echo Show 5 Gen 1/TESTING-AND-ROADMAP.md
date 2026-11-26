@@ -58,7 +58,9 @@ See [PRE-ARRIVAL.md](PRE-ARRIVAL.md) for safe preparation.
 - [ ] Experiment with official Spotify Android app/Connect on Echo Show, speaker output and background playback alongside kiosk; measure RAM; keep Echo mode unavailable until verified.
 - [ ] Test one active Home layout/preset at a time, wallpaper sizing, settings persistence, clock styles, and verify idle never changes page; measure resource use on device.
 - [ ] Validate navigation reflow, swipe/arrow, timer, per-page setting and drawer interactions in browser and on device.
-- [ ] Build browser prototype at 960 x 480 with synthetic test data and review before hardware deployment.
+- [x] Commit first isolated synthetic-data Home/navigation/Settings shell on echo-show/prototype; JS parse verified, not executed.
+- [ ] User browser review first shell at 960 x 480; test timer, gesture, drawer, theme/reset and reload.
+- [ ] Complete Spotify, Weather, Glucose, contextual quick controls and pin/reorder; full browser review before hardware deployment.
 
 - [ ] Spotify authorization and active-device metadata.
 - [ ] Pause/resume/skip Xbox playback with PC fully off; check unsupported volume gracefully.

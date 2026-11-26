@@ -1,5 +1,11 @@
 # Echo Show 5 Gen 1 changelog
 
+## 2026-11-26 — First isolated prototype increment committed
+
+- Development branch echo-show/prototype, commit fceb8653d337645ac9df93ec17c162c3b9cd7024, static files in Echo Show 5 Gen 1/prototype/. Home, right rail/auto-hide, arrow/swipe reveal, Apps drawer, basic quick settings and General/Navigation Settings shell. Existing main root code unchanged.
+- Read-back verified branch head and JavaScript parsed successfully (not executed). Browser visual/gesture/timer tests pending. No Pi integration, real data/audio or hardware brightness. Other pages, pin/reorder, scheduled night mode and per-app quick settings are pending. See PROTOTYPE-STATUS.md for run instructions.
+- Main remains documentation-only; next user browser review and Pi read-only preflight, then additional pages.
+
 ## 2026-11-26 — Final display choices accepted; design baseline complete
 
 - User selected Graphite/Black only, rail styles/transparency, 10s default hide, selectable animations, manual brightness, manual/configurable auto night mode, always-on display, top-edge swipe-down quick settings with per-app controls, and Home on startup.
