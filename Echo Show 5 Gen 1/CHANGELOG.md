@@ -1,5 +1,11 @@
 # Echo Show 5 Gen 1 changelog
 
+## 2026-11-26 — Spotify visual refinements and opt-in live testing
+
+- User reviewed sample player screenshot, confirmed auto-hide delay works, requested tap empty content to hide rail, borderless save circle with green saved tick, neutral translucent mode/device controls. Changes committed, re-review pending.
+- Added isolated loopback PKCE Spotify test server and browser integration (code head 154da1eb7e4f7364d4c4ec5389d43c6fe8b1a8c4), with current URI library endpoints, in-memory tokens, local guards and nine mocked Python tests authored. JS syntax passed; Python tests and real OAuth/playback not executed. User has existing Client ID; enter locally, no secret needed. See PROTOTYPE-STATUS.md. No Pi, root application or actual CGM changes.
+- Next local Spotify test and Weather.
+
 ## 2026-11-26 — Home visual approval and Spotify preview
 
 - User launched first preview on Omarchy, HTML/CSS/JS HTTP 200, screenshot shows Home clock/date, sample tiles and collapsed rail; user said looks good. Other shell interactions not separately verified. Favicon 404 harmless; SVG favicon now added.

@@ -62,7 +62,9 @@ See [PRE-ARRIVAL.md](PRE-ARRIVAL.md) for safe preparation.
 - [x] User visually approved Home on Omarchy; HTML/CSS/JS HTTP 200, clock/date/tiles and collapsed rail shown.
 - [ ] Remaining first shell interaction tests: timer, gesture, drawer, theme/reset and reload.
 - [x] Spotify synthetic UI committed on preview branch; JS parse and 17 pure-state assertions passed.
-- [ ] User Spotify visual and interaction test; real playback and hardware still pending.
+- [x] User reviewed sample Spotify screenshot and confirmed auto-hide delay works; refinements requested.
+- [ ] Verify blank-area dismissal (without swallowing controls), bare save circle/green tick, neutral selectors in both rail states.
+- [ ] Run local mocked Python tests, authorize existing Spotify app using PKCE, test Wi-Fi real metadata/artwork, commands, device selection and library URI endpoints; real account and hardware still pending.
 - [ ] Complete Spotify, Weather, Glucose, contextual quick controls and pin/reorder; full browser review before hardware deployment.
 
 - [ ] Spotify authorization and active-device metadata.

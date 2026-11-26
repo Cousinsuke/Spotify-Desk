@@ -114,6 +114,10 @@ User requested a cleaner page after reviewing the illustrative preview, and expl
 - Quick settings access: swipe down starting at top edge. User requests context-sensitive panel: Home/general brightness and other controls, other apps can have customized shortcuts. Proposed shared panel with per-page control registry; Home brightness/night/theme/rail, Spotify device/mode/background, Weather forecast/icon style, Glucose view/range/scale/background. Exact controls not yet individually selected; retain access to full Settings. Avoid gesture conflicts with Android notification shade, graph/slider and rail reveal. One shared settings state; no duplicate state or secret exposure.
 - Prototype first on a separate development branch with synthetic data and no network integrations; preserve original /device and root app. Main design baseline is accepted, not a claim of implementation.
 
+## 2026-11-26 — Browser Spotify review and refinements
+
+User supplied a browser screenshot at 960 x 480 and requested three changes: tap empty page content outside expanded rail to hide immediately (in addition to idle delay, respecting per-page auto-hide; do not swallow interactive controls); save-song circle without surrounding box, green circle/tick when saved; mode and playback-device selectors use neutral translucent styling rather than fixed dark-green fill. Implemented on prototype branch; browser re-review pending. User also requested local real Spotify account testing with existing Client ID. Local opt-in Wi-Fi test server added; see PROTOTYPE-STATUS.md. No secrets or personal playback history committed.
+
 ## Page layouts (review before implementation)
 
 - Home: default B clock with subtle bottom summaries as above; optional other fixed presets conditional on resources. Do not switch pages on inactivity. No stale value presented as live.

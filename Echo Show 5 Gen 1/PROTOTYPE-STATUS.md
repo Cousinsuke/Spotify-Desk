@@ -50,3 +50,22 @@ git pull --ff-only origin echo-show/prototype
 ```
 
 Refresh existing browser with Ctrl+Shift+R. If server stopped, rerun launch command from preview worktree. Check artwork/control fit with rail expanded/collapsed, mode dropdown, floating device selection/dismissal, play/pause, seek, skip, save/shuffle/repeat, and top-handle Spotify quick settings. Optional local test: `node "Echo Show 5 Gen 1/prototype/spotify-preview.test.js"` if Node installed. Next: Weather layout, then Glucose with existing chart renderer and expanded settings. Pi preflight can run in parallel; do not wipe old data.
+
+## Increment 3 — Spotify refinements and local real-account test
+
+Latest branch commit: [154da1e](https://github.com/Cousinsuke/Spotify-Desk/commit/154da1eb7e4f7364d4c4ec5389d43c6fe8b1a8c4). User screenshot confirms sample Spotify rendering, collapsed rail, and successful static asset responses including favicon. User confirms auto-hide delay works. Requested immediate blank-area dismissal, bare save icon with green tick, neutral mode/device backgrounds; implemented, re-review pending. JS syntax checked; new Python tests authored but not executed by assistant. No actual OAuth or playback tested.
+
+Stop static server with Ctrl+C, update separate worktree, set existing Spotify app redirect URI to http://127.0.0.1:8765/spotify/callback, then run on Omarchy:
+
+```bash
+cd ~/Projects/Spotify-Desk-Echo-Prototype
+git pull --ff-only origin echo-show/prototype
+python3 -m venv .venv
+./.venv/bin/python -m pip install -r requirements-ui.txt
+./.venv/bin/python 'Echo Show 5 Gen 1/prototype/test_live_server.py'
+env SPOTIPY_CLIENT_ID='YOUR_CLIENT_ID' ./.venv/bin/python 'Echo Show 5 Gen 1/prototype/live_server.py'
+```
+
+Open http://127.0.0.1:8765/?live=1, select Spotify then Connect Spotify; approve in official Spotify authorization page and return to dashboard (Home opens on reload). Start music on an available Spotify device. Test metadata, artwork, device selector and controls. Developer app owner Premium and authorized account required. Do not share client secret, OAuth code, tokens or real account metadata. Current library URI endpoints per Spotify February 2026 migration guide; server uses PKCE, one-time state cookie, tokens in memory, loopback binding, exact host/origin guards, explicit asset allowlist, rate-limit backoff. No LAN or CGM, no production readiness claim. Stopping server clears tokens; live artwork neutral background until real art color extraction implemented. PC/Echo unavailable. Other pages use sample data. Existing static sample preview remains at /; no root app changes.
+
+Sources: https://developer.spotify.com/documentation/web-api/tutorials/code-pkce-flow ; https://developer.spotify.com/documentation/web-api/concepts/redirect_uri ; https://developer.spotify.com/documentation/web-api/tutorials/february-2026-migration-guide . Next verify local account and visual changes, then Weather.
