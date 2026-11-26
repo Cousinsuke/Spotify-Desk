@@ -1,5 +1,11 @@
 # Echo Show 5 Gen 1 changelog
 
+## 2026-11-26 — Spotify direction accepted; physical controls and local audio research
+
+- User selected current web player's left artwork/right controls with immersive styling, selectable backgrounds, previous/play/pause/next, seeking, shuffle/repeat and like/save; floating device selector.
+- Requested physical +/- with transient volume popup and a third Echo speaker mode. Exact-model Kiosk Satellite guide assigns third button to screen power/privacy; preserve these, use three touchscreen selectors. Hardware key forwarding and local Spotify Android/Connect playback remain untested; Web API cannot stream audio. Record alternatives and sources in UI-DESIGN.md.
+- Prefer last-track metadata/artwork in memory with correct paused/disconnected label if lightweight; minimal fallback. No implementation or hardware tests; next Weather layout review.
+
 ## 2026-11-26 — Home direction accepted
 
 - User selected default B (clock with subtle widgets), optional other fixed presets if lightweight, background options conditional on resources, selectable clock styles, and fixed layout first with optional low-cost customization.

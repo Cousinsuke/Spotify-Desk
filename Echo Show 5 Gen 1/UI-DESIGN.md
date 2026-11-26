@@ -1,6 +1,6 @@
 # Echo Show 5 — dashboard UI direction
 
-2026-11-26. User supplied rough visual reference in chat. **Global navigation and default Home direction accepted by user; remaining page layouts and visual details pending, no implementation or device validation.**
+2026-11-26. User supplied rough visual reference in chat. **Global navigation, default Home and Spotify visual direction accepted by user; remaining pages and hardware-dependent features pending, no implementation or device validation.**
 
 ## Reference and user decisions
 
@@ -46,10 +46,22 @@ The user selected a grid icon opening a floating app drawer. If future features 
 - Fixed default layout and hard-coded adjustments first; optional lightweight preset/visibility settings if resource use permits. No freeform editor planned for initial version. Do not promise zero RAM/storage overhead; test one active layout, image decoding, navigation and idle memory.
 - Night mode was suggested, not approved; defer brightness/schedule/dim clock choices to Settings.
 
+## Accepted Spotify design direction (2026-11-26)
+
+- Retain the existing Spotify Desk web player composition: square artwork left, track information and controls right; combine classic split layout with immersive album-art colours. Reference implementation: ../templates/device.html, ../static/ui.css, ../static/device.js, ../static/device.css. Adapt to 960 x 480; retain navigation reflow.
+- Background selectable in Settings (candidate dynamic album-colour gradient, dim artwork, subtle glow, theme/static background); actual choices and resource impact to test.
+- User wants previous/play-pause/next, touch seeking on progress bar, shuffle/repeat, like/save song. API scopes, current developer-mode endpoint restrictions and device capabilities must be checked before implementing; disable unsupported actions, not fake success.
+- Physical volume +/- preferred, with temporary OS-style volume popup showing selected target/percentage then disappearing. Keep a tappable on-screen volume fallback (proposed). Local Echo volume is Android media volume; Wi-Fi volume targets selected Spotify device only if supported; PC volume retains existing companion ownership policy. Avoid changing two outputs with one press. Android native bridge or supported kiosk key integration required for remote control; browser alone cannot reliably intercept hardware volume keys. Test key handling, hold/repeat, debounce, popup and no unintended navigation.
+- User requests third Echo playback mode, playing through built-in speaker. Wi-Fi / PC / Echo three touchscreen buttons if no spare physical button. Model-specific Kiosk Satellite documentation assigns the third hardware button to screen power (short press) and privacy (hold); preserve privacy and power functions rather than remap. Thus three touch buttons are the planned fallback, Echo mode disabled/unavailable until validated. Do not repurpose hardware privacy control.
+- Accepted floating device selector (tap active device name), available devices and active indicator; keep PC companion connectivity separate from Spotify device availability. No automatic transfer merely on opening the menu.
+- Idle playback: prefer retain last known track/artwork if lightweight, label accurately paused vs disconnected/no active playback; fallback Spotify logo and No music playing. Proposed memory-only single last state/one resized artwork, no persistent history or secret caching. Never present old state as active or auto-resume on reconnection.
+- Local playback first experiment: official Spotify Android app running in background, if install/authentication and Spotify Connect discovery succeed on checkers ROM; Pi controls it using Web API. Alternative Android App Remote SDK (requires installed Spotify app), or browser Web Playback SDK (requires compatible protected media/DRM, Premium and current developer permissions; kiosk WebView not guaranteed). Web API alone cannot stream audio. Test screen-off playback, app/kiosk coexistence, memory, sleep and audio output; no claim of local playback compatibility until hardware test. Existing Wi-Fi/PC modes independent.
+- Research: https://kiosksatellite.com/docs/echo-show-5-1st-gen/ (exact model power/privacy behavior, speaker); https://github.com/jxlarrea/kiosk-satellite/issues/821 (reported volume events KEY_VOLUMEUP/DOWN and navigation bug, not proof of remapping support); https://developer.spotify.com/documentation/android ; https://developer.spotify.com/documentation/web-playback-sdk ; https://developer.spotify.com/documentation/web-api/concepts/scopes . Reviewed 2026-11-26. No actual key or audio test performed.
+
 ## Page layouts (review before implementation)
 
 - Home: default B clock with subtle bottom summaries as above; optional other fixed presets conditional on resources. Do not switch pages on inactivity. No stale value presented as live.
-- Spotify: album art, track/artist, progress, previous/play-pause/next, active playback device; volume if supported. Preserve Wi-Fi Spotify Connect and optional PC mode, clearly identify current mode/device, and keep PC-off behavior graceful.
+- Spotify: accepted split/immersive layout and controls above; hardware volume and Echo playback remain experimental; floating device selector and three touch mode buttons planned.
 - Weather: fixed Bournemouth, current conditions, today/tomorrow/following day. Hourly details only as optional future refinement if space allows.
 - Glucose: prominent current value, source trend, age/timestamp, visible stale/offline status and graph. Retain previous LIVE/GRAPH/BOTH layouts and graph configuration from existing dashboard docs. This is a supplementary display, not medical alarms or a treatment-decision tool. Synthetic data only for design tests.
 - More: floating app drawer with a proposed grid/list of additional pages; settings, calendar, timers, reminders and system info are examples, not committed features.
@@ -66,6 +78,6 @@ User proposed hiding the right rail after inactivity to reclaim screen area and 
 
 Design discussion question set: reveal method (edge handle, background tap, swipe, own idea); auto-hide delay (5/10/15/30 seconds or own idea); layout (reflow, overlay, hybrid, own idea); More (grid/chevron, own idea); Home content (clock-only, subtle summaries, cards, own idea). Historical question set; navigation answers are recorded above. Home direction accepted above; exact details remain for prototype review. No app code changed.
 
-## Next design task — Spotify
+## Next design task — Weather
 
-Present landscape layout choices: classic split album artwork and controls; artwork-focused with lower controls; compact control-first with larger touch targets. Use synthetic metadata/artwork in sketches. Ask about default layout, background tied to album art versus theme, playback controls and progress/seeking, volume placement, active device selection and Wi-Fi/PC mode placement, always including Own idea and optional modifications. Preserve existing functionality where supported and handle offline/restricted devices gracefully. These are proposals for user review, not new accepted choices. Then review Weather, Glucose, floating app drawer/Settings and remaining visual details. Review in browser at 960 x 480 before deployment, preserving existing desktop UI/code; no implementation or physical validation yet.
+Present landscape weather layout options: current conditions left with daily cards right; current conditions across top with three day cards below; minimalist current weather plus expandable details. Keep Bournemouth default and next couple days from prior decisions; ask about layout, forecast detail, icon style, background, forecast time range and optional expanded information with Own idea for every choice. Then review Glucose, floating drawer/Settings and visual details. All mockup data illustrative, no device implementation yet. Preserve existing software and test on 960 x 480 before deployment.

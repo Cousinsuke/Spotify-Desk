@@ -40,7 +40,11 @@ See [PRE-ARRIVAL.md](PRE-ARRIVAL.md) for safe preparation.
 - [x] User selected Pi hosting and supplied rough clock-first, right-rail UI concept (2026-11-26).
 - [x] User accepted arrow + swipe reveal, configurable timeout, content expansion, floating More drawer and per-page auto-hide.
 - [x] User accepted Home default B, fixed layout first, selectable clock styles, conditional lightweight presets/backgrounds, and no inactivity page switching.
-- [ ] Approve Spotify and other remaining page layouts, exact Home details, remaining icons, rail sizing, defaults and drawer visuals (see UI-DESIGN.md).
+- [x] User accepted Spotify visual direction, controls, floating device selector; requested physical volume and Echo mode subject to feasibility.
+- [ ] Approve Weather and other remaining layouts, exact Home/Spotify details, rail sizing, defaults and drawer visuals.
+- [ ] Test physical +/- key events and mode-aware volume popup, safe privacy/power behavior, on-screen fallback, no double volume changes or navigation side effects.
+- [ ] Verify Spotify seek/shuffle/repeat/save permissions and endpoint/device support; test floating device selector and last-track paused/disconnected states.
+- [ ] Experiment with official Spotify Android app/Connect on Echo Show, speaker output and background playback alongside kiosk; measure RAM; keep Echo mode unavailable until verified.
 - [ ] Test one active Home layout/preset at a time, wallpaper sizing, settings persistence, clock styles, and verify idle never changes page; measure resource use on device.
 - [ ] Validate navigation reflow, swipe/arrow, timer, per-page setting and drawer interactions in browser and on device.
 - [ ] Build browser prototype at 960 x 480 with synthetic test data and review before hardware deployment.
