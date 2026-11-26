@@ -1,5 +1,11 @@
 # Echo Show 5 Gen 1 changelog
 
+## 2026-11-26 — Collapsible navigation proposal and design review process
+
+- User proposed automatically hiding the right navigation icons after inactivity to reclaim screen space, with tap or small right-edge arrow to reveal.
+- Recorded candidate behaviors in UI-DESIGN.md and updated handoff/README. Exact timing, reveal gesture, layout behavior, More and page designs remain open.
+- User requests ideas/questions for every design stage with an explicit Own idea option, including modifications to proposed ideas. Start navigation and Home, then iterate other pages. No code or device changes.
+
 ## 2026-11-26 — Pi hosting selected; dashboard concept received
 
 - User explicitly selected the Pi backend for future expansion and to reduce workload on the Echo Show.

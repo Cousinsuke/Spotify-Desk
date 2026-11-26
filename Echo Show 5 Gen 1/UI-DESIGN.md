@@ -12,7 +12,7 @@
 
 ## Proposed navigation
 
-Keep central content area and persistent right-side rail. Aim for five visible slots, with consistent icon sizes and touch targets, active-page indication and accessible labels. Proposed top-to-bottom:
+Keep central content area and a right-side rail that can collapse (user proposed auto-hide on inactivity, with tap or edge arrow to reopen; exact timing/trigger pending). Aim for five visible slots, with consistent icon sizes and touch targets, active-page indication and accessible labels. Proposed top-to-bottom:
 
 | Page | Suggested icon | Purpose |
 | --- | --- | --- |
@@ -35,6 +35,14 @@ For More, a grid indicates app/widget selection, a chevron indicates expandable 
 ## Visual and performance principles
 
 Minimal, dark/neutral rail with consistent icons; wallpaper can vary on Home. Large readable typography and comfortably spaced touch targets appropriate to 5.5-inch display. Keep the main content clear, no clipping or scrolling on primary views at 960 x 480. Use lightweight CSS, restrained transitions, bounded chart updates and minimal browser work. No expensive animation by default; test against actual hardware. Provide keyboard/focus and accessible labels where applicable.
+
+## 2026-11-26 — Navigation interaction and collaborative layout review
+
+User requested a clean design process with ideas/questions for each page and an explicit **Own idea** option for every choice, including variations or entirely different concepts. Work through global navigation, Home, Spotify, Weather, Glucose, More/Settings, then themes/animations. Record selections as accepted only when user confirms them.
+
+User proposed hiding the right rail after inactivity to reclaim screen area and revealing it by touch or a small arrow on the right. This supersedes the earlier always-visible rail concept. Candidate design (not yet accepted): rail slides away after a configurable idle delay, content uses full width, small left-facing edge handle opens it; lightweight transition; current page and data updates unaffected. Alternative reveal methods: edge swipe, tap empty background or hybrid. Avoid stealing media/graph interactions, hiding while a user is interacting with navigation, or making the control inaccessible. Decide global versus per-page behavior, timeout, whether it overlays or reflows content, reveal control and More behavior before implementation. Prefer a comfortably sized invisible touch area around a small visible handle. No automatic page switching as a side effect of collapse.
+
+Design discussion question set: reveal method (edge handle, background tap, swipe, own idea); auto-hide delay (5/10/15/30 seconds or own idea); layout (reflow, overlay, hybrid, own idea); More (grid/chevron, own idea); Home content (clock-only, subtle summaries, cards, own idea). These are candidates, not final choices. No app code changed.
 
 ## Next design task
 
