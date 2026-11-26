@@ -1,5 +1,11 @@
 # Echo Show 5 Gen 1 changelog
 
+## 2026-11-26 — Home direction accepted
+
+- User selected default B (clock with subtle widgets), optional other fixed presets if lightweight, background options conditional on resources, selectable clock styles, and fixed layout first with optional low-cost customization.
+- User explicitly requires staying on current page during inactivity; page changes only by user choice. Layout B's three compact summaries are inferred from selected concept, not separately approved; validate in prototype.
+- Documented one-active-layout approach, static resized wallpapers served by Pi, no initial drag/resize editor and unmeasured performance. Next design review: Spotify, with Own idea on all questions. No code/device changes.
+
 ## 2026-11-26 — Navigation behavior accepted
 
 - User selected right-edge arrow + inward swipe to reveal; configurable inactivity timeout; full-width content when hidden; grid icon opens floating app drawer; per-page auto-hide settings.

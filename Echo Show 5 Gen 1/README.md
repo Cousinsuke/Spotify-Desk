@@ -21,7 +21,7 @@ Amazon Echo Show 5 first generation (2019), charcoal black, physical model H23K3
 
 The user confirmed the Raspberry Pi deployment direction on 2026-11-26. The selected deployment is a Raspberry Pi 4 serving a lightweight touchscreen web dashboard over authenticated HTTPS. The desktop PC is optional for Spotify Connect, weather and supplementary CGM display; local PC media control and audio visualisation require a separate running desktop companion. Home Assistant is not required for the intended project; evaluate Kiosk Satellite's standalone configuration versus a simple kiosk browser.
 
-The UI direction is based on the user's rough reference: a clock-first home screen, abstract wallpaper, and compact right-side vertical navigation with accepted auto-hide behavior: arrow and swipe reveal, configurable delay and per-page behavior, content reflow, and a grid icon opening a floating app drawer. Detailed page layouts and visual styling remain to be approved; see UI-DESIGN.md.
+The UI direction is based on the user's rough reference: a clock-first home screen, abstract wallpaper, and compact right-side vertical navigation with accepted auto-hide behavior: arrow and swipe reveal, configurable delay and per-page behavior, content reflow, and a grid icon opening a floating app drawer. Home default B (clock with subtle widgets), selectable clock/background options conditional on performance, fixed layouts first and no automatic page changes on inactivity are recorded. Other pages and final visual styling remain to be approved; see UI-DESIGN.md.
 
 ## Maintenance and privacy
 
