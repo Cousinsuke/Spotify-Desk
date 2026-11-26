@@ -67,7 +67,9 @@ See [PRE-ARRIVAL.md](PRE-ARRIVAL.md) for safe preparation.
 - [x] User ran nine mocked Python tests successfully (0.039s, OK) and started loopback server on Omarchy.
 - [x] User corrected callback URI and reported real Spotify connected/working before pause failure.
 - [x] Commit shared successful command response parsing fix and local playback progress clock; JS syntax and 10 pure clock tests passed.
-- [ ] Run expanded 13 Python tests and live retest pause/resume, skip, seek, external changes, progress, device selection and library URI endpoints; hardware still pending.
+- [x] User ran 13 Python tests (OK); Pause reached iPhone, browser lag and subsequent Previous device-unavailable issue observed.
+- [x] Commit explicit intent, bounded confirmation and verified inactive-device recovery; 19 JS assertions passed.
+- [ ] Run expanded 19 Python tests; retest pause/resume, Previous/Next while playing and paused, external device switch, seek, progress, library endpoints; physical hardware still pending.
 - [ ] Complete Spotify, Weather, Glucose, contextual quick controls and pin/reorder; full browser review before hardware deployment.
 
 - [ ] Spotify authorization and active-device metadata.

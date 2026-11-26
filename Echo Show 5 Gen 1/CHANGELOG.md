@@ -1,5 +1,9 @@
 # Echo Show 5 Gen 1 changelog
 
+## 2026-11-26 — Pause synchronization and inactive device recovery
+
+User ran all 13 Python tests successfully (0.010s), confirmed Pause reached iPhone but browser lagged; Previous then displayed active-device unavailable and no active playback. Exact upstream state not logged. Preview commit ae6b0c2750cdad8b38a241b82be164b9b7252a39: explicit requested play/pause state, acknowledged local state, bounded post-command confirmation reads (250/650/1300ms waits), one retained historical track labelled inactive, fresh same-device availability checks for resume/skip; never silently target another active device or retry writes. Regular 5s polling retained. Six more Python tests authored (19 total); 19 pure JS assertions passed. Actual live retest and new Python tests pending. Restart/reconnect required; if phone is absent from device list, open Spotify on it and manually select it. No private data committed.
+
 ## 2026-11-26 — Spotify connected; pause response and timer fixes
 
 - User confirmed callback URI caused initial connection failure and real Spotify worked until Pause. Traceback located JSON decode of command response; exact upstream status/body unknown.
