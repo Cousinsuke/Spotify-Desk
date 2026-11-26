@@ -37,6 +37,10 @@ See [PRE-ARRIVAL.md](PRE-ARRIVAL.md) for safe preparation.
 
 ## Gate D — functions
 
+- [x] User selected Pi hosting and supplied rough clock-first, right-rail UI concept (2026-11-26).
+- [ ] Approve exact page layouts, icons, rail sizing and More interaction (see UI-DESIGN.md).
+- [ ] Build browser prototype at 960 x 480 with synthetic test data and review before hardware deployment.
+
 - [ ] Spotify authorization and active-device metadata.
 - [ ] Pause/resume/skip Xbox playback with PC fully off; check unsupported volume gracefully.
 - [ ] Optional PC companion: local media/volume/visualisation, offline indication.

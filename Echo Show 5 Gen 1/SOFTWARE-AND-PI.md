@@ -12,6 +12,10 @@ Last updated 2026-11-26. Design proposal, not implemented on a Pi or Echo Show.
 - Glucose: supplementary near-real-time data, mmol/L, source trend arrow, reading timestamp/age, LIVE/GRAPH/BOTH, selected history windows, configurable display band and existing AUTO/FULL chart behavior. No permanent local medical history; no invented readings. Preserve existing display preferences in docs/DASHBOARDS.md without adding personal health information here.
 - Future widgets optional. No Home Assistant dependency desired.
 
+## Selected UI direction (2026-11-26)
+
+The user provided a rough clock-first home mock-up with a right-side vertical icon rail, and confirmed the Pi backend direction. Keep the frontend lightweight and expandable, with Home / Spotify / Weather / Glucose and a proposed More entry. Detailed proposals and outstanding decisions are in [UI-DESIGN.md](UI-DESIGN.md); no redesigned UI has been implemented.
+
 ## Proposed architecture
 
 ```text
@@ -30,7 +34,7 @@ CGM -> official phone app -> sharing cloud -> Gluroo GGC HTTPS -> Pi reader
 Optional Windows/Omarchy PC companion <-> authenticated service
 ```
 
-The Pi is preferred because it can remain on when Windows is off and has 8 GB RAM; the user clarified on 2026-11-26 that it is powered off and Nextcloud is no longer used. It can potentially be dedicated to this project; inspect existing OS/storage and preserve old data unless user approves wiping. No paid hosting or new hardware planned (existing internet/services and power still required). Direct native Android app is a possible later alternative but not validated on 1 GB RAM. No Home Assistant required unless a selected kiosk app cannot function without it.
+The Pi is selected by the user because it can remain on when Windows is off and has 8 GB RAM; the user clarified on 2026-11-26 that it is powered off and Nextcloud is no longer used. It can potentially be dedicated to this project; inspect existing OS/storage and preserve old data unless user approves wiping. No paid hosting or new hardware planned (existing internet/services and power still required). Direct native Android app is a possible later alternative but not validated on 1 GB RAM. No Home Assistant required unless a selected kiosk app cannot function without it.
 
 ## Hosting alternatives (2026-11-26)
 

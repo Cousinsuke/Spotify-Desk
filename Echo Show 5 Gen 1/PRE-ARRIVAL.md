@@ -48,6 +48,8 @@ These are read-only diagnostics; no package installs or configuration changes. I
 
 ## 3. Software while waiting
 
+User confirmed Pi hosting and supplied a rough right-side navigation concept. Before UI implementation, review [UI-DESIGN.md](UI-DESIGN.md) and agree exact Home, Spotify, Weather, Glucose and More layouts. Preserve existing functionality and use synthetic data for design previews.
+
 Proposed implementation order:
 1. Review existing root UI and Python code; preserve desktop baseline. Use an isolated development branch for application changes, keep original CAD intact.
 2. Create a headless server mode with Wi-Fi Spotify playback independent from local Linux audio/PC mode. Ensure the current OAuth loopback flow can be completed securely via an SSH tunnel or other reviewed local setup, and verify current Spotify app restrictions. No public callback/Flask debug exposure.

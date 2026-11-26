@@ -11,10 +11,12 @@ Branch: main (documentation baseline). Read the actual latest files before actin
 - Repurpose a charcoal-black 5.5-inch Echo Show 5 (2019), not an 8-inch model, as the Spotify Desk touchscreen.
 - Home dashboard, Spotify, Bournemouth weather, supplementary live CGM display; expandable to more widgets later.
 - Spotify Wi-Fi mode must control the active Spotify Connect device (including Xbox) with the PC off. PC mode remains separate and optional; it controls local Windows/Omarchy media, system volume and audio meter when its companion is running.
-- Prefer existing Raspberry Pi 4 (8 GB) as always-on host; user clarified the Pi is currently powered off and Nextcloud is no longer in use; no extra hardware or paid hosting if avoidable. No Home Assistant requirement.
+- User explicitly selected the existing Raspberry Pi 4 (8 GB) as always-on host; user clarified the Pi is currently powered off and Nextcloud is no longer in use; no extra hardware or paid hosting if avoidable. No Home Assistant requirement.
 - Reuse existing interface and code; keep old CAD/PCB and software baselines intact. Design for the 960 x 480 screen and 1 GB RAM.
 - Follow the upstream exact-model guide; the stock firmware/bootloader must be checked first. Keep stock device offline until then.
 - Use clear OS-specific commands (Omarchy/Arch Linux preferred for firmware checks; Windows 11 and Pi Linux are distinct). Never advise destructive steps before compatibility and prerequisites are known.
+
+- New UI direction: user's rough reference has a large central clock/date, small weather line, abstract background and right-side vertical navigation. Five primary slots proposed: Home, Spotify, Weather, Glucose, More. Grid icon and separate More page are recommendations, not final selections. Read UI-DESIGN.md before designing or coding.
 
 ## Current checkpoint
 
@@ -26,7 +28,7 @@ The existing Gluroo reader and dashboard are already in the repository; a prior 
 
 ## Next step
 
-While awaiting delivery, start with the read-only Pi preflight in PRE-ARRIVAL.md (Omarchy tool checks are complete). Pi is off and unused; existing OS/storage and whether old Nextcloud data should be preserved are unknown; do not assume a deployment architecture until preflight results arrive. Pi remains the recommended initial host, not a hard requirement. Native Android APK or Termux loopback server are later alternatives; neither is tested. Do not erase existing storage without explicit approval. Next build an isolated headless backend and synthetic-data browser preview, then secure and test it before enabling real data. On delivery, keep stock Fire OS offline, inspect the device and follow INSTALLATION-AND-USB.md; request redacted product and LK version only. Do not flash until compatibility and the current guide are checked.
+While awaiting delivery, start with the read-only Pi preflight in PRE-ARRIVAL.md (Omarchy tool checks are complete). Pi is off and unused; existing OS/storage and whether old Nextcloud data should be preserved are unknown; do not assume a deployment architecture until preflight results arrive. Pi is now the user-selected initial host, to reduce Echo Show workload and simplify future expansion. Native Android APK or Termux loopback server are later alternatives; neither is tested. Do not erase existing storage without explicit approval. In parallel, define the exact five page layouts for user review using UI-DESIGN.md. Next build an isolated headless backend and synthetic-data browser preview, then secure and test it before enabling real data. On delivery, keep stock Fire OS offline, inspect the device and follow INSTALLATION-AND-USB.md; request redacted product and LK version only. Do not flash until compatibility and the current guide are checked.
 
 ## Copy/paste prompt for a new chat
 

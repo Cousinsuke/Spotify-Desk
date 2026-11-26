@@ -1,5 +1,12 @@
 # Echo Show 5 Gen 1 changelog
 
+## 2026-11-26 — Pi hosting selected; dashboard concept received
+
+- User explicitly selected the Pi backend for future expansion and to reduce workload on the Echo Show.
+- User supplied a rough UI reference with central clock/date, small weather line, abstract wallpaper and right-side vertical icon rail. The final question-mark icon is a placeholder for additional features.
+- Recorded proposed five-slot navigation (Home, Spotify, Weather, Glucose, More), proposed grid icon and separate More page first, plus alternatives. Exact icons, page layout and interaction remain for user review.
+- Added UI-DESIGN.md and refreshed handoff, pre-arrival plan and roadmap. No implementation, firmware or Pi changes; reference image described in text, not uploaded.
+
 ## 2026-11-26 — Omarchy tools verified; hosting alternatives reviewed
 
 - User verified installed ADB 1.0.41 / 37.0.0p1, Fastboot 37.0.0p1 and usbutils 019 on Arch x86_64. Tool availability confirmed, not physical USB compatibility.
