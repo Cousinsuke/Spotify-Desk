@@ -94,5 +94,8 @@ For troubleshooting, record the first error, command, OS, reproducibility and re
 - [x] Review original Spotify Desk playback code and port bounded optimistic feedback; 29 JS assertions passed.
 - [x] User ran 26 Python tests (0.015s, OK), compared original Wi-Fi mode, and supplied diagnostics showing 204/no devices/404 resume. User reports Xbox works perfectly and accepts iPhone limitation.
 - [x] Implement real album-art backgrounds using original Desk sampler; 23 palette assertions and syntax passed.
-- [ ] Browser review on Xbox: cover-derived colours, dimmed artwork, global theme, rapid skip, missing art and CORS fallback; then Weather.
+- [x] User reports all three Spotify background styles tested and approved; specific edge cases not individually confirmed.
+- [x] Weather synthetic UI committed; 13 pure JS assertions and syntax passed.
+- [ ] Review Weather layout at 960x480, rail reflow, duration settings, forecast scrolling, icon styles, Home tile and day detail overlay.
+- [ ] Connect real fixed Bournemouth weather feed and validate cache, freshness, condition assets and hourly data; then Glucose.
 - [ ] Validate individual remaining Spotify controls and later Pi-hosted Xbox playback with PC off; actual Echo hardware pending.

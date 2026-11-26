@@ -69,6 +69,10 @@ The user selected a grid icon opening a floating app drawer. If future features 
 - Tapping a forecast day opens more details. Proposed floating panel with date, daily high/low, condition, rain probability, sunrise/sunset and hourly breakdown where supported. Exact detail fields/layout not separately approved. Dismiss without changing main page. Pi should cache weather data; preserve last-success timestamp and label stale/unavailable data. Verify API fields and allowed forecast lengths at implementation; no new weather endpoint or code implemented.
 - Illustrative weather previews are not live forecasts.
 
+### Weather implementation checkpoint
+
+First synthetic preview committed on echo-show/prototype. Proposed 3/5/7-day options, colour/outline icons, vector sky with condition gradients, scrolling cards and floating day details implemented for review. User has not yet approved these exact styling choices. Live weather integration and final condition imagery remain pending.
+
 ## Accepted Glucose design direction (2026-11-26)
 
 User supplied four screenshots of the existing desktop browser Glucose page (BOTH, GRAPH, LIVE and GRAPH with 24h/FULL). User explicitly wants the existing visual layout and graph functionality preserved, instead of answering the previous general questionnaire. Screenshots contain private CGM data; do not upload, reproduce readings, or copy graph samples to Git. Describe design only, and use synthetic data in prototypes.
