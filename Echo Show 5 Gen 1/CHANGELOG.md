@@ -1,5 +1,11 @@
 # Echo Show 5 Gen 1 changelog
 
+## 2026-11-26 — Final Glucose layout locked for prototyping
+
+- User requested no redundant Glucose/Libre 2 Plus or demo header in normal live UI, dark green background and lighter green cards, compact view selector top-right and graph duration/scale dropdowns within graph card.
+- User explicitly selected equal-height 40/60 reading/graph split for BOTH and no graph title. Keep original data/scale behavior, stale/offline status and supplementary-display notice; synthetic previews remain labelled. No private screenshots or readings added.
+- Documentation only; next app drawer and Settings design review.
+
 ## 2026-11-26 — Final Glucose refinements accepted
 
 - User selected compact view dropdown, selectable backgrounds with green default and optional dynamic red/green/yellow-orange/orange colours, 6h/AUTO reset on reload and unchanged graph interaction.
