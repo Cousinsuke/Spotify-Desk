@@ -13,3 +13,19 @@ Open http://127.0.0.1:8765/ in a desktop browser. Designed for 960 x 480 at 100%
 Implemented: Home with three sample widgets and real local clock; right rail with 10-second default auto-hide and reflow, arrow/edge swipe reveal, Apps drawer with outside/close/select dismissal, Settings Centre shell with General/Navigation controls, top-edge swipe-down quick settings (click top handle for desktop), Graphite/Black, rail appearance, opacity, animation, timeout, per-page hide, preview brightness dimming, manual preview night mode, preference-only local storage and reset. Home always opens on reload. Scheduled night mode is a labelled planned setting, not active. Spotify sample player added: artwork left, mode dropdown (Echo disabled), play/pause, previous/next, seek, shuffle/repeat, save state, floating sample device selector, selectable background and contextual quick settings. No real playback or audio. Calendar/System and Weather/Glucose remain labelled planned destinations. Spotify contextual quick settings are implemented in preview; other app-specific controls and pin/reorder are pending. No Pi preference server yet.
 
 Validation required: browser layout and gestures, accessibility, timer/focus behavior, actual device resource use; Home increment visually accepted by user on Omarchy; Spotify runtime review and hardware testing pending. Run node --check app.js if Node is installed. Use synthetic data only. Next: Weather and Glucose pages using existing chart renderer, then expanded settings and app registry.
+
+## Increment 3 — UI fixes and opt-in live Spotify test
+
+Tap empty content to hide an expanded auto-hide rail; interactive controls and open overlays remain unaffected. Save is a bare circle with green saved state; mode/device selectors use neutral translucent styling. Browser review pending.
+
+Live mode is an isolated loopback Flask server, PKCE with in-memory access/refresh tokens, explicit state check, same-origin API guards, no token logging or disk cache. Stop the static server first. Add `http://127.0.0.1:8765/spotify/callback` to your existing Spotify app Redirect URIs. From repo root:
+
+```bash
+python3 -m venv .venv
+./.venv/bin/python -m pip install -r requirements-ui.txt
+read -r 'SPOTIPY_CLIENT_ID?Spotify Client ID: '
+export SPOTIPY_CLIENT_ID
+./.venv/bin/python 'Echo Show 5 Gen 1/prototype/live_server.py'
+```
+
+The `read` example is zsh; bash uses `read -rp 'Spotify Client ID: ' SPOTIPY_CLIENT_ID`. Open http://127.0.0.1:8765/?live=1 then Spotify and Connect Spotify. Premium and app user permission required. Real Wi-Fi playback only; PC/Echo disabled. Current library URI endpoints used. Tokens disappear on process exit; no LAN/CGM connection. Live artwork uses original Spotify CDN with neutral background until colour extraction is implemented. No real account or runtime server test yet. Static demo remains available on /.
