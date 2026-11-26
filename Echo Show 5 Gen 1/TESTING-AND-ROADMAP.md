@@ -90,3 +90,6 @@ For troubleshooting, record the first error, command, OS, reproducibility and re
 - [x] User ran 19 Python tests successfully; paused-device dropout remains in live test.
 - [x] Commit bounded last-device resume fallback; JS syntax checked.
 - [ ] Run 26 Python tests and verify explicit resume after 10–15 seconds paused on iPhone (foreground and locked). Compare PC and capture redacted status if still unavailable.
+
+- [x] Review original Spotify Desk playback code and port bounded optimistic feedback; 29 JS assertions passed.
+- [ ] Run 26 Python tests, compare original Wi-Fi mode on same iPhone, then retest new preview with opt-in diagnostics. Determine source of dropout before additional device-recovery changes.
