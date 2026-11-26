@@ -2,12 +2,19 @@
 'use strict';
 const enabled=new URLSearchParams(location.search).get('live')==='1';
 const clock=window.EchoPlaybackClock;
-let state={connected:false,saved:null},received=performance.now(),freezeAt=null,inFlight=null,commandBusy=false,message='',messageUntil=0,generation=0;
-const api={enabled,get state(){return state},get message(){return performance.now()<messageUntil?message:''},get pending(){return commandBusy},position:()=>clock.position(state,received,performance.now(),freezeAt),onChange:null};
+let state={connected:false,saved:null},received=performance.now(),freezeAt=null,inFlight=null,commandBusy=false,message='',messageUntil=0,generation=0,override=null;
+const api={enabled,get state(){return state},get message(){return performance.now()<messageUntil?message:''},get pending(){return commandBusy},get syncing(){return !!override},get pendingTrack(){return override&&['next','previous'].includes(override.action)?override.action:null},position:()=>clock.position(state,received,performance.now(),freezeAt),onChange:null};
 const emit=()=>api.onChange?.();
 const warn=msg=>{message=msg;messageUntil=performance.now()+12000};
-const sleep=ms=>new Promise(resolve=>setTimeout(resolve,ms));
 function accept(s){state=s;received=performance.now();freezeAt=null;emit()}
+function reconcile(s){
+  if(override){
+    if(clock.holdIncoming(s,override,performance.now()))return;
+    if(performance.now()>=override.expires&&!clock.matchesIntent(s,override)&&s.connected&&!s.error&&!s.inactive&&s.deviceId===override.device)warn('Spotify has not confirmed the update yet.');
+    override=null;
+  }
+  accept(s);
+}
 async function request(path,opts={}){
   let r;
   try{r=await fetch(path,{...opts,cache:'no-store',credentials:'same-origin',headers:{'Content-Type':'application/json','X-Desk-Preview':'1',...(opts.headers||{})}})}
@@ -17,39 +24,41 @@ async function request(path,opts={}){
   if(!r.ok)throw Error(data.error||'Spotify request failed (HTTP '+r.status+')');
   return data;
 }
-api.refresh=async()=>{
+api.refresh=async(fresh=false)=>{
   if(!enabled||commandBusy)return;
   if(inFlight)return inFlight;
   const version=generation;
-  inFlight=(async()=>{try{const next=await request('/api/spotify/state');if(version!==generation)return;accept(next)}catch(e){if(version!==generation)return;accept({connected:false,saved:null,error:e.message})}})();
+  inFlight=(async()=>{try{const next=await request('/api/spotify/state'+(fresh?'?fresh=1':''));if(version!==generation)return;reconcile(next)}catch(e){if(version!==generation)return;override=null;accept({connected:false,saved:null,error:e.message})}})();
   try{await inFlight}finally{inFlight=null}
 };
 api.devices=async()=>{const d=await request('/api/spotify/devices');return d.devices||[]};
 api.command=async(action,value)=>{
   if(!enabled||commandBusy||!state.connected||state.error)return;
   if(action==='toggle')value=!state.playing;
-  const pos=api.position();
+  const pos=api.position(), prior=state, priorReceived=received;
   const intent={action,value,uri:state.uri,device:state.deviceId,position:pos,before:action==='shuffle'?state.shuffle:action==='repeat'?state.repeat:state.saved};
   const payload={action,value,uri:intent.uri,device:intent.device};
-  commandBusy=true;generation++;message='';messageUntil=0;freezeAt=performance.now();emit();
-  let latest=null;
+  commandBusy=true;const version=++generation;message='';messageUntil=0;
+  override=['toggle','seek','next','previous','shuffle','repeat','save'].includes(action)?{...intent,expires:Infinity}:null;
+  // Match original Desk: immediate feedback on press; restore prior state on failed write.
+  if(action==='toggle'||action==='seek')accept(clock.acknowledged(state,intent,pos));
+  else {freezeAt=performance.now();emit()}
+  let ok=false;
   try{
     if(inFlight)await inFlight;
     await request('/api/spotify/command',{method:'POST',body:JSON.stringify(payload)});
-    // Show an acknowledged pause/resume/seek immediately; do not fabricate a new track.
-    accept(clock.acknowledged(state,intent,pos));
-    for(const delay of [250,650,1300]){
-      await sleep(delay);
-      latest=await request('/api/spotify/state?fresh=1');
-      const changed=latest.deviceId&&intent.action!=='device'&&latest.deviceId!==intent.device;
-      if(!latest.connected||latest.error||changed||clock.matchesIntent(latest,intent))break;
-    }
-    if(latest){
-      if(latest.connected&&!latest.error&&!clock.matchesIntent(latest,intent))warn('Spotify has not confirmed the update yet.');
-      accept(latest);
-    }
-  }catch(e){warn(e.message)}
-  finally{commandBusy=false;freezeAt=null;if(!latest)await api.refresh();emit()}
+    ok=true;
+    if(override)override.expires=performance.now()+(['next','previous'].includes(action)?7000:3500);
+  }catch(e){
+    override=null;state=prior;received=priorReceived;freezeAt=null;warn(e.message);
+  }finally{
+    commandBusy=false;
+    if(!api.pendingTrack)freezeAt=null;
+    emit();
+  }
+  // Confirm independently of the write lock. New commands invalidate old timers/results.
+  const delays=!ok?[250]:['next','previous'].includes(action)?[280,1130,2630,7100]:[950,3000,3600];
+  for(const delay of delays)setTimeout(()=>{if(version===generation&&!commandBusy&&!document.hidden)api.refresh(true)},delay);
 };
 window.EchoSpotifyLive=api;
 })();

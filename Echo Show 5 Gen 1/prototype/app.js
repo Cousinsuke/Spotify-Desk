@@ -52,8 +52,8 @@ function renderLiveState(){
 const s=live.state,home=$('homeTrack');if(home)home.textContent=s.connected?(s.inactive?'No active playback':s.title||'No playback'):'Spotify — not connected';
 if(active!=='spotify'||!$('album'))return;
 const text=(id,v)=>{$(id).textContent=v};
-text('playStatus',!s.connected?'NOT CONNECTED':s.error?'UNAVAILABLE':live.pending?(s.playing?'PLAYING · SYNCING':'PAUSED · SYNCING'):s.inactive?(s.recovery==='recent'?'PAUSED · LAST DEVICE':s.recovery==='verified'?'PAUSED · DEVICE AVAILABLE':s.title?'LAST TRACK · DEVICE UNAVAILABLE':'NO ACTIVE PLAYBACK'):s.playing?'NOW PLAYING':s.title?'PAUSED':'NO ACTIVE PLAYBACK');
-text('songTitle',s.title||'No music playing');text('songArtist',s.artist||'Start Spotify on your Xbox, phone or PC');
+text('playStatus',!s.connected?'NOT CONNECTED':s.error?'UNAVAILABLE':(live.pending||live.syncing)?(s.playing?'PLAYING · SYNCING':'PAUSED · SYNCING'):s.inactive?(s.recovery==='recent'?'PAUSED · LAST DEVICE':s.recovery==='verified'?'PAUSED · DEVICE AVAILABLE':s.title?'LAST TRACK · DEVICE UNAVAILABLE':'NO ACTIVE PLAYBACK'):s.playing?'NOW PLAYING':s.title?'PAUSED':'NO ACTIVE PLAYBACK');
+text('songTitle',live.pendingTrack?(live.pendingTrack==='next'?'Skipping track…':'Going back…'):(s.title||'No music playing'));text('songArtist',live.pendingTrack?'Waiting for Spotify':(s.artist||'Start Spotify on your Xbox, phone or PC'));
 text('duration',music.time(s.duration||0));
 const seek=$('seek');seek.max=s.duration||1;seek.disabled=live.pending||s.inactive||!!s.error||!s.controllable||!s.duration||!!s.disallows?.seeking;updateLiveProgress();
 const album=$('album');if(album.dataset.url!==(s.art||'')||!album.firstChild){album.dataset.url=s.art||'';album.replaceChildren();if(s.art){const img=document.createElement('img');img.alt='Album artwork';img.src=s.art;img.referrerPolicy='no-referrer';album.append(img)}else{album.innerHTML='<div class="placeholder">Spotify</div>'}}

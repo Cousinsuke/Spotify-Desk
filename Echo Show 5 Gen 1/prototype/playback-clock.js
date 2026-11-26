@@ -31,5 +31,11 @@ function acknowledged(s,intent,position){
   if(intent.action==='seek')return {...s,position:intent.value,positionMs:intent.value*1000};
   return s;
 }
-const api={position,matchesIntent,acknowledged};if(typeof module==='object'&&module.exports)module.exports=api;else root.EchoPlaybackClock=api;
+// Original Desk-style bounded override: hold only stale same-device responses.
+function holdIncoming(incoming,intent,now){
+  if(!intent||now>=intent.expires||!incoming.connected||incoming.error||incoming.inactive||
+     !incoming.deviceId||incoming.deviceId!==intent.device)return false;
+  return !matchesIntent(incoming,intent);
+}
+const api={position,matchesIntent,acknowledged,holdIncoming};if(typeof module==='object'&&module.exports)module.exports=api;else root.EchoPlaybackClock=api;
 })(typeof globalThis!=='undefined'?globalThis:this);

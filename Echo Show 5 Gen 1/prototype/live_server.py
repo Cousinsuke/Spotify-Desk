@@ -30,6 +30,12 @@ last_seen = None
 resume_grace = 300
 resume_blocked = False
 logging.getLogger("werkzeug").disabled = True
+DIAGNOSTICS = os.environ.get("DESK_SPOTIFY_DIAGNOSTICS") == "1"
+
+def diagnostic(label, **fields):
+    if DIAGNOSTICS:
+        print("[spotify-diag] "+time.strftime("%H:%M:%S")+" "+label+" "+
+              " ".join(f"{k}={v}" for k,v in fields.items()), flush=True)
 
 class ApiError(Exception):
     def __init__(self, status, message):
@@ -86,6 +92,8 @@ def spotify(method,path,params=None,body=None):
         r=requests.request(method,"https://api.spotify.com/v1"+path,params=params,json=body,headers={"Authorization":"Bearer "+token["access_token"]},timeout=10,allow_redirects=False)
     except requests.RequestException:
         raise ApiError(502,"Could not reach Spotify.")
+    if path.startswith("/me/player"):
+        diagnostic("upstream", method=method, endpoint=path, status=r.status_code)
     if r.status_code==429:
         try: delay=max(1,int(r.headers.get("Retry-After","30")))
         except ValueError: delay=30
@@ -139,6 +147,11 @@ def player(force=False):
     if not force and playback_cache and now-playback_cache[0]<3:
         return playback_cache[1]
     p=spotify("GET","/me/player") or {}
+    d=p.get("device") or {}
+    diagnostic("player", present=bool(p), item=bool(p.get("item")),
+               playing=bool(p.get("is_playing")), device=bool(d.get("id")),
+               restricted=bool(d.get("is_restricted")),
+               same_last=bool(d.get("id") and last_snapshot and d["id"]==last_snapshot.get("deviceId")))
     playback_cache=(time.monotonic(),p)
     return p
 
@@ -199,6 +212,8 @@ def state():
             expected=last.get("deviceId")
             rows=devices() if expected else []
             recovery=recovery_target(expected,rows)
+            diagnostic("inactive", recovery=recovery or "none", blocked=resume_blocked,
+                       remembered=bool(expected))
             if recovery=="verified":
                 last_seen=time.monotonic()
                 resume_blocked=False
@@ -231,6 +246,10 @@ def devices(force=False):
     if not force and devices_cache and now-devices_cache[0]<5:return devices_cache[1]
     result=spotify("GET","/me/player/devices") or {}
     rows=[{"id":d.get("id"),"name":d.get("name","Device"),"active":bool(d.get("is_active")),"restricted":bool(d.get("is_restricted"))} for d in result.get("devices",[])]
+    expected=(last_snapshot or {}).get("deviceId")
+    diagnostic("devices", count=len(rows), active=sum(bool(row["active"]) for row in rows),
+               last_present=bool(expected and any(row["id"]==expected for row in rows)),
+               other_active=any(row["active"] and row["id"]!=expected for row in rows))
     devices_cache=(now,rows)
     return rows
 
@@ -246,6 +265,7 @@ def command():
     a,v=data.get("action"),data.get("value")
     if a not in ("device","save","toggle","next","previous","seek","shuffle","repeat"):
         raise ApiError(400,"Invalid command.")
+    diagnostic("command", action=a, desired=v if a=="toggle" and type(v) is bool else "-")
     if a=="device":
         if not isinstance(v,str) or not any(d["id"]==v and not d["restricted"] for d in devices(True)):
             raise ApiError(400,"Device no longer available.")
@@ -306,6 +326,7 @@ def command():
             elif a=="repeat":spotify("PUT","/me/player/repeat",{**params,"state":{"off":"context","context":"track","track":"off"}.get(p.get("repeat_state"),"off")})
             else:raise ApiError(400,"Unknown command.")
     playback_cache=None
+    diagnostic("command_ack", action=a)
     return jsonify(ok=True)
 
 @app.get("/")
