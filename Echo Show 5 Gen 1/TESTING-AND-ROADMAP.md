@@ -42,7 +42,8 @@ See [PRE-ARRIVAL.md](PRE-ARRIVAL.md) for safe preparation.
 - [x] User accepted Home default B, fixed layout first, selectable clock styles, conditional lightweight presets/backgrounds, and no inactivity page switching.
 - [x] User accepted Spotify visual direction, controls, floating device selector and compact mode dropdown (replacing three permanent buttons); requested physical volume and Echo mode subject to feasibility.
 - [ ] Test mode dropdown current-mode display, selection/dismissal, unavailable mode handling and distinction from playback-device selector.
-- [ ] Approve Weather and other remaining layouts, exact Home/Spotify details, rail sizing, defaults and drawer visuals.
+- [x] User accepted Weather B, selected current metrics, configurable forecast duration/icon styles, static weather backgrounds, Bournemouth and tap-day details.
+- [ ] Approve Glucose and remaining layouts, exact Home/Spotify/Weather details, rail sizing, defaults and drawer visuals.
 - [ ] Test physical +/- key events and mode-aware volume popup, safe privacy/power behavior, non-permanent fallback if necessary, no permanent volume icon/slider, extended device selector and far-right save button, no double volume changes or navigation side effects.
 - [ ] Verify Spotify seek/shuffle/repeat/save permissions and endpoint/device support; test floating device selector and last-track paused/disconnected states.
 - [ ] Experiment with official Spotify Android app/Connect on Echo Show, speaker output and background playback alongside kiosk; measure RAM; keep Echo mode unavailable until verified.
@@ -53,7 +54,7 @@ See [PRE-ARRIVAL.md](PRE-ARRIVAL.md) for safe preparation.
 - [ ] Spotify authorization and active-device metadata.
 - [ ] Pause/resume/skip Xbox playback with PC fully off; check unsupported volume gracefully.
 - [ ] Optional PC companion: local media/volume/visualisation, offline indication.
-- [ ] Bournemouth weather, current conditions and three-day forecast.
+- [ ] Bournemouth weather: selected current conditions, clear forecast probability interval, sunrise/sunset local time, configurable daily duration (three-day default proposed), icon styles, static condition imagery, tap-day details, stale/offline status, no clipping or gesture conflicts.
 - [ ] Gluroo real source verification locally with no reading/credential disclosure; compare timestamps against official app, verify source trend/units, graph gaps and stale/offline.
 - [ ] Home widgets, navigation, layout on actual 960 x 480.
 - [ ] Extended soak test: memory, input responsiveness, reconnect, reboot, overnight, no Nextcloud regression.

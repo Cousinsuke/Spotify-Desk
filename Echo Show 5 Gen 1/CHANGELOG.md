@@ -1,5 +1,11 @@
 # Echo Show 5 Gen 1 changelog
 
+## 2026-11-26 — Weather direction accepted
+
+- User selected B large current weather above daily cards; temperature/condition, feels-like, rain probability, humidity and sunrise/sunset; configurable forecast duration and icon styles, condition-themed static backgrounds, always Bournemouth, tap day for details.
+- Proposed three-day default, swipeable longer forecast, Pi-served static images and cached forecast/day-details panel; exact detail layout, API fields and resource impact pending. No implementation or hardware tests.
+- Updated UI-DESIGN.md, handoff, README, architecture and roadmap. Next review Glucose using established chart preferences.
+
 ## 2026-11-26 — Spotify mode dropdown refinement
 
 - User requested replacing the three permanent Wi-Fi/PC/Echo buttons with a compact dropdown and down arrow to reduce clutter. Display the active mode when closed; show available modes when opened, keep the playback-device selector separate. Echo mode and hardware volume remain unverified. Documentation only; Weather review next.

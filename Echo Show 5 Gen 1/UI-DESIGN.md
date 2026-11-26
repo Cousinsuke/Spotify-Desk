@@ -1,6 +1,6 @@
 # Echo Show 5 — dashboard UI direction
 
-2026-11-26. User supplied rough visual reference in chat. **Global navigation, default Home and Spotify visual direction accepted by user; remaining pages and hardware-dependent features pending, no implementation or device validation.**
+2026-11-26. User supplied rough visual reference in chat. **Global navigation, default Home, Spotify and Weather visual directions accepted by user; remaining pages and hardware-dependent features pending, no implementation or device validation.**
 
 ## Reference and user decisions
 
@@ -58,11 +58,22 @@ The user selected a grid icon opening a floating app drawer. If future features 
 - Local playback first experiment: official Spotify Android app running in background, if install/authentication and Spotify Connect discovery succeed on checkers ROM; Pi controls it using Web API. Alternative Android App Remote SDK (requires installed Spotify app), or browser Web Playback SDK (requires compatible protected media/DRM, Premium and current developer permissions; kiosk WebView not guaranteed). Web API alone cannot stream audio. Test screen-off playback, app/kiosk coexistence, memory, sleep and audio output; no claim of local playback compatibility until hardware test. Existing Wi-Fi/PC modes independent.
 - Research: https://kiosksatellite.com/docs/echo-show-5-1st-gen/ (exact model power/privacy behavior, speaker); https://github.com/jxlarrea/kiosk-satellite/issues/821 (reported volume events KEY_VOLUMEUP/DOWN and navigation bug, not proof of remapping support); https://developer.spotify.com/documentation/android ; https://developer.spotify.com/documentation/web-playback-sdk ; https://developer.spotify.com/documentation/web-api/concepts/scopes . Reviewed 2026-11-26. No actual key or audio test performed.
 
+## Accepted Weather design direction (2026-11-26)
+
+- User selected B: large current condition icon/temperature above daily forecast cards, adapted to 960 x 480 and both navigation rail states.
+- Current summary: temperature and weather condition, feels-like temperature, rain probability, sunrise/sunset and humidity. Distinguish forecast precipitation probability from measured precipitation; label the period (e.g. next hour or today) rather than treating it as a current observation. Wind and UV were not selected for the main view.
+- Forecast duration configurable in Settings; proposed default remains today + next two days. Proposed horizontal swipeable row for longer forecasts to retain readable card sizes; exact supported durations and detail presentation pending prototype. Separate rail edge gesture from forecast scrolling.
+- Selectable weather icon styles in Settings, with a consistent Home weather symbol mapping. Exact icon sets pending.
+- Static weather-themed images change with current condition. Proposed clear/cloud/rain/storm/snow/fog and day/night variants; serve appropriately resized assets from Pi, display one active image, avoid animated backgrounds and maintain contrast with a lightweight overlay. Resource impact remains unmeasured.
+- Always Bournemouth, no location input or selector. Reuse existing town-center configuration and Open-Meteo integration; use Europe/London local times.
+- Tapping a forecast day opens more details. Proposed floating panel with date, daily high/low, condition, rain probability, sunrise/sunset and hourly breakdown where supported. Exact detail fields/layout not separately approved. Dismiss without changing main page. Pi should cache weather data; preserve last-success timestamp and label stale/unavailable data. Verify API fields and allowed forecast lengths at implementation; no new weather endpoint or code implemented.
+- Illustrative weather previews are not live forecasts.
+
 ## Page layouts (review before implementation)
 
 - Home: default B clock with subtle bottom summaries as above; optional other fixed presets conditional on resources. Do not switch pages on inactivity. No stale value presented as live.
 - Spotify: accepted split/immersive layout and controls above, with expanded device selector and save button at far right, no permanent volume icon/slider; hardware volume and Echo playback remain experimental; floating device selector and compact Wi-Fi/PC/Echo mode dropdown planned.
-- Weather: fixed Bournemouth, current conditions, today/tomorrow/following day. Hourly details only as optional future refinement if space allows.
+- Weather: accepted B layout with large current weather, selected statistics, configurable daily forecast duration, selectable icon styles, condition-dependent static backgrounds and tappable forecast days; fixed Bournemouth.
 - Glucose: prominent current value, source trend, age/timestamp, visible stale/offline status and graph. Retain previous LIVE/GRAPH/BOTH layouts and graph configuration from existing dashboard docs. This is a supplementary display, not medical alarms or a treatment-decision tool. Synthetic data only for design tests.
 - More: floating app drawer with a proposed grid/list of additional pages; settings, calendar, timers, reminders and system info are examples, not committed features.
 
@@ -78,6 +89,6 @@ User proposed hiding the right rail after inactivity to reclaim screen area and 
 
 Design discussion question set: reveal method (edge handle, background tap, swipe, own idea); auto-hide delay (5/10/15/30 seconds or own idea); layout (reflow, overlay, hybrid, own idea); More (grid/chevron, own idea); Home content (clock-only, subtle summaries, cards, own idea). Historical question set; navigation answers are recorded above. Home direction accepted above; exact details remain for prototype review. No app code changed.
 
-## Next design task — Weather
+## Next design task — Glucose
 
-Present landscape weather layout options: current conditions left with daily cards right; current conditions across top with three day cards below; minimalist current weather plus expandable details. Keep Bournemouth default and next couple days from prior decisions; ask about layout, forecast detail, icon style, background, forecast time range and optional expanded information with Own idea for every choice. Then review Glucose, floating drawer/Settings and visual details. All mockup data illustrative, no device implementation yet. Preserve existing software and test on 960 x 480 before deployment.
+Use existing docs/DASHBOARDS.md, docs/GLUCOSE-LIVE.md and chart implementation as reference. Preserve established LIVE/GRAPH/BOTH views (BOTH = square live tile left, wider chart right), source trend and age, LIVE/STALE/OFFLINE status, 4–7 mmol/L visual display band, AUTO normally 3–12 with whole-number labels, FULL normally 3–21 in steps of 3, extend bounds for valid extremes, and 1/3/6/12/24-hour history options with real time-axis labels and gaps. The 24h history may be partial depending on source coverage. These are prior design/code decisions, not new medical advice. Ask about default view, compact selector/dropdown, tile/graph style, default window, chart interaction and background with Own idea on each question. Keep privacy, secure transport and official app for medical decisions unchanged. All examples synthetic; no real health data in Git. Next review floating drawer/Settings and final visual details. No implementation or physical tests yet.
