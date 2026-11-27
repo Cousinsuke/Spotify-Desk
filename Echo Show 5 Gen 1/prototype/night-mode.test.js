@@ -21,7 +21,7 @@ near(d(overnight,720),0);
 near(d({...overnight,brightness:20,nightDim:30},0),.6);
 near(d({...overnight,brightness:60,nightDim:70},0),.7);
 near(d({...overnight,brightness:60,night:'off'},0),.3);
-assert.ok(source.includes('Object.assign(prefs,normaliseHome(p),normaliseNight(p))'));
+assert.ok(source.includes('Object.assign(prefs,normaliseNight(p))'));
 assert.ok(source.includes('clock();updateNightMode();'));
 assert.ok(source.includes("document.addEventListener('visibilitychange',()=>{if(!document.hidden)updateNightMode()})"));
 assert.ok(source.includes('...normaliseNight(),spotifyBackground:'));
