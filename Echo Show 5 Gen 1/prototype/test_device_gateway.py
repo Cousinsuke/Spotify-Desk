@@ -76,4 +76,52 @@ class GatewayTests(unittest.TestCase):
         for bind,network in (("0.0.0.0","0.0.0.0/0"),("192.168.50.10","192.168.0.0/16"),("8.8.8.8","8.8.8.0/24")):
             with self.assertRaises(ValueError):g.validate_network(bind,network)
 
+class LiveGatewayTests(GatewayTests):
+    def setUp(self):
+        super().setUp()
+        self.calls=[]
+        def backend(method,path,params,body):
+            self.calls.append((method,path,params,body))
+            return {"synthetic":True},200
+        self.app=g.create_app(self.path,"192.168.50.10","192.168.50.0/24",lambda:self.now,live=True,backend=backend)
+        self.client=self.app.test_client()
+    # Only run live-specific methods; base tests expect sample mode.
+    def test_unpaired(self):
+        for path in g.LIVE_GET:
+            self.assertEqual(self.req(path,headers={"X-Desk-Preview":"1"}).status_code,401)
+        self.assertEqual(self.calls,[])
+    def test_pair_cookie_and_sample(self):
+        self.pair()
+        self.assertEqual(self.req("/").location,"/?live=1")
+        with self.req("/?live=1") as response:
+            self.assertIn(b'data-device-gateway="1"',response.data)
+            self.assertIn("connect-src 'self'",response.headers["Content-Security-Policy"])
+    def test_no_live_paths(self):
+        self.pair()
+        for path in ("/spotify/login","/spotify/callback","/.env","/.spotify_token.json","/api/unknown","/device_gateway.py"):
+            self.assertEqual(self.req(path,headers={"X-Desk-Preview":"1"}).status_code,404)
+        self.assertEqual(self.calls,[])
+    def test_live_allowlist(self):
+        self.pair()
+        for path in g.LIVE_GET:
+            self.assertEqual(self.req(path).status_code,403)
+            self.assertEqual(self.req(path,headers={"X-Desk-Preview":"1"}).json,{"synthetic":True})
+        self.assertEqual(len(self.calls),6)
+        self.assertEqual(self.req("/api/calendar?month=2026-11-01",headers={"X-Desk-Preview":"1"}).status_code,200)
+        self.assertEqual(self.calls[-1][2],{"month":"2026-11-01"})
+        self.assertEqual(self.req("/api/calendar?url=http://example.com",headers={"X-Desk-Preview":"1"}).status_code,400)
+    def test_live_write_and_revoke(self):
+        self.pair()
+        h={"Origin":self.base,"X-Desk-Preview":"1"}
+        url=g.LIVE_POST
+        self.assertEqual(self.req(url,"POST",json={"action":"toggle","value":True},headers=h).status_code,200)
+        self.assertEqual(self.req(url,"POST",json={"action":"toggle"},headers=h).status_code,400)
+        self.assertEqual(self.req(url,"POST",json={"action":"toggle","value":True},headers={"X-Desk-Preview":"1"}).status_code,403)
+        g.revoke(self.path)
+        self.assertEqual(self.req(url,"POST",json={"action":"toggle","value":True},headers=h).status_code,401)
+        self.assertEqual(self.req("/api/device/session",headers={"X-Desk-Preview":"1"}).status_code,401)
+        self.assertEqual(len(self.calls),1)
+    def test_local_transport_guard(self):
+        with self.assertRaises(ValueError):g.local_api("GET","/spotify/login",{},None)
+
 if __name__=="__main__":unittest.main()
