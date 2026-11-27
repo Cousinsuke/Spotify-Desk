@@ -261,3 +261,8 @@ User ran all 13 Python tests successfully (0.010s), confirmed Pause reached iPho
 - Discussed stock firmware updates/downgrades, confirmed 2024 LK support and identified alternative test point method as higher risk/unverified for actual unit.
 
 Future updates: append dated entries with evidence and exact versions, distinguish proposed from tested, refresh CHATGPT-HANDOFF.md and checklist after significant progress.
+
+
+### Raspberry Pi board confirmation
+
+2026-11-27: User confirmed physical board Raspberry Pi 4 Model B Rev 1.5, ARM64 Cortex-A72, four cores, reported maximum 1.8 GHz, Git 2.47.3 already installed. Earlier 1.8 GiB visible RAM remains the sizing basis; physical RAM capacity not independently verified. Next stage isolated checkout and Python 3.13 virtual environment on existing Debian. Install requirements-ui.txt; for full historical regression suite also install prototype/requirements-calendar.txt (inactive Apple adapter tests need these optional packages; public Calendar runtime does not). No credentials required for offline tests; Nextcloud and external storage untouched. Production startup and secure device transport still pending. No Pi changes or test execution reported yet.
