@@ -286,3 +286,12 @@ For troubleshooting, record the first error, command, OS, reproducibility and re
 - [x] Actual paired-device revocation verified.
 - [x] Implement explicit opt-in scoped live access.
 - [ ] Run regression suite, enable live mode locally, pair, verify real data/control and session restart/revocation.
+
+
+### Direct authenticated live dashboard accepted
+
+2026-11-27: User pulled prototype 612b888, ran all 80 Python unittest cases successfully in 0.680s plus launcher assertions, enabled explicit live mode and paired. User approved direct HTTPS live Home/System Information screenshots: actual Pi hardware, dashboard/Weather/Glucose ready, Spotify connected idle, Calendar partial data (individual source not established), CPU 2%, RAM 36%, storage 32%, temperature 33.6 C. Direct paired live read access demonstrated, no SSH tunnel required for browser. Actual Spotify command/artwork, calendar source detail, live graph behavior, browser restart persistence, live gateway restart/reboot recovery and Android kiosk trust not separately verified. Keep original admin service loopback and OAuth there. Next test playback controls on an active device and inspect Calendar sources if still partial; confirm browser pairing survives closure, then enable gateway user unit and verify reboot without manual start. Reserve configured Ethernet IP in router DHCP because TLS SAN/bind depend on it; no router forwarding. Gateway boot network readiness is not guaranteed by user network.target; observe actual reboot and adjust retry behavior if needed. No new code, no raw screenshots, glucose values, pairing codes, identifiers, private certificate or local network addresses committed. Nextcloud preserved. Physical Echo model/firmware and Android CA compatibility remain pending.
+
+- [x] 80 Python tests passed on Pi; direct HTTPS paired live dashboard and hardware metrics verified.
+- [ ] Real Spotify control/artwork and browser session persistence; check partial Calendar sources.
+- [ ] Enable gateway startup and verify reboot; stable LAN address and Android trust/hardware pending.
