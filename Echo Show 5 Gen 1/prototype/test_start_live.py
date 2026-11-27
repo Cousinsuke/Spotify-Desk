@@ -19,6 +19,21 @@ for bad in [content + "\n" + keys[0] + "=duplicate", content + "\nUNKNOWN=secret
         pass
     else:
         raise AssertionError("bad config accepted")
+# Optional Apple credentials must not change the existing three-key setup.
+apple = dict(zip(x["APPLE_KEYS"], ["example@example.invalid", "abcd-efgh-ijkl-mnop"]))
+apple_content = content + "\n" + "\n".join(k + "=" + v for k, v in apple.items())
+assert x["parse"](apple_content) == {**values, **apple}
+assert x["parse"](content + "\nDESK_ICLOUD_USERNAME=\nDESK_ICLOUD_APP_PASSWORD=") == {**values, "DESK_ICLOUD_USERNAME": "", "DESK_ICLOUD_APP_PASSWORD": ""}
+for bad in [content + "\nDESK_ICLOUD_USERNAME=example@example.invalid",
+            content + "\nDESK_ICLOUD_APP_PASSWORD=abcd-efgh-ijkl-mnop",
+            apple_content.replace("abcd-efgh-ijkl-mnop", "not-an-app-password"),
+            apple_content.replace("example@example.invalid", "bad identifier")]:
+    try:
+        x["parse"](bad)
+    except ValueError:
+        pass
+    else:
+        raise AssertionError("invalid optional Apple config accepted")
 with tempfile.TemporaryDirectory() as d:
     p = pathlib.Path(d) / ".env"
     p.write_text(content)
@@ -45,4 +60,4 @@ with tempfile.TemporaryDirectory() as d:
         assert x["setup"](p) == values
     assert p.stat().st_mode & 0o777 == 0o600
     assert x["load"](p) == values
-print("Launcher: 14 synthetic assertions passed")
+print("Launcher: existing and optional Apple configuration checks passed")
