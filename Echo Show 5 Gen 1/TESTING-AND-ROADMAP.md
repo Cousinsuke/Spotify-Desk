@@ -155,3 +155,6 @@ For troubleshooting, record the first error, command, OS, reproducibility and re
 - [x] Implement manual/scheduled night mode, 32 new and 97 existing pure/source checks passed.
 - [ ] Browser review of night controls, manual/automatic transitions, schedule persistence/reset, equal times, no page switch and status readability. Android actual backlight/always-on still pending.
 - [ ] Calendar scope and design after night-mode review.
+
+- [x] User confirmed night mode update works (browser acceptance; individual edge cases not separately reported).
+- [ ] Agree Calendar source and scope; implement after design decision. Hardware brightness and always-on verification remain pending.

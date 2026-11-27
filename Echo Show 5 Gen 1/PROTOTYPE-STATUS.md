@@ -226,3 +226,8 @@ git pull --ff-only origin echo-show/prototype
 node "Echo Show 5 Gen 1/prototype/night-mode.test.js"
 ```
 Hard refresh; Settings > General > Night mode. Test Manual, then Scheduled with current time inside/outside interval; use a near-future boundary if practical. Return to preferred setting. Native Node optional.
+
+
+### Latest checkpoint — night mode accepted
+
+2026-11-27: User confirmed the automatic night mode update worked on their preview. Mark browser night mode acceptance as user-reported; exact mode, boundary timing, persistence, brightness level and individual edge cases were not separately reported. Actual Echo Show backlight and always-on behavior remain unverified. Next agree Calendar scope/source before implementation (local date-only calendar versus optional event integration; read-only first, no private events or credentials in Git). System Information follows; Pi preflight and physical device gates remain separate. No code changes in this documentation checkpoint.
