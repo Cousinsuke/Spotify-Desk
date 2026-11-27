@@ -191,3 +191,8 @@ git pull --ff-only origin echo-show/prototype
 ./"Echo Show 5 Gen 1/prototype/start-live"
 ```
 Open http://127.0.0.1:8765/?live=1, connect Spotify and agree once, then stop/restart using start-live and verify playback reconnects without consent. Next continue General/Home settings; no repeat of iPhone troubleshooting.
+
+
+### Latest checkpoint — persistent authorization accepted
+
+2026-11-27: User confirmed both requested Omarchy validations worked: the test_live_server.py regression suite (34 tests expected, including eight new authorization tests) and stopping/restarting the live server with start-live, refreshing the dashboard and controlling Spotify without pressing Agree again. Mark both user-reported passes; exact terminal output, runtime and device were not supplied. Do not invent test duration or claim independent execution, two restart cycles, Xbox-specific retest or weather/glucose revalidation. Persistent local Spotify authorization is accepted; no need to repeat consent or this troubleshooting unless a new issue arises. Six-month expiry/revocation and eventual secure Pi deployment remain separate. Next continue remaining General/Home settings and scheduled night mode; no source changes in this documentation update.

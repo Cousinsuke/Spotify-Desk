@@ -137,5 +137,8 @@ For troubleshooting, record the first error, command, OS, reproducibility and re
 - [ ] Confirm finger swipe and mouse-wheel scrolling in both Settings columns and quick settings, including last row and rail states, with no visible scrollbar or gesture conflict.
 
 - [x] User approved Settings scrolling/appearance.
-- [x] Implement local refresh-token cache and add eight mocked regression tests (34 total); execution pending.
-- [ ] Run test_live_server.py; consent once and restart twice to verify automatic connection, Xbox playback and unchanged weather/glucose. Never share token file.
+- [x] Implement local refresh-token cache and add eight mocked regression tests (34 total).
+- [x] User reports test_live_server.py passes and restart/reconnection works without further consent (2026-11-27; exact output not provided).
+- [ ] Additional repeat-restart, Xbox-specific regression and unchanged weather/glucose verification not separately reported; cover in later integration testing.
+
+2026-11-27: User confirmed both requested Omarchy validations worked: the test_live_server.py regression suite (34 tests expected, including eight new authorization tests) and stopping/restarting the live server with start-live, refreshing the dashboard and controlling Spotify without pressing Agree again. Mark both user-reported passes; exact terminal output, runtime and device were not supplied. Do not invent test duration or claim independent execution, two restart cycles, Xbox-specific retest or weather/glucose revalidation. Persistent local Spotify authorization is accepted; no need to repeat consent or this troubleshooting unless a new issue arises. Six-month expiry/revocation and eventual secure Pi deployment remain separate. Next continue remaining General/Home settings and scheduled night mode; no source changes in this documentation update.
