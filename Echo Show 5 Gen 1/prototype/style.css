@@ -197,3 +197,15 @@ button,select,input{font:inherit;color:inherit}button,select{background:var(--co
 /* The Home tile keeps status colour even if the global theme is changed. */
 #screen[data-page=home] .tile[data-page=glucose]{background:var(--glu-status-bg);border-color:var(--glu-status-edge);color:var(--glu-status-ink)}
 #screen[data-page=home] .tile[data-page=glucose] span{color:var(--glu-status-muted)}
+
+/* App shortcuts: bounded rail pins and touch-friendly order controls. */
+.app-help{color:var(--muted);font-size:13px;line-height:1.4;margin:8px 0}
+.app-capacity{font-size:13px;color:var(--accent);margin:6px 0 10px}
+.app-order-row{gap:8px;padding:7px 9px;min-height:52px}
+.app-order-name{display:flex;align-items:center;gap:8px;flex:1;min-width:0}
+.app-order-name .icon{width:22px;height:22px;flex:none}
+.app-order-name strong{font-size:14px;overflow-wrap:anywhere}
+.app-order-row .app-pin{flex:none;display:flex;align-items:center;gap:5px;min-height:44px;font-size:13px}
+.app-order-controls{display:flex;gap:5px}
+.app-order-controls button{min-width:44px;min-height:44px;padding:0;font-size:19px}
+.app-order-controls button:disabled,.app-pin:has(input:disabled){opacity:.45}

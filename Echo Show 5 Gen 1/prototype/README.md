@@ -79,3 +79,8 @@ User confirmed real feed rendered in BOTH and GRAPH and requested vivid yellow/a
 ## Increment 16 — independent glucose card, chart and page background
 
 User requested a white graph, Home glucose tile status colour, and global themes affecting only surrounding background. Chart now uses a fixed dark graphite panel with white trace/dot/axis labels and a neutral shaded 4–7 display band in all modes. Live reading card and Home tile share the status palette regardless of background preference; stale/unavailable remain neutral and Home hides the reading. Green, Dynamic and Global theme select only the Glucose page backdrop; dynamic follows fresh source status. Home page wallpaper unchanged. No graph geometry, data transport, threshold or polling changes. JS syntax and 27 source assertions passed; actual browser rendering and status transitions pending. Frontend only; pull and hard refresh.
+
+
+## Increment 17 — app shortcuts and ordering (2026-11-27)
+
+Settings > Apps lets you pin up to three enabled apps and move them up/down. Home and Apps stay fixed; the drawer lists all enabled apps, including unpinned ones. Calendar and System Information are hidden until implemented. Existing default pins and order retained; validated non-sensitive preferences migrate in place, persist locally and reset with preview preferences. No Pi storage yet. Touch and keyboard controls, local persistence and actual layout need browser review. Run `node "Echo Show 5 Gen 1/prototype/app-shortcuts.test.js"` from repo root. Frontend-only pull and hard refresh; no new asset served, no restart or reauthorization. No playback, weather, glucose or root app changes.
