@@ -179,3 +179,6 @@ For troubleshooting, record the first error, command, OS, reproducibility and re
 
 - [x] User approved public Calendar direction; add vertical month swipe/mouse drag, 28 Calendar checks passed.
 - [ ] Browser review swipe up/down, short/diagonal gesture, date taps, arrow/Today, agenda scroll and rail/quick settings; physical touch pending.
+
+- [x] User confirmed Calendar swipe navigation works in preview.
+- [ ] Define System Information scope and host/display distinction, then implement read-only diagnostics.
