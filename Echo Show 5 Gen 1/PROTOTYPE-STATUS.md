@@ -171,3 +171,8 @@ git pull --ff-only origin echo-show/prototype
 ./"Echo Show 5 Gen 1/prototype/start-live"
 ```
 Stop any running preview server with Ctrl+C first. First launch prompts once; subsequent launches run the last command without re-entering credentials. Edit locally if needed with `nano "Echo Show 5 Gen 1/prototype/.env"`. Open http://127.0.0.1:8765/?live=1 and reconnect Spotify if needed. Optional test: `python3 "Echo Show 5 Gen 1/prototype/test_start_live.py"`.
+
+
+### Settings scrollbar refinement (2026-11-27)
+
+User requested hiding the visible Settings scrollbars while keeping vertical finger swipes. Prototype commit [b8d4280](https://github.com/Cousinsuke/Spotify-Desk/commit/b8d42806153e8721cbe63565a232308209bffcf8) hides scrollbar chrome for category list, details and quick settings using standard scrollbar-width and WebKit fallback, retains native overflow-y:auto, prevents category buttons shrinking and contains vertical overscroll. Quick settings included for consistency. Mouse-wheel scrolling remains enabled; no JS gesture changes, no service or root app changes. Nine source checks passed using assistant JS runtime with mocked Node file/assertion interfaces; actual browser and touchscreen scrolling pending review. Pull and hard refresh; no restart or reauthorization. Next review Settings scrolling and preceding changes, then continue General/Home settings.

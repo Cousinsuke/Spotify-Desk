@@ -132,3 +132,6 @@ For troubleshooting, record the first error, command, OS, reproducibility and re
 
 - [x] Add local one-command launcher, ignored mode-600 configuration, blank example and offline regression test; 14 synthetic checks passed.
 - [ ] User verifies first launch, repeat launch without prompts and existing loopback UI; do not share .env contents. OAuth reconnect after restart remains expected.
+
+- [x] Hide Settings and quick settings scrollbar chrome, preserve native scrolling; nine source checks passed.
+- [ ] Confirm finger swipe and mouse-wheel scrolling in both Settings columns and quick settings, including last row and rail states, with no visible scrollbar or gesture conflict.
