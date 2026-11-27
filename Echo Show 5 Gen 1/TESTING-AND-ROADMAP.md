@@ -295,3 +295,11 @@ For troubleshooting, record the first error, command, OS, reproducibility and re
 - [x] 80 Python tests passed on Pi; direct HTTPS paired live dashboard and hardware metrics verified.
 - [ ] Real Spotify control/artwork and browser session persistence; check partial Calendar sources.
 - [ ] Enable gateway startup and verify reboot; stable LAN address and Android trust/hardware pending.
+
+
+### Gateway automatic startup enabled
+
+2026-11-27: User enabled the HTTPS device gateway systemd user unit; enable --now returned enabled and active. Both services configured for automatic startup, with previously confirmed user lingering. User reports Calendar transient Partial data when opening System Information quickly, then Ready about one second later; consistent with independent source refresh, no persistent calendar issue reported, no code change needed. Final gateway reboot recovery and browser pairing persistence across reboot pending. Reboot interrupts SSH/Pi Connect and existing Nextcloud temporarily; verify direct trusted HTTPS dashboard without tunnel or manual service start, both units active/enabled, saved Spotify authorization and paired session retained. Fixed DHCP reservation recommended before permanent kiosk deployment, Android CA trust and hardware integration pending. No raw output, local addresses, identifiers or health data committed. Documentation only.
+
+- [x] HTTPS device gateway unit enabled and active; transient Calendar partial status resolves to Ready.
+- [ ] Confirm gateway reboot recovery and persistent pairing; real Spotify control check if not already performed.
