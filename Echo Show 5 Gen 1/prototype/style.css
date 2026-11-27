@@ -288,3 +288,7 @@ button,select,input{font:inherit;color:inherit}button,select{background:var(--co
 .cal-legend{display:flex;flex-wrap:wrap;gap:8px;font-size:11px;color:var(--muted);margin-bottom:10px}
 .cal-legend span::before{content:"";display:inline-block;width:7px;height:7px;border-radius:50%;margin-right:4px}
 .cal-attribution{font-size:11px}
+
+/* Month swipes are handled only inside the calendar grid; agenda retains native vertical scrolling. */
+.cal-grid{touch-action:none;user-select:none;-webkit-user-select:none}
+.cal-agenda{touch-action:pan-y}

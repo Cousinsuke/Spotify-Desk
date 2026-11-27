@@ -70,6 +70,10 @@ function displayDim(value,minute){
 function calendarKey(d){return [d.getFullYear(),String(d.getMonth()+1).padStart(2,'0'),String(d.getDate()).padStart(2,'0')].join('-')}
 function calendarDate(key){const [y,m,d]=key.split('-').map(Number);return new Date(y,m-1,d,12)}
 function calendarMonth(key,delta){const d=calendarDate(key);return calendarKey(new Date(d.getFullYear(),d.getMonth()+delta,1,12))}
+function calendarSwipeDirection(dx,dy){
+  if(!Number.isFinite(dx)||!Number.isFinite(dy)||Math.abs(dy)<48||Math.abs(dy)<Math.abs(dx)*1.35)return null;
+  return dy<0?'next':'prev';
+}
 function calendarGrid(key){
   const d=calendarDate(key),first=new Date(d.getFullYear(),d.getMonth(),1,12),offset=(first.getDay()+6)%7;
   return Array.from({length:42},(_,i)=>{
@@ -160,11 +164,11 @@ function renderCalendar(){
     (!hasData?'<p class="cal-empty">'+calendarEscape(data.message||'Loading calendar…')+'</p>':(chosen.length?chosen.map(event).join(''):'<p class="cal-empty">No events for this day.</p>')+(upcoming.length?'<h3>Upcoming</h3>'+upcoming.map(e=>'<small class="cal-event-date">'+dateLabel(e.date)+'</small>'+event(e)).join(''):''))+
     (liveEnabled?'<p class="cal-source cal-attribution">UK bank holidays: GOV.UK · F1 schedule: F1Calendar.com / sportstimes/f1 (unofficial, MIT). Times in UK local time.</p>':'')+'</section></div>';
 }
-function calendarAction(action){
+function calendarAction(action,focus=true){
   if(action==='today')calendarReset();
   else if(action==='prev'||action==='next'){calendarShown=calendarMonth(calendarShown,action==='prev'?-1:1);calendarSelected=calendarShown}
   renderCalendar();refreshCalendar();
-  page.querySelector('[data-cal-action="'+action+'"]')?.focus({preventScroll:true});
+  if(focus)page.querySelector('[data-cal-action="'+action+'"]')?.focus({preventScroll:true});
 }
 function renderPage(){screen.dataset.page=active;renderRail();if(active==='home'){renderHome()}else if(active==='spotify'){renderSpotify();if(liveEnabled)live.refresh()}else if(active==='weather'){renderWeather()}else if(active==='glucose'){renderGlucose()}else if(active==='settings'){renderSettings()}else if(active==='calendar'){renderCalendar();refreshCalendar()}else{page.innerHTML='<div class="placeholder"><h1>'+apps[active]+'</h1><p>This page is planned for a later prototype increment. No live service is connected.</p><button data-page="home">Return Home</button></div>'}}
 function navigate(id){if(id!=='home'&&!enabledAppIds.includes(id))return;if(glucoseObserver){glucoseObserver.disconnect();glucoseObserver=null}closeOverlay(false);active=id;if(id==='calendar')calendarReset();renderPage();setRail(true);if(weather.enabled&&['home','weather'].includes(active))weather.refresh();if(glucoseLive.enabled&&['home','glucose'].includes(active)){updateLiveGlucose();glucoseLive.refresh()}}
@@ -205,7 +209,7 @@ function renderSettings(){page.innerHTML='<h1>Settings</h1><div class="settings-
 screen.addEventListener('click',e=>{const b=e.target.closest('button');if(e.target===shade){closeOverlay();return}if(!b){if(expanded&&!overlay&&prefs.autoHide[active]&&page.contains(e.target)&&!e.target.closest('input,select,a,label,textarea,[contenteditable]'))setRail(false);return}if(b.id==='reveal'){setRail(true);return}if(b.id==='quickHandle'){openOverlay('quick');return}if(b.hasAttribute('data-close')){closeOverlay();return}if(b.dataset.calAction){calendarAction(b.dataset.calAction);return}if(b.dataset.calDay){const day=b.dataset.calDay;if(calendarGrid(calendarShown).some(d=>d.key===day)){calendarSelected=day;calendarShown=calendarMonth(day,0);renderCalendar();refreshCalendar();page.querySelector('[data-cal-day="'+day+'"]')?.focus({preventScroll:true})}return}if(b.dataset.hourDay!==undefined){weatherDay=Number(b.dataset.hourDay);openOverlay('weather');return}if(b.dataset.weatherDay!==undefined){const i=Number(b.dataset.weatherDay);if(Number.isInteger(i)&&i>=0&&i<weather.validDuration(prefs.weatherDays)){weatherDay=i;openOverlay('weather')}return}if(b.dataset.open){openOverlay(b.dataset.open);return}if(b.dataset.music){musicAction(b.dataset.music);return}if(b.dataset.liveDevice){live.command('device',b.dataset.liveDevice);closeOverlay(false);return}if(b.dataset.device){playback=music.reduce(playback,'device',b.dataset.device);closeOverlay(false);renderSpotify();$('deviceSelect')?.focus();return}if(b.dataset.page){navigate(b.dataset.page);return}if(b.dataset.appMove){const id=b.dataset.appMove,delta=Number(b.dataset.direction);prefs.appLayout=changeAppOrder(prefs.appLayout,id,delta);refreshAppSettings(id,'move',delta);return}if(b.dataset.category){category=b.dataset.category;renderSettings();return}if(b.hasAttribute('data-reset')&&confirm('Reset preview preferences only?')){prefs=defaults();save();renderRail();renderSettings()}});
 screen.addEventListener('input',e=>{const el=e.target,k=el.dataset.pref;if(el.id==='seek'){if(liveEnabled){$('elapsed').textContent=music.time(Number(el.value));return}musicAction('seek',Number(el.value),false);return}if(!k||el.type!=='range')return;prefs[k]=Number(el.value);const o=el.parentElement.querySelector('output');if(o)o.textContent=el.value+(k==='speed'?' ms':'%');if(k==='nightDim')syncNightControls();save()});
 screen.addEventListener('change',e=>{const el=e.target,k=el.dataset.pref;if(el.dataset.nightTime){const key=el.dataset.nightTime;if(['nightStart','nightEnd'].includes(key)&&nightMinutes(el.value)!==null){prefs[key]=el.value;syncNightControls();save()}else if(['nightStart','nightEnd'].includes(key))el.value=prefs[key];return}if(el.dataset.glucoseControl){changeGlucose(el.dataset.glucoseControl,el.value);return}if(el.id==='weatherView'){if(['hourly','daily'].includes(el.value)&&el.value!==weatherView){weatherView=el.value;renderWeather(true);$('weatherView')?.focus()}return}if(el.id==='seek'&&liveEnabled){live.command('seek',Number(el.value));return}if(el.dataset.mode!==undefined){musicAction('mode',el.value);if(overlay==='quick')renderQuick();return}if(el.dataset.appPin){const id=el.dataset.appPin;prefs.appLayout=changeAppPin(prefs.appLayout,id,el.checked);refreshAppSettings(id,'pin');return}if(el.dataset.hide){prefs.autoHide[el.dataset.hide]=el.checked;save();return}if(k&&el.tagName==='SELECT'){if(Object.prototype.hasOwnProperty.call(homeOptions,k)&&!homeOptions[k].some(([id])=>id===el.value))return;if(k==='night'&&!['off','manual','scheduled'].includes(el.value))return;prefs[k]=k==='delay'?Number(el.value):el.value;if(k==='night')syncNightControls();save();if(active==='home'&&k==='homeClock')renderHome();if(active==='weather'&&['weatherDays','weatherIcons'].includes(k))renderWeather();if(active==='glucose'&&['glucoseView','glucoseBackground'].includes(k))renderGlucose()}});
-screen.addEventListener('pointerdown',e=>{const r=screen.getBoundingClientRect();gesture={x:e.clientX,y:e.clientY,top:e.clientY-r.top<28,edge:r.right-e.clientX<30,control:!!e.target.closest('input,select,button:not(#quickHandle):not(#reveal)')};schedule()});
+screen.addEventListener('pointerdown',e=>{if(active==='calendar'&&e.target.closest('.cal-grid')){gesture=null;schedule();return}const r=screen.getBoundingClientRect();gesture={x:e.clientX,y:e.clientY,top:e.clientY-r.top<28,edge:r.right-e.clientX<30,control:!!e.target.closest('input,select,button:not(#quickHandle):not(#reveal)')};schedule()});
 screen.addEventListener('pointerup',e=>{if(!gesture)return;const dx=e.clientX-gesture.x,dy=e.clientY-gesture.y;const g=gesture;gesture=null;if(overlay||g.control)return;if(g.top&&dy>50&&dy>Math.abs(dx)*1.4)openOverlay('quick');else if(g.edge&&dx< -45&&Math.abs(dx)>Math.abs(dy)*1.4)setRail(true)});
 screen.addEventListener('pointercancel',()=>{gesture=null});rail.addEventListener('focusout',()=>setTimeout(schedule,0));screen.addEventListener('keydown',e=>{if(e.key==='Escape'&&overlay){closeOverlay();return}if(e.key==='Escape'&&expanded&&prefs.autoHide[active]){setRail(false);return}schedule()});
 
@@ -366,6 +370,40 @@ setInterval(()=>{if(active==='calendar'&&!document.hidden)refreshCalendar()},500
 setInterval(()=>{clock();updateNightMode();if(active==='calendar'&&calendarToday!==calendarKey(new Date()))renderCalendar();if(!liveEnabled){playback=music.reduce(playback,'tick');if(active==='spotify'&&!overlay)updateSpotify()}},1000);
 
 if(weather.enabled){weather.onChange=()=>{if(active==='home')updateHomeWeather();else if(active==='weather'){renderWeather();if(overlay==='weather')renderWeatherDetails(true)}};weather.refresh();setInterval(()=>{if(['home','weather'].includes(active)&&!document.hidden)weather.refresh()},15000);}
+
+// Calendar grid: one month per deliberate vertical swipe, never scroll the agenda.
+let calendarDrag=null,ignoreCalendarClick=false;
+screen.addEventListener('pointerdown',e=>{
+  ignoreCalendarClick=false;
+  if(calendarDrag){if(e.pointerId!==calendarDrag.id)calendarDrag=null;return}
+  if(active!=='calendar'||overlay||!e.isPrimary||e.button!==0||!e.target.closest('.cal-grid'))return;
+  calendarDrag={id:e.pointerId,x:e.clientX,y:e.clientY,dragged:false};
+},true);
+window.addEventListener('pointermove',e=>{
+  const d=calendarDrag;
+  if(!d||d.id!==e.pointerId)return;
+  if(active!=='calendar'||overlay){calendarDrag=null;return}
+  if(!d.dragged&&Math.hypot(e.clientX-d.x,e.clientY-d.y)>12){
+    d.dragged=true;
+    try{page.setPointerCapture(e.pointerId)}catch{}
+  }
+  if(d.dragged&&e.cancelable)e.preventDefault();
+},{passive:false});
+window.addEventListener('pointerup',e=>{
+  const d=calendarDrag;
+  if(!d||d.id!==e.pointerId)return;
+  calendarDrag=null;
+  if(active!=='calendar'||overlay)return;
+  const dx=e.clientX-d.x,dy=e.clientY-d.y,action=calendarSwipeDirection(dx,dy);
+  if(d.dragged||Math.hypot(dx,dy)>12)ignoreCalendarClick=true;
+  if(action)calendarAction(action,false);
+});
+window.addEventListener('pointercancel',e=>{
+  if(calendarDrag?.id===e.pointerId){calendarDrag=null;ignoreCalendarClick=true}
+});
+screen.addEventListener('click',e=>{
+  if(ignoreCalendarClick&&e.detail!==0){ignoreCalendarClick=false;e.preventDefault();e.stopImmediatePropagation()}
+},true);
 
 // Forecast strips: native touch scrolling, mouse drag for desktop preview.
 // Capture only after a horizontal drag threshold so ordinary card taps still open details.

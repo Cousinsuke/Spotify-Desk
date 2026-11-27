@@ -2,7 +2,7 @@
 const assert=require('node:assert/strict'),fs=require('node:fs'),path=require('node:path');
 const s=fs.readFileSync(path.join(__dirname,'app.js'),'utf8');
 const start=s.indexOf('function calendarKey('),end=s.indexOf('const defaults=',start);
-const {calendarKey:k,calendarDate:d,calendarMonth:m,calendarGrid:g,calendarSample:sample}=new Function(s.slice(start,end)+';return {calendarKey,calendarDate,calendarMonth,calendarGrid,calendarSample};')();
+const {calendarKey:k,calendarDate:d,calendarMonth:m,calendarGrid:g,calendarSample:sample,calendarSwipeDirection:swipe}=new Function(s.slice(start,end)+';return {calendarKey,calendarDate,calendarMonth,calendarGrid,calendarSample,calendarSwipeDirection};')();
 assert.equal(k(d('2026-11-27')),'2026-11-27');
 assert.equal(m('2026-12-31',1),'2027-01-01');
 assert.equal(m('2026-01-31',-1),'2025-12-01');
@@ -15,4 +15,18 @@ assert.ok(s.includes('sample=liveEnabled?(data.events||[]):calendarSample(calend
 assert.ok(s.includes('SAMPLE EVENTS · NOT LIVE'));
 assert.ok(s.includes('calendarEscape(e.title)'));
 assert.ok(s.includes("else if(active==='calendar'){renderCalendar();refreshCalendar()}"));
-console.log('15 Calendar checks passed');
+assert.equal(swipe(0,-80),'next');
+assert.equal(swipe(0,80),'prev');
+assert.equal(swipe(0,47),null);
+assert.equal(swipe(80,-60),null);
+assert.equal(swipe(20,-48),'next');
+assert.equal(swipe(48,48),null);
+assert.equal(swipe(NaN,80),null);
+assert.ok(s.includes("!e.target.closest('.cal-grid')"));
+assert.ok(s.includes('if(action)calendarAction(action,false)'));
+assert.ok(s.includes('ignoreCalendarClick&&e.detail!==0'));
+assert.ok(s.includes('calendarDrag=null;ignoreCalendarClick=true'));
+const css=fs.readFileSync(path.join(__dirname,'style.css'),'utf8');
+assert.ok(css.includes('.cal-grid{touch-action:none;'));
+assert.ok(css.includes('.cal-agenda{touch-action:pan-y}'));
+console.log('28 Calendar checks passed');
