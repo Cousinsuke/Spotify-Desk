@@ -182,3 +182,6 @@ For troubleshooting, record the first error, command, OS, reproducibility and re
 
 - [x] User confirmed Calendar swipe navigation works in preview.
 - [ ] Define System Information scope and host/display distinction, then implement read-only diagnostics.
+
+- [x] User selected combined System Information option C; implement read-only metrics and service status. 35 JS checks passed.
+- [ ] Run four Python fixture tests; review live metrics and service states, missing sensors, page scroll and rail; Pi/Echo hardware validation pending.

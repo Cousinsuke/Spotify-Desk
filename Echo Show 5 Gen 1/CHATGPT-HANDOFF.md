@@ -222,3 +222,18 @@ Hard refresh live preview, open Calendar, select Today. Report only connection s
 ### Latest checkpoint — Calendar navigation accepted
 
 2026-11-27: User confirmed Calendar vertical month navigation works. Record user-reported browser acceptance; physical touch, diagonal/short gestures, specific individual feed/session data and future-season coverage are not separately verified. Calendar public holidays/observances/F1 direction accepted, Apple adapter inactive. Next define System Information scope before implementation per accepted design process: distinguish server host (currently Omarchy, eventually Pi) from browser/display device (eventually Echo), consider read-only CPU/RAM/storage/temperature/uptime and service diagnostics, no credentials, personal data or privileged device controls. Offer own idea option. Pi preflight and real hardware integration remain separate. Documentation only, no code changes.
+
+
+### Latest checkpoint — combined System Information
+
+2026-11-27: User selected System Information option C (combined hardware/service dashboard). Prototype [d40e347](https://github.com/Cousinsuke/Spotify-Desk/commit/d40e347e6132d163c23b4ee92f8340eb3e25c34a) adds enabled, pinnable System Information app (default pins unchanged) and Settings > System link. Separate server hardware and service panels: Linux OS/architecture, Pi model if detected, sampled aggregate CPU/logical CPUs, MemAvailable-based RAM, project-volume storage, recognized CPU/package thermal sensor, host uptime and network link (not an internet guarantee). Missing values explicitly unavailable. Dashboard server health, Spotify last playback probe/idle/disconnected/authorized, Weather freshness, Glucose freshness and public Calendar source status; existing refresh policies reused, Spotify polling at existing five-second cadence while System visible. New loopback-only /api/system uses existing request guard, no privileged controls, IP addresses, hostnames, serials, secrets or personal reading/event contents in response. Five-second visible-page refresh, sample values explicitly labelled, actual server metrics not Echo metrics; display side reports browser CSS dimensions and hardware unavailable until integration. Exact Linux sensor selection, network label, storage mount, status labels and five-second refresh implementation choices for review. No new dependencies. JS syntax and 12 System + 23 app shortcut checks passed in assistant runtime with mocked Node interfaces; four Python fixture test methods authored but not executed. Browser and real host metric values, physical device sensors and Pi remain unverified. Pull/restart/hard refresh; persistent Spotify authorization unchanged. Next review System Information, then Raspberry Pi read-only preflight before deployment; verify actual Echo hardware separately.
+
+Stop current server with Ctrl+C, then:
+
+```bash
+cd ~/Projects/Spotify-Desk-Echo-Prototype
+git pull --ff-only origin echo-show/prototype
+./.venv/bin/python "Echo Show 5 Gen 1/prototype/test_system_service.py"
+./"Echo Show 5 Gen 1/prototype/start-live"
+```
+Hard refresh and open Apps > System Information. Review both rail states, values, service labels, hidden page refresh and scroll; no need to share private data.
