@@ -109,3 +109,8 @@ For troubleshooting, record the first error, command, OS, reproducibility and re
 - [x] User screenshots confirm live Open-Meteo data rendered on main and expanded Weather views.
 - [x] Commit forecast dropdown, remove arrows/scrollbar chrome, retain swiping and add mouse drag; syntax/source checks passed.
 - [ ] Verify 3/5/7-day and hourly scrolling, mouse drag vs tap, expanded details and eventual Echo touch behavior; then Glucose.
+
+- [x] User approved revised Weather appearance; hardware touch validation still pending.
+- [x] Commit synthetic Glucose UI with original chart renderer and agreed dropdowns/backgrounds; 27 JS assertions passed.
+- [ ] Review LIVE/GRAPH/BOTH, rail reflow, graph range and scale, dynamic sample backgrounds and Home tile at 960 x 480.
+- [ ] Integrate existing Gluroo backend for secure local-only testing; authenticated encrypted Pi/Echo transport remains separate.
