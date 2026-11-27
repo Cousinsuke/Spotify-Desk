@@ -10,6 +10,7 @@ from pathlib import Path
 from urllib.parse import urlencode, urlparse
 import requests
 import weather_service
+import glucose_service
 from flask import Flask, jsonify, redirect, request, send_from_directory
 
 HOST = "127.0.0.1"
@@ -330,6 +331,12 @@ def command():
     diagnostic("command_ack", action=a)
     return jsonify(ok=True)
 
+@app.get("/api/glucose")
+def glucose_state():
+    if request.remote_addr != HOST:
+        return jsonify(error="Local glucose access only"),403
+    return jsonify(glucose_service.service.snapshot())
+
 @app.get("/api/weather")
 def weather_state():return jsonify(weather_service.snapshot())
 
@@ -338,7 +345,7 @@ def index():return send_from_directory(ROOT,"index.html")
 
 @app.get("/<name>")
 def asset(name):
-    if name not in {"style.css","app.js","spotify-preview.js","spotify-live.js","playback-clock.js","album-palette.js","weather-preview.js","weather-live.js","glucose-chart.js","glucose-preview.js","favicon.svg","weather-sky.svg"}:return "",404
+    if name not in {"style.css","app.js","spotify-preview.js","spotify-live.js","playback-clock.js","album-palette.js","weather-preview.js","weather-live.js","glucose-chart.js","glucose-preview.js","glucose-live.js","favicon.svg","weather-sky.svg"}:return "",404
     return send_from_directory(ROOT,name)
 
 if __name__=="__main__":

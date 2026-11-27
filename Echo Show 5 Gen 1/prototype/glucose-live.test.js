@@ -1,0 +1,17 @@
+'use strict';
+const assert=require('node:assert/strict'),g=require('./glucose-live.js');
+const now=Date.UTC(2026,0,1,12),point=(age,mmol=6.1,direction='Flat')=>({timestamp:now-age*1000,mmol,direction});
+const raw={status:'live',readings:[point(60),point(120,5.9,'SingleUp'),point(90000),point(30,99),point(-500),point(60,6.2,'FortyFiveDown')]};
+let r=g.normalise(raw,now);
+assert.equal(r.status,'live');assert.equal(r.latest.mmol,6.2);assert.equal(r.latest.arrow,'↘');assert.equal(r.readings.length,2);assert.equal(r.ageSeconds,60);
+assert.equal(g.normalise(r,now+600000).status,'stale');
+assert.equal(g.normalise({...raw,status:'stale'},now).status,'stale');
+assert.equal(g.normalise({...raw,status:'unavailable'},now).latest,null);
+assert.equal(g.normalise({...raw,status:'not_configured'},now).readings.length,0);
+assert.equal(g.normalise({status:'live',readings:[]},now).status,'unavailable');
+assert.equal(g.normalise({status:'live',readings:[point(0,6,'unknown')]},now).latest.arrow,'');
+assert.equal(g.normalise({status:'live',readings:[point(0,6,'DoubleUp')]},now).latest.arrow,'↑↑');
+assert.equal(g.normalise(null,now).status,'unavailable');
+assert.equal(g.label('stale'),'STALE · NOT LIVE');
+assert.equal(g.label('sample'),'SAMPLE DATA · NOT LIVE');
+console.log('15 live glucose assertions passed');
