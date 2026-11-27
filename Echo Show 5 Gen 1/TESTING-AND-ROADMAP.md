@@ -162,3 +162,6 @@ For troubleshooting, record the first error, command, OS, reproducibility and re
 - [x] User selected Apple/iCloud Calendar; month/agenda preview and app registry added, 15 Calendar and 23 shortcut checks passed.
 - [ ] Review month navigation, date selection, Today, agenda scrolling and both rail states at 960x480, verify no samples in live mode.
 - [ ] Implement and validate private read-only CalDAV adapter, local credential setup, recurring/all-day/timezones, freshness, privacy and secure Pi transport.
+
+- [x] Implement optional iCloud credentials in private local .env without changing existing required credentials.
+- [ ] Run launcher config tests and validate real read-only CalDAV sync once adapter is implemented.
