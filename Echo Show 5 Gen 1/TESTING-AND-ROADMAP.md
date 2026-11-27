@@ -119,3 +119,6 @@ For troubleshooting, record the first error, command, OS, reproducibility and re
 - [x] User screenshots confirm live Gluroo feed rendering in BOTH and GRAPH.
 - [x] Commit saturated amber/orange palettes and remove fixed green gradient; 39 JS assertions passed.
 - [ ] Review dynamic colour appearance and stale neutral state, then full Settings.
+
+- [x] Separate chart, status cards and background themes; add Home status tile. 27 source checks passed.
+- [ ] User visual review in all background modes and stale state, then full Settings.
