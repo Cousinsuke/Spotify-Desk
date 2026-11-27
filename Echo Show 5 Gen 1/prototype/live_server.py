@@ -96,7 +96,7 @@ def save_refresh(secret):
     tmp = None
     try:
         with tempfile.NamedTemporaryFile(mode="w", encoding="utf-8", dir=TOKEN_PATH.parent,
-                                         prefix=".spotify_token.json.", delete=False) as f:
+                                         prefix=".cache-spotify-token-", delete=False) as f:
             tmp = Path(f.name)
             os.fchmod(f.fileno(), 0o600)
             json.dump({"client_id": CLIENT, "scopes": SCOPES, "refresh_token": secret}, f)
