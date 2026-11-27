@@ -150,3 +150,8 @@ User clarified personal calendar events are not used; only UK holidays/observanc
 ## Calendar month swipe (2026-11-27)
 
 User approved public Calendar direction and requested vertical swipe navigation. Swipe up on the month grid for next month, down for previous month; mouse drag also supported. One month per deliberate gesture, 48px vertical threshold and vertical dominance, accidental date clicks suppressed, horizontal drags do not change month, cancelled gestures discarded. Existing Today/arrows and day taps remain; agenda keeps native vertical scrolling, quick settings/rail unaffected. No server changes. 28 Calendar pure/source checks and JS syntax passed in assistant JS runtime; actual touch/mouse/browser review pending. Pull and hard refresh.
+
+
+## System Information — combined dashboard (2026-11-27)
+
+User selected option C. System Information enabled in Apps and pin registry; default pins unchanged. Server panel shows OS/architecture, Pi model if detected, CPU usage/logical CPUs, RAM, project-volume storage, recognized CPU temperature, host uptime and network-link state. Service panel reports dashboard, Spotify (last playback probe, idle is connected), Weather, Glucose freshness and Calendar status; no event contents or glucose readings included. Local-only read-only /api/system, standard Linux proc/sys files, no privileged operations/new dependency. Refresh every five seconds while visible; sample mode labelled. Metrics belong to server host, not Echo; display reports browser CSS size only. JS syntax and 12 System plus 23 shortcut checks passed in assistant JS runtime; four offline Python methods authored not executed; browser/Linux readings and actual Pi/Echo pending. Pull, restart, hard refresh.

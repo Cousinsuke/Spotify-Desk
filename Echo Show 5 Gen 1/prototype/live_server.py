@@ -15,6 +15,9 @@ import requests
 import weather_service
 import glucose_service
 import public_calendar_service
+import system_service
+from datetime import datetime
+from zoneinfo import ZoneInfo
 from flask import Flask, jsonify, redirect, request, send_from_directory
 
 HOST = "127.0.0.1"
@@ -28,6 +31,7 @@ TOKEN_PATH = ROOT / ".spotify_token.json"
 refresh_retry_at = 0.0
 app = Flask(__name__, static_folder=None)
 token = None
+spotify_health = ('authorized',0.0)
 pending = None
 backoff = 0.0
 saved_cache = {}
@@ -281,8 +285,9 @@ def recovery_target(expected, rows):
 
 @app.get("/api/spotify/state")
 def state():
-    global last_snapshot,last_seen,resume_blocked
+    global last_snapshot,last_seen,resume_blocked,spotify_health
     if not token:
+        spotify_health=('disconnected',time.monotonic())
         last_snapshot=last_seen=None
         resume_blocked=False
         return jsonify(connected=False,saved=None)
@@ -303,6 +308,7 @@ def state():
                 last_seen=time.monotonic()
                 resume_blocked=False
             match=next((row for row in rows if row["id"]==expected),None) if recovery=="verified" else None
+            spotify_health=('inactive',time.monotonic())
             return jsonify(**{**last,"connected":True,"playing":False,"inactive":True,
                 "controllable":bool(recovery),"recovery":recovery,
                 "device":(match["name"] if match else last.get("device")) if recovery else None,
@@ -319,8 +325,10 @@ def state():
         elif d.get("id") and last_snapshot and d.get("id")!=last_snapshot.get("deviceId"):
             last_snapshot=last_seen=None
             resume_blocked=False
+        spotify_health=('connected',time.monotonic())
         return jsonify(**snapshot)
     except ApiError as e:
+        spotify_health=('error' if token else 'disconnected',time.monotonic())
         if not token:last_snapshot=last_seen=None
         return jsonify(connected=bool(token),saved=None,error=e.message)
 
@@ -428,6 +436,18 @@ def calendar_state():
         return jsonify(public_calendar_service.service.snapshot(request.args.get("month","")))
     except ValueError:
         return jsonify(error="Invalid calendar month"),400
+
+@app.get("/api/system")
+def system_state():
+    if request.remote_addr != HOST:
+        return jsonify(error="Local system access only"),403
+    spotify_status = "disconnected" if not token else spotify_health[0] if time.monotonic()-spotify_health[1]<30 else "authorized"
+    month=datetime.now(ZoneInfo("Europe/London")).strftime("%Y-%m-01")
+    services={"server":"fresh","spotify":spotify_status,
+              "weather":weather_service.snapshot()["status"],
+              "glucose":glucose_service.service.snapshot()["status"],
+              "calendar":public_calendar_service.service.snapshot(month)["status"]}
+    return jsonify(hardware=system_service.hardware.snapshot(ROOT),services=services)
 
 @app.get("/api/weather")
 def weather_state():return jsonify(weather_service.snapshot())

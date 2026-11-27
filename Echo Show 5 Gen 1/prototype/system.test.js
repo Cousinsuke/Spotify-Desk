@@ -1,0 +1,18 @@
+'use strict';
+const assert=require('node:assert/strict'),fs=require('node:fs'),path=require('node:path');
+const s=fs.readFileSync(path.join(__dirname,'app.js'),'utf8');
+const start=s.indexOf('function systemBytes('),end=s.indexOf('function renderSystem()',start);
+const {systemBytes:b,systemUptime:u,systemPercent:p,systemServiceState:st}=new Function(s.slice(start,end)+';return {systemBytes,systemUptime,systemPercent,systemServiceState};')();
+assert.equal(b(1073741824),'1.0 GiB');
+assert.equal(b(null),'—');
+assert.equal(u(90060),'1d 1h 1m');
+assert.equal(u(null),'Unavailable');
+assert.equal(p(110),100);
+assert.equal(p(null),null);
+assert.deepEqual(st('inactive'),['Connected · idle','ok']);
+assert.deepEqual(st('stale'),['Stale','warn']);
+assert.deepEqual(st('unknown'),['Not checked','neutral']);
+assert.ok(s.includes("else if(active==='system'){renderSystem();refreshSystem()"));
+assert.ok(s.includes('Echo Show hardware metrics unavailable'));
+assert.ok(s.includes("fetch('/api/system'"));
+console.log('System Information checks passed');

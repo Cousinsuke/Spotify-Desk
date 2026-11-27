@@ -5,9 +5,9 @@ const start=source.indexOf('const enabledAppIds='),end=source.indexOf('const def
 assert.ok(start>=0&&end>start);
 const {normaliseApps:n,appRailIds:r,changeAppOrder:o,changeAppPin:p}=new Function(source.slice(start,end)+';return {normaliseApps,appRailIds,changeAppOrder,changeAppPin};')();
 let s=n();
-assert.deepEqual(s.order,['spotify','weather','glucose','settings','calendar']);
+assert.deepEqual(s.order,['spotify','weather','glucose','settings','calendar','system']);
 assert.deepEqual(r(s),['home','spotify','weather','glucose']);
-assert.deepEqual(n({order:['settings','settings','calendar','bogus'],pins:['home','apps','settings','settings','weather','spotify','glucose']}),{order:['settings','calendar','spotify','weather','glucose'],pins:['settings','weather','spotify']});
+assert.deepEqual(n({order:['settings','settings','calendar','bogus'],pins:['home','apps','settings','settings','weather','spotify','glucose']}),{order:['settings','calendar','spotify','weather','glucose','system'],pins:['settings','weather','spotify']});
 assert.deepEqual(p(s,'settings',true),s);
 assert.deepEqual(p(s,'home',false),s);
 assert.deepEqual(p(s,'calendar',true),s);
@@ -17,7 +17,7 @@ s=p(s,'settings',true);assert.deepEqual(r(s),['home','spotify','glucose','settin
 s=o(s,'settings',-1);assert.deepEqual(r(s),['home','spotify','settings','glucose']);
 assert.deepEqual(o(s,'spotify',-1),s);
 assert.deepEqual(o(s,'settings',10),s);
-assert.deepEqual(o(s,'calendar',1),s);
+assert.deepEqual(o(s,'system',1),s);
 assert.deepEqual(r(n({order:s.order,pins:[]})),['home']);
 assert.deepEqual(n(JSON.parse(JSON.stringify(s))),s);
 assert.deepEqual(r(n(null)),['home','spotify','weather','glucose']);
