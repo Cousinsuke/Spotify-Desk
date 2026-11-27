@@ -109,3 +109,19 @@ button,select,input{font:inherit;color:inherit}button,select{background:var(--co
 
 #screen[data-page=weather][data-weather-condition=partlyNight],#screen[data-page=weather][data-weather-condition=night]{background:linear-gradient(135deg,#293759,#111625)}
 #screen[data-page=weather][data-weather-condition=unknown]{background:linear-gradient(135deg,#303945,#17212d)}
+
+/* Touch-first forecast controls. Hide scrollbar chrome without disabling overflow. */
+.weather-forecast-heading #weatherView{
+ min-width:120px;height:34px;padding:5px 12px;border-radius:12px;
+ background:rgba(255,255,255,.10);border:1px solid rgba(255,255,255,.19);
+ color:#fff;font-size:14px;letter-spacing:0;
+}
+.weather-forecast-heading #weatherView option{background:#243449;color:#fff}
+#forecastDays,#weatherDetails #detailHours{
+ scrollbar-width:none;-ms-overflow-style:none;overflow-x:auto;
+ overscroll-behavior-x:contain;touch-action:pan-x;user-select:none;
+ -webkit-user-select:none;padding:3px 2px 3px;
+}
+#forecastDays::-webkit-scrollbar,#weatherDetails #detailHours::-webkit-scrollbar{display:none;width:0;height:0}
+#forecastDays.forecast-dragging,#weatherDetails #detailHours.forecast-dragging{scroll-snap-type:none;cursor:grabbing}
+#forecastDays.forecast-dragging *,#weatherDetails #detailHours.forecast-dragging *{cursor:grabbing}
