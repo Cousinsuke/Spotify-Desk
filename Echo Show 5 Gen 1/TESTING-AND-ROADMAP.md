@@ -222,3 +222,12 @@ For troubleshooting, record the first error, command, OS, reproducibility and re
 - [x] Pi live System Information and service readiness accepted.
 - [ ] Install production dependency, run 61 unittest cases plus launcher assertions, enable user unit and linger, verify restart/boot, retain loopback.
 - [ ] Authenticated HTTPS device boundary and physical Echo integration.
+
+
+### Pi production service verified
+
+2026-11-27: User supplied successful production installation output on Pi: prototype 4fe329b pulled, Waitress 3.0.2 installed, all 61 unittest cases passed in 0.261s plus launcher assertions. systemd user unit installed, enabled and active; loginctl Linger=yes; listener confirmed 127.0.0.1:8765 only; startup log confirms saved Spotify authorization restored. Brief Waitress queue depth warnings 1 and 2 observed after startup, consistent with deliberately serialized single request worker; no failure shown, actual latency not measured. Keep single worker until evidence warrants concurrency redesign. Service configured for boot startup without login; reboot survival not yet tested. Next verify manual restart and optional controlled reboot, reconnect SSH tunnel, verify service readiness and Spotify persistence. User should be aware reboot interrupts existing Nextcloud and remote connections; no container changes. Then design authenticated HTTPS device access (no raw reverse proxy of loopback endpoints, no real glucose on LAN until protections verified). No secrets, raw logs, hostname/IP or identifying process IDs stored. No code changes in this documentation checkpoint.
+
+- [x] 61 Python tests passed on Pi; Waitress installed, systemd enabled/active, linger yes, loopback listener and saved authorization restored.
+- [ ] Verify service restart and actual reboot recovery; monitor latency if queue warnings persist.
+- [ ] Implement and validate authenticated HTTPS device boundary separately.
