@@ -338,7 +338,7 @@ def index():return send_from_directory(ROOT,"index.html")
 
 @app.get("/<name>")
 def asset(name):
-    if name not in {"style.css","app.js","spotify-preview.js","spotify-live.js","playback-clock.js","album-palette.js","weather-preview.js","weather-live.js","favicon.svg","weather-sky.svg"}:return "",404
+    if name not in {"style.css","app.js","spotify-preview.js","spotify-live.js","playback-clock.js","album-palette.js","weather-preview.js","weather-live.js","glucose-chart.js","glucose-preview.js","favicon.svg","weather-sky.svg"}:return "",404
     return send_from_directory(ROOT,name)
 
 if __name__=="__main__":

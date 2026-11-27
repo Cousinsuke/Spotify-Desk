@@ -125,3 +125,31 @@ button,select,input{font:inherit;color:inherit}button,select{background:var(--co
 #forecastDays::-webkit-scrollbar,#weatherDetails #detailHours::-webkit-scrollbar{display:none;width:0;height:0}
 #forecastDays.forecast-dragging,#weatherDetails #detailHours.forecast-dragging{scroll-snap-type:none;cursor:grabbing}
 #forecastDays.forecast-dragging *,#weatherDetails #detailHours.forecast-dragging *{cursor:grabbing}
+
+/* Glucose: equal-height panels, sample-only, preserve the original chart renderer. */
+#screen[data-page=glucose]{--glu-card:#254c3b;--glu-edge:#6aa18a55;--glu-accent:#a9f3c5;background:linear-gradient(135deg,#122e23,#0b1b15);color:#effbf4}
+#screen[data-page=glucose][data-glucose-background=theme]{--glu-card:#29332f;--glu-edge:#748b8055;background:linear-gradient(135deg,#292e35,#14181d)}
+#screen[data-page=glucose][data-glucose-background=theme][data-theme=black]{--glu-card:#1d2220;background:#080808}
+#screen[data-page=glucose][data-glucose-background=dynamic][data-glucose-band=low]{--glu-card:#542e33;--glu-edge:#b36e7655;background:linear-gradient(135deg,#3b2025,#1d1316)}
+#screen[data-page=glucose][data-glucose-background=dynamic][data-glucose-band=above]{--glu-card:#514329;--glu-edge:#b9a36a55;background:linear-gradient(135deg,#3e3521,#211b13)}
+#screen[data-page=glucose][data-glucose-background=dynamic][data-glucose-band=high]{--glu-card:#593b29;--glu-edge:#bd885955;background:linear-gradient(135deg,#442b1d,#241810)}
+#screen[data-page=glucose][data-glucose-background=dynamic][data-glucose-band=neutral]{--glu-card:#29332f;background:#1a2220}
+#screen[data-page=glucose] #page{padding:18px 44px 26px 26px;gap:10px}
+.glucose-header{display:flex;justify-content:space-between;align-items:center;flex:none;min-height:38px}
+.glucose-sample{font-size:11px;letter-spacing:1px;color:#c4d8cd}
+.glucose-header select,.glucose-chart-controls select{min-height:34px;padding:5px 12px;border-radius:10px;background:#ffffff16;border:1px solid #ffffff30;color:#f1faf4;font-size:14px}
+.glucose-header select{min-width:120px}.glucose-header select option,.glucose-chart-controls select option{background:#26372e;color:#fff}
+.glucose-layout{display:grid;grid-template-columns:minmax(0,2fr) minmax(0,3fr);gap:14px;flex:1;min-height:0}
+.glucose-layout[data-view=live],.glucose-layout[data-view=graph]{grid-template-columns:minmax(0,1fr)}
+.glucose-card{min-width:0;min-height:0;border:1px solid var(--glu-edge);border-radius:17px;background:var(--glu-card);overflow:hidden}
+.glucose-reading{display:flex;align-items:center;justify-content:center;flex-direction:column;gap:10px;padding:12px}
+.glucose-number{display:flex;align-items:center;justify-content:center;gap:16px;max-width:100%;white-space:nowrap}
+.glucose-number strong{font-size:clamp(48px,8vw,84px);font-weight:650;line-height:1;letter-spacing:-3px;font-variant-numeric:tabular-nums}
+.glucose-arrow{font-size:52px;color:var(--glu-accent);line-height:1}
+.glucose-unit{font-size:17px;color:#d0e0d7}.glucose-reading small{font-size:13px;color:#c3d6cc}
+.glucose-layout[data-view=live] .glucose-number strong{font-size:116px}.glucose-layout[data-view=live] .glucose-arrow{font-size:76px}
+.glucose-layout[data-view=live] .glucose-unit{font-size:21px}
+.glucose-graph{display:flex;flex-direction:column;padding:12px;gap:8px;background:linear-gradient(150deg,var(--glu-card),#10251f)}
+.glucose-chart-controls{display:flex;justify-content:flex-end;gap:7px;flex:none}
+#glucosePlot{width:100%;height:100%;min-height:0;flex:1;display:block}
+.glucose-footer{font-size:11px;color:#c1d4ca;flex:none}
