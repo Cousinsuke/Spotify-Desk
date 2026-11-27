@@ -168,3 +168,7 @@ For troubleshooting, record the first error, command, OS, reproducibility and re
 
 - [x] Implement read-only iCloud CalDAV adapter and live Calendar UI, 15 JS checks passed.
 - [ ] Install optional dependencies, run seven Python test methods, verify actual iCloud connection, event dates, recurrence, errors and no calendar writes. Calendar filtering and hardware validation pending.
+
+- [x] User confirmed iCloud Connected status; event synchronization not yet confirmed (empty month).
+- [x] Implement DAV property merge and privacy-safe counts; JS syntax passed.
+- [ ] Inspect counts and compare source calendars with iCloud.com; validate iCloud test event, nine Python test methods and subscription behavior.
