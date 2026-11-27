@@ -176,3 +176,6 @@ For troubleshooting, record the first error, command, OS, reproducibility and re
 - [x] User clarified only public holidays/observances and F1 events needed; retire active iCloud sync for current scope.
 - [x] Public Calendar implemented, F1 2026 source schema inspected, JS syntax passed.
 - [ ] Run test_public_calendar.py; confirm real bank holiday/F1 fetch, November 5 and 27–29, session time/location, source status, colour markers and future season coverage.
+
+- [x] User approved public Calendar direction; add vertical month swipe/mouse drag, 28 Calendar checks passed.
+- [ ] Browser review swipe up/down, short/diagonal gesture, date taps, arrow/Today, agenda scroll and rail/quick settings; physical touch pending.
