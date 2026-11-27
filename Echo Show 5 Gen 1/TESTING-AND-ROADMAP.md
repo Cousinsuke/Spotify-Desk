@@ -105,3 +105,7 @@ For troubleshooting, record the first error, command, OS, reproducibility and re
 
 - [x] Implement live Open-Meteo weather, shared Home tile, day/night icons, asynchronous cache and 14 mapping assertions.
 - [ ] Verify actual live data and cache on Omarchy; confirm no sample temperatures in live mode and check hourly forecast and future-day sunrise/sunset. Then Glucose.
+
+- [x] User screenshots confirm live Open-Meteo data rendered on main and expanded Weather views.
+- [x] Commit forecast dropdown, remove arrows/scrollbar chrome, retain swiping and add mouse drag; syntax/source checks passed.
+- [ ] Verify 3/5/7-day and hourly scrolling, mouse drag vs tap, expanded details and eventual Echo touch behavior; then Glucose.
