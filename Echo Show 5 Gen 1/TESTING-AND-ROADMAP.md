@@ -277,3 +277,12 @@ For troubleshooting, record the first error, command, OS, reproducibility and re
 
 - [x] Trusted Chrome pairing and sample dashboard navigation verified after origin-policy correction.
 - [ ] Verify persistence and revocation in browser; confirm 69-test suite result before enabling live routes.
+
+
+### Revocation verified — scoped live gateway
+
+2026-11-27: User listed valid paired session and revoked all; browser screenshot returned to pairing page. Actual revocation verified, browser restart persistence not explicitly reported. Prototype [612b888](https://github.com/Cousinsuke/Spotify-Desk/commit/612b888be85f7ced4d4a6f33e07a740cff24047b) implements explicit live-on/live-off mode, defaults sample, mode change revokes sessions; stop gateway before switch and start after. Fixed loopback backend, six GET endpoints (Spotify state/devices, weather, glucose, calendar, system), one Spotify command POST plus local session check. Exact path/method, auth cookie, explicit request header, query and JSON action validation, POST origin, bounded JSON responses, no redirects/environment proxy/forwarded headers/cookies, no OAuth routes or credentials, no-store. Existing backend continues single poller; no changes to source services or live server. Paired frontend auto directs to live query, labels live and hides OAuth link, checks session every 15 seconds; cannot recall previously displayed/offline data. Existing cert unchanged. Explicit enable only after regression suite succeeds. JS syntax checked; Python tests authored, not run by assistant; expected 80 discovered including inherited boundary tests. Actual live behavior, browser restart persistence, Android CA trust, fixed/reserved LAN IP and kiosk integration pending. Keep service manual until approved; no port forwarding, Nextcloud changes or credentials committed. Revoke test sessions and stop when not needed. Rollback stop, live-off, start.
+
+- [x] Actual paired-device revocation verified.
+- [x] Implement explicit opt-in scoped live access.
+- [ ] Run regression suite, enable live mode locally, pair, verify real data/control and session restart/revocation.
