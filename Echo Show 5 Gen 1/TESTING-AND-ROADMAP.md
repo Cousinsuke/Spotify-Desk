@@ -146,3 +146,7 @@ For troubleshooting, record the first error, command, OS, reproducibility and re
 - [x] Implement three Home layouts, four clock styles and five CSS wallpaper presets; 22 pure/source checks passed.
 - [ ] User review at 960x480 with rail expanded and hidden, all layout/clock combinations, wallpaper/global theme, Home quick settings, reload and reset, clock-only navigation, summary data and stale glucose colours. Native Node test and physical display performance pending.
 - [ ] Next scheduled night mode and remaining optional Home features if requested.
+
+- [x] User approved Home customization overall.
+- [x] Shared neutral Home tile/rail background implemented; 16 source checks passed.
+- [ ] Verify matched surface styling on wallpapers, both rail states, opacity and Transparent style; confirm Glucose status colour unchanged. Then automatic night mode.

@@ -154,3 +154,8 @@ git pull --ff-only origin echo-show/prototype
 node "Echo Show 5 Gen 1/prototype/home-customization.test.js"
 ```
 Native Node test optional if installed; hard refresh existing live preview. Review Settings > Home and Home quick settings. No need to restart.
+
+
+### Latest checkpoint — Home surface transparency
+
+2026-11-27: User confirmed Home customization tested and looks good; screenshots show clock/widget layout and collapsed/expanded rail. User requested Spotify and Weather Home tiles match sidebar transparency, eliminating their green tint. Prototype commit [885bf0e](https://github.com/Cousinsuke/Spotify-Desk/commit/885bf0ee117040eae62ad9892c43fcb28922f5b4) replaces fixed green-tinted tile background with shared neutral CSS surface used by rail and Home tiles, including existing opacity slider and Transparent rail style multiplier; neutral label colour and transparent tile border. Glucose reading-dependent status colours/border/text overrides unchanged, including neutral stale state. Coupling tile opacity to rail settings is implementation choice for review. No JS, service, root app, CAD or hardware changes. 16 source checks passed in assistant JS runtime with mocked Node interfaces; browser review of new opacity matching pending. Prior Home presets user-approved overall; not all combinations independently confirmed. No private readings or screenshots committed. Pull and hard refresh; no restart. Next review surface refinement, then automatic night mode.
