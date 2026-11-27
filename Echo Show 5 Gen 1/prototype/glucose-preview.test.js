@@ -13,4 +13,7 @@ assert.equal(c.yBounds([{mmol:39}],'fixed').high,39);
 assert.equal(c.yBounds([{mmol:2.2}],'auto').low,2);
 assert.equal(c.geometry([{timestamp:now-3600000,mmol:5},{timestamp:now,mmol:6}],{hours:3,endTime:now,scale:'auto'}).segments.length,2);
 assert.equal(c.seriesWindow([{timestamp:now,mmol:5},{timestamp:now,mmol:6}],1,now).length,1);
-console.log('27 Glucose assertions passed');
+const svg=c.render(s.readings,{hours:6,endTime:now,scale:'auto',width:450}).svg;
+for(const name of ['glu-grid','glu-band-edge','glu-band','glu-now','glu-trace','glu-dot','glu-label'])assert.ok(svg.includes('class="'+name+'"'));
+assert.equal(p.theme(14.99,'live'),'above');assert.equal(p.theme(15,'live'),'high');assert.equal(p.theme(7,'live'),'range');assert.equal(p.theme(7.01,'live'),'above');assert.equal(p.theme(16,'stale'),'neutral');
+console.log('39 Glucose assertions passed');

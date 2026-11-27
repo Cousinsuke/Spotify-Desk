@@ -125,10 +125,10 @@
       const y = f(g.y(value));
       const targetEdge = value===TARGET_LOW || value===TARGET_HIGH;
       lineGrid.push('<line x1="'+LEFT+'" x2="'+g.right+'" y1="'+y+'" y2="'+y+
-        '" stroke="'+(targetEdge?'#8ac19a66':'#ffffff23')+
+        '" class="'+(targetEdge?'glu-band-edge':'glu-grid')+'" stroke="'+(targetEdge?'#8ac19a66':'#ffffff23')+
         '" stroke-width="1"'+(targetEdge?' stroke-dasharray="4 5"':'')+'/>');
       lineGrid.push('<text x="'+(LEFT-10)+'" y="'+f(g.y(value)+3.5)+
-        '" fill="#acbeb4" font-size="11" text-anchor="end">'+
+        '" class="glu-label" fill="#acbeb4" font-size="11" text-anchor="end">'+
         (options.scale === 'fixed' || value !== TARGET_LOW && value !== TARGET_HIGH
           ? String(value) : value.toFixed(1))+'</text>');
     }
@@ -139,21 +139,21 @@
       .filter(value => !tickValues.some(tick => Math.abs(tick-value)<0.01))
       .map(value => '<line x1="'+LEFT+'" x2="'+g.right+'" y1="'+f(g.y(value))+
         '" y2="'+f(g.y(value))+
-        '" stroke="#8ac19a66" stroke-width="1" stroke-dasharray="4 5"/>')
+        '" class="glu-band-edge" stroke="#8ac19a66" stroke-width="1" stroke-dasharray="4 5"/>')
       .join('');
     const bandTop = clamp(g.y(TARGET_HIGH),TOP,BOTTOM);
     const bandBottom = clamp(g.y(TARGET_LOW),TOP,BOTTOM);
     const band = '<rect x="'+LEFT+'" y="'+f(bandTop)+'" width="'+(g.right-LEFT)+
-      '" height="'+f(Math.max(0,bandBottom-bandTop))+'" fill="#83be8e" fill-opacity=".13"/>';
+      '" height="'+f(Math.max(0,bandBottom-bandTop))+'" class="glu-band" fill="#83be8e" fill-opacity=".13"/>';
     const nowLine = '<line x1="'+g.right+'" x2="'+g.right+'" y1="'+TOP+'" y2="'+BOTTOM+
-      '" stroke="#cfdfd2" stroke-opacity=".48" stroke-dasharray="5 5" stroke-width="1"/>';
+      '" class="glu-now" stroke="#cfdfd2" stroke-opacity=".48" stroke-dasharray="5 5" stroke-width="1"/>';
     const traces = g.segments.map(seg => seg.length>1
       ? '<polyline points="'+seg.map(p=>f(p.x)+','+f(p.y)).join(' ')+
-        '" fill="none" stroke="#a9f3c5" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/>'
+        '" class="glu-trace" fill="none" stroke="#a9f3c5" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/>'
       : '').join('');
     const last = g.points[g.points.length-1];
     const dot = last ? '<circle cx="'+f(g.x(last.timestamp))+'" cy="'+f(g.y(last.mmol))+
-      '" r="4.8" fill="#b2facf" stroke="#143425" stroke-width="1.6"/>' : '';
+      '" class="glu-dot" r="4.8" fill="#b2facf" stroke="#143425" stroke-width="1.6"/>' : '';
     // Times are real local-clock positions, not fabricated categories.
     const labels = Array.from({length:5},(_,i)=>{
       const t=g.start+(g.endTime-g.start)*i/4;
@@ -162,7 +162,7 @@
     const xTicks = labels.map((entry,i)=>{
       const px = LEFT + (g.right-LEFT)*i/4;
       const align = i===0?'start':i===4?'end':'middle';
-      return '<text x="'+f(px)+'" y="187" fill="#9db4a8" font-size="12" text-anchor="'+
+      return '<text x="'+f(px)+'" y="187" class="glu-label" fill="#9db4a8" font-size="12" text-anchor="'+
         align+'">'+entry.label+'</text>';
     }).join('');
     const svg = '<rect x="0" y="0" width="'+g.width+'" height="196" fill="transparent"/>'+ 
