@@ -1,0 +1,12 @@
+'use strict';
+const assert=require('node:assert/strict'),fs=require('node:fs'),path=require('node:path');
+const css=fs.readFileSync(path.join(__dirname,'style.css'),'utf8');
+const selectors='#screen[data-page=settings] .categories,\n#screen[data-page=settings] .details,\n#quick{';
+const start=css.indexOf(selectors);
+assert.ok(start>=0);
+const rule=css.slice(start+selectors.length,css.indexOf('}',start));
+for(const value of ['overflow-y:auto','overflow-x:hidden','min-height:0','scrollbar-width:none','overscroll-behavior-y:contain'])assert.ok(rule.includes(value),value);
+assert.ok(!rule.includes('touch-action:none'));
+assert.ok(css.includes('#screen[data-page=settings] .categories::-webkit-scrollbar,\n#screen[data-page=settings] .details::-webkit-scrollbar,\n#quick::-webkit-scrollbar{display:none;width:0;height:0}'));
+assert.ok(css.includes('#screen[data-page=settings] .categories>button{flex-shrink:0}'));
+console.log('9 Settings scrollbar source checks passed');

@@ -209,3 +209,19 @@ button,select,input{font:inherit;color:inherit}button,select{background:var(--co
 .app-order-controls{display:flex;gap:5px}
 .app-order-controls button{min-width:44px;min-height:44px;padding:0;font-size:19px}
 .app-order-controls button:disabled,.app-pin:has(input:disabled){opacity:.45}
+
+/* Settings: hide scrollbar chrome, preserve native vertical scrolling. */
+#screen[data-page=settings] .categories,
+#screen[data-page=settings] .details,
+#quick{
+  overflow-y:auto;
+  overflow-x:hidden;
+  min-height:0;
+  scrollbar-width:none;
+  -ms-overflow-style:none;
+  overscroll-behavior-y:contain;
+}
+#screen[data-page=settings] .categories::-webkit-scrollbar,
+#screen[data-page=settings] .details::-webkit-scrollbar,
+#quick::-webkit-scrollbar{display:none;width:0;height:0}
+#screen[data-page=settings] .categories>button{flex-shrink:0}

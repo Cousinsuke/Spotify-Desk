@@ -95,3 +95,8 @@ On Omarchy/Linux, stop any running preview server (Ctrl+C), then from the previe
 ```
 
 First launch asks for the Spotify Client ID, Gluroo HTTPS base URL and 40-hex API Secret Header SHA-1 using hidden input, then creates `prototype/.env` with mode 600 and starts the existing loopback server using the existing root .venv. Subsequent launches reuse the file without prompts. The root .gitignore already excludes .env at every level; only .env.example is tracked. To change values locally use `nano "Echo Show 5 Gen 1/prototype/.env"`, keeping literal unquoted KEY=value lines; never force-add or share the real file. Local plaintext secrets protected by owner-only file permissions, not encryption. Do not copy them to Git or chat. Spotify OAuth tokens remain memory-only: reauthorize after a server restart as before. No new dependencies or changes to live_server.py, existing port or LAN security. Offline test: `python3 "Echo Show 5 Gen 1/prototype/test_start_live.py"`. 14 synthetic checks passed in assistant Linux runtime; actual startup with user's credentials pending.
+
+
+## Settings touch scrolling (2026-11-27)
+
+Hidden scrollbar chrome in the Settings category list, detail pane and quick settings overlay, while retaining native vertical overflow, touch swipes and mouse-wheel scrolling. Category buttons retain their size instead of shrinking. No JavaScript gesture changes or new runtime dependencies. Nine source assertions passed in assistant JS runtime; actual browser and Echo touch scrolling need review. Optional local test: `node "Echo Show 5 Gen 1/prototype/settings-scroll.test.js"`. Pull and hard refresh; no server restart needed.
