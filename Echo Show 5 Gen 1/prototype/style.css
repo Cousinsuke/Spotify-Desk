@@ -90,3 +90,19 @@ button,select,input{font:inherit;color:inherit}button,select{background:var(--co
 .hourly-days span,.hourly-days small{font-size:12px;color:#c8d9e9}.hourly-days strong{font-size:20px}.hourly-days .weather-symbol{width:40px;height:40px}
 .weather-detail-footer{display:flex;justify-content:space-between;padding-top:16px;font-size:13px;color:#c8d9e9}
 .tile .home-weather{display:flex;align-items:center;gap:6px}.tile .home-weather .weather-symbol{width:28px;height:28px;flex:none}.tile .home-weather span{font-size:inherit;color:inherit;overflow:hidden;text-overflow:ellipsis}
+
+/* Weather review: upcoming hours by default; daily forecast remains accessible. */
+.weather-forecast-heading{gap:10px}.weather-forecast-heading>span{margin-left:auto;text-align:right}
+.forecast-heading .forecast-tabs{gap:3px;background:#12223685;border-radius:9px;padding:3px;flex:none}
+.forecast-heading .forecast-tabs button{width:auto;padding:0 14px;font-size:12px;height:28px;border:0;border-radius:7px;background:transparent}
+.forecast-heading .forecast-tabs button[aria-pressed=true]{background:#ffffff24;color:#fff}
+.forecast-hours .hour-card,.hourly-days .hour-card{flex:0 0 calc((100% - 50px)/6);min-width:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;border-radius:10px;background:#13253bad;border:1px solid #ffffff1a;scroll-snap-align:start;padding:5px 3px;color:#f4faff}
+.forecast-hours .hour-card{height:132px}.hour-card>span{font-size:13px;white-space:nowrap}.hour-card .hour-date{font-size:10px;color:#c9dbed;line-height:12px}.hour-card .weather-symbol{width:37px;height:37px}.hour-card strong{font-size:22px;font-weight:600}.hour-card small{font-size:11px;color:#c4d6e7}
+#weatherDetails:not([hidden]){display:flex;flex-direction:column;gap:8px;padding:16px 18px}
+#weatherDetails header{margin:0;flex:none}.weather-detail-summary{padding:0 8px 8px;flex:none}.weather-detail-summary .weather-symbol{width:68px;height:68px}
+#weatherDetails .hourly-days{display:flex;flex:1;min-height:125px;gap:8px;overflow-x:auto;overflow-y:hidden;scroll-snap-type:x proximity;touch-action:pan-x;scrollbar-width:thin;padding-bottom:4px}
+#weatherDetails .hourly-days .hour-card{flex-basis:calc((100% - 40px)/6);background:#ffffff09}
+#weatherDetails .hourly-days .weather-symbol{width:46px;height:46px}
+.weather-detail-stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(95px,1fr));gap:7px;flex:none}
+.weather-detail-stats>div{display:grid;gap:5px;justify-items:center;padding:12px 4px;background:#ffffff0b;border:1px solid #ffffff14;border-radius:9px}
+.weather-detail-stats span{font-size:11px;color:#c8d9e9}.weather-detail-stats strong{font-size:19px;font-weight:550}
