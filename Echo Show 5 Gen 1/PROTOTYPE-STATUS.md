@@ -196,3 +196,16 @@ Open http://127.0.0.1:8765/?live=1, connect Spotify and agree once, then stop/re
 ### Latest checkpoint — persistent authorization accepted
 
 2026-11-27: User confirmed both requested Omarchy validations worked: the test_live_server.py regression suite (34 tests expected, including eight new authorization tests) and stopping/restarting the live server with start-live, refreshing the dashboard and controlling Spotify without pressing Agree again. Mark both user-reported passes; exact terminal output, runtime and device were not supplied. Do not invent test duration or claim independent execution, two restart cycles, Xbox-specific retest or weather/glucose revalidation. Persistent local Spotify authorization is accepted; no need to repeat consent or this troubleshooting unless a new issue arises. Six-month expiry/revocation and eventual secure Pi deployment remain separate. Next continue remaining General/Home settings and scheduled night mode; no source changes in this documentation update.
+
+
+### Latest checkpoint — Home customization (2026-11-27)
+
+Prototype commit [89c49a4](https://github.com/Cousinsuke/Spotify-Desk/commit/89c49a453548dc509575393e468c345f00acda2f) implements accepted Home customization direction. Settings > Home and Home quick settings offer three fixed layouts (existing Clock + widgets default, Clock only, Split dashboard), four clock styles (Thin digital default, Bold digital, Split digits, Analogue) and five CSS wallpapers (Original abstract default, Ocean, Dusk, Forest, Global theme). These exact options are implementation choices for user review, not separately approved. Validated non-sensitive preferences migrate in place, reset to existing defaults and apply immediately; Preview Home button in Settings. Clock-only hides tiles but retains existing polling; analogue minute-resolution hands, no continuous animation, one active clock/layout, no new assets or dependencies. Home live Spotify summary is refreshed from current state when rebuilding the clock, no new API call. Custom wallpaper upload, scheduled backgrounds and dynamic layout remain optional later work; no hardware performance measurement. 22 pure-state/source assertions and JS syntax passed in assistant JS runtime with mocked Node file/assertion interfaces; native Node and actual browser rendering at 960x480 and both rail states pending. No server changes, no playback/weather/glucose logic, root app, CAD, Pi or firmware changes. Pull and hard refresh without restarting server or reauthorizing. Next user review Home layout/clock/wallpaper choices, persistence/reset, all tile status colours and navigation; then configurable automatic night mode. Pi preflight independent.
+
+```bash
+cd ~/Projects/Spotify-Desk-Echo-Prototype
+git status --short
+git pull --ff-only origin echo-show/prototype
+node "Echo Show 5 Gen 1/prototype/home-customization.test.js"
+```
+Native Node test optional if installed; hard refresh existing live preview. Review Settings > Home and Home quick settings. No need to restart.
