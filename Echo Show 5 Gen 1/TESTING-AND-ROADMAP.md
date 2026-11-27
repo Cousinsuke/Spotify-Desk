@@ -112,5 +112,6 @@ For troubleshooting, record the first error, command, OS, reproducibility and re
 
 - [x] User approved revised Weather appearance; hardware touch validation still pending.
 - [x] Commit synthetic Glucose UI with original chart renderer and agreed dropdowns/backgrounds; 27 JS assertions passed.
-- [ ] Review LIVE/GRAPH/BOTH, rail reflow, graph range and scale, dynamic sample backgrounds and Home tile at 960 x 480.
-- [ ] Integrate existing Gluroo backend for secure local-only testing; authenticated encrypted Pi/Echo transport remains separate.
+- [x] User visually approved LIVE/GRAPH/BOTH; individual dynamic and rail edge cases not separately confirmed.
+- [x] Reuse original Gluroo backend for loopback-only live mode; 15 JS assertions passed.
+- [ ] Run six offline adapter tests and existing 26 server tests, then verify real Gluroo connection, timestamps, source trend, range and stale states on Omarchy. Authenticated encrypted Pi/Echo transport remains separate.
