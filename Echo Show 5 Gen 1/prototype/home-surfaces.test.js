@@ -1,0 +1,13 @@
+'use strict';
+const assert=require('node:assert/strict'),fs=require('node:fs'),path=require('node:path');
+const css=fs.readFileSync(path.join(__dirname,'style.css'),'utf8');
+const rule=selector=>{const i=css.indexOf(selector+'{');assert.ok(i>=0,selector);return css.slice(i+selector.length+1,css.indexOf('}',i));};
+assert.ok(rule('#screen').includes('--neutral-surface:rgba(17,20,24,var(--rail-opacity))'));
+assert.ok(rule('#rail').includes('background:var(--neutral-surface)'));
+assert.ok(rule('.tile').includes('background:var(--neutral-surface)'));
+assert.ok(rule('#screen[data-rail=transparent]').includes('--neutral-surface:rgba(17,20,24,calc(var(--rail-opacity)*.55))'));
+assert.ok(!rule('.tile').includes('#17201e'));
+assert.ok(rule('.tile span').includes('color:#d0d4da'));
+assert.ok(rule('#screen[data-page=home] .tile[data-page=glucose]').includes('background:var(--glu-status-bg)'));
+assert.ok(rule('#screen[data-page=home] .tile[data-page=glucose] span').includes('color:var(--glu-status-muted)'));
+console.log('16 shared surface source checks passed');

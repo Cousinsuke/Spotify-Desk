@@ -110,3 +110,8 @@ User approved Settings scrolling and requested no repeated Spotify consent on ev
 ## Increment 18 — Home customization (2026-11-27)
 
 Home settings and Home quick settings now offer three fixed layouts (existing clock + widgets default, clock only, split dashboard), four clock styles (thin default, bold, split digits, analogue) and five lightweight CSS wallpapers (original abstract default, ocean, dusk, forest, global theme). Options are validated and persisted in existing local non-sensitive preferences; global reset restores the original layout. Clock-only hides summary tiles without changing background polling; one active clock and layout, no new assets or dependencies. Home preview button in Settings; live quick changes apply immediately. The analogue hands update at minute resolution; no seconds animation. Custom image upload, scheduled wallpaper and dynamic layout remain optional later work. 22 pure/source assertions passed in assistant JS runtime; browser visual/interaction and hardware performance pending. No server changes; pull and hard refresh. Optional test: `node "Echo Show 5 Gen 1/prototype/home-customization.test.js"`.
+
+
+## Home tile transparency refinement (2026-11-27)
+
+User approved Home presets and requested the neutral Spotify/Weather summary tiles match sidebar transparency rather than green-tinted cards. Shared CSS surface variable now drives rail and neutral Home tiles, including rail opacity and Transparent rail style. Neutral label text and transparent tile border; Glucose status background, border and text overrides unchanged. 16 source checks passed in assistant JS runtime; visual review pending. No JS or server changes. Pull and hard refresh. Optional `node "Echo Show 5 Gen 1/prototype/home-surfaces.test.js"`.
