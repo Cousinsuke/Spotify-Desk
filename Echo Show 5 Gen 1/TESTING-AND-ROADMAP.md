@@ -172,3 +172,7 @@ For troubleshooting, record the first error, command, OS, reproducibility and re
 - [x] User confirmed iCloud Connected status; event synchronization not yet confirmed (empty month).
 - [x] Implement DAV property merge and privacy-safe counts; JS syntax passed.
 - [ ] Inspect counts and compare source calendars with iCloud.com; validate iCloud test event, nine Python test methods and subscription behavior.
+
+- [x] User clarified only public holidays/observances and F1 events needed; retire active iCloud sync for current scope.
+- [x] Public Calendar implemented, F1 2026 source schema inspected, JS syntax passed.
+- [ ] Run test_public_calendar.py; confirm real bank holiday/F1 fetch, November 5 and 27–29, session time/location, source status, colour markers and future season coverage.
