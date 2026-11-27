@@ -115,3 +115,7 @@ For troubleshooting, record the first error, command, OS, reproducibility and re
 - [x] User visually approved LIVE/GRAPH/BOTH; individual dynamic and rail edge cases not separately confirmed.
 - [x] Reuse original Gluroo backend for loopback-only live mode; 15 JS assertions passed.
 - [ ] Run six offline adapter tests and existing 26 server tests, then verify real Gluroo connection, timestamps, source trend, range and stale states on Omarchy. Authenticated encrypted Pi/Echo transport remains separate.
+
+- [x] User screenshots confirm live Gluroo feed rendering in BOTH and GRAPH.
+- [x] Commit saturated amber/orange palettes and remove fixed green gradient; 39 JS assertions passed.
+- [ ] Review dynamic colour appearance and stale neutral state, then full Settings.
