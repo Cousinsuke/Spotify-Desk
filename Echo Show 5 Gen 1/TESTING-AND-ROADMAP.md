@@ -102,3 +102,6 @@ For troubleshooting, record the first error, command, OS, reproducibility and re
 
 - [x] User reviewed initial Weather screenshots; commit current-temperature/upcoming-hour refinements and expanded bottom cards; 25 logic tests passed.
 - [ ] Review revised Weather UI, hourly/daily toggle, midnight rollover, scrolling and details at 960 x 480; connect real weather after approval.
+
+- [x] Implement live Open-Meteo weather, shared Home tile, day/night icons, asynchronous cache and 14 mapping assertions.
+- [ ] Verify actual live data and cache on Omarchy; confirm no sample temperatures in live mode and check hourly forecast and future-day sunrise/sunset. Then Glucose.
