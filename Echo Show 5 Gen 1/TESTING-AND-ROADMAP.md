@@ -189,3 +189,7 @@ For troubleshooting, record the first error, command, OS, reproducibility and re
 - [x] User approved live System Information page on Omarchy; screenshot confirms populated metrics and service rows.
 - [ ] Verify Python fixture tests separately if not already run; real Pi and Echo hardware metrics pending.
 - [ ] Power on Pi and run read-only preflight before selecting deployment approach.
+
+- [x] User provided Raspberry Pi read-only preflight; existing Debian/ARM64 installation and free storage suitable for staged test; RAM differs from earlier assumption.
+- [ ] Verify actual model, check git/venv, stage isolated checkout, run Python 3.13 tests; review reversible Nextcloud shutdown separately.
+- [ ] Design/test single-worker production service, authenticated HTTPS and device integration before exposing live data.
