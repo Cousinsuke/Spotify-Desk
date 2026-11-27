@@ -11,6 +11,20 @@ class CalendarTests(unittest.TestCase):
         for url in ["http://caldav.icloud.com/","https://evil.invalid/","https://caldav.icloud.com.evil.invalid/","https://name:pass@caldav.icloud.com/","https://caldav.icloud.com:8080/"]:
             with self.subTest(url=url),self.assertRaises(s.CalendarError):
                 s.safe_url(s.BASE,url)
+    def test_merge_successful_propstats(self):
+        root=s.ET.fromstring('<d:multistatus xmlns:d="DAV:" xmlns:c="urn:ietf:params:xml:ns:caldav"><d:response><d:href>/synthetic/</d:href><d:propstat><d:prop><d:resourcetype><d:collection/><c:calendar/></d:resourcetype></d:prop><d:status>HTTP/1.1 200 OK</d:status></d:propstat><d:propstat><d:prop><c:supported-calendar-component-set><c:comp name="VTODO"/></c:supported-calendar-component-set></d:prop><d:status>HTTP/2 200</d:status></d:propstat><d:propstat><d:prop><d:displayname/></d:prop><d:status>HTTP/1.1 404 Not Found</d:status></d:propstat></d:response></d:multistatus>')
+        props=list(s.Client.props(root))
+        self.assertEqual(len(props),1)
+        self.assertIsNotNone(props[0][1].find(s.DAV+"resourcetype/"+s.CAL+"calendar"))
+        self.assertEqual(props[0][1].find(s.CAL+"supported-calendar-component-set")[0].get("name"),"VTODO")
+        self.assertIsNone(props[0][1].find(s.DAV+"displayname"))
+    def test_no_calendars_not_connected(self):
+        with patch.object(s,"fetch_month",return_value=([],{"eventCalendars":0})):
+            service=s.Service()
+            service.refresh("2026-11-01")
+            result=service.cache["2026-11-01"][1]
+            self.assertEqual(result["status"],"empty")
+            self.assertEqual(result["calendarCount"],0)
     def test_range(self):
         self.assertEqual(s.month_bounds("2026-11-01"),(date(2026,10,26),date(2026,12,21)))
         with self.assertRaises(ValueError):s.month_bounds("2026-11-02")

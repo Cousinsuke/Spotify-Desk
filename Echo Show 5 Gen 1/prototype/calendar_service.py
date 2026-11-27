@@ -12,6 +12,7 @@ import requests
 TZ = ZoneInfo("Europe/London")
 DAV = "{DAV:}"
 CAL = "{urn:ietf:params:xml:ns:caldav}"
+CS = "{http://calendarserver.org/ns/}"
 BASE = "https://caldav.icloud.com/"
 LIMIT = 4 * 1024 * 1024
 
@@ -72,6 +73,7 @@ class Client:
         self.session.trust_env = False
         self.session.auth = (username, password)
         self.deadline = time.monotonic() + 90
+        self.counts = {"collections":0,"eventCalendars":0,"subscriptions":0,"reportResources":0,"calendarData":0,"occurrences":0}
 
     def xml(self, method, url, body, depth):
         url = safe_url(BASE, url)
@@ -103,11 +105,15 @@ class Client:
     def props(root):
         for response in root.findall(DAV+"response"):
             href = response.findtext(DAV+"href")
+            merged = ET.Element(DAV+"prop")
             for ps in response.findall(DAV+"propstat"):
-                if " 200 " in (ps.findtext(DAV+"status") or ""):
+                status = (ps.findtext(DAV+"status") or "").split()
+                if len(status) >= 2 and status[1] == "200":
                     prop = ps.find(DAV+"prop")
                     if prop is not None:
-                        yield href, prop
+                        merged.extend(list(prop))
+            if len(merged):
+                yield href, merged
 
     def calendars(self):
         url, root = self.propfind(BASE, "<d:current-user-principal/>")
@@ -121,7 +127,16 @@ class Client:
         url, root = self.propfind(safe_url(url, home), "<d:resourcetype/><c:supported-calendar-component-set/>", 1)
         found = []
         for href,p in self.props(root):
-            if not href or p.find(DAV+"resourcetype/"+CAL+"calendar") is None:
+            if not href:
+                continue
+            kind = p.find(DAV+"resourcetype")
+            if kind is None:
+                continue
+            if kind.find(DAV+"collection") is not None:
+                self.counts["collections"] += 1
+            if kind.find(CS+"subscribed") is not None:
+                self.counts["subscriptions"] += 1
+            if kind.find(CAL+"calendar") is None:
                 continue
             components = p.find(CAL+"supported-calendar-component-set")
             if components is not None and not any(c.get("name")=="VEVENT" for c in components):
@@ -131,6 +146,7 @@ class Client:
                 found.append(candidate)
         if len(found) > 30:
             raise CalendarError("Too many calendars for this preview.")
+        self.counts["eventCalendars"] = len(found)
         return found
 
     def events(self, url, start, end):
@@ -144,12 +160,22 @@ class Client:
                 '</c:comp-filter></c:comp-filter></c:filter></c:calendar-query>')
         _,root = self.xml("REPORT", url, body, 1)
         rows = []
+        resources = root.findall(DAV+"response")
+        self.counts["reportResources"] += len(resources)
+        for resource in resources:
+            statuses = [x.findtext(DAV+"status") or "" for x in resource.findall(DAV+"propstat")]
+            if resource.find(DAV+"status") is not None:
+                statuses.append(resource.findtext(DAV+"status") or "")
+            if any(len(st.split()) >= 2 and st.split()[1] in ("401","403","500","503") for st in statuses):
+                raise CalendarError("iCloud returned an error for a calendar resource.")
         for _,prop in self.props(root):
             data = prop.findtext(CAL+"calendar-data")
             if not data:
                 continue
+            self.counts["calendarData"] += 1
             calendar = Calendar.from_ical(data)
             for event in recurring_ical_events.of(calendar).between(local_dt(start), local_dt(end)):
+                self.counts["occurrences"] += 1
                 rows.extend(event_rows(event,start,end))
                 if len(rows) > 2000 or time.monotonic() > self.deadline:
                     raise CalendarError("Calendar exceeds the preview limit.")
@@ -173,7 +199,7 @@ def fetch_month(month, username, password):
         rows.sort(key=lambda e:(e["date"],e["sort"],e["title"]))
         for row in rows:
             row.pop("sort",None)
-        return rows,len(calendars)
+        return rows,dict(client.counts)
     finally:
         client.session.close()
 
@@ -200,8 +226,13 @@ class Service:
 
     def refresh(self,month):
         try:
-            rows,count = fetch_month(month,self.username,self.password)
-            result = {"status":"fresh","events":rows,"calendarCount":count}
+            rows,counts = fetch_month(month,self.username,self.password)
+            count = counts["eventCalendars"]
+            result = {"status":"fresh" if count else "empty", "events":rows,"calendarCount":count,"counts":counts}
+            if not count:
+                result["message"] = "Signed in, but no readable iCloud event calendars were found. Check calendar sources on your iPhone."
+            elif not rows:
+                result["message"] = "No event dates returned in this date range. Check iCloud.com and calendar sources."
         except CalendarError as e:
             result = {"status":"error","events":[],"message":str(e)}
         except Exception:
