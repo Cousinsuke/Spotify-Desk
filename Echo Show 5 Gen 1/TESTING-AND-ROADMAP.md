@@ -231,3 +231,11 @@ For troubleshooting, record the first error, command, OS, reproducibility and re
 - [x] 61 Python tests passed on Pi; Waitress installed, systemd enabled/active, linger yes, loopback listener and saved authorization restored.
 - [ ] Verify service restart and actual reboot recovery; monitor latency if queue warnings persist.
 - [ ] Implement and validate authenticated HTTPS device boundary separately.
+
+
+### Pi reboot recovery verified
+
+2026-11-27: User verified manual restart and full Pi reboot. Post-reboot uptime ~2 minutes, service active/enabled and started automatically at boot, saved Spotify authorization restored, 127.0.0.1:8765 listener present. User reports runs fine. Initial workstation inactive/not-found output was from local Omarchy after SSH disconnected, not a Pi failure. Boot persistence accepted; no code changes. Actual post-reboot individual upstream data accuracy/playback not separately measured. Next design authenticated HTTPS device access with synthetic data first; keep existing loopback and OAuth path isolated. Physical Echo model/LK, Android trust and kiosk capabilities remain unverified. No public exposure, router forwarding, credential or Nextcloud changes; no identifying raw logs committed.
+
+- [x] Manual restart and full reboot recovery verified; saved authorization restored and loopback listener present.
+- [ ] Design and test authenticated HTTPS device boundary with synthetic data before enabling live data.
