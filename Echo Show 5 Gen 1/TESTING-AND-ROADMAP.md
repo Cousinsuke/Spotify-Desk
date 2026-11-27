@@ -264,3 +264,8 @@ For troubleshooting, record the first error, command, OS, reproducibility and re
 
 - [x] LAN HTTPS listener, matching CA transfer hashes, verified TLS and unauthenticated redirect.
 - [ ] Browser trust, pairing, persistence, live-route denial and revocation.
+
+
+### Browser pairing 403 correction
+
+2026-11-27: User imported verified CA and reached pairing page in Chrome without visible certificate warning, but submitting generated code returned generic Flask 403 Forbidden (distinct from custom invalid-code message). Likely native HTML form POST Origin serialized as null under no-referrer policy, per MDN https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Headers/Referrer-Policy and Fetch standard https://fetch.spec.whatwg.org/. Prototype [449bde5](https://github.com/Cousinsuke/Spotify-Desk/commit/449bde5f64a0ba8bb42e6d1595ed50ec77c3e08e) sets Referrer-Policy same-origin on /pair only; exact HTTPS origin guard unchanged, no missing/null/foreign acceptance, no-referrer retained elsewhere. Added regression test and closed static response handles in existing tests. Expected 69 tests, not run by assistant. Pull and rerun tests, restart only sample gateway, reload pairing page fresh, generate fresh code, retry. Browser origin hypothesis not directly measured; if still 403 inspect only Origin and Sec-Fetch-Site headers (no body, cookies or codes). Existing production server/certificates/device database unchanged, no live LAN access. Pairing, persistence and revocation still pending.
