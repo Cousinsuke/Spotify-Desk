@@ -165,3 +165,6 @@ For troubleshooting, record the first error, command, OS, reproducibility and re
 
 - [x] Implement optional iCloud credentials in private local .env without changing existing required credentials.
 - [ ] Run launcher config tests and validate real read-only CalDAV sync once adapter is implemented.
+
+- [x] Implement read-only iCloud CalDAV adapter and live Calendar UI, 15 JS checks passed.
+- [ ] Install optional dependencies, run seven Python test methods, verify actual iCloud connection, event dates, recurrence, errors and no calendar writes. Calendar filtering and hardware validation pending.

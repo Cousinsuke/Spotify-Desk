@@ -186,3 +186,19 @@ Hard refresh; Settings > General > Night mode. Test Manual, then Scheduled with 
 ### Latest checkpoint — optional Apple Calendar configuration
 
 2026-11-27: User generated an Apple app-specific password and asked whether to put it in .env. Prototype commit [6fec7bd](https://github.com/Cousinsuke/Spotify-Desk/commit/6fec7bd397d0090874ad6689cfa02c06e5bd5857) extends start-live, .env.example and launcher tests to accept optional DESK_ICLOUD_USERNAME (Apple Account sign-in identifier) and DESK_ICLOUD_APP_PASSWORD (dedicated four-group app-specific password). Both blank/absent or both valid; existing Spotify/Gluroo configuration and first-run prompts unchanged. Private owner-only ignored .env, no secret output or shell evaluation. Existing credentials need not be re-entered. Six additional offline config checks authored, not executed in assistant runtime. No actual CalDAV connection or calendar backend yet; credential saving is preparation only. No user secret or identifier supplied or committed. Next implement private read-only Apple Calendar synchronization, with no actual personal data in tests or Git.
+
+
+### Latest checkpoint — live Apple Calendar
+
+2026-11-27: User confirmed optional Apple credentials saved and showed the Calendar preview still Not connected, expected before backend implementation. Prototype commits [cac9187](https://github.com/Cousinsuke/Spotify-Desk/commit/cac91876eeeef945a24f7c30d221d098261053d2) and [e4a52b4](https://github.com/Cousinsuke/Spotify-Desk/commit/e4a52b442c9c831ee92540e92114c4aa064ef5c3) implement a private read-only CalDAV connection via existing local credentials, allowlisted TLS iCloud hostname/redirect validation, PROPFIND discovery and REPORT reads only, bounded month range (56 days), recurrence expansion via icalendar and recurring-ical-events, Europe/London timezone, all-day/multi-day rendering, initial inclusion of all accessible VEVENT calendars, title/date/time only with HTML escaping, memory-only cache (up to three months; 5-minute refresh), async background worker and no personal data logs or localStorage persistence. Local API guarded by existing preview header/host plus loopback remote address. Optional requirements-calendar.txt installs independently; missing calendar dependencies do not prevent existing services starting. User needs to pull, install requirements into existing venv, restart and hard-refresh; no changes to .env required. JavaScript syntax and 15 updated Calendar checks passed in assistant runtime. Seven Python safety/date/recurrence test methods authored but not executed; Apple interoperability and browser live results unverified. First iteration displays all accessible iCloud calendars; selection/filtering and alternative providers not implemented; only events stored in iCloud available. Do not collect real credentials or events in chat/Git. Apple app-specific password can be revoked via account settings; read-only describes app behavior, not credential permission scope. No Pi/LAN or original app changes. Next real account sync test, then calendar selection/visual refinements as needed.
+
+Stop server with Ctrl+C, then:
+
+```bash
+cd ~/Projects/Spotify-Desk-Echo-Prototype
+git pull --ff-only origin echo-show/prototype
+./.venv/bin/python -m pip install -r "Echo Show 5 Gen 1/prototype/requirements-calendar.txt"
+./.venv/bin/python "Echo Show 5 Gen 1/prototype/test_calendar_service.py"
+./"Echo Show 5 Gen 1/prototype/start-live"
+```
+Hard refresh live preview, open Calendar, select Today. Report only connection status/error and whether expected events appear; no private titles, email or passwords.
