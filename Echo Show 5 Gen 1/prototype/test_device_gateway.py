@@ -30,10 +30,12 @@ class GatewayTests(unittest.TestCase):
         cookie=response.headers["Set-Cookie"]
         for flag in ("Secure","HttpOnly","SameSite=Strict","Path=/","__Host-desk_device"):
             self.assertIn(flag,cookie)
-        self.assertEqual(self.req("/").status_code,200)
+        with self.req("/") as response:
+            self.assertEqual(response.status_code,200)
+            self.assertEqual(response.headers["Cache-Control"],"no-store")
         self.assertEqual(self.req("/?live=1").status_code,303)
-        self.assertEqual(self.req("/app.js").status_code,200)
-        self.assertEqual(self.req("/").headers["Cache-Control"],"no-store")
+        with self.req("/app.js") as response:
+            self.assertEqual(response.status_code,200)
     def test_no_live_paths(self):
         self.pair()
         for path in ("/api/glucose","/api/spotify/state","/api/system","/spotify/login","/spotify/callback","/.env","/.spotify_token.json","/device_gateway.py","/ca.crt","/server.key"):
@@ -45,6 +47,16 @@ class GatewayTests(unittest.TestCase):
         self.assertEqual(self.req("/pair",environ_overrides={"REMOTE_ADDR":"192.168.51.20"}).status_code,403)
         self.assertEqual(self.req("/pair",headers={"Sec-Fetch-Site":"cross-site"}).status_code,403)
         self.assertEqual(self.req("/pair","POST",data={"code":"x"}).status_code,403)
+    def test_pair_referrer_policy_and_origin(self):
+        response=self.req("/pair")
+        self.assertEqual(response.headers["Referrer-Policy"],"same-origin")
+        code=g.issue(self.path,self.now)
+        for origin in ("null","https://other.example",None):
+            headers={"Origin":origin} if origin is not None else {}
+            self.assertEqual(self.req("/pair","POST",data={"code":code},headers=headers).status_code,403)
+        self.assertEqual(self.req("/pair","POST",data={"code":code},headers={"Origin":self.base,"Sec-Fetch-Site":"same-origin"}).status_code,303)
+        with self.req("/") as response:
+            self.assertEqual(response.headers["Referrer-Policy"],"no-referrer")
     def test_one_time_and_expiry(self):
         code=g.issue(self.path,self.now)
         token=g.exchange(self.path,code,self.now)

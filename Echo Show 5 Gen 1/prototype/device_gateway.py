@@ -155,7 +155,9 @@ def create_app(path,bind,network,clock=time.time):
     @app.after_request
     def headers(response):
         response.headers["Cache-Control"]="no-store"
-        response.headers["Referrer-Policy"]="no-referrer"
+        # Native same-origin form POST needs its real Origin; no-referrer makes it null.
+        # Limit the exception to the pairing page; never accept null or missing Origin.
+        response.headers["Referrer-Policy"]="same-origin" if request.path=="/pair" else "no-referrer"
         response.headers["X-Content-Type-Options"]="nosniff"
         response.headers["X-Frame-Options"]="DENY"
         response.headers["Content-Security-Policy"]="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; connect-src 'none'; frame-ancestors 'none'; base-uri 'none'; form-action 'self'; object-src 'none'"
