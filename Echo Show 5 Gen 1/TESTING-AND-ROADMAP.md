@@ -185,3 +185,7 @@ For troubleshooting, record the first error, command, OS, reproducibility and re
 
 - [x] User selected combined System Information option C; implement read-only metrics and service status. 35 JS checks passed.
 - [ ] Run four Python fixture tests; review live metrics and service states, missing sensors, page scroll and rail; Pi/Echo hardware validation pending.
+
+- [x] User approved live System Information page on Omarchy; screenshot confirms populated metrics and service rows.
+- [ ] Verify Python fixture tests separately if not already run; real Pi and Echo hardware metrics pending.
+- [ ] Power on Pi and run read-only preflight before selecting deployment approach.

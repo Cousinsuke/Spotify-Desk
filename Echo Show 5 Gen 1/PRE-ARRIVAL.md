@@ -63,3 +63,8 @@ Proposed implementation order:
 Confirm actual unit/model and accessories, inspect hardware offline, check cable data capability and query product/LK read-only. Only then choose the model-specific ROM and unlocking method. Keep the old case/PCB work unchanged and use TESTING-AND-ROADMAP.md to record evidence.
 
 **Current blocker:** Pi preflight results and physical Echo Show delivery. No guarantee of a compatible installed LK or kiosk performance until tested.
+
+
+### Latest checkpoint — System Information accepted
+
+2026-11-27: User approved System Information appearance and supplied browser screenshot confirming populated Omarchy host CPU, RAM, storage, temperature, uptime, network link and all five service status rows. Record user visual acceptance and live endpoint output; no independent metric accuracy check, exact Python test output, expanded rail or physical Echo hardware verification reported. Do not commit screenshot or personal data. Main dashboard app design phase accepted; next action Raspberry Pi 4 (8 GB) read-only preflight per PRE-ARRIVAL.md. Existing Pi OS/storage and old Nextcloud services unknown; power on and access via known SSH account or local terminal, no installs/erase/service changes until reviewed. Keep current Omarchy preview available; secure authenticated HTTPS boundary required before real Gluroo data is accessible over LAN. Echo delivery/model/LK validation separate. Documentation-only checkpoint.

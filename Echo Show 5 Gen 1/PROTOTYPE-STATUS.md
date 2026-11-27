@@ -292,3 +292,8 @@ git pull --ff-only origin echo-show/prototype
 ./"Echo Show 5 Gen 1/prototype/start-live"
 ```
 Hard refresh and open Apps > System Information. Review both rail states, values, service labels, hidden page refresh and scroll; no need to share private data.
+
+
+### Latest checkpoint — System Information accepted
+
+2026-11-27: User approved System Information appearance and supplied browser screenshot confirming populated Omarchy host CPU, RAM, storage, temperature, uptime, network link and all five service status rows. Record user visual acceptance and live endpoint output; no independent metric accuracy check, exact Python test output, expanded rail or physical Echo hardware verification reported. Do not commit screenshot or personal data. Main dashboard app design phase accepted; next action Raspberry Pi 4 (8 GB) read-only preflight per PRE-ARRIVAL.md. Existing Pi OS/storage and old Nextcloud services unknown; power on and access via known SSH account or local terminal, no installs/erase/service changes until reviewed. Keep current Omarchy preview available; secure authenticated HTTPS boundary required before real Gluroo data is accessible over LAN. Echo delivery/model/LK validation separate. Documentation-only checkpoint.
