@@ -1,7 +1,10 @@
-"""Loopback-only, single-user Spotify test. No disk token cache or LAN exposure."""
+"""Loopback-only, single-user Spotify preview. Private refresh-token cache; no LAN exposure."""
 import base64
 import hashlib
 import logging
+import json
+import stat
+import tempfile
 import os
 import re
 import secrets
@@ -20,6 +23,8 @@ REDIRECT = ORIGIN + "/spotify/callback"
 SCOPES = "user-read-playback-state user-read-currently-playing user-modify-playback-state user-library-read user-library-modify"
 ROOT = Path(__file__).resolve().parent
 CLIENT = os.environ.get("SPOTIPY_CLIENT_ID", "").strip()
+TOKEN_PATH = ROOT / ".spotify_token.json"
+refresh_retry_at = 0.0
 app = Flask(__name__, static_folder=None)
 token = None
 pending = None
@@ -66,18 +71,92 @@ def headers(response):
 def api_error(e):
     return jsonify(error=e.message), e.status
 
+def read_refresh():
+    """Never follow symlinks, expose tokens, or accept another client's cache."""
+    try:
+        with os.fdopen(os.open(TOKEN_PATH, os.O_RDONLY | os.O_NOFOLLOW | os.O_NONBLOCK), "r", encoding="utf-8") as f:
+            info = os.fstat(f.fileno())
+            if not stat.S_ISREG(info.st_mode) or info.st_uid != os.getuid() or info.st_mode & 0o077:
+                raise ValueError("Unsafe cache")
+            data = json.loads(f.read(16384))
+        if (isinstance(data, dict) and data.get("client_id") == CLIENT
+                and data.get("scopes") == SCOPES and valid_secret(data.get("refresh_token"))):
+            return {"refresh_token": data["refresh_token"], "expires_at": 0}
+    except FileNotFoundError:
+        pass
+    except (OSError, ValueError, UnicodeError):
+        print("Spotify: private authorization cache could not be read; connect again.", flush=True)
+    return None
+
+def valid_secret(value):
+    return isinstance(value, str) and 0 < len(value) <= 8192 and not any(c.isspace() or ord(c) < 32 for c in value)
+
+def save_refresh(secret):
+    """Atomic owner-only file; no access token or account data on disk."""
+    tmp = None
+    try:
+        with tempfile.NamedTemporaryFile(mode="w", encoding="utf-8", dir=TOKEN_PATH.parent,
+                                         prefix=".spotify_token.json.", delete=False) as f:
+            tmp = Path(f.name)
+            os.fchmod(f.fileno(), 0o600)
+            json.dump({"client_id": CLIENT, "scopes": SCOPES, "refresh_token": secret}, f)
+            f.flush()
+            os.fsync(f.fileno())
+        os.replace(tmp, TOKEN_PATH)
+        return True
+    except OSError:
+        print("Spotify: could not save private authorization; reconnect may be needed after restart.", flush=True)
+        return False
+    finally:
+        if tmp is not None:
+            try: tmp.unlink(missing_ok=True)
+            except OSError: pass
+
+def clear_refresh():
+    try: TOKEN_PATH.unlink(missing_ok=True)
+    except OSError:
+        print("Spotify: could not remove expired authorization cache.", flush=True)
+
 def exchange(data):
-    global token
+    global token, refresh_retry_at
+    refreshing = data.get("grant_type") == "refresh_token"
+    if refreshing and time.monotonic() < refresh_retry_at:
+        raise ApiError(503, "Spotify authorization temporarily unavailable; retrying automatically.")
     try:
         r = requests.post("https://accounts.spotify.com/api/token", data={**data,"client_id":CLIENT}, timeout=12, allow_redirects=False)
-        if r.status_code != 200:
-            raise ApiError(401,"Spotify authorization failed. Check Client ID, redirect URI and account access.")
-        new = r.json()
-        if not new.get("access_token"):
-            raise ApiError(401,"Spotify did not return an access token.")
-        token = {**new, "refresh_token":new.get("refresh_token") or (token or {}).get("refresh_token"), "expires_at":time.monotonic()+int(new.get("expires_in",3600))}
     except requests.RequestException:
+        if refreshing: refresh_retry_at = time.monotonic() + 30
         raise ApiError(502,"Could not reach Spotify authorization server.")
+    try: new = r.json()
+    except ValueError: new = {}
+    if not isinstance(new, dict): new = {}
+    if refreshing and r.status_code == 400 and new.get("error") == "invalid_grant":
+        token = None
+        clear_refresh()
+        refresh_retry_at = 0
+        raise ApiError(401,"Spotify authorization expired or was revoked. Connect Spotify again.")
+    if r.status_code != 200:
+        if refreshing:
+            try: delay = max(30, int(r.headers.get("Retry-After", "30")))
+            except ValueError: delay = 30
+            refresh_retry_at = time.monotonic() + delay
+            raise ApiError(503,"Spotify authorization temporarily unavailable; retrying automatically.")
+        raise ApiError(401,"Spotify authorization failed. Check Client ID, redirect URI and account access.")
+    try:
+        expiry = int(new.get("expires_in", 3600))
+        if not valid_secret(new.get("access_token")) or expiry <= 0: raise ValueError()
+    except (ValueError, TypeError, OverflowError):
+        if refreshing: refresh_retry_at = time.monotonic() + 30
+        raise ApiError(502,"Spotify returned an invalid authorization response.")
+    secret = new.get("refresh_token") or (data.get("refresh_token") if refreshing else None)
+    if not valid_secret(secret):
+        if refreshing: refresh_retry_at = time.monotonic() + 30
+        raise ApiError(502,"Spotify did not return a valid refresh token.")
+    token = {"access_token":new["access_token"],"refresh_token":secret,"expires_at":time.monotonic()+expiry}
+    refresh_retry_at = 0
+    if not refreshing or secret != data.get("refresh_token"):
+        if not save_refresh(secret):
+            clear_refresh()
 
 def spotify(method,path,params=None,body=None):
     global token,backoff
@@ -102,6 +181,9 @@ def spotify(method,path,params=None,body=None):
         backoff=time.monotonic()+delay
         raise ApiError(429,"Spotify rate limit; waiting before retry.")
     if r.status_code==401:
+        if token.get("refresh_token"):
+            token["expires_at"]=0
+            raise ApiError(401,"Spotify access expired; refreshing on the next request.")
         token=None
         raise ApiError(401,"Spotify session expired; reconnect.")
     if r.status_code>=400 or 300<=r.status_code<400:
@@ -351,5 +433,6 @@ def asset(name):
 if __name__=="__main__":
     if not re.fullmatch(r"[A-Za-z0-9]{16,128}",CLIENT):
         raise SystemExit("Set SPOTIPY_CLIENT_ID locally before starting.")
-    print("Local Spotify test: "+ORIGIN+"/?live=1 (tokens held in memory only)",flush=True)
+    token = read_refresh()
+    print("Local Spotify test: "+ORIGIN+"/?live=1 (saved authorization restored)" if token else "Local Spotify test: "+ORIGIN+"/?live=1 (connect Spotify once)",flush=True)
     app.run(host=HOST,port=PORT,debug=False,use_reloader=False,threaded=False)

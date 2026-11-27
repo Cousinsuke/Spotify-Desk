@@ -1,11 +1,19 @@
 """Run locally using the preview virtual environment. No network or credentials."""
 import unittest
+import json
+from pathlib import Path
+import tempfile
 from unittest.mock import patch
 import live_server as s
 
 class LocalTests(unittest.TestCase):
     def setUp(self):
         self.client=s.app.test_client()
+        self.temp=tempfile.TemporaryDirectory()
+        self.addCleanup(self.temp.cleanup)
+        cache=patch.object(s,'TOKEN_PATH',Path(self.temp.name)/'.spotify_token.json')
+        cache.start();self.addCleanup(cache.stop)
+        s.refresh_retry_at=0.0
         s.backoff=0.0
         s.token=None
         s.pending=None
@@ -172,4 +180,59 @@ class LocalTests(unittest.TestCase):
             data=self.client.get("/api/spotify/state",base_url=self.url,headers=self.headers).json
             self.assertEqual(data["recovery"],"verified")
             self.assertFalse(s.resume_blocked)
+    def token_response(self, status=200, data=None):
+        r=s.requests.Response();r.status_code=status
+        r._content=json.dumps(data if data is not None else {"access_token":"synthetic-access","refresh_token":"synthetic-refresh","expires_in":3600}).encode()
+        return r
+    def test_auth_persists_refresh_only_and_restores(self):
+        with patch.object(s.requests,"post",return_value=self.token_response()):
+            s.exchange({"grant_type":"authorization_code","code":"synthetic"})
+        self.assertEqual(s.TOKEN_PATH.stat().st_mode & 0o777,0o600)
+        self.assertNotIn("access_token",json.loads(s.TOKEN_PATH.read_text()))
+        s.token=s.read_refresh()
+        self.assertEqual(s.token,{"refresh_token":"synthetic-refresh","expires_at":0})
+        with patch.object(s.requests,"post",return_value=self.token_response(data={"access_token":"new-access","expires_in":3600})) as post,patch.object(s.requests,"request",return_value=self.token_response(204)):
+            self.assertIsNone(s.spotify("GET","/me/player"))
+            self.assertEqual(post.call_args.kwargs["data"]["refresh_token"],"synthetic-refresh")
+        self.assertEqual(s.token["refresh_token"],"synthetic-refresh")
+    def test_rotated_refresh_is_saved(self):
+        s.save_refresh("old")
+        s.token=s.read_refresh()
+        with patch.object(s.requests,"post",return_value=self.token_response()):
+            s.exchange({"grant_type":"refresh_token","refresh_token":"old"})
+        self.assertEqual(s.read_refresh()["refresh_token"],"synthetic-refresh")
+    def test_expired_refresh_removes_cache(self):
+        s.save_refresh("old");s.token=s.read_refresh()
+        with patch.object(s.requests,"post",return_value=self.token_response(400,{"error":"invalid_grant"})):
+            with self.assertRaises(s.ApiError):s.exchange({"grant_type":"refresh_token","refresh_token":"old"})
+        self.assertIsNone(s.token);self.assertFalse(s.TOKEN_PATH.exists())
+    def test_network_failure_keeps_cache_and_backs_off(self):
+        s.save_refresh("old");s.token=s.read_refresh()
+        with patch.object(s.requests,"post",side_effect=s.requests.ConnectionError) as post:
+            for _ in range(2):
+                with self.assertRaises(s.ApiError):s.exchange({"grant_type":"refresh_token","refresh_token":"old"})
+            post.assert_called_once()
+        self.assertEqual(s.read_refresh()["refresh_token"],"old")
+    def test_wrong_client_and_scopes_not_restored(self):
+        s.save_refresh("old")
+        with patch.object(s,"CLIENT","different-client"):self.assertIsNone(s.read_refresh())
+        with patch.object(s,"SCOPES","different-scopes"):self.assertIsNone(s.read_refresh())
+    def test_cache_permissions_and_symlink(self):
+        s.save_refresh("old");s.TOKEN_PATH.chmod(0o644)
+        self.assertIsNone(s.read_refresh())
+        s.TOKEN_PATH.unlink()
+        target=s.TOKEN_PATH.with_name("target");target.write_text("not a cache")
+        s.TOKEN_PATH.symlink_to(target)
+        self.assertIsNone(s.read_refresh())
+    def test_api_401_does_not_replay_write(self):
+        s.save_refresh("old")
+        s.token={"refresh_token":"old","access_token":"old-access","expires_at":s.time.monotonic()+3600}
+        with patch.object(s.requests,"request",return_value=self.token_response(401)) as api:
+            with self.assertRaises(s.ApiError):s.spotify("PUT","/me/player/pause")
+            api.assert_called_once()
+        self.assertEqual(s.token["expires_at"],0)
+        self.assertEqual(s.read_refresh()["refresh_token"],"old")
+    def test_cache_not_served(self):
+        s.save_refresh("old")
+        self.assertEqual(self.client.get("/.spotify_token.json",base_url=self.url).status_code,404)
 if __name__=="__main__":unittest.main()
