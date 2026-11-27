@@ -1,6 +1,6 @@
 (function(root){
 'use strict';
-const conditions={clear:'Clear',partly:'Partly cloudy',cloud:'Cloudy',rain:'Light rain',storm:'Thunderstorms',snow:'Snow',fog:'Fog',night:'Clear night'};
+const conditions={clear:'Clear',partly:'Partly cloudy',cloud:'Cloudy',rain:'Light rain',storm:'Thunderstorms',snow:'Snow',fog:'Fog',night:'Clear night',partlyNight:'Partly cloudy',unknown:'Unavailable'};
 const current=Object.freeze({temp:10,feels:7,condition:'partly',humidity:76,rain:20,sunrise:'07:43',sunset:'16:08'});
 const days=Object.freeze([
  ['partly',12,7,20],['rain',11,6,70],['clear',13,8,10],['cloud',11,5,25],['rain',10,6,85],['fog',9,4,15],['clear',12,5,5]
@@ -42,7 +42,8 @@ function icon(c,style='colour'){
  const sunShape='<circle cx="23" cy="23" r="11" fill="'+sun+'" stroke="'+(colour?'#ffd17c':stroke)+'"/><path d="M23 5v5m0 26v5M5 23h5m26 0h5M10 10l4 4m18 18 4 4M10 36l4-4m18-18 4-4" stroke="'+(colour?'#ffd17c':stroke)+'"/>';
  const cloudShape='<path d="M12 39a10 10 0 0 1 1-20 14 14 0 0 1 26 2 10 10 0 0 1-1 18z" fill="'+cloud+'" stroke="'+stroke+'"/>';
  const rain='<path d="m15 45-3 6m13-6-3 6m13-6-3 6" stroke="'+(colour?'#85c8ff':stroke)+'"/>';
- let shape=c==='clear'?sunShape:c==='partly'?'<g transform="translate(0 -1) scale(.8)">'+sunShape+'</g><g transform="translate(6 9) scale(.9)">'+cloudShape+'</g>':c==='night'?'<path d="M36 8a19 19 0 1 0 12 31A20 20 0 0 1 36 8z" fill="'+(colour?'#cbd5fd':'none')+'" stroke="'+stroke+'"/>':cloudShape+(c==='rain'?rain:c==='storm'?'<path d="m28 40-9 10h8l-4 8 14-14h-9l5-4" fill="'+sun+'" stroke="'+stroke+'"/>':c==='snow'?'<path d="M14 47h7m-3.5-3.5v7m11-3.5h7m-3.5-3.5v7" stroke="'+stroke+'"/>':c==='fog'?'<path d="M8 44h36M12 50h29" stroke="'+stroke+'"/>':'');
+ const moon='<path d="M29 5a14 14 0 1 0 9 23A15 15 0 0 1 29 5z" fill="'+(colour?'#cbd5fd':'none')+'" stroke="'+stroke+'"/>';
+ let shape=c==='unknown'?'<path d="M20 28h16" stroke="'+stroke+'"/>':c==='partlyNight'?moon+'<g transform="translate(6 9) scale(.9)">'+cloudShape+'</g>':c==='clear'?sunShape:c==='partly'?'<g transform="translate(0 -1) scale(.8)">'+sunShape+'</g><g transform="translate(6 9) scale(.9)">'+cloudShape+'</g>':c==='night'?'<path d="M36 8a19 19 0 1 0 12 31A20 20 0 0 1 36 8z" fill="'+(colour?'#cbd5fd':'none')+'" stroke="'+stroke+'"/>':cloudShape+(c==='rain'?rain:c==='storm'?'<path d="m28 40-9 10h8l-4 8 14-14h-9l5-4" fill="'+sun+'" stroke="'+stroke+'"/>':c==='snow'?'<path d="M14 47h7m-3.5-3.5v7m11-3.5h7m-3.5-3.5v7" stroke="'+stroke+'"/>':c==='fog'?'<path d="M8 44h36M12 50h29" stroke="'+stroke+'"/>':'');
  return '<svg class="weather-symbol" viewBox="0 0 56 58" aria-hidden="true" fill="none" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">'+shape+'</svg>';
 }
 const api={conditions,current,forecast,validDuration,dayLabel,fullDate,hourly,summary,icon};

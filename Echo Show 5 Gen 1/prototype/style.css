@@ -106,3 +106,6 @@ button,select,input{font:inherit;color:inherit}button,select{background:var(--co
 .weather-detail-stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(95px,1fr));gap:7px;flex:none}
 .weather-detail-stats>div{display:grid;gap:5px;justify-items:center;padding:12px 4px;background:#ffffff0b;border:1px solid #ffffff14;border-radius:9px}
 .weather-detail-stats span{font-size:11px;color:#c8d9e9}.weather-detail-stats strong{font-size:19px;font-weight:550}
+
+#screen[data-page=weather][data-weather-condition=partlyNight],#screen[data-page=weather][data-weather-condition=night]{background:linear-gradient(135deg,#293759,#111625)}
+#screen[data-page=weather][data-weather-condition=unknown]{background:linear-gradient(135deg,#303945,#17212d)}
