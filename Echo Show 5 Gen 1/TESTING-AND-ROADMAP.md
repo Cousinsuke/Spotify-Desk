@@ -303,3 +303,11 @@ For troubleshooting, record the first error, command, OS, reproducibility and re
 
 - [x] HTTPS device gateway unit enabled and active; transient Calendar partial status resolves to Ready.
 - [ ] Confirm gateway reboot recovery and persistent pairing; real Spotify control check if not already performed.
+
+
+### Raspberry Pi deployment milestone complete
+
+2026-11-27: User verified complete Pi reboot recovery with both backend and HTTPS gateway active/enabled, both expected listeners (loopback backend 8765 and dedicated LAN HTTPS 8443), Pi uptime four minutes and low load. Browser screenshot after boot showed direct LIVE PAIRED DISPLAY with populated tiles without a new pairing code or SSH tunnel. Automatic startup and persistent pairing across server reboot accepted. Prototype 612b888 previously passed all 80 tests on Pi. No new code changes; no need for manual service start. Pi deployment milestone complete. Remaining: reserve existing Ethernet IPv4 in router DHCP (not confirmed), real Spotify playback command/artwork through HTTPS not separately confirmed, browser process restart persistence not separately confirmed, Echo delivery and physical model/firmware/LK inspection before flashing, Android TLS CA trust and kiosk capability, automatic kiosk startup, volume buttons, speaker integration and final performance/privacy testing. Keep loopback OAuth admin boundary, no router forwarding, no TLS bypass. Existing Nextcloud unchanged. No raw logs, IP, health readings, screenshots, or identifiers committed.
+
+- [x] Both Pi services start after reboot; live HTTPS and pairing survive reboot.
+- [ ] Confirm stable DHCP reservation, actual Spotify controls and physical Echo compatibility before kiosk deployment.
