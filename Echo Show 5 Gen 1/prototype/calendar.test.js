@@ -1,0 +1,18 @@
+'use strict';
+const assert=require('node:assert/strict'),fs=require('node:fs'),path=require('node:path');
+const s=fs.readFileSync(path.join(__dirname,'app.js'),'utf8');
+const start=s.indexOf('function calendarKey('),end=s.indexOf('const defaults=',start);
+const {calendarKey:k,calendarDate:d,calendarMonth:m,calendarGrid:g,calendarSample:sample}=new Function(s.slice(start,end)+';return {calendarKey,calendarDate,calendarMonth,calendarGrid,calendarSample};')();
+assert.equal(k(d('2026-11-27')),'2026-11-27');
+assert.equal(m('2026-12-31',1),'2027-01-01');
+assert.equal(m('2026-01-31',-1),'2025-12-01');
+const nov=g('2026-11-01');assert.equal(nov.length,42);assert.equal(nov[0].key,'2026-10-26');assert.equal(nov[6].key,'2026-11-01');assert.equal(nov.filter(x=>x.inMonth).length,30);
+assert.equal(g('2024-02-01').filter(x=>x.inMonth).length,29);
+assert.equal(g('2026-02-01').filter(x=>x.inMonth).length,28);
+assert.equal(g('2026-11-01').at(-1).key,'2026-12-06');
+assert.equal(sample('2026-12-31')[1].date,'2027-01-02');
+assert.ok(s.includes('sample=liveEnabled?[]:calendarSample(calendarToday)'));
+assert.ok(s.includes('SAMPLE EVENTS · NOT LIVE'));
+assert.ok(s.includes('iCloud · Not connected'));
+assert.ok(s.includes("else if(active==='calendar'){renderCalendar()}"));
+console.log('15 Calendar checks passed');

@@ -253,3 +253,27 @@ button,select,input{font:inherit;color:inherit}button,select{background:var(--co
 /* Night mode remains a visual overlay, never a page change or hardware power action. */
 .setting input[type=time]{background:var(--control);border:1px solid var(--border);border-radius:9px;padding:7px 9px;min-height:40px;color:inherit}
 .night-status{font-size:13px;color:var(--muted);margin:5px 0 10px}
+
+/* Calendar: fixed month grid and native scrollable agenda at 960x480. */
+#screen[data-page=calendar] #page{padding:24px 36px 27px 24px}
+.cal-layout{display:grid;grid-template-columns:minmax(0,1.25fr) minmax(0,1fr);gap:14px;flex:1;min-height:0}
+.cal-month{display:flex;flex-direction:column;min-width:0;min-height:0}
+.cal-month header{display:flex;align-items:center;justify-content:space-between;gap:6px;margin-bottom:10px;flex-wrap:wrap}
+.cal-month h1{font-size:21px;margin:0}
+.cal-nav{display:flex;gap:5px}
+.cal-nav button{padding:6px 10px;min-height:40px;font-size:15px}
+.cal-grid{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));grid-template-rows:24px repeat(6,minmax(0,1fr));gap:3px;flex:1;min-height:0}
+.cal-weekday{font-size:12px;text-align:center;color:var(--muted)}
+.cal-grid button{position:relative;min-width:0;min-height:0;padding:0;border:1px solid transparent;background:transparent;font-size:16px;border-radius:8px}
+.cal-grid button.outside{color:var(--muted);opacity:.55}
+.cal-grid button[aria-current=date]{border-color:var(--accent)}
+.cal-grid button[aria-pressed=true]{background:#46647d;color:#fff;opacity:1}
+.cal-grid button i{position:absolute;width:5px;height:5px;bottom:4px;left:calc(50% - 2.5px);border-radius:50%;background:var(--accent)}
+.cal-agenda{background:var(--panel);border:1px solid var(--border);border-radius:14px;padding:15px;min-width:0;min-height:0;overflow-y:auto;overflow-x:hidden;scrollbar-width:none;overscroll-behavior-y:contain}
+.cal-agenda::-webkit-scrollbar{display:none}
+.cal-agenda h2{font-size:19px;margin:0 0 8px}
+.cal-agenda h3{font-size:13px;color:var(--muted);margin:15px 0 8px}
+.cal-source,.cal-empty,.cal-event-date{font-size:13px;color:var(--muted);line-height:1.5}
+.cal-event{display:grid;gap:5px;background:var(--control);border-left:3px solid var(--accent);border-radius:8px;padding:10px;margin:7px 0 12px;overflow-wrap:anywhere}
+.cal-event small{font-size:12px;color:var(--muted)}
+.cal-event strong{font-size:16px}
