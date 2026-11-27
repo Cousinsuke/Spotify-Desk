@@ -249,3 +249,7 @@ button,select,input{font:inherit;color:inherit}button,select{background:var(--co
 .hour-hand{height:27%;transform:translateX(-50%) rotate(var(--hour-angle,0deg))}
 .minute-hand{height:37%;width:3px;transform:translateX(-50%) rotate(var(--minute-angle,0deg))}
 .clock-pin{position:absolute;width:9px;height:9px;border-radius:50%;background:#fff;top:50%;left:50%;transform:translate(-50%,-50%)}
+
+/* Night mode remains a visual overlay, never a page change or hardware power action. */
+.setting input[type=time]{background:var(--control);border:1px solid var(--border);border-radius:9px;padding:7px 9px;min-height:40px;color:inherit}
+.night-status{font-size:13px;color:var(--muted);margin:5px 0 10px}

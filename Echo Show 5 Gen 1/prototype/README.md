@@ -115,3 +115,8 @@ Home settings and Home quick settings now offer three fixed layouts (existing cl
 ## Home tile transparency refinement (2026-11-27)
 
 User approved Home presets and requested the neutral Spotify/Weather summary tiles match sidebar transparency rather than green-tinted cards. Shared CSS surface variable now drives rail and neutral Home tiles, including rail opacity and Transparent rail style. Neutral label text and transparent tile border; Glucose status background, border and text overrides unchanged. 16 source checks passed in assistant JS runtime; visual review pending. No JS or server changes. Pull and hard refresh. Optional `node "Echo Show 5 Gen 1/prototype/home-surfaces.test.js"`.
+
+
+## Scheduled night mode (2026-11-27)
+
+User approved matched Home tile/rail transparency. General and Home quick settings now support Off (default), Manual and Scheduled night mode, configurable local start/end (22:00–07:00 default) and 10–70% visual dimming (55% default, matching earlier manual preview). Overnight and same-day windows, inclusive start/exclusive end, equal times disable schedule with status note. Existing manual brightness remains independent: stronger dim wins rather than compounding; no page switch, sleep, new polling or hardware backlight claims. Local preferences persist/reset, automatic status checked by existing second timer and on visibility return. 32 pure/source checks and JS syntax passed in assistant runtime; actual browser time controls, schedule transition, readability and Android backlight/always-on remain pending. Pull and hard refresh; no restart. Optional `node "Echo Show 5 Gen 1/prototype/night-mode.test.js"`.
