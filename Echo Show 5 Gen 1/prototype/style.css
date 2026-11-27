@@ -225,3 +225,27 @@ button,select,input{font:inherit;color:inherit}button,select{background:var(--co
 #screen[data-page=settings] .details::-webkit-scrollbar,
 #quick::-webkit-scrollbar{display:none;width:0;height:0}
 #screen[data-page=settings] .categories>button{flex-shrink:0}
+
+/* Home presets: one fixed layout and one wallpaper, original default unchanged. */
+#screen[data-page=home][data-home-wallpaper=ocean]{background:linear-gradient(140deg,#132e45,#304e63 55%,#14252e)}
+#screen[data-page=home][data-home-wallpaper=dusk]{background:linear-gradient(145deg,#261f35,#633e51 60%,#303047)}
+#screen[data-page=home][data-home-wallpaper=forest]{background:linear-gradient(135deg,#132b27,#355249 60%,#1a2c2a)}
+#screen[data-page=home][data-home-wallpaper=solid]{background:#14181d}
+#screen[data-page=home][data-home-wallpaper=solid][data-theme=black]{background:#080808}
+#screen[data-page=home][data-home-layout=minimal] .tiles{display:none}
+#screen[data-page=home][data-home-layout=split] #page{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,.95fr);align-items:center;gap:20px;padding-right:44px}
+#screen[data-page=home][data-home-layout=split] .tiles{grid-template-columns:minmax(0,1fr);margin:0;gap:10px}
+#screen[data-page=home][data-home-layout=split] .clock{font-size:clamp(42px,8vw,76px)}
+#screen[data-page=home][data-home-clock=bold] .clock{font-weight:750}
+#screen[data-page=home][data-home-clock=blocks] .clock{display:flex;align-items:center;justify-content:center;gap:6px;font-weight:500;font-size:clamp(44px,9vw,90px)}
+#screen[data-page=home][data-home-clock=blocks] .clock>span:not(.clock-colon){padding:8px 12px;border-radius:14px;background:#10171caa;border:1px solid #ffffff24}
+#screen[data-page=home][data-home-clock=blocks][data-home-layout=split] .clock{font-size:clamp(35px,6vw,62px)}
+#screen[data-page=home][data-home-clock=blocks][data-home-layout=split] .clock>span:not(.clock-colon){padding:7px}
+#screen[data-page=home][data-home-clock=analogue] .clock{display:flex;justify-content:center;align-items:center}
+.analogue-face{position:relative;width:clamp(130px,23vw,215px);aspect-ratio:1;border:2px solid #ffffff80;border-radius:50%;background:#10171c80;box-shadow:0 6px 18px #0003}
+.clock-mark{position:absolute;font-style:normal;font-size:15px;font-weight:500;line-height:1;letter-spacing:0}
+.clock-mark.m12{top:8%;left:50%;transform:translateX(-50%)}.clock-mark.m6{bottom:8%;left:50%;transform:translateX(-50%)}.clock-mark.m3{right:8%;top:50%;transform:translateY(-50%)}.clock-mark.m9{left:8%;top:50%;transform:translateY(-50%)}
+.clock-hand{position:absolute;left:50%;bottom:50%;border-radius:5px;transform-origin:50% 100%;background:#fff;width:4px}
+.hour-hand{height:27%;transform:translateX(-50%) rotate(var(--hour-angle,0deg))}
+.minute-hand{height:37%;width:3px;transform:translateX(-50%) rotate(var(--minute-angle,0deg))}
+.clock-pin{position:absolute;width:9px;height:9px;border-radius:50%;background:#fff;top:50%;left:50%;transform:translate(-50%,-50%)}
