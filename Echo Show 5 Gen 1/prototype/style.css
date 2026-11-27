@@ -277,3 +277,14 @@ button,select,input{font:inherit;color:inherit}button,select{background:var(--co
 .cal-event{display:grid;gap:5px;background:var(--control);border-left:3px solid var(--accent);border-radius:8px;padding:10px;margin:7px 0 12px;overflow-wrap:anywhere}
 .cal-event small{font-size:12px;color:var(--muted)}
 .cal-event strong{font-size:16px}
+
+/* Public calendar source colours, independent of global background. */
+.cal-grid button .cal-dots{display:flex;justify-content:center;gap:4px;position:absolute;bottom:4px;left:0;right:0;pointer-events:none}
+.cal-grid button .cal-dots i{position:static;width:5px;height:5px;background:var(--accent)}
+.cal-grid button i[data-cal-kind=holiday],.cal-legend span[data-cal-kind=holiday]::before{background:#69b6ef}
+.cal-grid button i[data-cal-kind=observance],.cal-legend span[data-cal-kind=observance]::before{background:#7dcb7d}
+.cal-grid button i[data-cal-kind=f1],.cal-legend span[data-cal-kind=f1]::before{background:#ff6363}
+.cal-event[data-cal-kind=holiday]{border-left-color:#69b6ef}.cal-event[data-cal-kind=observance]{border-left-color:#7dcb7d}.cal-event[data-cal-kind=f1]{border-left-color:#ff6363}
+.cal-legend{display:flex;flex-wrap:wrap;gap:8px;font-size:11px;color:var(--muted);margin-bottom:10px}
+.cal-legend span::before{content:"";display:inline-block;width:7px;height:7px;border-radius:50%;margin-right:4px}
+.cal-attribution{font-size:11px}

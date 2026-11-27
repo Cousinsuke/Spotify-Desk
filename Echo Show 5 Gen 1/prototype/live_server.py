@@ -14,7 +14,7 @@ from urllib.parse import urlencode, urlparse
 import requests
 import weather_service
 import glucose_service
-import calendar_service
+import public_calendar_service
 from flask import Flask, jsonify, redirect, request, send_from_directory
 
 HOST = "127.0.0.1"
@@ -425,7 +425,7 @@ def calendar_state():
     if request.remote_addr != HOST:
         return jsonify(error="Local calendar access only"),403
     try:
-        return jsonify(calendar_service.service.snapshot(request.args.get("month","")))
+        return jsonify(public_calendar_service.service.snapshot(request.args.get("month","")))
     except ValueError:
         return jsonify(error="Invalid calendar month"),400
 

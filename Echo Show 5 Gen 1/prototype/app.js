@@ -145,19 +145,20 @@ function renderCalendar(){
   calendarToday=calendarKey(new Date());
   const data=calendarDataMonth===calendarShown?calendarData:{status:'loading',events:[]};
   const month=calendarDate(calendarShown),sample=liveEnabled?(data.events||[]):calendarSample(calendarToday),days=calendarGrid(calendarShown);
-  const hasData=!liveEnabled||['fresh','stale'].includes(data.status);
+  const hasData=!liveEnabled||['fresh','stale','partial'].includes(data.status);
   const chosen=sample.filter(e=>e.date===calendarSelected),upcoming=sample.filter(e=>e.date>calendarSelected).slice(0,3);
   const monthLabel=new Intl.DateTimeFormat('en-GB',{month:'long',year:'numeric'}).format(month);
   const dateLabel=k=>new Intl.DateTimeFormat('en-GB',{weekday:'long',day:'numeric',month:'long'}).format(calendarDate(k));
-  const event=e=>'<article class="cal-event"><small>'+calendarEscape(e.time)+'</small><strong>'+calendarEscape(e.title)+'</strong></article>';
+  const event=e=>'<article class="cal-event" data-cal-kind="'+(['holiday','observance','f1'].includes(e.kind)?e.kind:'sample')+'"><small>'+calendarEscape(e.time)+'</small><strong>'+calendarEscape(e.title)+'</strong>'+(e.location?'<small>'+calendarEscape(e.location)+'</small>':'')+'</article>';
+  const marks=day=>[...new Set(sample.filter(e=>e.date===day).map(e=>['holiday','observance','f1'].includes(e.kind)?e.kind:'sample'))].map(k=>'<i data-cal-kind="'+k+'"></i>').join('');
   page.innerHTML='<div class="cal-layout"><section class="cal-month" aria-label="Monthly calendar"><header><h1>'+monthLabel+'</h1><div class="cal-nav"><button data-cal-action="prev" aria-label="Previous month">‹</button><button data-cal-action="today">Today</button><button data-cal-action="next" aria-label="Next month">›</button></div></header><div class="cal-grid">'+
     ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'].map(d=>'<span class="cal-weekday">'+d+'</span>').join('')+
-    days.map(d=>'<button data-cal-day="'+d.key+'" aria-label="'+dateLabel(d.key)+'" aria-pressed="'+(d.key===calendarSelected)+'" '+(d.key===calendarToday?'aria-current="date" ':'')+'class="'+(d.inMonth?'':'outside')+'">'+d.day+(sample.some(e=>e.date===d.key)?'<i></i>':'')+'</button>').join('')+
-    '</div></section><section class="cal-agenda" aria-label="Calendar events"><h2>'+dateLabel(calendarSelected)+'</h2><p class="cal-source">'+(liveEnabled?'iCloud · '+({fresh:'Connected',stale:'Refreshing',loading:'Connecting',unconfigured:'Not configured',error:'Unavailable',empty:'No calendars found'}[data.status]||'Unavailable'):'SAMPLE EVENTS · NOT LIVE')+'</p>'+
-    (liveEnabled&&data.counts?'<p class="cal-source">'+calendarEscape(data.counts.eventCalendars)+' calendars · '+calendarEscape(sample.length)+' event days'+(data.counts.subscriptions?' · '+calendarEscape(data.counts.subscriptions)+' subscription collections':'')+'</p>':'')+
-    (liveEnabled&&hasData&&sample.length===0&&data.message?'<p class="cal-empty">'+calendarEscape(data.message)+'</p>':'')+
+    days.map(d=>'<button data-cal-day="'+d.key+'" aria-label="'+dateLabel(d.key)+'" aria-pressed="'+(d.key===calendarSelected)+'" '+(d.key===calendarToday?'aria-current="date" ':'')+'class="'+(d.inMonth?'':'outside')+'">'+d.day+'<span class="cal-dots">'+marks(d.key)+'</span>'+'</button>').join('')+
+    '</div></section><section class="cal-agenda" aria-label="Calendar events"><h2>'+dateLabel(calendarSelected)+'</h2><p class="cal-source">'+(liveEnabled?'UK holidays &amp; Formula 1 · '+({fresh:'Updated',partial:'Partial data',loading:'Loading',error:'Unavailable'}[data.status]||'Unavailable'):'SAMPLE EVENTS · NOT LIVE')+'</p>'+
+    (liveEnabled&&data.sources?'<p class="cal-source">Bank holidays: '+calendarEscape(data.sources.holidays)+' · F1: '+calendarEscape(data.sources.f1)+'</p>':'')+
+    '<div class="cal-legend"><span data-cal-kind="holiday">Bank holidays</span><span data-cal-kind="observance">Observances</span><span data-cal-kind="f1">F1</span></div>'+
     (!hasData?'<p class="cal-empty">'+calendarEscape(data.message||'Loading calendar…')+'</p>':(chosen.length?chosen.map(event).join(''):'<p class="cal-empty">No events for this day.</p>')+(upcoming.length?'<h3>Upcoming</h3>'+upcoming.map(e=>'<small class="cal-event-date">'+dateLabel(e.date)+'</small>'+event(e)).join(''):''))+
-    '</section></div>';
+    (liveEnabled?'<p class="cal-source cal-attribution">UK bank holidays: GOV.UK · F1 schedule: F1Calendar.com / sportstimes/f1 (unofficial, MIT). Times in UK local time.</p>':'')+'</section></div>';
 }
 function calendarAction(action){
   if(action==='today')calendarReset();
