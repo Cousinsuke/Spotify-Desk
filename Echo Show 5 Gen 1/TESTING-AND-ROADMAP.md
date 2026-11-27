@@ -248,3 +248,11 @@ For troubleshooting, record the first error, command, OS, reproducibility and re
 - [x] Implement isolated HTTPS sample pairing boundary.
 - [ ] Run 68 Python tests; test TLS, trusted CA, pairing, unauthorized routes, revocation and existing loopback server.
 - [ ] Implement scoped live API boundary after synthetic verification; Android trust and kiosk testing pending.
+
+
+### Sample HTTPS gateway installation checkpoint
+
+2026-11-27: User supplied Pi sample HTTPS gateway installation output: prototype 744fc33 pulled, Gunicorn 27.0.1 installed, 68 unittest cases passed in 0.520s plus launcher assertions; sample gateway tests passed. Flask test-client static response objects produced nonfatal ResourceWarning for unclosed index/app.js file handles; improve test response cleanup in future increment, no observed production leak established. TLS initialization completed. Separate gateway user service started (disabled at boot as intended); status sampled 31 ms after launch before Gunicorn listener appeared, so actual HTTPS listener and startup success not yet verified. Existing loopback 8765 listener confirmed. Next recheck status/journal/listeners, obtain public CA SHA256 fingerprint on Pi, transfer only ca.crt via authenticated SSH, verify fingerprint and curl --cacert hostname/IP validation, import verified CA into test browser trust and pair with locally generated one-time code. Confirm unauthorized/paired/blocked-live routes and revocation before implementing scoped live access. No actual LAN live data exposure, no TLS bypass, no router forwarding or Nextcloud changes. No secrets, local addresses or raw logs committed. Documentation only.
+
+- [x] Gunicorn installed, 68 Python tests passed, local TLS state generated.
+- [ ] Confirm gateway listener after startup, validate TLS and browser trust, pairing and revocation; live routes remain disabled.
