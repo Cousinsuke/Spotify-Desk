@@ -256,3 +256,11 @@ For troubleshooting, record the first error, command, OS, reproducibility and re
 
 - [x] Gunicorn installed, 68 Python tests passed, local TLS state generated.
 - [ ] Confirm gateway listener after startup, validate TLS and browser trust, pairing and revocation; live routes remain disabled.
+
+
+### Sample HTTPS transport verified
+
+2026-11-27: User verified Gunicorn 27.0.1 sample-only device gateway active, worker booted and listening on configured LAN IPv4:8443, original 127.0.0.1:8765 listener retained. Public CA copied using authenticated SSH; SHA256 file hashes matched. Workstation curl --cacert verified TLS and returned 303 Location /pair with no-store, no-referrer, nosniff, DENY and restrictive CSP (connect-src none). No certificate bypass. Journal query returned no journal files but systemctl status provided startup logs; persistent journal not required at this stage. Next import verified local CA in test browser (browser certificate authority trust, no private key), generate one-time pairing code locally, verify sample UI, persistence, blocked API/OAuth paths and revocation; no real data enabled yet. Gateway remains disabled at boot intentionally. Do not publish code, cookie, certificate fingerprint, local address or raw output. No Nextcloud or existing live server changes.
+
+- [x] LAN HTTPS listener, matching CA transfer hashes, verified TLS and unauthenticated redirect.
+- [ ] Browser trust, pairing, persistence, live-route denial and revocation.
