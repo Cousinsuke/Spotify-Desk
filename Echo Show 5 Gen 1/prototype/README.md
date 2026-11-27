@@ -84,3 +84,14 @@ User requested a white graph, Home glucose tile status colour, and global themes
 ## Increment 17 — app shortcuts and ordering (2026-11-27)
 
 Settings > Apps lets you pin up to three enabled apps and move them up/down. Home and Apps stay fixed; the drawer lists all enabled apps, including unpinned ones. Calendar and System Information are hidden until implemented. Existing default pins and order retained; validated non-sensitive preferences migrate in place, persist locally and reset with preview preferences. No Pi storage yet. Touch and keyboard controls, local persistence and actual layout need browser review. Run `node "Echo Show 5 Gen 1/prototype/app-shortcuts.test.js"` from repo root. Frontend-only pull and hard refresh; no new asset served, no restart or reauthorization. No playback, weather, glucose or root app changes.
+
+
+## Local one-command launcher (2026-11-27)
+
+On Omarchy/Linux, stop any running preview server (Ctrl+C), then from the preview worktree root run:
+
+```bash
+./"Echo Show 5 Gen 1/prototype/start-live"
+```
+
+First launch asks for the Spotify Client ID, Gluroo HTTPS base URL and 40-hex API Secret Header SHA-1 using hidden input, then creates `prototype/.env` with mode 600 and starts the existing loopback server using the existing root .venv. Subsequent launches reuse the file without prompts. The root .gitignore already excludes .env at every level; only .env.example is tracked. To change values locally use `nano "Echo Show 5 Gen 1/prototype/.env"`, keeping literal unquoted KEY=value lines; never force-add or share the real file. Local plaintext secrets protected by owner-only file permissions, not encryption. Do not copy them to Git or chat. Spotify OAuth tokens remain memory-only: reauthorize after a server restart as before. No new dependencies or changes to live_server.py, existing port or LAN security. Offline test: `python3 "Echo Show 5 Gen 1/prototype/test_start_live.py"`. 14 synthetic checks passed in assistant Linux runtime; actual startup with user's credentials pending.
