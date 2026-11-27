@@ -158,3 +158,16 @@ git pull --ff-only origin echo-show/prototype
 node "Echo Show 5 Gen 1/prototype/app-shortcuts.test.js"
 ```
 Hard refresh the existing browser. If Node is unavailable, the browser can still be reviewed; report that the automated local test was not run. Use static sample mode `/` for range-colour review if desired; do not share real glucose values or screenshots containing private data.
+
+
+## Local one-command launcher (2026-11-27)
+
+User requested one-command launch rather than re-entering Spotify Client ID, Gluroo URL and API Secret Header SHA-1 at every restart. Prototype commit [0271c7a](https://github.com/Cousinsuke/Spotify-Desk/commit/0271c7acee9a10170380ebc81043aca7cf6c0e5f) adds executable prototype/start-live, blank .env.example, offline regression test and launch documentation. On Omarchy/Linux first run prompts locally with hidden input, validates required values and creates owner-only mode 600 prototype/.env; subsequent runs parse literal key/value data (no shell evaluation), reuse credentials, and exec existing .venv Python live_server.py. Reject duplicate/unknown settings, insecure permissions, symlinks and malformed HTTPS/hash values. Existing root .gitignore already excludes .env at all levels; real credentials never committed. Local plaintext file, not encrypted; do not share or force-add it. No new dependencies or API/port/security-policy changes. 14 synthetic assertions passed in assistant Linux runtime (parsing, bad configuration, permissions, symlink and mocked first-run creation); real credential launch pending user test. Spotify OAuth tokens remain memory-only and reauthorization after restart is unchanged. Pi storage/deployment remains separate.
+
+```bash
+cd ~/Projects/Spotify-Desk-Echo-Prototype
+git status --short
+git pull --ff-only origin echo-show/prototype
+./"Echo Show 5 Gen 1/prototype/start-live"
+```
+Stop any running preview server with Ctrl+C first. First launch prompts once; subsequent launches run the last command without re-entering credentials. Edit locally if needed with `nano "Echo Show 5 Gen 1/prototype/.env"`. Open http://127.0.0.1:8765/?live=1 and reconnect Spotify if needed. Optional test: `python3 "Echo Show 5 Gen 1/prototype/test_start_live.py"`.

@@ -128,3 +128,7 @@ For troubleshooting, record the first error, command, OS, reproducibility and re
 - [ ] Run native Node app-shortcuts.test.js; at 960 x 480 confirm default rail, unpin one app then pin Settings, three-pin cap, order changes in both rail/drawer, unpinned destination access, persistent preferences after reload, reset restores original defaults, touch/keyboard and rail reflow. Calendar/System must not be presented as functional.
 - [ ] Review independent glucose palettes (white graph and status card/Home tile) from preceding increment; confirm no change to glucose status/freshness behavior. Use sample scenarios rather than sharing real readings.
 - [ ] Next Settings General/Home and scheduled night mode; Pi preflight remains separate.
+
+
+- [x] Add local one-command launcher, ignored mode-600 configuration, blank example and offline regression test; 14 synthetic checks passed.
+- [ ] User verifies first launch, repeat launch without prompts and existing loopback UI; do not share .env contents. OAuth reconnect after restart remains expected.
