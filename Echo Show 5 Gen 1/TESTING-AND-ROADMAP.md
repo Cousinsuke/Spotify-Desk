@@ -150,3 +150,8 @@ For troubleshooting, record the first error, command, OS, reproducibility and re
 - [x] User approved Home customization overall.
 - [x] Shared neutral Home tile/rail background implemented; 16 source checks passed.
 - [ ] Verify matched surface styling on wallpapers, both rail states, opacity and Transparent style; confirm Glucose status colour unchanged. Then automatic night mode.
+
+- [x] User approved shared Home surface refinement.
+- [x] Implement manual/scheduled night mode, 32 new and 97 existing pure/source checks passed.
+- [ ] Browser review of night controls, manual/automatic transitions, schedule persistence/reset, equal times, no page switch and status readability. Android actual backlight/always-on still pending.
+- [ ] Calendar scope and design after night-mode review.
