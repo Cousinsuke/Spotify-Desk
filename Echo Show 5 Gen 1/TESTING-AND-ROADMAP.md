@@ -158,3 +158,7 @@ For troubleshooting, record the first error, command, OS, reproducibility and re
 
 - [x] User confirmed night mode update works (browser acceptance; individual edge cases not separately reported).
 - [ ] Agree Calendar source and scope; implement after design decision. Hardware brightness and always-on verification remain pending.
+
+- [x] User selected Apple/iCloud Calendar; month/agenda preview and app registry added, 15 Calendar and 23 shortcut checks passed.
+- [ ] Review month navigation, date selection, Today, agenda scrolling and both rail states at 960x480, verify no samples in live mode.
+- [ ] Implement and validate private read-only CalDAV adapter, local credential setup, recurring/all-day/timezones, freshness, privacy and secure Pi transport.
