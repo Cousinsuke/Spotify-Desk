@@ -99,3 +99,6 @@ For troubleshooting, record the first error, command, OS, reproducibility and re
 - [ ] Review Weather layout at 960x480, rail reflow, duration settings, forecast scrolling, icon styles, Home tile and day detail overlay.
 - [ ] Connect real fixed Bournemouth weather feed and validate cache, freshness, condition assets and hourly data; then Glucose.
 - [ ] Validate individual remaining Spotify controls and later Pi-hosted Xbox playback with PC off; actual Echo hardware pending.
+
+- [x] User reviewed initial Weather screenshots; commit current-temperature/upcoming-hour refinements and expanded bottom cards; 25 logic tests passed.
+- [ ] Review revised Weather UI, hourly/daily toggle, midnight rollover, scrolling and details at 960 x 480; connect real weather after approval.
