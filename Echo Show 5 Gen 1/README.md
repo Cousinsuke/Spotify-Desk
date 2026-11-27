@@ -1,6 +1,6 @@
 # Echo Show 5 Gen 1 — Spotify Desk
 
-**Last updated: 2026-11-26. Status: ordered by user; awaiting delivery. Pre-arrival software and Pi preparation; no Echo Show installation or Pi deployment confirmed.**
+**Last updated: 2026-11-27. Status: ordered by user; awaiting delivery. Pre-arrival software and Pi preparation; no Echo Show installation or Pi deployment confirmed.**
 
 This is a separate hardware/deployment path within Spotify-Desk, not a replacement for the existing Windows/Omarchy software or ESP32/Waveshare CAD work. The aim is a small, black, touchscreen desk dashboard with no separate physical media buttons required. Reuse the current software rather than rebuilding it unnecessarily.
 
@@ -29,3 +29,7 @@ The UI direction is based on the user's rough reference: a clock-first home scre
 Update this folder as each meaningful research result, command outcome, decision or fix is established. Record date, source, exact model/version, status (proposed / documented / tested / accepted / blocked), evidence, next step and any limitations. Do not present planned work as completed. Keep actual secrets, account identifiers, serial numbers, readings, medical screenshots, real network details and token files out of this public repository. Do not alter the existing mechanical work unless explicitly requested.
 
 Existing references: [project README](../README.md), [architecture](../docs/ARCHITECTURE.md), [dashboard design](../docs/DASHBOARDS.md), [Gluroo integration](../docs/GLUCOSE-LIVE.md).
+
+## Latest prototype checkpoint (2026-11-27)
+
+Isolated `echo-show/prototype` branch is at [7f4d9ea](https://github.com/Cousinsuke/Spotify-Desk/commit/7f4d9ea72483809f1b657f046559d9f1c64b8992). Local live Spotify, Weather and Glucose integrations exist; Xbox and Weather accepted, latest Glucose palette and new app shortcut customization await browser review. Settings > Apps now supports up to three optional rail shortcuts with shared ordering and local preference storage. See [PROTOTYPE-STATUS.md](PROTOTYPE-STATUS.md) and [CHATGPT-HANDOFF.md](CHATGPT-HANDOFF.md) for current next steps. Pi and Echo deployment remain pending.

@@ -122,3 +122,9 @@ For troubleshooting, record the first error, command, OS, reproducibility and re
 
 - [x] Separate chart, status cards and background themes; add Home status tile. 27 source checks passed.
 - [ ] User visual review in all background modes and stale state, then full Settings.
+
+
+- [x] Implement app pin/unpin and shared ordering on prototype branch; syntax and 23 assistant-runtime pure/source checks passed, commit 7f4d9ea.
+- [ ] Run native Node app-shortcuts.test.js; at 960 x 480 confirm default rail, unpin one app then pin Settings, three-pin cap, order changes in both rail/drawer, unpinned destination access, persistent preferences after reload, reset restores original defaults, touch/keyboard and rail reflow. Calendar/System must not be presented as functional.
+- [ ] Review independent glucose palettes (white graph and status card/Home tile) from preceding increment; confirm no change to glucose status/freshness behavior. Use sample scenarios rather than sharing real readings.
+- [ ] Next Settings General/Home and scheduled night mode; Pi preflight remains separate.
