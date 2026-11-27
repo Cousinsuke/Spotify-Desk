@@ -155,3 +155,24 @@ User approved public Calendar direction and requested vertical swipe navigation.
 ## System Information — combined dashboard (2026-11-27)
 
 User selected option C. System Information enabled in Apps and pin registry; default pins unchanged. Server panel shows OS/architecture, Pi model if detected, CPU usage/logical CPUs, RAM, project-volume storage, recognized CPU temperature, host uptime and network-link state. Service panel reports dashboard, Spotify (last playback probe, idle is connected), Weather, Glucose freshness and Calendar status; no event contents or glucose readings included. Local-only read-only /api/system, standard Linux proc/sys files, no privileged operations/new dependency. Refresh every five seconds while visible; sample mode labelled. Metrics belong to server host, not Echo; display reports browser CSS size only. JS syntax and 12 System plus 23 shortcut checks passed in assistant JS runtime; four offline Python methods authored not executed; browser/Linux readings and actual Pi/Echo pending. Pull, restart, hard refresh.
+
+
+## Pi production startup (2026-11-27)
+
+User confirmed live Pi System Information: four cores, low CPU, RAM 36%, 35 C, all service rows healthy (Spotify idle). Snapshot only, not a stress test. Nextcloud left running, no need to stop at present. Add optional Waitress production mode (single request worker to preserve Spotify state, same loopback port, private launcher and refresh cache, no proxy trust, bounded requests/connections), and an unprivileged systemd user unit. No changes to browser, data credentials or LAN security boundary. See https://docs.pylonsproject.org/projects/waitress/en/stable/arguments.html. Install requirements-production.txt into existing venv before tests. Stop manual preview before starting service. Commands on Pi:
+
+```bash
+cd ~/Projects/Spotify-Desk-Echo-Prototype
+git pull --ff-only origin echo-show/prototype
+./.venv/bin/python -m pip install -r "Echo Show 5 Gen 1/prototype/requirements-production.txt"
+./.venv/bin/python -m unittest discover -s "Echo Show 5 Gen 1/prototype" -p "test_*.py" -v
+mkdir -p ~/.config/systemd/user
+install -m 644 "Echo Show 5 Gen 1/prototype/spotify-desk.service" ~/.config/systemd/user/spotify-desk.service
+systemctl --user daemon-reload
+systemctl --user enable --now spotify-desk.service
+loginctl enable-linger "$USER"
+systemctl --user status spotify-desk.service --no-pager
+loginctl show-user "$USER" -p Linger
+```
+
+If linger authorization denied, keep service enabled but do not claim boot startup; resolve through existing authorized Pi administration before reboot. Verify loopback with ss and browser through existing SSH tunnel; close manual launch shell, test service restart, confirm Spotify restored; boot verification separate. Rollback systemctl --user disable --now spotify-desk.service; original start-live still works. No Nextcloud or disk modifications, no sudo needed for service installation (linger may require privilege), no credentials in unit. Three Python startup tests authored, not run by assistant; Pi test and boot verification pending.

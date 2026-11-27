@@ -1,0 +1,18 @@
+[Unit]
+Description=Spotify Desk Echo dashboard (local only)
+StartLimitIntervalSec=120
+StartLimitBurst=5
+
+[Service]
+Type=simple
+WorkingDirectory=%h/Projects/Spotify-Desk-Echo-Prototype
+ExecStart="%h/Projects/Spotify-Desk-Echo-Prototype/Echo Show 5 Gen 1/prototype/start-live" --production
+Restart=on-failure
+RestartSec=5
+TimeoutStopSec=20
+UMask=0077
+NoNewPrivileges=true
+Environment=PYTHONUNBUFFERED=1
+
+[Install]
+WantedBy=default.target

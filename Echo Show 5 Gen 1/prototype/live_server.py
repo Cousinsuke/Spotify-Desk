@@ -9,6 +9,7 @@ import os
 import re
 import secrets
 import time
+import sys
 from pathlib import Path
 from urllib.parse import urlencode, urlparse
 import requests
@@ -460,9 +461,24 @@ def asset(name):
     if name not in {"style.css","app.js","spotify-preview.js","spotify-live.js","playback-clock.js","album-palette.js","weather-preview.js","weather-live.js","glucose-chart.js","glucose-preview.js","glucose-live.js","favicon.svg","weather-sky.svg"}:return "",404
     return send_from_directory(ROOT,name)
 
-if __name__=="__main__":
+def run_server(production=False):
+    global token
     if not re.fullmatch(r"[A-Za-z0-9]{16,128}",CLIENT):
         raise SystemExit("Set SPOTIPY_CLIENT_ID locally before starting.")
     token = read_refresh()
     print("Local Spotify test: "+ORIGIN+"/?live=1 (saved authorization restored)" if token else "Local Spotify test: "+ORIGIN+"/?live=1 (connect Spotify once)",flush=True)
-    app.run(host=HOST,port=PORT,debug=False,use_reloader=False,threaded=False)
+    if production:
+        from waitress import serve
+        # One request worker preserves the existing single-threaded Spotify state.
+        # Weather/Glucose/Calendar retain their independent bounded background fetches.
+        serve(app,host=HOST,port=PORT,threads=1,connection_limit=64,
+              channel_timeout=60,max_request_header_size=32768,
+              max_request_body_size=65536,clear_untrusted_proxy_headers=True,
+              expose_tracebacks=False)
+    else:
+        app.run(host=HOST,port=PORT,debug=False,use_reloader=False,threaded=False)
+
+if __name__=="__main__":
+    if sys.argv[1:] not in ([], ["--production"]):
+        raise SystemExit("Usage: live_server.py [--production]")
+    run_server(production=bool(sys.argv[1:]))

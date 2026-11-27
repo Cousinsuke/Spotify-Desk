@@ -69,6 +69,9 @@ def setup(path):
 
 
 def main():
+    args = sys.argv[1:]
+    if args not in ([], ["--production"]):
+        raise ValueError("Usage: start-live [--production]")
     root = HERE.parent.parent
     python = root / ".venv/bin/python"
     if not os.access(python, os.X_OK):
@@ -77,13 +80,15 @@ def main():
     try:
         values = load(path)
     except FileNotFoundError:
+        if args:
+            raise ValueError("Configure .env interactively using start-live before enabling production.")
         values = setup(path)
     env = dict(os.environ, **values)
     for key in APPLE_KEYS:
         env[key] = values.get(key, "")
     os.chdir(root)
     print("Starting Echo preview: http://127.0.0.1:8765/?live=1", flush=True)
-    os.execve(python, [str(python), str(HERE / "live_server.py")], env)
+    os.execve(python, [str(python), str(HERE / "live_server.py"), *args], env)
 
 
 if __name__ == "__main__":
