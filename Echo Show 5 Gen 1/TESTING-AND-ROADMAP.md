@@ -135,3 +135,7 @@ For troubleshooting, record the first error, command, OS, reproducibility and re
 
 - [x] Hide Settings and quick settings scrollbar chrome, preserve native scrolling; nine source checks passed.
 - [ ] Confirm finger swipe and mouse-wheel scrolling in both Settings columns and quick settings, including last row and rail states, with no visible scrollbar or gesture conflict.
+
+- [x] User approved Settings scrolling/appearance.
+- [x] Implement local refresh-token cache and add eight mocked regression tests (34 total); execution pending.
+- [ ] Run test_live_server.py; consent once and restart twice to verify automatic connection, Xbox playback and unchanged weather/glucose. Never share token file.
