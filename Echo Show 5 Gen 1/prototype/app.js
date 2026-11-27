@@ -117,6 +117,7 @@ function paintGlucose(){
 function updateHomeGlucose(){
  const label=$('homeGlucoseLabel'),reading=$('homeGlucose');if(!label||!reading)return;
  const s=glucoseData,shown=s.status==='live'||s.status==='sample';
+ screen.dataset.glucoseBand=glucosePreview.theme(s.latest?.mmol,s.status);
  label.textContent=s.status==='sample'?'Glucose · sample':'Glucose';
  reading.textContent=shown&&s.latest?s.latest.mmol.toFixed(1)+(s.latest.arrow?' '+s.latest.arrow:''):'Not live';
 }

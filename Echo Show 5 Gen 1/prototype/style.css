@@ -126,77 +126,74 @@ button,select,input{font:inherit;color:inherit}button,select{background:var(--co
 #forecastDays.forecast-dragging,#weatherDetails #detailHours.forecast-dragging{scroll-snap-type:none;cursor:grabbing}
 #forecastDays.forecast-dragging *,#weatherDetails #detailHours.forecast-dragging *{cursor:grabbing}
 
-/* Glucose: equal-height panels, sample-only, preserve the original chart renderer. */
+/* Glucose status palette is independent of the page background preference.
+ * Home and the reading card share it; the graph is always neutral and high contrast. */
+#screen{
+ --glu-status-bg:#30363d;--glu-status-edge:#747e89;--glu-status-ink:#f3f5f7;
+ --glu-status-muted:#d0d4da;--glu-status-arrow:#f3f5f7;
+ --glu-dynamic-bg:#292e35;--glu-dynamic-end:#14181d
+}
+#screen[data-glucose-band=range]{
+ --glu-status-bg:#254c3b;--glu-status-edge:#6aa18a88;--glu-status-ink:#effbf4;
+ --glu-status-muted:#d0e0d7;--glu-status-arrow:#a9f3c5;
+ --glu-dynamic-bg:#122e23;--glu-dynamic-end:#0b1b15
+}
+#screen[data-glucose-band=low]{
+ --glu-status-bg:#a5263c;--glu-status-edge:#ffb7c088;--glu-status-ink:#fff;
+ --glu-status-muted:#fff;--glu-status-arrow:#fff0f2;
+ --glu-dynamic-bg:#6d1725;--glu-dynamic-end:#390e17
+}
+#screen[data-glucose-band=above]{
+ --glu-status-bg:#ffbb00;--glu-status-edge:#ffda72;--glu-status-ink:#211600;
+ --glu-status-muted:#352300;--glu-status-arrow:#211600;
+ --glu-dynamic-bg:#795100;--glu-dynamic-end:#543900
+}
+#screen[data-glucose-band=high]{
+ --glu-status-bg:#c24b00;--glu-status-edge:#ff9a4a;--glu-status-ink:#fff;
+ --glu-status-muted:#fff;--glu-status-arrow:#fff;
+ --glu-dynamic-bg:#913700;--glu-dynamic-end:#632600
+}
 #screen[data-page=glucose]{
- --glu-bg:#122e23;--glu-bg-end:#0b1b15;--glu-card:#254c3b;--glu-card-end:#10251f;
- --glu-edge:#6aa18a55;--glu-ink:#effbf4;--glu-muted:#d0e0d7;--glu-accent:#a9f3c5;
- --glu-grid:#ffffff23;--glu-band:#83be8e;--glu-band-edge:#8ac19a66;--glu-now:#cfdfd2;
- --glu-select:#26372e;--glu-control:#ffffff16;--glu-control-edge:#ffffff30;
- --glu-status:#b3efd0;--glu-footer:#c1d4ca;
- background:linear-gradient(135deg,var(--glu-bg),var(--glu-bg-end));color:#effbf4
+ --glu-bg:#122e23;--glu-bg-end:#0b1b15;--glu-footer:#f0f2f4;
+ background:linear-gradient(135deg,var(--glu-bg),var(--glu-bg-end));color:#f3f5f7
 }
-#screen[data-page=glucose][data-glucose-background=theme],
-#screen[data-page=glucose][data-glucose-background=dynamic][data-glucose-band=neutral]{
- --glu-bg:#292e35;--glu-bg-end:#14181d;--glu-card:#30363d;--glu-card-end:#22272d;
- --glu-edge:#a5aab455;--glu-ink:#f3f5f7;--glu-muted:#d0d4da;--glu-accent:#e4e8ef;
- --glu-grid:#ffffff25;--glu-band:#c0c5ce;--glu-band-edge:#c0c5ce66;--glu-now:#d4d9e0;
- --glu-select:#30363d;--glu-status:#e4e8ef;--glu-footer:#d0d4da
-}
-#screen[data-page=glucose][data-glucose-background=theme][data-theme=black]{
- --glu-bg:#080808;--glu-bg-end:#080808;--glu-card:#1d1d1d;--glu-card-end:#141414;--glu-select:#242424
-}
-#screen[data-page=glucose][data-glucose-background=dynamic][data-glucose-band=low]{
- --glu-bg:#6d1725;--glu-bg-end:#390e17;--glu-card:#a5263c;--glu-card-end:#851c30;
- --glu-edge:#ffb7c088;--glu-ink:#fff;--glu-muted:#fff;--glu-accent:#fff0f2;
- --glu-grid:#ffffff32;--glu-band:#ffd1d8;--glu-band-edge:#ffd1d888;--glu-now:#ffe1e6;
- --glu-select:#721a2a;--glu-status:#fff0f2;--glu-footer:#fff0f2
-}
-#screen[data-page=glucose][data-glucose-background=dynamic][data-glucose-band=above]{
- /* Reference amber: saturated yellow cards with dark text. */
- --glu-bg:#795100;--glu-bg-end:#543900;--glu-card:#ffbb00;--glu-card-end:#edaa00;
- --glu-edge:#ffda72;--glu-ink:#211600;--glu-muted:#352300;--glu-accent:#211600;
- --glu-grid:#21160033;--glu-band:#644400;--glu-band-edge:#64440088;--glu-now:#352300;
- --glu-select:#ffbb00;--glu-control:#21160012;--glu-control-edge:#21160055;
- --glu-status:#fff1c4;--glu-footer:#fff1c4
-}
-#screen[data-page=glucose][data-glucose-background=dynamic][data-glucose-band=high]{
- /* Reference orange, slightly darkened for small white text contrast. */
- --glu-bg:#913700;--glu-bg-end:#632600;--glu-card:#c24b00;--glu-card-end:#ad4000;
- --glu-edge:#ff9a4a;--glu-ink:#fff;--glu-muted:#fff;--glu-accent:#fff;
- --glu-grid:#ffffff35;--glu-band:#ffe0c1;--glu-band-edge:#ffe0c188;--glu-now:#fff1e3;
- --glu-select:#a83e00;--glu-status:#fff1e3;--glu-footer:#fff1e3
-}
+#screen[data-page=glucose][data-glucose-background=theme]{--glu-bg:#292e35;--glu-bg-end:#14181d}
+#screen[data-page=glucose][data-glucose-background=theme][data-theme=black]{--glu-bg:#080808;--glu-bg-end:#080808}
+#screen[data-page=glucose][data-glucose-background=dynamic]{--glu-bg:var(--glu-dynamic-bg);--glu-bg-end:var(--glu-dynamic-end)}
 #screen[data-page=glucose] #page{padding:18px 44px 26px 26px;gap:10px}
 .glucose-header{display:flex;justify-content:space-between;align-items:center;flex:none;min-height:38px}
 .glucose-sample{font-size:11px;letter-spacing:1px;color:var(--glu-footer)}
 .glucose-header select,.glucose-chart-controls select{min-height:34px;padding:5px 12px;border-radius:10px;background:#ffffff16;border:1px solid #ffffff30;color:#f1faf4;font-size:14px}
-.glucose-header select{min-width:120px}.glucose-header select option{background:#303030;color:#fff}.glucose-chart-controls select option{background:var(--glu-select);color:var(--glu-ink)}
+.glucose-header select{min-width:120px}.glucose-header select option{background:#303030;color:#fff}.glucose-chart-controls select option{background:#30363d;color:#fff}
 .glucose-layout{display:grid;grid-template-columns:minmax(0,2fr) minmax(0,3fr);gap:14px;flex:1;min-height:0}
 .glucose-layout[data-view=live],.glucose-layout[data-view=graph]{grid-template-columns:minmax(0,1fr)}
-.glucose-card{min-width:0;min-height:0;border:1px solid var(--glu-edge);border-radius:17px;background:var(--glu-card);color:var(--glu-ink);overflow:hidden}
-.glucose-reading{display:flex;align-items:center;justify-content:center;flex-direction:column;gap:10px;padding:12px}
+.glucose-card{min-width:0;min-height:0;border:1px solid #626b75;border-radius:17px;background:#252a30;color:#fff;overflow:hidden}
+.glucose-reading{display:flex;align-items:center;justify-content:center;flex-direction:column;gap:10px;padding:12px;background:var(--glu-status-bg);border-color:var(--glu-status-edge);color:var(--glu-status-ink)}
 .glucose-number{display:flex;align-items:center;justify-content:center;gap:16px;max-width:100%;white-space:nowrap}
 .glucose-number strong{font-size:clamp(48px,8vw,84px);font-weight:650;line-height:1;letter-spacing:-3px;font-variant-numeric:tabular-nums}
-.glucose-arrow{font-size:52px;color:var(--glu-accent);line-height:1}
-.glucose-unit{font-size:17px;color:var(--glu-muted)}.glucose-reading small{font-size:13px;color:var(--glu-muted)}
+.glucose-arrow{font-size:52px;color:var(--glu-status-arrow);line-height:1}
+.glucose-unit{font-size:17px;color:var(--glu-status-muted)}.glucose-reading small{font-size:13px;color:var(--glu-status-muted)}
 .glucose-layout[data-view=live] .glucose-number strong{font-size:116px}.glucose-layout[data-view=live] .glucose-arrow{font-size:76px}
 .glucose-layout[data-view=live] .glucose-unit{font-size:21px}
-.glucose-graph{display:flex;flex-direction:column;padding:12px;gap:8px;background:linear-gradient(150deg,var(--glu-card),var(--glu-card-end))}
+.glucose-graph{display:flex;flex-direction:column;padding:12px;gap:8px;background:#252a30}
 .glucose-chart-controls{display:flex;justify-content:flex-end;gap:7px;flex:none}
 #glucosePlot{width:100%;height:100%;min-height:0;flex:1;display:block}
 .glucose-footer{font-size:11px;color:var(--glu-footer);flex:none}
 
 .glucose-sample[data-status=stale],.glucose-sample[data-status=unavailable],.glucose-sample[data-status=configuration_error],.glucose-sample[data-status=not_configured]{color:#f6d1a4}
-.glucose-sample[data-status=live]{color:var(--glu-status)}
+.glucose-sample[data-status=live]{color:#f3f5f7}
 .glucose-graph{position:relative}
-.glucose-empty{position:absolute;inset:50px 12px 12px;display:grid;place-items:center;font-size:14px;color:var(--glu-muted);pointer-events:none}
+.glucose-empty{position:absolute;inset:50px 12px 12px;display:grid;place-items:center;font-size:14px;color:#e3e7ec;pointer-events:none}
 
-/* Palette also covers the SVG, without changing chart geometry or data. */
-#screen[data-page=glucose] .glucose-chart-controls select{color:var(--glu-ink);background:var(--glu-control);border-color:var(--glu-control-edge)}
-#glucosePlot .glu-grid{stroke:var(--glu-grid)}
-#glucosePlot .glu-band-edge{stroke:var(--glu-band-edge)}
-#glucosePlot .glu-band{fill:var(--glu-band)}
-#glucosePlot .glu-now{stroke:var(--glu-now)}
-#glucosePlot .glu-trace{stroke:var(--glu-accent)}
-#glucosePlot .glu-dot{fill:var(--glu-accent);stroke:var(--glu-card-end)}
-#glucosePlot .glu-label{fill:var(--glu-muted)}
+/* Fixed chart palette: white trace and labels, neutral graph panel in every mode. */
+#screen[data-page=glucose] .glucose-chart-controls select{color:#fff;background:#ffffff16;border-color:#ffffff30}
+#glucosePlot .glu-grid{stroke:#ffffff32}
+#glucosePlot .glu-band-edge{stroke:#bfc8d599}
+#glucosePlot .glu-band{fill:#c0c8d3}
+#glucosePlot .glu-now{stroke:#d4d9e0}
+#glucosePlot .glu-trace{stroke:#fff}
+#glucosePlot .glu-dot{fill:#fff;stroke:#252a30}
+#glucosePlot .glu-label{fill:#fff}
+/* The Home tile keeps status colour even if the global theme is changed. */
+#screen[data-page=home] .tile[data-page=glucose]{background:var(--glu-status-bg);border-color:var(--glu-status-edge);color:var(--glu-status-ink)}
+#screen[data-page=home] .tile[data-page=glucose] span{color:var(--glu-status-muted)}
