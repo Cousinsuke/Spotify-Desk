@@ -1,0 +1,14 @@
+'use strict';
+const assert=require('node:assert/strict'),fs=require('node:fs'),path=require('node:path');
+const source=fs.readFileSync(path.join(__dirname,'app.js'),'utf8');
+const start=source.indexOf('function volumeRoute('),end=source.indexOf('function normaliseEchoDevice(',start);
+const route=new Function(source.slice(start,end)+';return volumeRoute;')();
+const state={connected:true,deviceId:'remote',controllable:true,supportsVolume:true,volumePercent:100};
+assert.equal(route(state,'echo'),'remote');
+assert.equal(route({...state,deviceId:'echo'},'echo'),'local');
+assert.equal(route(state,''),'local');
+assert.equal(route({...state,deviceId:null},'echo'),'local');
+for(const patch of [{supportsVolume:false},{volumePercent:null},{volumePercent:101},{inactive:true},{controllable:false},{connected:false},{error:'x'}])assert.equal(route({...state,...patch},'echo'),'unavailable');
+assert.ok(source.includes("live.command('volume',q.delta,q.id)"));
+assert.ok(source.includes('Math.max(-25,Math.min(25,remoteVolumeQueue.delta+direction*5))'));
+console.log('Volume routing checks passed');

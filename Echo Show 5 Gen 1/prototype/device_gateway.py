@@ -162,7 +162,7 @@ def query_for(path,args):
 def command_body(data):
     if not isinstance(data,dict) or set(data)-{"action","value","uri","device"}:raise ValueError("Invalid command")
     action=data.get("action")
-    if action not in ("toggle","next","previous","seek","shuffle","repeat","save","device"):raise ValueError("Invalid action")
+    if action not in ("toggle","next","previous","seek","shuffle","repeat","save","device","volume"):raise ValueError("Invalid action")
     for key in ("uri","device"):
         value=data.get(key)
         if value is not None and (not isinstance(value,str) or len(value)>256):raise ValueError("Invalid target")
@@ -170,7 +170,8 @@ def command_body(data):
     if action=="toggle" and type(value) is not bool:raise ValueError("Explicit playback state required")
     if action=="seek" and (type(value) not in (int,float) or not math.isfinite(value) or not 0<=value<=86400):raise ValueError("Invalid seek")
     if action=="device" and (not isinstance(value,str) or not 0<len(value)<=256):raise ValueError("Invalid device")
-    if action not in ("toggle","seek","device") and value is not None and type(value) is not bool:raise ValueError("Invalid value")
+    if action=="volume" and (type(value) is not int or not -25<=value<=25 or value==0 or value%5!=0 or not data.get("device")):raise ValueError("Invalid volume adjustment")
+    if action not in ("toggle","seek","device","volume") and value is not None and type(value) is not bool:raise ValueError("Invalid value")
     return data
 
 def local_api(method,path,params,body):

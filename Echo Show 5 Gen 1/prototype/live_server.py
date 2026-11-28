@@ -364,9 +364,26 @@ def command():
     data=request.get_json(silent=True)
     if not isinstance(data,dict):raise ApiError(400,"Invalid command.")
     a,v=data.get("action"),data.get("value")
-    if a not in ("device","save","toggle","next","previous","seek","shuffle","repeat"):
+    if a not in ("device","save","toggle","next","previous","seek","shuffle","repeat","volume"):
         raise ApiError(400,"Invalid command.")
     diagnostic("command", action=a, desired=v if a=="toggle" and type(v) is bool else "-")
+    if a=="volume":
+        expected=data.get("device")
+        if (type(v) is not int or not -25<=v<=25 or v==0 or v%5!=0
+                or not isinstance(expected,str) or not 0<len(expected)<=256):
+            raise ApiError(400,"Invalid volume adjustment.")
+        p=player(True); playback_cache=None; d=p.get("device") or {}
+        if d.get("id")!=expected or d.get("is_active") is not True or d.get("is_restricted"):
+            raise ApiError(409,"Active playback device changed or is unavailable.")
+        fields=volume_fields(d)
+        if fields["supportsVolume"] is not True or fields["volumePercent"] is None:
+            raise ApiError(409,"Remote volume is unavailable for this device.")
+        level=max(0,min(100,fields["volumePercent"]+v))
+        if level!=fields["volumePercent"]:
+            spotify("PUT","/me/player/volume",{"device_id":expected,"volume_percent":level})
+        devices_cache=None
+        diagnostic("command_ack", action=a)
+        return jsonify(ok=True,requestedVolume=level)
     if a=="device":
         if not isinstance(v,str) or not any(d["id"]==v and not d["restricted"] for d in devices(True)):
             raise ApiError(400,"Device no longer available.")

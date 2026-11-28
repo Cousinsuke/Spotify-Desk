@@ -33,3 +33,7 @@ System Information > Echo Show receives local read-only Android snapshot every f
 ## Spotify on-demand launch (0.7.0)
 
 Fixed official Spotify package visibility declaration and launch action in native Back menu and trusted root-page link. No generic external-app/intent bridge; main-frame, same-origin, foreground and explicit gesture/native confirmation checks; no automatic startup or autoplay. Return to dashboard using Android Home. Missing/disabled Spotify displays native error. Requires updated Pi app.js/style.css for web link; Back menu works independently. Build and physical testing pending.
+
+## Mode-aware physical volume (0.8.0)
+
+Native foreground physical volume keys consult a fixed main-frame JS function only on trusted dashboard root with existing epoch guards; local route adjusts Android STREAM_MUSIC once, remote route uses dashboard OSD and existing authenticated gateway. Old assets and recovery remain local. No new bridge/permission. Both Pi services need updated code and restart before installing updated APK. Device mapping required for remote routing, remote unavailable is not silently redirected to local. Native build/device tests pending.

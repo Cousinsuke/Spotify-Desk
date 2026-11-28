@@ -62,6 +62,12 @@ function nightActive(value,minute){
   if(start===end)return false;
   return start<end?minute>=start&&minute<end:minute>=start||minute<end;
 }
+function volumeRoute(state,echoId){
+  if(!echoId)return 'local';
+  if(!state?.connected||state.error)return 'unavailable';
+  if(!state.deviceId||state.deviceId===echoId)return 'local';
+  return !state.inactive&&state.controllable&&state.supportsVolume===true&&Number.isInteger(state.volumePercent)&&state.volumePercent>=0&&state.volumePercent<=100?'remote':'unavailable';
+}
 function normaliseEchoDevice(value){return typeof value==='string'&&value.length>0&&value.length<=256&&value.trim()===value?value:''}
 function confirmedPlaybackMode(state,echoId){return echoId&&state?.connected&&!state.error&&state.deviceId===echoId?'echo':'wifi'}
 function echoDeviceAvailable(list,id){return !!id&&Array.isArray(list)&&list.some(d=>d&&d.id===id&&!d.restricted)}
@@ -289,8 +295,66 @@ screen.addEventListener('pointercancel',()=>{gesture=null});rail.addEventListene
 // All playback here is deterministic sample state. No audio/API requests.
 const transportIcons={previous:'<path d="M5 4v16M19 4 7 12l12 8z" fill="currentColor"/>',next:'<path d="M19 4v16M5 4l12 8-12 8z" fill="currentColor"/>',play:'<path d="m8 4 13 8-13 8z" fill="currentColor"/>',pause:'<path d="M8 5v14M16 5v14" stroke-width="4"/>',shuffle:'<path d="M3 6h3c4 0 8 12 12 12h3m-4-4 4 4-4 4M3 18h3c1.5 0 3-2 4-4m4-4c1-2 3-4 4-4h3m-4-4 4 4-4 4"/>',repeat:'<path d="M4 10V6h15m-4-4 4 4-4 4M20 14v4H5m4-4-4 4 4 4"/>',save:'<circle cx="12" cy="12" r="10"/><path d="M7 12h10M12 7v10"/>',saved:'<circle cx="12" cy="12" r="10"/><path d="m7 12 3 3 7-7"/>'};
 const transportIcon=id=>'<svg class="icon" viewBox="0 0 24 24" aria-hidden="true">'+transportIcons[id]+'</svg>';
+let nativeVolumeRouting=false,remoteVolumeTimer=null,remoteVolumeHide=null,remoteVolumeQueue=null,remoteVolumeBusy=false;
+function remoteVolumePopup(label,status,level=null){
+  let osd=document.getElementById('remoteVolumeOsd');
+  if(!osd){
+    osd=document.createElement('div');osd.id='remoteVolumeOsd';osd.setAttribute('role','status');
+    const name=document.createElement('div'),text=document.createElement('strong'),bar=document.createElement('div'),fill=document.createElement('i');
+    bar.className='remote-volume-meter';bar.append(fill);osd.append(name,text,bar);document.body.append(osd);
+  }
+  osd.children[0].textContent=label;
+  osd.children[1].textContent=status;
+  osd.children[2].hidden=level===null;
+  osd.children[2].firstChild.style.width=(level===null?0:level)+'%';
+  osd.hidden=false;clearTimeout(remoteVolumeHide);remoteVolumeHide=setTimeout(()=>{osd.hidden=true},2000);
+}
+function scheduleRemoteVolume(){
+  if(remoteVolumeBusy||remoteVolumeTimer!==null||!remoteVolumeQueue)return;
+  remoteVolumeTimer=setTimeout(()=>{remoteVolumeTimer=null;flushRemoteVolume()},180);
+}
+async function flushRemoteVolume(){
+  const q=remoteVolumeQueue;remoteVolumeQueue=null;
+  if(!q||!q.delta)return;
+  if(document.hidden||volumeRoute(live.state,prefs.echoDeviceId)!=='remote'||live.state.deviceId!==q.id||live.pending){
+    remoteVolumePopup(q.name+' volume','Device changed or busy');return;
+  }
+  remoteVolumeBusy=true;
+  try{
+    remoteVolumePopup(q.name+' volume','Adjusting…');
+    const result=await live.command('volume',q.delta,q.id);
+    if(live.state.deviceId===q.id&&!document.hidden){
+      if(Number.isInteger(result?.requestedVolume)&&result.requestedVolume>=0&&result.requestedVolume<=100)
+        remoteVolumePopup(q.name+' volume','Requested '+result.requestedVolume+'%',result.requestedVolume);
+      else {remoteVolumeQueue=null;remoteVolumePopup(q.name+' volume','Remote volume unavailable')}
+    }else remoteVolumeQueue=null;
+  }finally{remoteVolumeBusy=false;scheduleRemoteVolume()}
+}
+window.echoDeskRouteVolume=direction=>{
+  if(direction!==1&&direction!==-1)return 'unavailable';
+  nativeVolumeRouting=true;
+  const state=live.state,route=liveEnabled&&echoModeSupported()?volumeRoute(state,prefs.echoDeviceId):'local';
+  if(route==='local'){
+    remoteVolumeQueue=null;
+    const osd=document.getElementById('remoteVolumeOsd');if(osd)osd.hidden=true;
+    return 'local';
+  }
+  const name=state.device||'Spotify device';
+  if(route!=='remote'){
+    remoteVolumeQueue=null;remoteVolumePopup(name+' volume','Remote volume unavailable');return 'unavailable';
+  }
+  if(live.pending&&!remoteVolumeBusy){remoteVolumePopup(name+' volume','Spotify busy · try again');return 'unavailable'}
+  if(!remoteVolumeQueue||remoteVolumeQueue.id!==state.deviceId)remoteVolumeQueue={id:state.deviceId,name,delta:0};
+  remoteVolumeQueue.delta=Math.max(-25,Math.min(25,remoteVolumeQueue.delta+direction*5));
+  remoteVolumePopup(name+' volume','Adjusting…');
+  scheduleRemoteVolume();return 'remote';
+};
+document.addEventListener('visibilitychange',()=>{
+  if(document.hidden){remoteVolumeQueue=null;clearTimeout(remoteVolumeTimer);remoteVolumeTimer=null;const osd=document.getElementById('remoteVolumeOsd');if(osd)osd.hidden=true}
+});
 let nativeSpotifyLaunch=false;
 window.echoDeskEnableSpotifyLaunch=()=>{nativeSpotifyLaunch=true};
+window.echoDeskEnableVolumeRouting=()=>{nativeVolumeRouting=true};
 function echoModeSupported(){return liveEnabled&&document.documentElement.dataset.deviceGateway==='1'}
 function liveMode(){return echoModeSupported()?confirmedPlaybackMode(live.state,prefs.echoDeviceId):'wifi'}
 function modeOptions(){if(liveEnabled)return '<option value="wifi" '+(liveMode()==='wifi'?'selected':'')+'>Wi-Fi</option><option disabled>PC · pending</option><option value="echo" '+(!echoModeSupported()?'disabled':liveMode()==='echo'?'selected':'')+'>'+(echoModeSupported()?(prefs.echoDeviceId?'Echo':'Echo · set up'):'Echo · paired display only')+'</option>';return [['wifi','Wi-Fi'],['pc','PC'],['echo','Echo · pending']].map(([id,label])=>'<option value="'+id+'" '+(id===playback.mode?'selected ':'')+(id==='echo'?'disabled':'')+'>'+label+'</option>').join('')}
@@ -513,7 +577,7 @@ const err=$('liveError');err.replaceChildren();if(!s.connected){if(document.docu
 function updateLiveProgress(){if(!liveEnabled||active!=='spotify'||!$('seek')||seeking)return;const pos=live.position(),seek=$('seek');seek.value=Math.floor(pos);const elapsed=music.time(Math.floor(pos));if($('elapsed').textContent!==elapsed)$('elapsed').textContent=elapsed;}
 apply();renderPage();setRail(true);
 document.addEventListener('visibilitychange',()=>{if(!document.hidden)updateNightMode()});
-if(liveEnabled){$('demo').textContent=document.documentElement.dataset.deviceGateway==='1'?'LIVE · PAIRED DISPLAY':'LOCAL TEST · SECONDARY DISPLAY';screen.style.setProperty('--album-color','#40434c');screen.style.setProperty('--album-dark','#15171a');live.onChange=renderLiveState;live.refresh();setInterval(()=>{if(['spotify','home','system'].includes(active)&&!document.hidden)live.refresh()},5000);setInterval(updateLiveProgress,200)}
+if(liveEnabled){$('demo').textContent=document.documentElement.dataset.deviceGateway==='1'?'LIVE · PAIRED DISPLAY':'LOCAL TEST · SECONDARY DISPLAY';screen.style.setProperty('--album-color','#40434c');screen.style.setProperty('--album-dark','#15171a');live.onChange=renderLiveState;live.refresh();setInterval(()=>{if((nativeVolumeRouting||['spotify','home','system'].includes(active))&&!document.hidden)live.refresh()},5000);setInterval(updateLiveProgress,200)}
 setInterval(()=>{if(active==='calendar'&&!document.hidden)refreshCalendar();if(active==='system'&&!document.hidden)refreshSystem()},5000);
 setInterval(()=>{clock();updateNightMode();if(active==='calendar'&&calendarToday!==calendarKey(new Date()))renderCalendar();if(!liveEnabled){playback=music.reduce(playback,'tick');if(active==='spotify'&&!overlay)updateSpotify()}},1000);
 

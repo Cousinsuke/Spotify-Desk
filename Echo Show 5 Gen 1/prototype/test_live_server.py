@@ -81,6 +81,32 @@ class LocalTests(unittest.TestCase):
             self.assertTrue(data["inactive"])
             self.assertIsNone(data["supportsVolume"])
             self.assertIsNone(data["volumePercent"])
+    def test_remote_volume_targets_active_device(self):
+        player={"device":{"id":"d","is_active":True,"supports_volume":True,"volume_percent":100}}
+        with patch.object(s,"player",return_value=player) as read,patch.object(s,"spotify") as api:
+            r=self.client.post("/api/spotify/command",base_url=self.url,headers=self.headers,json={"action":"volume","device":"d","value":-5})
+            self.assertEqual(r.status_code,200)
+            self.assertEqual(r.json["requestedVolume"],95)
+            read.assert_called_once_with(True)
+            api.assert_called_once_with("PUT","/me/player/volume",{"device_id":"d","volume_percent":95})
+    def test_remote_volume_rejects_invalid_and_unsupported(self):
+        base={"id":"d","is_active":True,"supports_volume":True,"volume_percent":50}
+        for device in [dict(base,id="other"),dict(base,is_active=False),dict(base,is_restricted=True),dict(base,supports_volume=False),dict(base,volume_percent=None),{}]:
+            with patch.object(s,"player",return_value={"device":device}),patch.object(s,"spotify") as api:
+                r=self.client.post("/api/spotify/command",base_url=self.url,headers=self.headers,json={"action":"volume","device":"d","value":-5})
+                self.assertEqual(r.status_code,409);api.assert_not_called()
+        for value in [True,0,1,30,-30,5.0,None]:
+            with patch.object(s,"player") as read,patch.object(s,"spotify") as api:
+                r=self.client.post("/api/spotify/command",base_url=self.url,headers=self.headers,json={"action":"volume","device":"d","value":value})
+                self.assertEqual(r.status_code,400);read.assert_not_called();api.assert_not_called()
+    def test_remote_volume_clamps_and_noop(self):
+        for current,delta,expected in [(2,-5,0),(98,5,100),(100,5,100),(0,-5,0)]:
+            device={"id":"d","is_active":True,"supports_volume":True,"volume_percent":current}
+            with patch.object(s,"player",return_value={"device":device}),patch.object(s,"spotify") as api:
+                r=self.client.post("/api/spotify/command",base_url=self.url,headers=self.headers,json={"action":"volume","device":"d","value":delta})
+                self.assertEqual(r.status_code,200);self.assertEqual(r.json["requestedVolume"],expected)
+                if current==expected:api.assert_not_called()
+                else:api.assert_called_once_with("PUT","/me/player/volume",{"device_id":"d","volume_percent":expected})
     def test_command_device_changed(self):
         with patch.object(s,"player",return_value={"device":{"id":"new"}}),patch.object(s,"spotify") as api:
             r=self.client.post("/api/spotify/command",base_url=self.url,headers=self.headers,json={"action":"toggle","device":"old"})

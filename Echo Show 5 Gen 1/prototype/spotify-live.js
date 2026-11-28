@@ -32,8 +32,9 @@ api.refresh=async(fresh=false)=>{
   try{await inFlight}finally{inFlight=null}
 };
 api.devices=async()=>{const d=await request('/api/spotify/devices');return d.devices||[]};
-api.command=async(action,value)=>{
+api.command=async(action,value,expectedDevice=null)=>{
   if(!enabled||commandBusy||!state.connected||state.error)return;
+  if(action==='volume'&&(!expectedDevice||state.deviceId!==expectedDevice||state.inactive||state.supportsVolume!==true))return;
   if(action==='toggle')value=!state.playing;
   const pos=api.position(), prior=state, priorReceived=received;
   const intent={action,value,uri:state.uri,device:state.deviceId,position:pos,before:action==='shuffle'?state.shuffle:action==='repeat'?state.repeat:state.saved};
@@ -43,10 +44,10 @@ api.command=async(action,value)=>{
   // Match original Desk: immediate feedback on press; restore prior state on failed write.
   if(action==='toggle'||action==='seek')accept(clock.acknowledged(state,intent,pos));
   else {freezeAt=performance.now();emit()}
-  let ok=false;
+  let ok=false,result=null;
   try{
     if(inFlight)await inFlight;
-    await request('/api/spotify/command',{method:'POST',body:JSON.stringify(payload)});
+    result=await request('/api/spotify/command',{method:'POST',body:JSON.stringify(payload)});
     ok=true;
     if(override)override.expires=performance.now()+(['next','previous'].includes(action)?7000:3500);
   }catch(e){
@@ -57,8 +58,9 @@ api.command=async(action,value)=>{
     emit();
   }
   // Confirm independently of the write lock. New commands invalidate old timers/results.
-  const delays=!ok?[250]:['next','previous'].includes(action)?[280,1130,2630,7100]:[950,3000,3600];
+  const delays=!ok?[250]:action==='volume'?[950,3000]:['next','previous'].includes(action)?[280,1130,2630,7100]:[950,3000,3600];
   for(const delay of delays)setTimeout(()=>{if(version===generation&&!commandBusy&&!document.hidden)api.refresh(true)},delay);
+  return ok?result:null;
 };
 window.EchoSpotifyLive=api;
 })();

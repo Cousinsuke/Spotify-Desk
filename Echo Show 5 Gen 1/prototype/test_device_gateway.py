@@ -139,3 +139,16 @@ class LiveGatewayTests(GatewayTests):
         with self.assertRaises(ValueError):g.local_api("GET","/spotify/login",{},None)
 
 if __name__=="__main__":unittest.main()
+
+
+class VolumeCommandValidationTests(unittest.TestCase):
+    def test_volume_command_bounds(self):
+        from device_gateway import command_body
+        for value in (-25,-5,5,25):
+            data={"action":"volume","device":"example","value":value}
+            self.assertEqual(command_body(data),data)
+        for value in (None,True,0,1,30,-30,5.0,"5"):
+            with self.assertRaises(ValueError):
+                command_body({"action":"volume","device":"example","value":value})
+        with self.assertRaises(ValueError):
+            command_body({"action":"volume","value":5})

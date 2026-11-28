@@ -256,7 +256,7 @@ public final class MainActivity extends Activity {
                     retryAttempt = 0;
                     dashboardPageReady = brightnessPage(url);
                     if (dashboardPageReady)
-                        v.evaluateJavascript("if(typeof window.echoDeskEnableSpotifyLaunch==='function')window.echoDeskEnableSpotifyLaunch()", null);
+                        v.evaluateJavascript("if(typeof window.echoDeskEnableSpotifyLaunch==='function')window.echoDeskEnableSpotifyLaunch();if(typeof window.echoDeskEnableVolumeRouting==='function')window.echoDeskEnableVolumeRouting()", null);
                     scheduleBrightness();
                 }
             }
@@ -345,20 +345,34 @@ public final class MainActivity extends Activity {
         if (!resumed || !hasWindowFocus() || audio == null || audio.isVolumeFixed())
             return super.dispatchKeyEvent(event);
         if (event.getAction() == KeyEvent.ACTION_DOWN) {
-            try {
-                audio.adjustStreamVolume(AudioManager.STREAM_MUSIC,
-                    key == KeyEvent.KEYCODE_VOLUME_UP ? AudioManager.ADJUST_RAISE : AudioManager.ADJUST_LOWER, 0);
-            } catch (SecurityException e) {
-                return super.dispatchKeyEvent(event);
+            int direction = key == KeyEvent.KEYCODE_VOLUME_UP ? 1 : -1;
+            WebView source = web;
+            int epoch = brightnessEpoch;
+            if (source != null && diagnosticsPage(source, epoch)) {
+                source.evaluateJavascript("typeof window.echoDeskRouteVolume==='function'?window.echoDeskRouteVolume(" + direction + "):'local'", route -> {
+                    if (!diagnosticsPage(source, epoch) || !hasWindowFocus()) return;
+                    if ("\"local\"".equals(route)) adjustLocalVolume(direction);
+                    else volumeOverlay.hide();
+                });
+                return true;
             }
-            volumeOverlay.show(audio.getStreamVolume(AudioManager.STREAM_MUSIC),
-                audio.getStreamMinVolume(AudioManager.STREAM_MUSIC),
-                audio.getStreamMaxVolume(AudioManager.STREAM_MUSIC),
-                audio.isStreamMute(AudioManager.STREAM_MUSIC));
+            if (!adjustLocalVolume(direction)) return super.dispatchKeyEvent(event);
             return true;
         }
         if (event.getAction() == KeyEvent.ACTION_UP) return true;
         return super.dispatchKeyEvent(event);
+    }
+
+    private boolean adjustLocalVolume(int direction) {
+        try {
+            audio.adjustStreamVolume(AudioManager.STREAM_MUSIC,
+                direction > 0 ? AudioManager.ADJUST_RAISE : AudioManager.ADJUST_LOWER, 0);
+        } catch (SecurityException e) { return false; }
+        volumeOverlay.show(audio.getStreamVolume(AudioManager.STREAM_MUSIC),
+            audio.getStreamMinVolume(AudioManager.STREAM_MUSIC),
+            audio.getStreamMaxVolume(AudioManager.STREAM_MUSIC),
+            audio.isStreamMute(AudioManager.STREAM_MUSIC));
+        return true;
     }
 
     private void disposeWeb() {
