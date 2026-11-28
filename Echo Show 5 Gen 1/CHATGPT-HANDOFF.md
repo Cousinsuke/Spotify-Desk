@@ -28,7 +28,7 @@ The existing Gluroo reader and dashboard are already in the repository; a prior 
 
 ## Next step
 
-**Current priority (2026-11-28):** User visual review of green Glucose graph target-band shading on prototype `8c88142`. Pull the existing Pi checkout and reload dashboard; check GRAPH/BOTH, AUTO/FULL and white-line readability. User explicitly deferred notification access/local media-session work because Xbox responsiveness would not benefit. Keep existing Spotify cloud controls and diagnostics; latency remains unresolved. Extended stability remains deferred. Last reported Python suite: 96 passed. No new APK or firmware change.
+**Current priority (2026-11-28):** Green Glucose target-band appearance accepted by user. No outstanding change requested. Native Spotify notification access/media-session integration and extended stability testing remain deferred; retain existing cloud playback behavior. Spotify metadata latency remains unresolved. Last reported Python suite: 96 passed. Await next user-directed improvement or resumption of stability testing.
 
 Historical initial plan (superseded where newer checkpoints record completion):
 
@@ -573,3 +573,7 @@ Hard refresh and open Apps > System Information. Review both rail states, values
 ### Green glucose target band; native Spotify integration deferred
 
 2026-11-28: User agreed to defer Android notification access/local media-session integration because it would only benefit Echo-local playback, not Xbox remote playback. Preserve existing cloud control and diagnostic behavior; Spotify metadata latency remains unresolved. User requested Libre-like green rather than grey shading for the Glucose graph target range. Prototype [8c88142](https://github.com/Cousinsuke/Spotify-Desk/commit/8c88142f3bcf67528c87e73b38cbc019cdcf947c) changes only CSS graph styling: #4ade80 at 22% fill opacity with green dashed edges; white trace/labels, neutral card, existing 4–7 mmol/L target thresholds, chart geometry, time windows, scales, live data and dynamic palettes unchanged. Applies to GRAPH and BOTH. Two regression assertions added to glucose-palette.test.js; four equivalent CSS source checks passed in assistant runtime. Full Node suite and physical appearance not yet verified. Clean fast-forward existing Pi prototype checkout, reload dashboard (assets served from disk; no APK/service restart needed). Check GRAPH/BOTH and AUTO/FULL, readability and theme independence. Next user visual review; extended stability remains deferred unless user resumes it. No personal readings or credentials committed.
+
+### Green glucose target band accepted
+
+User confirmed the green target-band appearance is perfect following prototype 8c88142. Accept the visual change on the user's reported review; individual GRAPH/BOTH, AUTO/FULL and theme combinations were not separately reported. No further styling changes requested. Native Spotify media-session integration and extended stability testing remain deferred; existing Spotify cloud controls preserved. No code changes or new automated tests in this acceptance step. Await the user's next requested improvement or resumption of stability testing.
