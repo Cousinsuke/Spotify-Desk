@@ -48,6 +48,39 @@ class LocalTests(unittest.TestCase):
             self.assertEqual(data["position"],12)
             self.assertTrue(data["controllable"])
             self.assertNotIn("access_token",data)
+    def test_volume_fields_strict_types_and_bounds(self):
+        for device,expected in [
+            ({"supports_volume":True,"volume_percent":0},{"supportsVolume":True,"volumePercent":0}),
+            ({"supports_volume":False,"volume_percent":100},{"supportsVolume":False,"volumePercent":100}),
+            ({},{"supportsVolume":None,"volumePercent":None}),
+            ({"supports_volume":1,"volume_percent":True},{"supportsVolume":None,"volumePercent":None}),
+            ({"supports_volume":"true","volume_percent":101},{"supportsVolume":None,"volumePercent":None}),
+            ({"volume_percent":-1},{"supportsVolume":None,"volumePercent":None}),
+        ]:
+            self.assertEqual(s.volume_fields(device),expected)
+    def test_device_list_reports_volume_capability(self):
+        with patch.object(s,"spotify",return_value={"devices":[
+            {"id":"d","name":"Example","type":"Computer","supports_volume":True,"volume_percent":42},
+            {"id":"e","supports_volume":False,"volume_percent":None},
+        ]}):
+            data=self.client.get("/api/spotify/devices",base_url=self.url,headers=self.headers).json["devices"]
+            self.assertEqual(data[0]["type"],"Computer")
+            self.assertIs(data[0]["supportsVolume"],True)
+            self.assertEqual(data[0]["volumePercent"],42)
+            self.assertIs(data[1]["supportsVolume"],False)
+            self.assertIsNone(data[1]["volumePercent"])
+    def test_current_state_volume_and_inactive_clear(self):
+        s.token={"access_token":"test"}
+        sample={"item":{"name":"Synthetic","type":"track","uri":"spotify:track:abc"},"device":{"id":"d","name":"Example","supports_volume":True,"volume_percent":40},"is_playing":True}
+        with patch.object(s,"player",return_value=sample),patch.object(s,"saved_status",return_value=False):
+            data=self.client.get("/api/spotify/state",base_url=self.url,headers=self.headers).json
+            self.assertIs(data["supportsVolume"],True)
+            self.assertEqual(data["volumePercent"],40)
+        with patch.object(s,"player",return_value={}),patch.object(s,"devices",return_value=[{"id":"d","name":"Example","restricted":False,"active":False}]):
+            data=self.client.get("/api/spotify/state",base_url=self.url,headers=self.headers).json
+            self.assertTrue(data["inactive"])
+            self.assertIsNone(data["supportsVolume"])
+            self.assertIsNone(data["volumePercent"])
     def test_command_device_changed(self):
         with patch.object(s,"player",return_value={"device":{"id":"new"}}),patch.object(s,"spotify") as api:
             r=self.client.post("/api/spotify/command",base_url=self.url,headers=self.headers,json={"action":"toggle","device":"old"})

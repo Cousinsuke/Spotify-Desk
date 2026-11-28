@@ -269,6 +269,13 @@ def saved_status(uri):
     saved_cache[uri]=(now,value)
     return value
 
+def volume_fields(device):
+    """Report only validated upstream values; absent support is unknown, never true."""
+    support=device.get("supports_volume")
+    level=device.get("volume_percent")
+    return {"supportsVolume":support if type(support) is bool else None,
+            "volumePercent":level if type(level) is int and 0<=level<=100 else None}
+
 def recovery_target(expected, rows):
     """Return verified, recent, or unavailable. Never guess another device."""
     if not isinstance(expected,str) or not expected:
@@ -313,12 +320,12 @@ def state():
             return jsonify(**{**last,"connected":True,"playing":False,"inactive":True,
                 "controllable":bool(recovery),"recovery":recovery,
                 "device":(match["name"] if match else last.get("device")) if recovery else None,
-                "deviceId":expected if recovery else None,"saved":None,"disallows":{"seeking":True,
+                "deviceId":expected if recovery else None,"saved":None,"supportsVolume":None,"volumePercent":None,"disallows":{"seeking":True,
                 "pausing":True,"skipping_prev":recovery=="recent","skipping_next":recovery=="recent",
                 "toggling_shuffle":True,"toggling_repeat_context":True}})
         uri=item.get("uri") if item.get("type")=="track" and not item.get("is_local") else None
         disallows=(p.get("actions") or {}).get("disallows") or p.get("actions") or {}
-        snapshot=dict(connected=True,title=item.get("name"),artist=", ".join(a.get("name","") for a in item.get("artists",[])),art=safe_art(item),uri=uri,position=max(0,(p.get("progress_ms") or 0)//1000),positionMs=max(0,p.get("progress_ms") or 0),duration=max(0,(item.get("duration_ms") or 0)//1000),playing=bool(p.get("is_playing")),device=d.get("name"),deviceId=d.get("id"),controllable=bool(d.get("id") and not d.get("is_restricted")),shuffle=bool(p.get("shuffle_state")),repeat=p.get("repeat_state","off"),saved=saved_status(uri),disallows=disallows,inactive=False)
+        snapshot=dict(connected=True,title=item.get("name"),artist=", ".join(a.get("name","") for a in item.get("artists",[])),art=safe_art(item),uri=uri,position=max(0,(p.get("progress_ms") or 0)//1000),positionMs=max(0,p.get("progress_ms") or 0),duration=max(0,(item.get("duration_ms") or 0)//1000),playing=bool(p.get("is_playing")),device=d.get("name"),deviceId=d.get("id"),controllable=bool(d.get("id") and not d.get("is_restricted")),shuffle=bool(p.get("shuffle_state")),repeat=p.get("repeat_state","off"),saved=saved_status(uri),disallows=disallows,inactive=False,**volume_fields(d))
         if item and d.get("id"):
             last_snapshot=snapshot.copy()
             last_seen=time.monotonic() if snapshot["controllable"] else None
@@ -339,7 +346,7 @@ def devices(force=False):
     now=time.monotonic()
     if not force and devices_cache and now-devices_cache[0]<5:return devices_cache[1]
     result=spotify("GET","/me/player/devices") or {}
-    rows=[{"id":d.get("id"),"name":d.get("name","Device"),"active":bool(d.get("is_active")),"restricted":bool(d.get("is_restricted"))} for d in result.get("devices",[])]
+    rows=[{"id":d.get("id"),"name":d.get("name","Device"),"active":bool(d.get("is_active")),"restricted":bool(d.get("is_restricted")),"type":d.get("type") if isinstance(d.get("type"),str) else None,**volume_fields(d)} for d in result.get("devices",[])]
     expected=(last_snapshot or {}).get("deviceId")
     diagnostic("devices", count=len(rows), active=sum(bool(row["active"]) for row in rows),
                last_present=bool(expected and any(row["id"]==expected for row in rows)),
