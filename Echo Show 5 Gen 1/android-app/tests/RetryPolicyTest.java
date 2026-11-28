@@ -12,6 +12,8 @@ public final class RetryPolicyTest {
         check(RetryPolicy.MAX_ATTEMPT == 4);
         for (int s : new int[]{500, 502, 503, 504}) check(RetryPolicy.retryableHttp(s));
         for (int s : new int[]{200, 303, 400, 401, 403, 404, 429, 501, 505}) check(!RetryPolicy.retryableHttp(s));
-        System.out.println("RetryPolicy: 22 checks passed");
+        for (int i : new int[]{0, 1, 2}) check(RetryPolicy.quietRetry(i));
+        for (int i : new int[]{-1, 3, 4, Integer.MAX_VALUE}) check(!RetryPolicy.quietRetry(i));
+        System.out.println("RetryPolicy: 28 checks passed");
     }
 }

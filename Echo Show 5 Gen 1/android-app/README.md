@@ -37,3 +37,8 @@ Fixed official Spotify package visibility declaration and launch action in nativ
 ## Mode-aware physical volume (0.8.0)
 
 Native foreground physical volume keys consult a fixed main-frame JS function only on trusted dashboard root with existing epoch guards; local route adjusts Android STREAM_MUSIC once, remote route uses dashboard OSD and existing authenticated gateway. Old assets and recovery remain local. No new bridge/permission. Both Pi services need updated code and restart before installing updated APK. Device mapping required for remote routing, remote unavailable is not silently redirected to local. Native build/device tests pending.
+
+
+## Startup and connection screen (0.9.0)
+
+Native startup overlay covers the WebView until a successful allowed main-page load. First three retryable failures use a centered dark reconnecting screen with spinner, retry interval and Connection options; fourth and later failures show existing detailed recovery panel. Retry attempts still use 2/4/8/15/30s backoff; later attempts continue every 30s. Nonretryable errors, including TLS validation, immediately show detailed recovery; no certificate bypass. Pairing page is shown normally after load. Connection options opens existing native Back menu; retries are deferred while menu open. Existing WebView, brightness, volume and Spotify launch functionality preserved. Native-only update; no Pi restart or dashboard assets change. Test normal cold boot, temporary outage recovery, sustained outage, manual options and previous controls. Source guards passed; standalone Java and physical tests pending.

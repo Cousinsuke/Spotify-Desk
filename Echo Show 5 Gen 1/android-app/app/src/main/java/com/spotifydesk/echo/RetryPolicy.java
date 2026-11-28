@@ -9,6 +9,11 @@ final class RetryPolicy {
         return DELAYS[Math.max(0, Math.min(attempt, MAX_ATTEMPT))];
     }
 
+    // The first three transient failures use a calm reconnecting screen.
+    static boolean quietRetry(int attempt) {
+        return attempt >= 0 && attempt < 3;
+    }
+
     static boolean retryableHttp(int status) {
         return status == 500 || status == 502 || status == 503 || status == 504;
     }

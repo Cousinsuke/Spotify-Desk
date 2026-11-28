@@ -7,6 +7,8 @@ import android.content.ActivityNotFoundException;
 import android.graphics.Color;
 import android.media.AudioManager;
 import android.view.KeyEvent;
+import android.view.Gravity;
+import android.widget.ProgressBar;
 import android.widget.FrameLayout;
 import android.net.Uri;
 import android.net.http.SslError;
@@ -46,6 +48,9 @@ public final class MainActivity extends Activity {
     private final Runnable brightnessTask = this::readDashboardBrightness;
     private Uri origin;
     private boolean errorShown;
+    private View connectionPanel;
+    private boolean dashboardOpened;
+    private boolean recoveryMenuOpen;
     private final Handler retryHandler = new Handler(Looper.getMainLooper());
     private int retryAttempt;
     private boolean retryPending;
@@ -57,7 +62,7 @@ public final class MainActivity extends Activity {
 
     private void scheduleRetry() {
         retryHandler.removeCallbacks(retryTask);
-        if (resumed && retryPending && !isFinishing() && !isDestroyed())
+        if (resumed && retryPending && !recoveryMenuOpen && !isFinishing() && !isDestroyed())
             retryHandler.postDelayed(retryTask, retryDelay);
     }
 
@@ -254,7 +259,9 @@ public final class MainActivity extends Activity {
                 if (v == web && !errorShown && allowed(Uri.parse(url))) {
                     CookieManager.getInstance().flush();
                     retryAttempt = 0;
+                    clearConnectionPanel();
                     dashboardPageReady = brightnessPage(url);
+                    if (dashboardPageReady) dashboardOpened = true;
                     if (dashboardPageReady)
                         v.evaluateJavascript("if(typeof window.echoDeskEnableSpotifyLaunch==='function')window.echoDeskEnableSpotifyLaunch();if(typeof window.echoDeskEnableVolumeRouting==='function')window.echoDeskEnableVolumeRouting()", null);
                     scheduleBrightness();
@@ -283,6 +290,7 @@ public final class MainActivity extends Activity {
         });
         content.removeAllViews();
         content.addView(web, new FrameLayout.LayoutParams(-1, -1));
+        showConnecting(retryAttempt > 0 || dashboardOpened, null);
         web.loadUrl(origin.toString());
         immersive();
     }
@@ -295,14 +303,63 @@ public final class MainActivity extends Activity {
         if (source != web || errorShown || isFinishing() || isDestroyed()) return;
         errorShown = true;
         retryPending = retryable;
+        boolean quietRetry = retryable && RetryPolicy.quietRetry(retryAttempt);
         if (retryable) {
             retryDelay = RetryPolicy.delayMillis(retryAttempt);
             if (retryAttempt < RetryPolicy.MAX_ATTEMPT) retryAttempt++;
             message += "\nAutomatic retry in " + (retryDelay / 1000) + " seconds.";
         }
-        showRecovery(message);
         disposeWeb();
+        if (quietRetry) showConnecting(true, "Trying again in " + (retryDelay / 1000) + " seconds.");
+        else showRecovery(message);
         scheduleRetry();
+    }
+
+    private void clearConnectionPanel() {
+        if (connectionPanel == null) return;
+        content.removeView(connectionPanel);
+        connectionPanel = null;
+    }
+
+    private void showConnecting(boolean reconnecting, String retryMessage) {
+        clearConnectionPanel();
+        LinearLayout panel = new LinearLayout(this);
+        panel.setOrientation(LinearLayout.VERTICAL);
+        panel.setGravity(Gravity.CENTER);
+        panel.setPadding(24, 16, 24, 16);
+        panel.setBackgroundColor(Color.rgb(16, 17, 18));
+        panel.setClickable(true);
+        TextView brand = new TextView(this);
+        brand.setText("Spotify Desk");
+        brand.setTextColor(Color.rgb(210, 213, 215));
+        brand.setTextSize(14);
+        brand.setGravity(Gravity.CENTER);
+        panel.addView(brand);
+        ProgressBar spinner = new ProgressBar(this);
+        spinner.setIndeterminateTintList(android.content.res.ColorStateList.valueOf(Color.rgb(140, 190, 165)));
+        int size = Math.round(32 * getResources().getDisplayMetrics().density);
+        LinearLayout.LayoutParams spinnerParams = new LinearLayout.LayoutParams(size, size);
+        spinnerParams.topMargin = Math.round(15 * getResources().getDisplayMetrics().density);
+        spinnerParams.bottomMargin = spinnerParams.topMargin;
+        panel.addView(spinner, spinnerParams);
+        TextView title = new TextView(this);
+        title.setText(reconnecting ? "Reconnecting to dashboard" : "Starting Spotify Desk");
+        title.setTextColor(Color.WHITE);
+        title.setTextSize(21);
+        title.setGravity(Gravity.CENTER);
+        panel.addView(title);
+        TextView detail = new TextView(this);
+        detail.setText(retryMessage == null ? "Connecting to your Raspberry Pi…" : retryMessage);
+        detail.setTextColor(Color.rgb(185, 190, 193));
+        detail.setTextSize(14);
+        detail.setGravity(Gravity.CENTER);
+        panel.addView(detail);
+        Button options = new Button(this);
+        options.setText("Connection options");
+        options.setOnClickListener(v -> onBackPressed());
+        panel.addView(options);
+        connectionPanel = panel;
+        content.addView(panel, new FrameLayout.LayoutParams(-1, -1));
     }
 
     private void showRecovery(String message) {
@@ -376,6 +433,7 @@ public final class MainActivity extends Activity {
     }
 
     private void disposeWeb() {
+        clearConnectionPanel();
         stopBrightness();
         if (web == null) return;
         WebView old = web;
@@ -394,6 +452,8 @@ public final class MainActivity extends Activity {
     }
 
     @Override public void onBackPressed() {
+        if (recoveryMenuOpen) return;
+        recoveryMenuOpen = true;
         retryHandler.removeCallbacks(retryTask);
         new AlertDialog.Builder(this).setTitle("Spotify Desk")
             .setItems(new String[]{"Return to dashboard", "Reload dashboard", "Android settings", "Change default Home app", "Exit", "Open Spotify"},
@@ -403,7 +463,10 @@ public final class MainActivity extends Activity {
                     else if (choice == 3) openHomeSettings();
                     else if (choice == 4) finish();
                     else if (choice == 5) openSpotify();
-                }).setOnDismissListener(dialog -> scheduleRetry()).show();
+                }).setOnDismissListener(dialog -> {
+                    recoveryMenuOpen = false;
+                    scheduleRetry();
+                }).show();
     }
 
     @Override protected void onResume() {
