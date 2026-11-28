@@ -1,0 +1,11 @@
+[Unit]
+Description=Spotify Desk local HTTPS gateway health check
+After=spotify-desk-device.service
+
+[Service]
+Type=oneshot
+WorkingDirectory=%h/Projects/Spotify-Desk-Echo-Prototype
+ExecStart="%h/Projects/Spotify-Desk-Echo-Prototype/.venv/bin/python" "%h/Projects/Spotify-Desk-Echo-Prototype/Echo Show 5 Gen 1/prototype/gateway_health.py"
+TimeoutStartSec=40
+UMask=0077
+NoNewPrivileges=true

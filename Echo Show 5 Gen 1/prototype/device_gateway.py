@@ -286,17 +286,22 @@ def create_app(path,bind,network,clock=time.time,live=False,backend=local_api):
         return send_from_directory(ROOT,name)
     return app
 
+def gateway_options(state,bind,port=PORT):
+    # A sync worker cannot keep sending idle heartbeats while blocked in TLS
+    # or request I/O. The master can replace it after the worker timeout.
+    # Separate workers provide concurrency without shared blocked threads.
+    return {"bind":f"{bind}:{port}","workers":3,"worker_class":"sync","threads":1,
+        "certfile":str(state/"server.crt"),"keyfile":str(state/"server.key"),
+        "accesslog":None,"forwarded_allow_ips":"","secure_scheme_headers":{},
+        "limit_request_line":2048,"limit_request_fields":32,"limit_request_field_size":4096,
+        "timeout":30,"graceful_timeout":15,"keepalive":0,"backlog":32}
+
 def serve(state):
     bind,net=config(state)
     from gunicorn.app.base import BaseApplication
     class Server(BaseApplication):
         def load_config(self):
-            options={"bind":f"{bind}:{PORT}","workers":1,"worker_class":"gthread","threads":2,
-                "certfile":str(state/"server.crt"),"keyfile":str(state/"server.key"),
-                "accesslog":None,"forwarded_allow_ips":"","secure_scheme_headers":{},
-                "limit_request_line":2048,"limit_request_fields":32,"limit_request_field_size":4096,
-                "timeout":30,"keepalive":2,"worker_connections":32,"backlog":32}
-            for key,value in options.items():self.cfg.set(key,value)
+            for key,value in gateway_options(state,bind).items():self.cfg.set(key,value)
         def load(self):return create_app(state/"devices.sqlite",bind,net,live=live_enabled(state))
     Server().run()
 

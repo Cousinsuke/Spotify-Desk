@@ -4,6 +4,20 @@ import unittest
 from pathlib import Path
 import device_gateway as g
 
+class GatewayTransportConfigTests(unittest.TestCase):
+    def test_bounded_sync_workers(self):
+        options=g.gateway_options(Path("/synthetic"),"192.168.50.10")
+        self.assertEqual(options["worker_class"],"sync")
+        self.assertEqual(options["workers"],3)
+        self.assertEqual(options["threads"],1)
+        self.assertEqual(options["timeout"],30)
+        self.assertEqual(options["keepalive"],0)
+        self.assertEqual(options["bind"],"192.168.50.10:8443")
+        self.assertEqual(options["certfile"],"/synthetic/server.crt")
+        self.assertEqual(options["keyfile"],"/synthetic/server.key")
+        self.assertEqual(options["forwarded_allow_ips"],"")
+        self.assertEqual(options["secure_scheme_headers"],{})
+
 class GatewayTests(unittest.TestCase):
     def setUp(self):
         self.tmp=tempfile.TemporaryDirectory()
