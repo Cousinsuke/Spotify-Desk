@@ -52,7 +52,7 @@ class GatewayTests(unittest.TestCase):
             self.assertEqual(response.status_code,200)
     def test_no_live_paths(self):
         self.pair()
-        for path in ("/api/glucose","/api/spotify/state","/api/system","/spotify/login","/spotify/callback","/.env","/.spotify_token.json","/device_gateway.py","/ca.crt","/server.key"):
+        for path in ("/api/glucose","/api/spotify/state","/api/pc/state","/api/system","/spotify/login","/spotify/callback","/.env","/.spotify_token.json","/device_gateway.py","/ca.crt","/server.key"):
             self.assertEqual(self.req(path).status_code,404,path)
         self.assertEqual(self.req("/api/spotify/command","POST",headers={"Origin":self.base}).status_code,404)
     def test_boundary(self):
@@ -117,13 +117,27 @@ class LiveGatewayTests(GatewayTests):
         self.assertEqual(self.calls,[])
     def test_live_allowlist(self):
         self.pair()
-        for path in g.LIVE_GET:
+        expected={"/api/spotify/state","/api/spotify/devices","/api/pc/state",
+                  "/api/weather","/api/glucose","/api/calendar","/api/system"}
+        self.assertEqual(g.LIVE_GET,expected)
+        for path in expected:
             self.assertEqual(self.req(path).status_code,403)
             self.assertEqual(self.req(path,headers={"X-Desk-Preview":"1"}).json,{"synthetic":True})
-        self.assertEqual(len(self.calls),6)
+        self.assertCountEqual(self.calls,[("GET",path,{},None) for path in expected])
         self.assertEqual(self.req("/api/calendar?month=2026-11-01",headers={"X-Desk-Preview":"1"}).status_code,200)
         self.assertEqual(self.calls[-1][2],{"month":"2026-11-01"})
         self.assertEqual(self.req("/api/calendar?url=http://example.com",headers={"X-Desk-Preview":"1"}).status_code,400)
+    def test_pc_state_read_only(self):
+        self.pair()
+        h={"X-Desk-Preview":"1","Origin":self.base}
+        self.assertEqual(self.req("/api/pc/state",headers=h).status_code,200)
+        self.assertEqual(self.req("/api/pc/state?fresh=1",headers=h).status_code,400)
+        self.assertEqual(self.req("/api/pc/state","POST",headers=h,json={"action":"toggle","value":True}).status_code,405)
+        self.assertEqual(self.req("/api/pc/command","POST",headers=h,json={"action":"toggle","value":True}).status_code,404)
+        g.revoke(self.path)
+        self.assertEqual(self.req("/api/pc/state",headers=h).status_code,401)
+        self.assertEqual(self.calls,[("GET","/api/pc/state",{},None)])
+
     def test_fast_playback_state_query_allowlist(self):
         self.pair()
         h={"X-Desk-Preview":"1"}

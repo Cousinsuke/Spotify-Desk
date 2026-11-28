@@ -27,6 +27,19 @@ class LocalTests(unittest.TestCase):
         self.headers={"X-Desk-Preview":"1","Origin":self.url}
     def test_requires_header(self):
         self.assertEqual(self.client.get("/api/spotify/state",base_url=self.url).status_code,403)
+    def test_pc_state_loopback_read_only(self):
+        path="/api/pc/state"
+        with patch.object(s.pc_client,"snapshot",return_value={"connected":True,"hasPlayback":False}) as snapshot:
+            self.assertEqual(self.client.get(path,base_url=self.url).status_code,403)
+            self.assertEqual(self.client.get(path,base_url=self.url,headers=self.headers,environ_overrides={"REMOTE_ADDR":"192.168.50.20"}).status_code,403)
+            self.assertEqual(self.client.get(path+"?fresh=1",base_url=self.url,headers=self.headers).status_code,403)
+            self.assertEqual(self.client.post(path,base_url=self.url,headers=self.headers,json={"action":"toggle"}).status_code,405)
+            snapshot.assert_not_called()
+            response=self.client.get(path,base_url=self.url,headers=self.headers)
+            self.assertEqual(response.status_code,200)
+            self.assertEqual(response.json,{"connected":True,"hasPlayback":False})
+            snapshot.assert_called_once_with()
+
     def test_wrong_host(self):
         self.assertEqual(self.client.get("/",base_url="http://evil.invalid").status_code,403)
     def test_wrong_origin(self):
