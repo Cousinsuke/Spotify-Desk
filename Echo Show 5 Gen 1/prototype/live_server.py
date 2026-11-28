@@ -234,7 +234,7 @@ def callback():
 def player(force=False):
     global playback_cache
     now=time.monotonic()
-    if not force and playback_cache and now-playback_cache[0]<3:
+    if not force and playback_cache and now-playback_cache[0]<1.5:
         return playback_cache[1]
     p=spotify("GET","/me/player") or {}
     d=p.get("device") or {}
@@ -301,6 +301,7 @@ def state():
         return jsonify(connected=False,saved=None)
     try:
         p=player(request.args.get("fresh")=="1")
+        sample_at=playback_cache[0] if playback_cache and playback_cache[1] is p else time.monotonic()
         item=p.get("item") or {}
         d=p.get("device") or {}
         if not item and not d.get("id"):
@@ -320,12 +321,13 @@ def state():
             return jsonify(**{**last,"connected":True,"playing":False,"inactive":True,
                 "controllable":bool(recovery),"recovery":recovery,
                 "device":(match["name"] if match else last.get("device")) if recovery else None,
-                "deviceId":expected if recovery else None,"saved":None,"supportsVolume":None,"volumePercent":None,"disallows":{"seeking":True,
+                "deviceId":expected if recovery else None,"saved":None,"sampleAgeMs":0,"supportsVolume":None,"volumePercent":None,"disallows":{"seeking":True,
                 "pausing":True,"skipping_prev":recovery=="recent","skipping_next":recovery=="recent",
                 "toggling_shuffle":True,"toggling_repeat_context":True}})
         uri=item.get("uri") if item.get("type")=="track" and not item.get("is_local") else None
         disallows=(p.get("actions") or {}).get("disallows") or p.get("actions") or {}
         snapshot=dict(connected=True,title=item.get("name"),artist=", ".join(a.get("name","") for a in item.get("artists",[])),art=safe_art(item),uri=uri,position=max(0,(p.get("progress_ms") or 0)//1000),positionMs=max(0,p.get("progress_ms") or 0),duration=max(0,(item.get("duration_ms") or 0)//1000),playing=bool(p.get("is_playing")),device=d.get("name"),deviceId=d.get("id"),controllable=bool(d.get("id") and not d.get("is_restricted")),shuffle=bool(p.get("shuffle_state")),repeat=p.get("repeat_state","off"),saved=saved_status(uri),disallows=disallows,inactive=False,**volume_fields(d))
+        snapshot["sampleAgeMs"]=max(0,min(15000,int((time.monotonic()-sample_at)*1000)))
         if item and d.get("id"):
             last_snapshot=snapshot.copy()
             last_seen=time.monotonic() if snapshot["controllable"] else None

@@ -6,14 +6,14 @@ let state={connected:false,saved:null},received=performance.now(),freezeAt=null,
 const api={enabled,get state(){return state},get message(){return performance.now()<messageUntil?message:''},get pending(){return commandBusy},get syncing(){return !!override},get pendingTrack(){return override&&['next','previous'].includes(override.action)?override.action:null},position:()=>clock.position(state,received,performance.now(),freezeAt),onChange:null};
 const emit=()=>api.onChange?.();
 const warn=msg=>{message=msg;messageUntil=performance.now()+12000};
-function accept(s){state=s;received=performance.now();freezeAt=null;emit()}
+function accept(s,age=0){state=s;received=performance.now()-clock.sampleAge(age);freezeAt=null;emit()}
 function reconcile(s){
   if(override){
     if(clock.holdIncoming(s,override,performance.now()))return;
     if(performance.now()>=override.expires&&!clock.matchesIntent(s,override)&&s.connected&&!s.error&&!s.inactive&&s.deviceId===override.device)warn('Spotify has not confirmed the update yet.');
     override=null;
   }
-  accept(s);
+  accept(s,s.sampleAgeMs);
 }
 async function request(path,opts={}){
   let r;
@@ -42,8 +42,8 @@ api.command=async(action,value,expectedDevice=null)=>{
   commandBusy=true;const version=++generation;message='';messageUntil=0;
   override=['toggle','seek','next','previous','shuffle','repeat','save'].includes(action)?{...intent,expires:Infinity}:null;
   // Match original Desk: immediate feedback on press; restore prior state on failed write.
-  if(action==='toggle'||action==='seek')accept(clock.acknowledged(state,intent,pos));
-  else {freezeAt=performance.now();emit()}
+  if(['toggle','seek','shuffle','repeat','save'].includes(action))accept(clock.acknowledged(state,intent,pos));
+  else {if(['next','previous','device'].includes(action))freezeAt=performance.now();emit()}
   let ok=false,result=null;
   try{
     if(inFlight)await inFlight;
@@ -58,7 +58,7 @@ api.command=async(action,value,expectedDevice=null)=>{
     emit();
   }
   // Confirm independently of the write lock. New commands invalidate old timers/results.
-  const delays=!ok?[250]:action==='volume'?[950,3000]:['next','previous'].includes(action)?[280,1130,2630,7100]:[950,3000,3600];
+  const delays=!ok?[150]:action==='volume'?[950,3000]:['next','previous'].includes(action)?[150,750,2000,7100]:[150,800,2000,3600];
   for(const delay of delays)setTimeout(()=>{if(version===generation&&!commandBusy&&!document.hidden)api.refresh(true)},delay);
   return ok?result:null;
 };

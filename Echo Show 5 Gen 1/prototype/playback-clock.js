@@ -2,6 +2,7 @@
 'use strict';
 // Pure clock projection: no timers, network, storage or invented next track.
 const finite=(x,fallback=0)=>Number.isFinite(x)?x:fallback;
+function sampleAge(age){return Math.max(0,Math.min(15000,finite(age)))}
 function position(s,received,now,freezeAt=null){
   if(!s.connected||s.error)return 0;
   const duration=Math.max(0,finite(s.duration));
@@ -29,6 +30,10 @@ function matchesIntent(s,intent){
 function acknowledged(s,intent,position){
   if(intent.action==='toggle')return {...s,playing:intent.value,inactive:false,position:Math.floor(position),positionMs:Math.floor(position*1000)};
   if(intent.action==='seek')return {...s,position:intent.value,positionMs:intent.value*1000};
+  const current={...s,position:Math.floor(position),positionMs:Math.floor(position*1000)};
+  if(intent.action==='shuffle')return {...current,shuffle:!s.shuffle};
+  if(intent.action==='repeat')return {...current,repeat:{off:'context',context:'track',track:'off'}[s.repeat]||'off'};
+  if(intent.action==='save'&&typeof s.saved==='boolean')return {...current,saved:!s.saved};
   return s;
 }
 // Original Desk-style bounded override: hold only stale same-device responses.
@@ -37,5 +42,5 @@ function holdIncoming(incoming,intent,now){
      !incoming.deviceId||incoming.deviceId!==intent.device)return false;
   return !matchesIntent(incoming,intent);
 }
-const api={position,matchesIntent,acknowledged,holdIncoming};if(typeof module==='object'&&module.exports)module.exports=api;else root.EchoPlaybackClock=api;
+const api={position,matchesIntent,acknowledged,holdIncoming,sampleAge};if(typeof module==='object'&&module.exports)module.exports=api;else root.EchoPlaybackClock=api;
 })(typeof globalThis!=='undefined'?globalThis:this);

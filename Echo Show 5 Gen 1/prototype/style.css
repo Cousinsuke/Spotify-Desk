@@ -401,3 +401,20 @@ button,select,input{font:inherit;color:inherit}button,select{background:var(--co
 /* Remote volume status mirrors the native local OSD, without intercepting touches. */
 #remoteVolumeOsd{position:fixed;z-index:10000;top:12px;left:50%;transform:translateX(-50%);width:min(300px,calc(100% - 32px));padding:10px 16px;border:1px solid #424546;border-radius:16px;background:#101112;color:#fff;box-shadow:0 4px 18px #0007;pointer-events:none;line-height:1.3;font-size:13px}
 #remoteVolumeOsd[hidden],#remoteVolumeOsd [hidden]{display:none!important}#remoteVolumeOsd>div:first-child{color:#d0d2d2;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}#remoteVolumeOsd strong{display:block;margin-top:3px;font-size:15px}.remote-volume-meter{height:6px;margin-top:6px;background:#424546;border-radius:5px;overflow:hidden}.remote-volume-meter i{display:block;height:100%;background:#fff;border-radius:5px}
+
+/* Consistent touch UI: suppress Android WebView tap flash; keep keyboard focus. */
+#screen,#screen *{-webkit-tap-highlight-color:transparent}
+#screen button,#screen a,#screen .themed-select{-webkit-user-select:none;user-select:none}
+#screen button:focus:not(:focus-visible),#screen a:focus:not(:focus-visible),#screen input:focus:not(:focus-visible){outline:none}
+#screen button:focus-visible,#screen a:focus-visible,#screen input:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+#screen[data-input=touch] button:focus,#screen[data-input=touch] a:focus,#screen[data-input=touch] input:focus{outline:none}
+/* All page/setting selects use the same Graphite/Black themed modal. */
+.themed-select{display:inline-flex;align-items:center;justify-content:space-between;gap:9px;min-width:0;white-space:nowrap;text-align:left;padding:7px 12px;font-size:14px;flex:none}
+.themed-select>span:first-child{overflow:hidden;text-overflow:ellipsis;min-width:0}.themed-select-chevron{font-size:15px;line-height:1;opacity:.75;flex:none}
+.setting .themed-select{max-width:58%;padding:5px 8px}.spotify-header .themed-select{min-width:112px;letter-spacing:0;background:rgba(255,255,255,.10);border-color:rgba(255,255,255,.19);color:#fff}
+.glucose-header .themed-select,.glucose-chart-controls .themed-select{min-height:34px;padding:5px 10px;border-radius:10px;background:#ffffff16;border-color:#ffffff30;color:#fff;font-size:14px}.glucose-header .themed-select{min-width:120px}
+.weather-forecast-heading .themed-select{width:auto;height:30px;padding:3px 10px;font-size:13px;letter-spacing:0;background:#ffffff12;border-color:#ffffff30}
+.themed-select-shade{position:absolute;inset:0;z-index:7;background:#0008;touch-action:none}
+.themed-select-panel{z-index:7;top:50%;left:50%;transform:translate(-50%,-50%);width:min(420px,85%);max-height:90%;display:flex;flex-direction:column;overflow:hidden;padding:14px 18px;touch-action:pan-y}
+.themed-select-panel header{flex:none;margin-bottom:8px}.themed-select-options{overflow:auto;min-height:0;overscroll-behavior:contain;touch-action:pan-y}
+.themed-select-option{min-height:42px;margin:6px 0;padding:8px 12px;justify-content:space-between}.themed-select-option span:first-child{margin:0;font-size:14px;color:inherit}.themed-select-option[aria-pressed=true]{background:var(--control);border-color:var(--accent)}.themed-select-option[aria-pressed=true] span:last-child{color:var(--accent)}

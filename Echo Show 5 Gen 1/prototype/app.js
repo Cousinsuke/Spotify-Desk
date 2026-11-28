@@ -136,9 +136,10 @@ function syncNightControls(){
     if(el.value!==String(prefs[key]))el.value=prefs[key];
   }
   for(const el of screen.querySelectorAll('[data-output=nightDim]'))el.textContent=prefs.nightDim+'%';
+  syncThemedSelects();
 }
 function save(){try{localStorage.setItem(key,JSON.stringify(prefs))}catch{}apply();schedule()}
-function schedule(){clearTimeout(timer);if(expanded&&!overlay&&prefs.autoHide[active]&&!rail.contains(document.activeElement))timer=setTimeout(()=>setRail(false),prefs.delay*1000)}
+function schedule(){clearTimeout(timer);if(expanded&&!overlay&&!themedSelectOpen&&prefs.autoHide[active]&&!rail.contains(document.activeElement))timer=setTimeout(()=>setRail(false),prefs.delay*1000)}
 function setRail(value){expanded=value;screen.classList.toggle('expanded',value);rail.inert=!value;rail.setAttribute('aria-hidden',String(!value));reveal.hidden=value;schedule()}
 function renderRail(){rail.innerHTML=appRailIds(prefs.appLayout).map(id=>'<button data-page="'+id+'" aria-label="'+apps[id]+'" '+(active===id?'aria-current="page"':'')+'>'+icon(id)+'</button>').join('')+'<button data-open="drawer" aria-label="Apps" aria-expanded="'+(overlay==='drawer')+'">'+icon('apps')+'</button>'}
 function clock(){
@@ -239,8 +240,8 @@ async function refreshSystem(){
 }
 function renderPage(){screen.dataset.page=active;renderRail();if(active==='home'){renderHome()}else if(active==='spotify'){renderSpotify();if(liveEnabled)live.refresh()}else if(active==='weather'){renderWeather()}else if(active==='glucose'){renderGlucose()}else if(active==='settings'){renderSettings()}else if(active==='calendar'){renderCalendar();refreshCalendar()}else if(active==='system'){renderSystem();refreshSystem();if(liveEnabled)live.refresh()}else{page.innerHTML='<div class="placeholder"><h1>'+apps[active]+'</h1><p>This page is planned for a later prototype increment. No live service is connected.</p><button data-page="home">Return Home</button></div>'}}
 function navigate(id){if(id!=='home'&&!enabledAppIds.includes(id))return;if(glucoseObserver){glucoseObserver.disconnect();glucoseObserver=null}closeOverlay(false);active=id;systemGeneration++;if(id==='system'){systemData=null;systemFailed=false;echoData=null}if(id==='calendar')calendarReset();renderPage();setRail(true);if(weather.enabled&&['home','weather'].includes(active))weather.refresh();if(glucoseLive.enabled&&['home','glucose'].includes(active)){updateLiveGlucose();glucoseLive.refresh()}}
-function closeOverlay(restore=true){const previous=overlay;overlay=null;drawer.hidden=true;quick.hidden=true;$('devices').hidden=true;$('weatherDetails').hidden=true;shade.hidden=true;renderRail();if(restore){if(previous==='quick')$('quickHandle').focus();else if(previous==='devices')$('deviceSelect')?.focus();else if(previous==='weather')(page.querySelector('[data-weather-day="'+weatherDay+'"]')||page.querySelector('[data-hour-day="'+weatherDay+'"]')||$('forecastDays'))?.focus();else rail.querySelector('[data-open=drawer]')?.focus()}schedule()}
-function openOverlay(id,devicePurpose='all'){overlay=id;clearTimeout(timer);shade.hidden=false;drawer.hidden=id!=='drawer';quick.hidden=id!=='quick';$('devices').hidden=id!=='devices';$('weatherDetails').hidden=id!=='weather';if(id==='drawer'){setRail(true);drawer.innerHTML='<header>Apps<button data-close aria-label="Close Apps">×</button></header><div class="app-grid">'+prefs.appLayout.order.map(a=>'<button data-page="'+a+'">'+icon(a)+apps[a]+'</button>').join('')+'</div>'}else if(id==='devices'){renderDevices(devicePurpose)}else if(id==='weather'){renderWeatherDetails()}else{renderQuick()}renderRail();(id==='drawer'?drawer:id==='devices'?$('devices'):id==='weather'?$('weatherDetails'):quick).querySelector('[data-close]')?.focus()}
+function closeOverlay(restore=true){closeThemedSelect(false);const previous=overlay;overlay=null;drawer.hidden=true;quick.hidden=true;$('devices').hidden=true;$('weatherDetails').hidden=true;shade.hidden=true;renderRail();if(restore){if(previous==='quick')$('quickHandle').focus();else if(previous==='devices')$('deviceSelect')?.focus();else if(previous==='weather')(page.querySelector('[data-weather-day="'+weatherDay+'"]')||page.querySelector('[data-hour-day="'+weatherDay+'"]')||$('forecastDays'))?.focus();else rail.querySelector('[data-open=drawer]')?.focus()}schedule()}
+function openOverlay(id,devicePurpose='all'){closeThemedSelect(false);overlay=id;clearTimeout(timer);shade.hidden=false;drawer.hidden=id!=='drawer';quick.hidden=id!=='quick';$('devices').hidden=id!=='devices';$('weatherDetails').hidden=id!=='weather';if(id==='drawer'){setRail(true);drawer.innerHTML='<header>Apps<button data-close aria-label="Close Apps">×</button></header><div class="app-grid">'+prefs.appLayout.order.map(a=>'<button data-page="'+a+'">'+icon(a)+apps[a]+'</button>').join('')+'</div>'}else if(id==='devices'){renderDevices(devicePurpose)}else if(id==='weather'){renderWeatherDetails()}else{renderQuick()}renderRail();(id==='drawer'?drawer:id==='devices'?$('devices'):id==='weather'?$('weatherDetails'):quick).querySelector('[data-close]')?.focus()}
 function selectRow(label,k,options){return '<div class="setting"><label>'+label+'</label><select aria-label="'+label+'" data-pref="'+k+'">'+options.map(([v,t])=>'<option value="'+v+'" '+(String(prefs[k])===String(v)?'selected':'')+'>'+t+'</option>').join('')+'</select></div>'}
 function rangeRow(label,k,min,max,step,suffix,note=''){return '<div class="setting"><label>'+label+(note?'<small>'+note+'</small>':'')+'</label><input aria-label="'+label+'" type="range" data-pref="'+k+'" min="'+min+'" max="'+max+'" step="'+step+'" value="'+prefs[k]+'"><output data-output="'+k+'">'+prefs[k]+suffix+'</output></div>'}
 const homeRows=()=>selectRow('Layout','homeLayout',homeOptions.homeLayout)+selectRow('Clock style','homeClock',homeOptions.homeClock)+selectRow('Wallpaper','homeWallpaper',homeOptions.homeWallpaper);
@@ -363,7 +364,7 @@ function spotifyBackgroundRow(){return selectRow('Background','spotifyBackground
 function artwork(t){return '<svg viewBox="0 0 320 320" role="img" aria-label="Abstract sample album artwork"><rect width="320" height="320" fill="'+t.colors[0]+'"/><circle cx="190" cy="105" r="94" fill="'+t.colors[1]+'"/><path d="M0 235 100 70 210 235 320 115V320H0Z" fill="'+t.colors[2]+'"/><circle cx="112" cy="215" r="66" fill="none" stroke="'+t.colors[1]+'" opacity=".6" stroke-width="12"/><text x="160" y="290" text-anchor="middle" fill="white" font-size="12" letter-spacing="4">SAMPLE ART</text></svg>'}
 function renderSpotify(){page.innerHTML='<header class="spotify-header"><span>SPOTIFY</span><select id="playMode" data-mode aria-label="Playback mode">'+modeOptions()+'</select></header><div class="spotify-layout"><div class="album" id="album"></div><section class="player"><div class="song"><small id="playStatus"></small><h1 id="songTitle"></h1><div id="songArtist"></div></div><div class="timeline"><input id="seek" type="range" min="0" step="1" aria-label="Seek track"><div class="times"><span id="elapsed"></span><span id="duration"></span></div></div><div class="transport"><button data-music="shuffle" aria-label="Shuffle" id="shuffle">'+transportIcon('shuffle')+'</button><button data-music="previous" aria-label="Previous">'+transportIcon('previous')+'</button><button class="play" id="playToggle" data-music="toggle" aria-label="Pause"></button><button data-music="next" aria-label="Next">'+transportIcon('next')+'</button><button data-music="repeat" aria-label="Repeat" id="repeat">'+transportIcon('repeat')+'<small id="repeatOne" hidden>1</small></button></div><div class="player-bottom"><button id="deviceSelect" data-open="devices" aria-label="Select playback device">'+icon('system')+'<span id="deviceLabel"></span><span class="chevron">⌄</span></button><button id="saveSong" data-music="save" aria-label="Save sample song"></button></div><p class="live-error" id="liveError" role="status"></p></section></div>';if(liveEnabled)renderLiveState();else updateSpotify()}
 let drawnTrack=-1, drawnAlbum=null;
-function updateSpotify(){const t=music.tracks[playback.index],album=$('album');if(!album)return;if(drawnTrack!==playback.index||drawnAlbum!==album){album.innerHTML=artwork(t);drawnTrack=playback.index;drawnAlbum=album;screen.style.setProperty('--album-color',t.colors[0]);screen.style.setProperty('--album-dark',t.colors[2]);$('songTitle').textContent=t.title;$('songArtist').textContent=t.artist;}const put=(id,v)=>{const el=$(id);if(el.textContent!==v)el.textContent=v};put('playStatus',playback.playing?'PLAYING · SAMPLE':'PAUSED · SAMPLE');put('elapsed',music.time(playback.position));put('duration',music.time(t.duration));const seek=$('seek');seek.max=t.duration;if(document.activeElement!==seek||!seeking)seek.value=playback.position;seek.style.setProperty('--progress',100*playback.position/t.duration+'%');const p=$('playToggle'),pLabel=playback.playing?'Pause':'Play';if(p.getAttribute('aria-label')!==pLabel||!p.firstChild){p.innerHTML=transportIcon(playback.playing?'pause':'play');p.setAttribute('aria-label',pLabel)}$('shuffle').setAttribute('aria-pressed',String(playback.shuffle));$('repeat').setAttribute('aria-pressed',String(playback.repeat!=='off'));$('repeat').setAttribute('aria-label','Repeat: '+playback.repeat);$('repeatOne').hidden=playback.repeat!=='one';const saved=playback.saved.includes(playback.index),s=$('saveSong'),label=saved?'Remove saved sample song':'Save sample song';if(s.getAttribute('aria-label')!==label||!s.firstChild){s.innerHTML=transportIcon(saved?'saved':'save');s.setAttribute('aria-label',label)}s.setAttribute('aria-pressed',String(saved));put('deviceLabel',(playback.playing?'Playing on ':'Selected: ')+playback.device);$('playMode').value=playback.mode}
+function updateSpotify(){const t=music.tracks[playback.index],album=$('album');if(!album)return;if(drawnTrack!==playback.index||drawnAlbum!==album){album.innerHTML=artwork(t);drawnTrack=playback.index;drawnAlbum=album;screen.style.setProperty('--album-color',t.colors[0]);screen.style.setProperty('--album-dark',t.colors[2]);$('songTitle').textContent=t.title;$('songArtist').textContent=t.artist;}const put=(id,v)=>{const el=$(id);if(el.textContent!==v)el.textContent=v};put('playStatus',playback.playing?'PLAYING · SAMPLE':'PAUSED · SAMPLE');put('elapsed',music.time(playback.position));put('duration',music.time(t.duration));const seek=$('seek');seek.max=t.duration;if(document.activeElement!==seek||!seeking)seek.value=playback.position;seek.style.setProperty('--progress',100*playback.position/t.duration+'%');const p=$('playToggle'),pLabel=playback.playing?'Pause':'Play';if(p.getAttribute('aria-label')!==pLabel||!p.firstChild){p.innerHTML=transportIcon(playback.playing?'pause':'play');p.setAttribute('aria-label',pLabel)}$('shuffle').setAttribute('aria-pressed',String(playback.shuffle));$('repeat').setAttribute('aria-pressed',String(playback.repeat!=='off'));$('repeat').setAttribute('aria-label','Repeat: '+playback.repeat);$('repeatOne').hidden=playback.repeat!=='one';const saved=playback.saved.includes(playback.index),s=$('saveSong'),label=saved?'Remove saved sample song':'Save sample song';if(s.getAttribute('aria-label')!==label||!s.firstChild){s.innerHTML=transportIcon(saved?'saved':'save');s.setAttribute('aria-label',label)}s.setAttribute('aria-pressed',String(saved));put('deviceLabel',(playback.playing?'Playing on ':'Selected: ')+playback.device);$('playMode').value=playback.mode;syncThemedSelects()}
 let seeking=false;
 screen.addEventListener('pointerdown',e=>{if(e.target.id==='seek')seeking=true});
 window.addEventListener('pointerup',()=>{seeking=false});window.addEventListener('pointercancel',()=>{seeking=false});
@@ -385,6 +386,7 @@ function syncLiveMode(){
     select.value=liveMode();
     select.disabled=live.pending||!live.state.connected||!!live.state.error;
   }
+  syncThemedSelects();
 }
 function renderDevices(purpose='all'){
   if(liveEnabled){
@@ -558,7 +560,7 @@ function renderLiveState(){
  syncLiveMode();
 const s=live.state,home=$('homeTrack');if(home)home.textContent=s.connected?(s.inactive?'No active playback':s.title||'No playback'):'Spotify — not connected';
 if(active!=='spotify'||!$('album'))return;
-const text=(id,v)=>{$(id).textContent=v};
+const text=(id,v)=>{const el=$(id);if(el.textContent!==v)el.textContent=v};
 text('playStatus',!s.connected?'NOT CONNECTED':s.error?'UNAVAILABLE':(live.pending||live.syncing)?(s.playing?'PLAYING · SYNCING':'PAUSED · SYNCING'):s.inactive?(s.recovery==='recent'?'PAUSED · LAST DEVICE':s.recovery==='verified'?'PAUSED · DEVICE AVAILABLE':s.title?'LAST TRACK · DEVICE UNAVAILABLE':'NO ACTIVE PLAYBACK'):s.playing?'NOW PLAYING':s.title?'PAUSED':'NO ACTIVE PLAYBACK');
 text('songTitle',live.pendingTrack?(live.pendingTrack==='next'?'Skipping track…':'Going back…'):(s.title||'No music playing'));text('songArtist',live.pendingTrack?'Waiting for Spotify':(s.artist||'Start Spotify on your Xbox, phone or PC'));
 text('duration',music.time(s.duration||0));
@@ -567,17 +569,103 @@ const album=$('album');if(album.dataset.url!==(s.art||'')||!album.firstChild){
   const art=s.art||'';album.dataset.url=art;
   albumPalette.mount(album,art,()=>active==='spotify'&&$('album')===album&&album.dataset.url===art);
 }
-const p=$('playToggle');p.innerHTML=transportIcon(s.playing?'pause':'play');p.setAttribute('aria-label',s.playing?'Pause':'Play');
+const p=$('playToggle'),playLabel=s.playing?'Pause':'Play';if(p.getAttribute('aria-label')!==playLabel||!p.firstChild){p.innerHTML=transportIcon(s.playing?'pause':'play');p.setAttribute('aria-label',playLabel)}
 $('shuffle').setAttribute('aria-pressed',String(!!s.shuffle));$('repeat').setAttribute('aria-pressed',String(!!s.repeat&&s.repeat!=='off'));$('repeatOne').hidden=s.repeat!=='track';$('repeat').setAttribute('aria-label','Repeat: '+(s.repeat||'off'));
-const save=$('saveSong');save.innerHTML=transportIcon(s.saved?'saved':'save');save.setAttribute('aria-pressed',String(!!s.saved));save.setAttribute('aria-label',s.saved?'Remove saved song':'Save song');save.disabled=live.pending||s.inactive||!s.uri||s.saved===null||!s.connected||!!s.error;
+const save=$('saveSong'),saveLabel=s.saved?'Remove saved song':'Save song';if(save.getAttribute('aria-label')!==saveLabel||!save.firstChild){save.innerHTML=transportIcon(s.saved?'saved':'save');save.setAttribute('aria-label',saveLabel)}save.setAttribute('aria-pressed',String(!!s.saved));save.disabled=live.pending||s.inactive||!s.uri||s.saved===null||!s.connected||!!s.error;
 for(const b of page.querySelectorAll('[data-music]')){if(b===save)continue;const key={toggle:s.playing?'pausing':'resuming',previous:'skipping_prev',next:'skipping_next',shuffle:'toggling_shuffle',repeat:'toggling_repeat_context'}[b.dataset.music];b.disabled=live.pending||!!s.error||!s.controllable||!!s.disallows?.[key]}
 text('deviceLabel',s.device?(s.playing?'Playing on ':s.recovery==='recent'?'Last device: ':'Selected: ')+s.device:'Select playback device');$('deviceSelect').disabled=live.pending||!s.connected||!!s.error;
 const err=$('liveError');err.replaceChildren();if(!s.connected){if(document.documentElement.dataset.deviceGateway==='1'){const a=document.createElement('span');a.className='live-link';a.textContent='Connect Spotify from the private admin dashboard.';err.append(a)}else{const a=document.createElement('a');a.href='/spotify/login';a.className='live-link';a.textContent='Connect Spotify';err.append(a)}}if(s.error||live.message){const span=document.createElement('span');span.textContent=' '+(live.message||s.error);err.append(span)}
 }
-function updateLiveProgress(){if(!liveEnabled||active!=='spotify'||!$('seek')||seeking)return;const pos=live.position(),seek=$('seek');seek.value=Math.floor(pos);const elapsed=music.time(Math.floor(pos));if($('elapsed').textContent!==elapsed)$('elapsed').textContent=elapsed;}
-apply();renderPage();setRail(true);
-document.addEventListener('visibilitychange',()=>{if(!document.hidden)updateNightMode()});
-if(liveEnabled){$('demo').textContent=document.documentElement.dataset.deviceGateway==='1'?'LIVE · PAIRED DISPLAY':'LOCAL TEST · SECONDARY DISPLAY';screen.style.setProperty('--album-color','#40434c');screen.style.setProperty('--album-dark','#15171a');live.onChange=renderLiveState;live.refresh();setInterval(()=>{if((nativeVolumeRouting||['spotify','home','system'].includes(active))&&!document.hidden)live.refresh()},5000);setInterval(updateLiveProgress,200)}
+function updateLiveProgress(){if(!liveEnabled||active!=='spotify'||!$('seek')||seeking)return;const pos=live.position(),seek=$('seek');if(seek.value!==String(Math.floor(pos)))seek.value=Math.floor(pos);const elapsed=music.time(Math.floor(pos));if($('elapsed').textContent!==elapsed)$('elapsed').textContent=elapsed;}
+// Theme-native dropdowns: retain real selects as internal state and dispatch the same
+// change event as before. No native Android select picker is exposed to touch.
+screen.addEventListener('pointerdown',e=>{if(e.pointerType==='touch'||e.pointerType==='pen'||e.pointerType==='mouse')screen.dataset.input='touch'},true);
+screen.addEventListener('keydown',e=>{if(!['Shift','Control','Alt','Meta'].includes(e.key))screen.dataset.input='keyboard'},true);
+const themedSelectButtons=new WeakMap();
+let themedSelectOpen=null,lastSpotifyPoll=0;
+function syncThemedSelects(){
+  if(themedSelectOpen&&(!themedSelectOpen.select.isConnected||themedSelectOpen.select.disabled))closeThemedSelect(false);
+  for(const select of screen.querySelectorAll('select')){
+    let trigger=themedSelectButtons.get(select);
+    if(!trigger){
+      trigger=document.createElement('button');trigger.type='button';
+      trigger.className='themed-select';trigger.setAttribute('aria-haspopup','dialog');
+      const text=document.createElement('span'),chevron=document.createElement('span');
+      chevron.className='themed-select-chevron';chevron.setAttribute('aria-hidden','true');chevron.textContent='⌄';
+      trigger.append(text,chevron);
+      trigger.addEventListener('click',e=>{e.stopPropagation();openThemedSelect(select,trigger)});
+      select.hidden=true;select.tabIndex=-1;select.setAttribute('aria-hidden','true');
+      select.after(trigger);themedSelectButtons.set(select,trigger);
+    }
+    const label=select.getAttribute('aria-label')||'Select option',option=select.selectedOptions[0];
+    const name=option?option.textContent:label;
+    if(trigger.firstChild.textContent!==name)trigger.firstChild.textContent=name;
+    const accessible=label+': '+name;
+    if(trigger.getAttribute('aria-label')!==accessible)trigger.setAttribute('aria-label',accessible);
+    trigger.setAttribute('aria-expanded',String(themedSelectOpen?.select===select));
+    if(trigger.disabled!==select.disabled)trigger.disabled=select.disabled;
+  }
+}
+function closeThemedSelect(restore=true){
+  const current=themedSelectOpen;if(!current)return;
+  themedSelectOpen=null;
+  current.panel.remove();current.backdrop.remove();
+  current.trigger.setAttribute('aria-expanded','false');
+  if(restore&&current.trigger.isConnected&&!current.trigger.disabled)current.trigger.focus({preventScroll:true});
+  schedule();
+}
+function openThemedSelect(select,trigger){
+  if(select.disabled||!select.isConnected)return;
+  closeThemedSelect(false);clearTimeout(timer);
+  const backdrop=document.createElement('div');backdrop.className='themed-select-shade';
+  const panel=document.createElement('section');panel.className='overlay themed-select-panel';
+  panel.setAttribute('role','dialog');panel.setAttribute('aria-modal','true');
+  const label=select.getAttribute('aria-label')||'Select option';panel.setAttribute('aria-label',label);
+  const header=document.createElement('header');header.textContent=label;
+  const close=document.createElement('button');close.type='button';close.textContent='×';close.setAttribute('aria-label','Close '+label);
+  close.addEventListener('click',()=>closeThemedSelect());header.append(close);panel.append(header);
+  const choices=document.createElement('div');choices.className='themed-select-options';
+  for(const [i,option] of Array.from(select.options).entries()){
+    const button=document.createElement('button');button.type='button';button.className='device-option themed-select-option';
+    button.disabled=option.disabled||!!option.closest('optgroup')?.disabled;
+    button.setAttribute('aria-pressed',String(i===select.selectedIndex));
+    const name=document.createElement('span');name.textContent=option.textContent;button.append(name);
+    if(i===select.selectedIndex){const mark=document.createElement('span');mark.textContent='✓';mark.setAttribute('aria-hidden','true');button.append(mark)}
+    button.addEventListener('click',()=>{
+      if(!select.isConnected||select.disabled||button.disabled){closeThemedSelect(false);return}
+      const changed=i!==select.selectedIndex;
+      closeThemedSelect();
+      if(changed){select.selectedIndex=i;select.dispatchEvent(new Event('change',{bubbles:true}))}
+      syncThemedSelects();
+    });
+    choices.append(button);
+  }
+  panel.append(choices);
+  backdrop.addEventListener('click',e=>{e.stopPropagation();closeThemedSelect()});
+  panel.addEventListener('click',e=>e.stopPropagation());
+  panel.addEventListener('keydown',e=>{
+    if(e.key==='Escape'){e.preventDefault();e.stopPropagation();closeThemedSelect();return}
+    const focusable=Array.from(panel.querySelectorAll('button:not(:disabled)'));
+    const index=focusable.indexOf(document.activeElement);
+    if(e.key==='ArrowDown'||e.key==='ArrowUp'||e.key==='Tab'){
+      e.preventDefault();e.stopPropagation();
+      const step=e.key==='ArrowUp'||(e.key==='Tab'&&e.shiftKey)?-1:1;
+      focusable[(index+step+focusable.length)%focusable.length]?.focus();
+    }
+  });
+  themedSelectOpen={select,trigger,panel,backdrop};
+  screen.append(backdrop,panel);trigger.setAttribute('aria-expanded','true');
+  (choices.querySelector('[aria-pressed=true]:not(:disabled)')||choices.querySelector('button:not(:disabled)')||close).focus({preventScroll:true});
+}
+// Observe only structural select changes, not every progress/clock update.
+const themedSelectObserver=new MutationObserver(records=>{
+  const containsSelect=node=>node.nodeType===1&&(node.matches('select')||!!node.querySelector('select'));
+  if(records.some(r=>r.type==='attributes'?r.target.matches('select,option'):r.target.matches?.('select,option')||[...r.addedNodes,...r.removedNodes].some(containsSelect)))syncThemedSelects();
+});
+themedSelectObserver.observe(screen,{childList:true,subtree:true,attributes:true,attributeFilter:['disabled','selected']});
+apply();renderPage();syncThemedSelects();setRail(true);
+document.addEventListener('visibilitychange',()=>{if(!document.hidden){updateNightMode();if(liveEnabled)live.refresh(true)}else closeThemedSelect(false)});
+if(liveEnabled){$('demo').textContent=document.documentElement.dataset.deviceGateway==='1'?'LIVE · PAIRED DISPLAY':'LOCAL TEST · SECONDARY DISPLAY';screen.style.setProperty('--album-color','#40434c');screen.style.setProperty('--album-dark','#15171a');live.onChange=renderLiveState;live.refresh();setInterval(()=>{if(document.hidden||!(nativeVolumeRouting||['spotify','home','system'].includes(active)))return;const now=performance.now(),interval=active==='spotify'?2000:5000;if(now-lastSpotifyPoll>=interval){lastSpotifyPoll=now;live.refresh()}},1000);setInterval(updateLiveProgress,200)}
 setInterval(()=>{if(active==='calendar'&&!document.hidden)refreshCalendar();if(active==='system'&&!document.hidden)refreshSystem()},5000);
 setInterval(()=>{clock();updateNightMode();if(active==='calendar'&&calendarToday!==calendarKey(new Date()))renderCalendar();if(!liveEnabled){playback=music.reduce(playback,'tick');if(active==='spotify'&&!overlay)updateSpotify()}},1000);
 

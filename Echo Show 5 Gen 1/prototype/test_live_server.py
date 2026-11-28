@@ -107,6 +107,14 @@ class LocalTests(unittest.TestCase):
                 self.assertEqual(r.status_code,200);self.assertEqual(r.json["requestedVolume"],expected)
                 if current==expected:api.assert_not_called()
                 else:api.assert_called_once_with("PUT","/me/player/volume",{"device_id":"d","volume_percent":expected})
+    def test_state_reports_playback_sample_age(self):
+        s.token={"access_token":"test"}
+        sample={"item":{"name":"Synthetic","type":"track","uri":"spotify:track:abc","duration_ms":100000},"device":{"id":"d"},"is_playing":True,"progress_ms":12000}
+        s.playback_cache=(100.0,sample)
+        with patch.object(s,"player",return_value=sample),patch.object(s,"saved_status",return_value=False),patch.object(s.time,"monotonic",return_value=101.25):
+            data=self.client.get("/api/spotify/state",base_url=self.url,headers=self.headers).json
+            self.assertEqual(data["positionMs"],12000)
+            self.assertEqual(data["sampleAgeMs"],1250)
     def test_command_device_changed(self):
         with patch.object(s,"player",return_value={"device":{"id":"new"}}),patch.object(s,"spotify") as api:
             r=self.client.post("/api/spotify/command",base_url=self.url,headers=self.headers,json={"action":"toggle","device":"old"})
