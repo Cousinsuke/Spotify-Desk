@@ -1,6 +1,6 @@
 # Echo Show 5 Gen 1 — Spotify Desk
 
-**Last updated: 2026-11-28. Status: LineageOS installed; Raspberry Pi HTTPS gateway and paired native display working; compact physical layout accepted. Startup/reconnection, hardware brightness and mode-aware volume accepted; Spotify track metadata latency is the next priority.**
+**Last updated: 2026-11-28. Status: LineageOS installed; Raspberry Pi HTTPS gateway and paired native display working; compact physical layout accepted. Startup/reconnection, hardware brightness and mode-aware volume accepted; Green glucose target-band visual review is next; native Spotify media-session integration deferred.**
 
 This is a separate hardware/deployment path within Spotify-Desk, not a replacement for the existing Windows/Omarchy software or ESP32/Waveshare CAD work. The aim is a small, black, touchscreen desk dashboard with no separate physical media buttons required. Reuse the current software rather than rebuilding it unnecessarily.
 
@@ -32,4 +32,4 @@ Existing references: [project README](../README.md), [architecture](../docs/ARCH
 
 ## Latest prototype checkpoint (2026-11-28)
 
-The isolated prototype is at [9b52085](https://github.com/Cousinsuke/Spotify-Desk/commit/9b52085e759af3d5d85ca260ce37a027796a9f09). Pi backend and authenticated HTTPS gateway recover automatically after Pi reboot; the paired Android app is 0.9.0. Physical dashboard layout, local Spotify playback, Echo/Xbox mode-aware volume, brightness, diagnostics and startup/reconnection polish accepted for tested paths. The latest Pi deployment passed 96 Python tests. Spotify title/artwork still lag audible track changes by roughly 3–5 seconds; source attribution is unresolved. Next obtain explicit approval for optional Android notification access and a read-only local Spotify media-session timing probe. No new permission or implementation yet. Extended stability testing deferred; no release stability claim. See [CHATGPT-HANDOFF.md](CHATGPT-HANDOFF.md) and [TESTING-AND-ROADMAP.md](TESTING-AND-ROADMAP.md).
+The isolated prototype is at [8c88142](https://github.com/Cousinsuke/Spotify-Desk/commit/8c88142f3bcf67528c87e73b38cbc019cdcf947c). Pi backend and authenticated HTTPS gateway recover automatically after Pi reboot; the paired Android app is 0.9.0. Physical dashboard layout, local Spotify playback, Echo/Xbox mode-aware volume, brightness, diagnostics and startup/reconnection polish accepted for tested paths. Last Pi suite: 96 Python tests passed. Spotify title/artwork latency remains unresolved; user deferred local media-session integration. Green Glucose target band implemented; next physical visual review. Extended stability deferred. See [CHATGPT-HANDOFF.md](CHATGPT-HANDOFF.md) and [TESTING-AND-ROADMAP.md](TESTING-AND-ROADMAP.md).
