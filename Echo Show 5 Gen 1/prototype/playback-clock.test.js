@@ -33,7 +33,7 @@ assert.equal(holdIncoming({...current,deviceId:'other'},hold,1000),false);
 assert.equal(holdIncoming({...current,connected:false},hold,1000),false);
 assert.equal(holdIncoming({...current,error:'failure'},hold,1000),false);
 const skip={action:'next',device:'d',uri:current.uri,position:82,expires:7000};
-assert.equal(holdIncoming(current,skip,4000),true);
+assert.equal(holdIncoming(current,skip,4000),false);
 assert.equal(holdIncoming({...current,uri:'new'},skip,4000),false);
 assert.equal(holdIncoming(current,skip,7100),false);
 assert.equal(sampleAge(undefined),0);
@@ -50,4 +50,6 @@ assert.equal(matchesIntent({...current,uri:null,trackKey:'spotify:episode:next'}
 assert.equal(matchesIntent({...current,position:80,positionMs:79500},{action:'previous',device:'d',uri:current.uri,position:82}),true);
 assert.equal(matchesIntent(current,{action:'previous',device:'d',uri:current.uri,position:82}),false);
 assert.equal(matchesIntent({...current,deviceId:'other',uri:'new'},{action:'next',device:'d',uri:current.uri,position:82}),false);
+assert.equal(holdIncoming({...current,positionMs:83000},{...skip,action:'previous'},4000),false);
+assert.equal(holdIncoming({...current,uri:'new',trackKey:'new'},{...skip,action:'previous'},4000),false);
 console.log('Playback clock and reconciliation assertions passed');

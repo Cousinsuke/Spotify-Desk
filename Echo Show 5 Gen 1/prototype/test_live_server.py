@@ -132,6 +132,26 @@ class LocalTests(unittest.TestCase):
             data=self.client.get("/api/spotify/state",base_url=self.url,headers=self.headers).json
             self.assertIs(data["saved"],True)
             saved.assert_called_once_with("spotify:track:abc")
+    def test_track_diagnostics_redacts_and_compares(self):
+        s.token={"access_token":"test"}
+        first={"item":{"uri":"spotify:track:old","name":"Private title"},"device":{"id":"private-device"},"timestamp":100,"progress_ms":5000,"is_playing":True}
+        second={"item":{"uri":"spotify:track:new"},"timestamp":200,"progress_ms":200,"is_playing":True}
+        with patch.object(s,"spotify",side_effect=[first,second]) as api:
+            data=self.client.get("/api/spotify/diagnostics/track",base_url=self.url,headers=self.headers).json
+            self.assertNotEqual(data["player"]["track"],data["currentlyPlaying"]["track"])
+            self.assertEqual(data["currentlyPlaying"]["timestamp"],200)
+            self.assertIsNone(data["sameDevice"])
+            self.assertNotIn("private-device",str(data))
+            self.assertNotIn("Private title",str(data))
+            self.assertNotIn("spotify:track:",str(data))
+            self.assertEqual([c.args for c in api.call_args_list],[("GET","/me/player"),("GET","/me/player/currently-playing")])
+    def test_track_diagnostics_stops_on_rate_limit(self):
+        s.token={"access_token":"test"}
+        with patch.object(s,"spotify",side_effect=s.ApiError(429,"rate limit")) as api:
+            data=self.client.get("/api/spotify/diagnostics/track",base_url=self.url,headers=self.headers).json
+            self.assertEqual(data["player"]["status"],429)
+            self.assertNotIn("currentlyPlaying",data)
+            api.assert_called_once()
     def test_command_device_changed(self):
         with patch.object(s,"player",return_value={"device":{"id":"new"}}),patch.object(s,"spotify") as api:
             r=self.client.post("/api/spotify/command",base_url=self.url,headers=self.headers,json={"action":"toggle","device":"old"})

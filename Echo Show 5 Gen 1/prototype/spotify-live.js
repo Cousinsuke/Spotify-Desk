@@ -10,6 +10,11 @@ const warn=msg=>{message=msg;messageUntil=performance.now()+12000};
 function accept(s,age=0){state=s;received=performance.now()-clock.sampleAge(age);freezeAt=null;emit()}
 function reconcile(s){
   if(override){
+    // Never discard a real track snapshot while a skip is pending. Keep only
+    // the bounded confirmation marker, not a frozen copy of the old song.
+    if(trackPending()&&performance.now()<override.expires&&s.connected&&!s.error&&!s.inactive&&s.deviceId===override.device&&!clock.matchesIntent(s,override)){
+      accept(s,s.sampleAgeMs);return;
+    }
     if(clock.holdIncoming(s,override,performance.now()))return;
     if(performance.now()>=override.expires&&!clock.matchesIntent(s,override)&&s.connected&&!s.error&&!s.inactive&&s.deviceId===override.device)warn('Spotify has not confirmed the update yet.');
     override=null;
@@ -67,7 +72,7 @@ api.command=async(action,value,expectedDevice=null)=>{
   override=['toggle','seek','next','previous','shuffle','repeat','save'].includes(action)?{...intent,expires:Infinity}:null;
   // Match original Desk: immediate feedback on press; restore prior state on failed write.
   if(['toggle','seek','shuffle','repeat','save'].includes(action))accept(clock.acknowledged(state,intent,pos));
-  else {if(['next','previous','device'].includes(action))freezeAt=performance.now();emit()}
+  else {if(action==='device')freezeAt=performance.now();emit()}
   let ok=false,result=null;
   try{
     if(inFlight)await inFlight;

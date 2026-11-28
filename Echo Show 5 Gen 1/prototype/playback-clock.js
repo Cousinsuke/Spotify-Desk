@@ -43,6 +43,9 @@ function acknowledged(s,intent,position){
 function holdIncoming(incoming,intent,now){
   if(!intent||now>=intent.expires||!incoming.connected||incoming.error||incoming.inactive||
      !incoming.deviceId||incoming.deviceId!==intent.device)return false;
+  // Track metadata is authoritative even when the skip is not yet confirmed.
+  // Only optimistic state mutations need suppression of stale acknowledgements.
+  if(['next','previous'].includes(intent.action))return false;
   return !matchesIntent(incoming,intent);
 }
 const api={position,matchesIntent,acknowledged,holdIncoming,sampleAge};if(typeof module==='object'&&module.exports)module.exports=api;else root.EchoPlaybackClock=api;

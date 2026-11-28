@@ -295,6 +295,45 @@ def recovery_target(expected, rows):
         return "recent"
     return None
 
+def diagnostic_track_sample(p):
+    """Redacted, comparable sample; no device ID, title, URI or token."""
+    item=p.get("item") or {}
+    uri=item.get("uri")
+    key=hashlib.sha256(uri.encode()).hexdigest()[:10] if isinstance(uri,str) and uri else None
+    timestamp=p.get("timestamp")
+    progress=p.get("progress_ms")
+    device=p.get("device") or {}
+    return {"track":key,"timestamp":timestamp if type(timestamp) is int else None,
+            "progressMs":progress if type(progress) is int else None,
+            "playing":p.get("is_playing") is True,
+            "hasDevice":bool(device.get("id"))}
+
+@app.get("/api/spotify/diagnostics/track")
+def compare_track_sources():
+    # Deliberately not in paired gateway allowlist. Existing loopback/header
+    # protection applies. On-demand only; no background polling or writes.
+    if request.remote_addr != HOST:
+        raise ApiError(403,"Local diagnostics only.")
+    if not token:
+        raise ApiError(401,"Spotify not connected.")
+    result={}
+    raw={}
+    for label,path in (("player","/me/player"),("currentlyPlaying","/me/player/currently-playing")):
+        start=time.monotonic()
+        try:
+            p=spotify("GET",path) or {}
+            raw[label]=p
+            result[label]=diagnostic_track_sample(p)
+        except ApiError as e:
+            result[label]={"status":e.status}
+            if e.status in (401,429):
+                break
+        result[label]["requestMs"]=int((time.monotonic()-start)*1000)
+    a=(raw.get("player",{}).get("device") or {}).get("id")
+    b=(raw.get("currentlyPlaying",{}).get("device") or {}).get("id")
+    result["sameDevice"]=a==b if a and b else None
+    return jsonify(result)
+
 @app.get("/api/spotify/state")
 def state():
     global last_snapshot,last_seen,resume_blocked,spotify_health
