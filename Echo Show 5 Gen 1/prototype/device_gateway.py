@@ -153,8 +153,11 @@ def switch_live(state,enabled):
 
 def query_for(path,args):
     if not args:return {}
-    if path=="/api/spotify/state" and list(args)==["fresh"] and args.getlist("fresh")==["1"]:
-        return {"fresh":"1"}
+    if path=="/api/spotify/state":
+        if set(args)=={"fresh"} and args.getlist("fresh")==["1"]:
+            return {"fresh":"1"}
+        if set(args)=={"fresh","fast"} and args.getlist("fresh")==["1"] and args.getlist("fast")==["1"]:
+            return {"fresh":"1","fast":"1"}
     if path=="/api/calendar" and list(args)==["month"] and len(args.getlist("month"))==1 and re.fullmatch(r"[0-9]{4}-(0[1-9]|1[0-2])-01",args["month"]):
         return {"month":args["month"]}
     raise ValueError("Invalid query")

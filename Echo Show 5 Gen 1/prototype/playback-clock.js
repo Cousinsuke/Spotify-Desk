@@ -21,7 +21,10 @@ function matchesIntent(s,intent){
   if(intent.action==='device')return s.deviceId===intent.value&&!s.inactive;
   if(s.deviceId!==intent.device||s.inactive)return false;
   if(intent.action==='seek')return Math.abs((s.positionMs??(s.position||0)*1000)/1000-intent.value)<=2;
-  if(intent.action==='next'||intent.action==='previous')return !!s.uri&&(s.uri!==intent.uri||(s.position||0)<Math.max(0,intent.position-2));
+  if(intent.action==='next'||intent.action==='previous'){
+    const current=s.trackKey||s.uri,previous=intent.trackKey||intent.uri;
+    return !!current&&(current!==previous||(s.positionMs??(s.position||0)*1000)/1000<Math.max(0,intent.position-2));
+  }
   if(intent.action==='shuffle')return s.shuffle!==intent.before;
   if(intent.action==='repeat')return s.repeat!==intent.before;
   if(intent.action==='save')return s.saved!==null&&s.saved!==intent.before;

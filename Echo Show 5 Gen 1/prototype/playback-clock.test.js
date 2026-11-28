@@ -46,4 +46,8 @@ assert.equal(acknowledged({...current,shuffle:false},{action:'shuffle'},82.5).sh
 assert.equal(acknowledged({...current,repeat:'off'},{action:'repeat'},82.5).repeat,'context');
 assert.equal(acknowledged({...current,saved:true},{action:'save'},82.5).saved,false);
 assert.equal(acknowledged({...current,shuffle:false},{action:'shuffle'},82.5).positionMs,82500);
+assert.equal(matchesIntent({...current,uri:null,trackKey:'spotify:episode:next'},{action:'next',device:'d',uri:null,trackKey:'spotify:episode:old',position:82}),true);
+assert.equal(matchesIntent({...current,position:80,positionMs:79500},{action:'previous',device:'d',uri:current.uri,position:82}),true);
+assert.equal(matchesIntent(current,{action:'previous',device:'d',uri:current.uri,position:82}),false);
+assert.equal(matchesIntent({...current,deviceId:'other',uri:'new'},{action:'next',device:'d',uri:current.uri,position:82}),false);
 console.log('Playback clock and reconciliation assertions passed');

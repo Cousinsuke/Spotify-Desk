@@ -254,6 +254,10 @@ def safe_art(item):
             return url
     return ""
 
+def cached_saved_status(uri):
+    entry=saved_cache.get(uri) if uri else None
+    return entry[1] if entry and time.monotonic()-entry[0]<60 else None
+
 def saved_status(uri):
     if not uri: return None
     now=time.monotonic()
@@ -327,7 +331,7 @@ def state():
                 "toggling_shuffle":True,"toggling_repeat_context":True}})
         uri=item.get("uri") if item.get("type")=="track" and not item.get("is_local") else None
         disallows=(p.get("actions") or {}).get("disallows") or p.get("actions") or {}
-        snapshot=dict(connected=True,title=item.get("name"),artist=", ".join(a.get("name","") for a in item.get("artists",[])),art=safe_art(item),uri=uri,position=max(0,(p.get("progress_ms") or 0)//1000),positionMs=max(0,p.get("progress_ms") or 0),duration=max(0,(item.get("duration_ms") or 0)//1000),playing=bool(p.get("is_playing")),device=d.get("name"),deviceId=d.get("id"),controllable=bool(d.get("id") and not d.get("is_restricted")),shuffle=bool(p.get("shuffle_state")),repeat=p.get("repeat_state","off"),saved=saved_status(uri),disallows=disallows,inactive=False,**volume_fields(d))
+        snapshot=dict(connected=True,title=item.get("name"),artist=", ".join(a.get("name","") for a in item.get("artists",[])),art=safe_art(item),uri=uri,trackKey=item.get("uri") if isinstance(item.get("uri"),str) and len(item["uri"])<=512 else None,position=max(0,(p.get("progress_ms") or 0)//1000),positionMs=max(0,p.get("progress_ms") or 0),duration=max(0,(item.get("duration_ms") or 0)//1000),playing=bool(p.get("is_playing")),device=d.get("name"),deviceId=d.get("id"),controllable=bool(d.get("id") and not d.get("is_restricted")),shuffle=bool(p.get("shuffle_state")),repeat=p.get("repeat_state","off"),saved=cached_saved_status(uri) if request.args.get("fast")=="1" else saved_status(uri),disallows=disallows,inactive=False,**volume_fields(d))
         snapshot["sampleAgeMs"]=max(0,min(15000,int((time.monotonic()-sample_at)*1000)))
         if item and d.get("id"):
             last_snapshot=snapshot.copy()

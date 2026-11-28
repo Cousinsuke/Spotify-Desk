@@ -3,6 +3,7 @@
 const enabled=new URLSearchParams(location.search).get('live')==='1';
 const clock=window.EchoPlaybackClock;
 let state={connected:false,saved:null},received=performance.now(),freezeAt=null,inFlight=null,commandBusy=false,message='',messageUntil=0,generation=0,override=null;
+const trackPending=()=>!!override&&['next','previous'].includes(override.action);
 const api={enabled,get state(){return state},get message(){return performance.now()<messageUntil?message:''},get pending(){return commandBusy},get syncing(){return !!override},get pendingTrack(){return override&&['next','previous'].includes(override.action)?override.action:null},position:()=>clock.position(state,received,performance.now(),freezeAt),onChange:null};
 const emit=()=>api.onChange?.();
 const warn=msg=>{message=msg;messageUntil=performance.now()+12000};
@@ -24,20 +25,43 @@ async function request(path,opts={}){
   if(!r.ok)throw Error(data.error||'Spotify request failed (HTTP '+r.status+')');
   return data;
 }
-api.refresh=async(fresh=false)=>{
+api.refresh=async(fresh=false,fast=false)=>{
   if(!enabled||commandBusy)return;
   if(inFlight)return inFlight;
   const version=generation;
-  inFlight=(async()=>{try{const next=await request('/api/spotify/state'+(fresh?'?fresh=1':''));if(version!==generation)return;reconcile(next)}catch(e){if(version!==generation)return;override=null;accept({connected:false,saved:null,error:e.message})}})();
+  fast=fast||trackPending();
+  inFlight=(async()=>{try{const next=await request('/api/spotify/state'+(fast?'?fresh=1&fast=1':fresh?'?fresh=1':''));if(version!==generation)return;reconcile(next)}catch(e){if(version!==generation)return;override=null;accept({connected:false,saved:null,error:e.message})}})();
   try{await inFlight}finally{inFlight=null}
 };
 api.devices=async()=>{const d=await request('/api/spotify/devices');return d.devices||[]};
+// Bounded sequential reads after a successful skip. A slow request cannot
+// swallow the next confirmation timer, and confirmation stops the burst.
+async function confirmTrack(version){
+  const start=performance.now();
+  for(const delay of [0,250,500,900,1400,2000,2000]){
+    if(delay)await new Promise(resolve=>setTimeout(resolve,delay));
+    if(version!==generation||commandBusy||document.hidden||!trackPending())break;
+    if(performance.now()-start>=8500)break;
+    if(inFlight)await inFlight;
+    if(version!==generation||commandBusy||document.hidden||!trackPending())break;
+    await api.refresh(true,true);
+  }
+  if(version!==generation||commandBusy||document.hidden)return;
+  if(!trackPending()){
+    // Metadata is already visible. Fill in any uncached library status later.
+    setTimeout(()=>{if(version===generation&&!commandBusy&&!document.hidden&&!trackPending())api.refresh()},250);
+  }else{
+    // A final regular poll reconciles at/after expiry; never leave a permanent
+    // pending label if intermediate responses were stale.
+    setTimeout(()=>{if(version===generation&&!commandBusy&&!document.hidden&&trackPending())api.refresh(true)},Math.max(0,override.expires-performance.now()));
+  }
+}
 api.command=async(action,value,expectedDevice=null)=>{
   if(!enabled||commandBusy||!state.connected||state.error)return;
   if(action==='volume'&&(!expectedDevice||state.deviceId!==expectedDevice||state.inactive||state.supportsVolume!==true))return;
   if(action==='toggle')value=!state.playing;
   const pos=api.position(), prior=state, priorReceived=received;
-  const intent={action,value,uri:state.uri,device:state.deviceId,position:pos,before:action==='shuffle'?state.shuffle:action==='repeat'?state.repeat:state.saved};
+  const intent={action,value,uri:state.uri,trackKey:state.trackKey,device:state.deviceId,position:pos,before:action==='shuffle'?state.shuffle:action==='repeat'?state.repeat:state.saved};
   const payload={action,value,uri:intent.uri,device:intent.device};
   commandBusy=true;const version=++generation;message='';messageUntil=0;
   override=['toggle','seek','next','previous','shuffle','repeat','save'].includes(action)?{...intent,expires:Infinity}:null;
@@ -58,7 +82,8 @@ api.command=async(action,value,expectedDevice=null)=>{
     emit();
   }
   // Confirm independently of the write lock. New commands invalidate old timers/results.
-  const delays=!ok?[150]:action==='volume'?[950,3000]:['next','previous'].includes(action)?[150,750,2000,7100]:[150,800,2000,3600];
+  if(ok&&['next','previous'].includes(action)){void confirmTrack(version);return result}
+  const delays=!ok?[150]:action==='volume'?[950,3000]:[150,800,2000,3600];
   for(const delay of delays)setTimeout(()=>{if(version===generation&&!commandBusy&&!document.hidden)api.refresh(true)},delay);
   return ok?result:null;
 };

@@ -115,6 +115,23 @@ class LocalTests(unittest.TestCase):
             data=self.client.get("/api/spotify/state",base_url=self.url,headers=self.headers).json
             self.assertEqual(data["positionMs"],12000)
             self.assertEqual(data["sampleAgeMs"],1250)
+    def test_fast_state_does_not_block_on_library_lookup(self):
+        s.token={"access_token":"test"}
+        sample={"item":{"name":"Synthetic","type":"track","uri":"spotify:track:abc","duration_ms":100000},"device":{"id":"d"},"is_playing":True,"progress_ms":1000}
+        with patch.object(s,"player",return_value=sample) as read,patch.object(s,"saved_status",return_value=True) as saved:
+            data=self.client.get("/api/spotify/state?fresh=1&fast=1",base_url=self.url,headers=self.headers).json
+            self.assertEqual(data["title"],"Synthetic")
+            self.assertEqual(data["trackKey"],"spotify:track:abc")
+            self.assertIsNone(data["saved"])
+            read.assert_called_once_with(True)
+            saved.assert_not_called()
+            s.saved_cache["spotify:track:abc"]=(s.time.monotonic(),False)
+            data=self.client.get("/api/spotify/state?fresh=1&fast=1",base_url=self.url,headers=self.headers).json
+            self.assertIs(data["saved"],False)
+            saved.assert_not_called()
+            data=self.client.get("/api/spotify/state",base_url=self.url,headers=self.headers).json
+            self.assertIs(data["saved"],True)
+            saved.assert_called_once_with("spotify:track:abc")
     def test_command_device_changed(self):
         with patch.object(s,"player",return_value={"device":{"id":"new"}}),patch.object(s,"spotify") as api:
             r=self.client.post("/api/spotify/command",base_url=self.url,headers=self.headers,json={"action":"toggle","device":"old"})

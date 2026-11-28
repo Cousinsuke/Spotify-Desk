@@ -124,6 +124,14 @@ class LiveGatewayTests(GatewayTests):
         self.assertEqual(self.req("/api/calendar?month=2026-11-01",headers={"X-Desk-Preview":"1"}).status_code,200)
         self.assertEqual(self.calls[-1][2],{"month":"2026-11-01"})
         self.assertEqual(self.req("/api/calendar?url=http://example.com",headers={"X-Desk-Preview":"1"}).status_code,400)
+    def test_fast_playback_state_query_allowlist(self):
+        self.pair()
+        h={"X-Desk-Preview":"1"}
+        for query in ("fresh=1&fast=1","fast=1&fresh=1"):
+            self.assertEqual(self.req("/api/spotify/state?"+query,headers=h).status_code,200)
+            self.assertEqual(self.calls[-1][2],{"fresh":"1","fast":"1"})
+        for query in ("fast=1","fresh=1&fast=2","fresh=1&fast=1&fast=1","fresh=1&fast=1&url=x"):
+            self.assertEqual(self.req("/api/spotify/state?"+query,headers=h).status_code,400)
     def test_live_write_and_revoke(self):
         self.pair()
         h={"Origin":self.base,"X-Desk-Preview":"1"}
