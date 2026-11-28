@@ -141,7 +141,7 @@ function syncNightControls(){
 function save(){try{localStorage.setItem(key,JSON.stringify(prefs))}catch{}apply();schedule()}
 function schedule(){clearTimeout(timer);if(expanded&&!overlay&&!themedSelectOpen&&prefs.autoHide[active]&&!rail.contains(document.activeElement))timer=setTimeout(()=>setRail(false),prefs.delay*1000)}
 function setRail(value){expanded=value;screen.classList.toggle('expanded',value);rail.inert=!value;rail.setAttribute('aria-hidden',String(!value));reveal.hidden=value;schedule()}
-function renderRail(){rail.innerHTML=appRailIds(prefs.appLayout).map(id=>'<button data-page="'+id+'" aria-label="'+apps[id]+'" '+(active===id?'aria-current="page"':'')+'>'+icon(id)+'</button>').join('')+'<button data-open="drawer" aria-label="Apps" aria-expanded="'+(overlay==='drawer')+'">'+icon('apps')+'</button>'}
+function renderRail(){rail.dataset.drawerOpen=String(overlay==='drawer');rail.innerHTML=appRailIds(prefs.appLayout).map(id=>'<button data-page="'+id+'" aria-label="'+apps[id]+'" '+(active===id?'aria-current="page"':'')+'>'+icon(id)+'</button>').join('')+'<button data-open="drawer" aria-label="Apps" aria-expanded="'+(overlay==='drawer')+'">'+icon('apps')+'</button>'}
 function clock(){
   if(active!=='home')return;
   const now=new Date(),parts=homeClockParts(now.getHours(),now.getMinutes()),label=parts.hour+':'+parts.minute,face=$('clock');

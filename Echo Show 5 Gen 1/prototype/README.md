@@ -289,3 +289,7 @@ User requested matching green playback-device text and a solid green saved-song 
 ### Paired display footer removal
 
 User accepted Spotify accent/saved icon appearance and requested removal of the persistent LIVE · PAIRED DISPLAY footer on every page. Hide the shared demo label via paired-root CSS before JS startup and clear its text in paired live mode. Keep local live-test and unpaired desktop design preview labels, pairing/session/authentication and page-specific statuses unchanged. JS syntax and four source assertions passed in JS runtime; physical refresh pending. Static assets only; no service restart or APK update. PC work remains deferred.
+
+### Exclusive Apps drawer highlight
+
+User reported that opening Apps with a page already selected highlights both buttons. Rail render now synchronizes a drawer-open data attribute and CSS suppresses only the current-page visual highlight while Apps is open. The Apps button retains its expanded highlight; closing Apps restores the underlying current-page highlight automatically, and selecting another page highlights that page. Current-page accessibility semantics, existing drawer behavior and other overlays are unchanged. JavaScript syntax and isolated rail-render/source assertions passed in JS runtime across 25 combinations; physical Echo appearance pending. Static assets only, pull and refresh; no service restart or APK rebuild. PC work remains deferred.
