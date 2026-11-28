@@ -66,6 +66,10 @@ function displayDim(value,minute){
   const p=normaliseNight(value),brightness=Number.isFinite(value?.brightness)?Math.max(10,Math.min(100,value.brightness)):100;
   return Math.max((100-brightness)/100*.75,nightActive(p,minute)?p.nightDim/100:0);
 }
+function hardwareBrightness(value,minute){
+  const p=normaliseNight(value),brightness=Number.isFinite(value?.brightness)?Math.max(10,Math.min(100,value.brightness)):100;
+  return Math.round(Math.min(brightness,nightActive(p,minute)?100-p.nightDim:100));
+}
 // Calendar date keys use local civil dates, not UTC timestamps.
 function calendarKey(d){return [d.getFullYear(),String(d.getMonth()+1).padStart(2,'0'),String(d.getDate()).padStart(2,'0')].join('-')}
 function calendarDate(key){const [y,m,d]=key.split('-').map(Number);return new Date(y,m-1,d,12)}
@@ -92,9 +96,10 @@ const glucosePreview=window.EchoGlucosePreview,glucoseLive=window.EchoGlucoseLiv
 const key='echo-show-preview-prefs-v1';let prefs=defaults(),active='home',category='navigation',expanded=true,timer,overlay=null,gesture=null;
 try{const p=JSON.parse(localStorage.getItem(key)||'null');if(p&&typeof p==='object'){for(const [k,allowed] of Object.entries({theme:['graphite','black'],railStyle:['floating','transparent','edge'],animation:['none','fade','slide'],night:['off','manual','scheduled'],spotifyBackground:['album','art','theme'],weatherDays:['3','5','7'],weatherIcons:['colour','outline'],glucoseView:['live','graph','both'],glucoseBackground:['green','dynamic','theme']}))if(allowed.includes(p[k]))prefs[k]=p[k];for(const [k,min,max] of [['opacity',25,100],['delay',5,60],['speed',100,350],['brightness',10,100]])if(Number.isFinite(p[k])&&p[k]>=min&&p[k]<=max)prefs[k]=p[k];Object.assign(prefs,normaliseHome(p));Object.assign(prefs,normaliseNight(p));prefs.appLayout=normaliseApps(p.appLayout);for(const id of Object.keys(apps))if(typeof p.autoHide?.[id]==='boolean')prefs.autoHide[id]=p.autoHide[id]}}catch{}
 function apply(){screen.dataset.homeLayout=prefs.homeLayout;screen.dataset.homeClock=prefs.homeClock;screen.dataset.homeWallpaper=prefs.homeWallpaper;screen.dataset.glucoseBackground=prefs.glucoseBackground;screen.dataset.glucoseBand=glucosePreview.theme(glucoseData.latest?.mmol,glucoseData.status);screen.dataset.spotifyBackground=prefs.spotifyBackground;screen.dataset.theme=prefs.theme;screen.dataset.rail=prefs.railStyle;screen.dataset.animation=prefs.animation;screen.style.setProperty('--rail-opacity',prefs.opacity/100);screen.style.setProperty('--speed',prefs.speed+'ms');updateNightMode();}
+let nativeBrightness=false;
 function updateNightMode(){
   const now=new Date(),minute=now.getHours()*60+now.getMinutes(),on=nightActive(prefs,minute);
-  const opacity=String(displayDim(prefs,minute));
+  const opacity=String(nativeBrightness?0:displayDim(prefs,minute));
   if($('dim').style.opacity!==opacity)$('dim').style.opacity=opacity;
   if(screen.dataset.nightActive!==String(on))screen.dataset.nightActive=String(on);
   const equal=prefs.night==='scheduled'&&prefs.nightStart===prefs.nightEnd;
@@ -103,6 +108,19 @@ function updateNightMode(){
   for(const node of screen.querySelectorAll('[data-night-schedule]'))if(node.hidden!==(prefs.night!=='scheduled'))node.hidden=prefs.night!=='scheduled';
   for(const node of screen.querySelectorAll('[data-night-level]'))if(node.hidden!==(prefs.night==='off'))node.hidden=prefs.night==='off';
 }
+// Called by the native Activity in the trusted main frame only. No exposed Android bridge.
+window.echoDeskHardwareBrightness=()=>{
+  if(!nativeBrightness){
+    nativeBrightness=true;
+    updateNightMode();
+    for(const el of screen.querySelectorAll('[data-pref=brightness],[data-pref=nightDim]')){
+      const note=el.parentElement.querySelector('small');
+      if(note)note.textContent=el.dataset.pref==='brightness'?'Controls Echo Show backlight':'Caps Echo Show backlight during night mode';
+    }
+  }
+  const now=new Date();
+  return hardwareBrightness(prefs,now.getHours()*60+now.getMinutes());
+};
 function syncNightControls(){
   for(const el of screen.querySelectorAll('[data-pref=night],[data-pref=nightDim],[data-night-time]')){
     const key=el.dataset.nightTime||el.dataset.pref;
@@ -207,11 +225,11 @@ function nightRow(){
   const status=prefs.night==='scheduled'&&prefs.nightStart===prefs.nightEnd?'Set different start and end times':prefs.night==='off'?'Off':on?'Active':'Waiting for schedule';
   const timeRow=(label,key)=>'<div class="setting"><label>'+label+'</label><input type="time" data-night-time="'+key+'" aria-label="'+label+'" value="'+prefs[key]+'" required></div>';
   return selectRow('Night mode','night',[['off','Off'],['manual','Manual'],['scheduled','Scheduled']])+
-    '<div data-night-level '+(prefs.night==='off'?'hidden':'')+'>'+rangeRow('Night dimming','nightDim',10,70,5,'%','Visual dimming; does not control hardware backlight')+'</div>'+
+    '<div data-night-level '+(prefs.night==='off'?'hidden':'')+'>'+rangeRow('Night dimming','nightDim',10,70,5,'%',nativeBrightness?'Caps Echo Show backlight during night mode':'Visual dimming; does not control hardware backlight')+'</div>'+
     '<div data-night-schedule '+(prefs.night!=='scheduled'?'hidden':'')+'>'+timeRow('Start time','nightStart')+timeRow('End time','nightEnd')+'<p class="app-help">Uses the display’s local time. Equal times disable the schedule.</p></div>'+
     '<p class="night-status" data-night-status role="status">'+status+'</p>';
 }
-const brightnessRow=()=>rangeRow('Brightness','brightness',10,100,5,'%','Visual dimming only; not hardware backlight');
+const brightnessRow=()=>rangeRow('Brightness','brightness',10,100,5,'%',nativeBrightness?'Controls Echo Show backlight':'Visual dimming only; not hardware backlight');
 const delayRow=()=>selectRow('Auto-hide delay','delay',[[5,'5 seconds'],[10,'10 seconds'],[15,'15 seconds'],[30,'30 seconds'],[60,'60 seconds']]);
 function renderQuick(){if(active==='home'){quick.innerHTML='<header>Home quick settings<button data-close aria-label="Close quick settings">×</button></header>'+homeRows()+brightnessRow()+nightRow()+themeRow()+delayRow()+'<button data-page="settings">All settings</button>';return}if(active==='glucose'){quick.innerHTML='<header>Glucose quick settings<button data-close aria-label="Close quick settings">×</button></header>'+glucoseRows(true)+'<button data-page="settings">All settings</button>';return}if(active==='weather'){quick.innerHTML='<header>Weather quick settings<button data-close aria-label="Close quick settings">×</button></header>'+weatherRows()+brightnessRow()+'<button data-page="settings">All settings</button>';return}if(active==='spotify'&&liveEnabled){quick.innerHTML='<header>Spotify quick settings<button data-close aria-label="Close quick settings">×</button></header>'+spotifyBackgroundRow()+'<div class="setting"><label>Playback mode</label><span>Wi-Fi</span></div><button data-open="devices">Playback devices</button> <button data-page="settings">All settings</button>';return}if(active==='spotify'){quick.innerHTML='<header>Spotify quick settings<button data-close aria-label="Close quick settings">×</button></header>'+spotifyModeRow()+spotifyBackgroundRow()+ '<div class="setting"><label>Playback device</label><button data-open="devices">'+playback.device+'</button></div><button data-page="settings">All settings</button>';return}quick.innerHTML='<header>'+apps[active]+' quick settings<button data-close aria-label="Close quick settings">×</button></header>'+brightnessRow()+nightRow()+themeRow()+delayRow()+(active==='home'||active==='settings'?'':'<p>App-specific controls will be added with the '+apps[active]+' page.</p>')+'<button data-page="settings">All settings</button>'}
 function appSettingsRows(){

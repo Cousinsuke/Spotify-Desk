@@ -37,6 +37,11 @@ public final class MainActivity extends Activity {
     private FrameLayout content;
     private LocalVolumeOverlay volumeOverlay;
     private AudioManager audio;
+    private final Handler brightnessHandler = new Handler(Looper.getMainLooper());
+    private boolean dashboardPageReady;
+    private int brightnessEpoch;
+    private float appliedBrightness = -1f;
+    private final Runnable brightnessTask = this::readDashboardBrightness;
     private Uri origin;
     private boolean errorShown;
     private final Handler retryHandler = new Handler(Looper.getMainLooper());
@@ -108,6 +113,53 @@ public final class MainActivity extends Activity {
             && port(origin) == port(uri) && uri.getUserInfo() == null;
     }
 
+    private boolean brightnessPage(String url) {
+        if (url == null) return false;
+        Uri uri = Uri.parse(url);
+        return allowed(uri) && "/".equals(uri.getPath());
+    }
+
+    private void applyWindowBrightness(float level) {
+        if (appliedBrightness == level) return;
+        WindowManager.LayoutParams attrs = getWindow().getAttributes();
+        attrs.screenBrightness = level;
+        getWindow().setAttributes(attrs);
+        appliedBrightness = level;
+    }
+
+    private void stopBrightness() {
+        brightnessEpoch++;
+        dashboardPageReady = false;
+        brightnessHandler.removeCallbacks(brightnessTask);
+        applyWindowBrightness(-1f);
+    }
+
+    private void scheduleBrightness() {
+        brightnessHandler.removeCallbacks(brightnessTask);
+        if (resumed && dashboardPageReady && web != null && !errorShown)
+            brightnessHandler.postDelayed(brightnessTask, 350);
+    }
+
+    private void readDashboardBrightness() {
+        WebView source = web;
+        if (!resumed || !dashboardPageReady || source == null || errorShown
+            || !brightnessPage(source.getUrl())) return;
+        int epoch = brightnessEpoch;
+        // evaluateJavascript operates in the current main frame. No JS-to-native interface.
+        source.evaluateJavascript("typeof window.echoDeskHardwareBrightness==='function'?window.echoDeskHardwareBrightness():null", value -> {
+            if (epoch != brightnessEpoch || source != web || !resumed || !dashboardPageReady
+                || errorShown || !brightnessPage(source.getUrl())) return;
+            try {
+                int percent = Integer.parseInt(value);
+                if (percent >= 10 && percent <= 100) applyWindowBrightness(percent / 100f);
+                else applyWindowBrightness(-1f);
+            } catch (NumberFormatException e) {
+                applyWindowBrightness(-1f);
+            }
+            scheduleBrightness();
+        });
+    }
+
     private void openDashboard() {
         retryHandler.removeCallbacks(retryTask);
         retryPending = false;
@@ -133,6 +185,8 @@ public final class MainActivity extends Activity {
                 return !allowed(req.getUrl());
             }
             @Override public void onPageStarted(WebView v, String url, android.graphics.Bitmap icon) {
+                if (v != web) return;
+                stopBrightness();
                 if (!allowed(Uri.parse(url))) {
                     v.stopLoading();
                     fail(v, "Blocked navigation outside the configured dashboard.");
@@ -142,6 +196,8 @@ public final class MainActivity extends Activity {
                 if (v == web && !errorShown && allowed(Uri.parse(url))) {
                     CookieManager.getInstance().flush();
                     retryAttempt = 0;
+                    dashboardPageReady = brightnessPage(url);
+                    scheduleBrightness();
                 }
             }
             @Override public void onReceivedSslError(WebView v, SslErrorHandler handler, SslError error) {
@@ -246,6 +302,7 @@ public final class MainActivity extends Activity {
     }
 
     private void disposeWeb() {
+        stopBrightness();
         if (web == null) return;
         WebView old = web;
         web = null;
@@ -278,10 +335,14 @@ public final class MainActivity extends Activity {
         super.onResume();
         resumed = true;
         scheduleRetry();
+        scheduleBrightness();
     }
 
     @Override protected void onPause() {
         resumed = false;
+        brightnessEpoch++;
+        brightnessHandler.removeCallbacks(brightnessTask);
+        applyWindowBrightness(-1f);
         volumeOverlay.hide();
         retryHandler.removeCallbacks(retryTask);
         CookieManager.getInstance().flush();
