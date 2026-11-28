@@ -28,7 +28,7 @@ The existing Gluroo reader and dashboard are already in the repository; a prior 
 
 ## Next step
 
-**Current priority (2026-11-28):** Spotify saved icon and green device accent accepted; paired footer removed at `92f0017` (physical verification pending). Prototype `2d0bfe6` fixes exclusive Apps drawer highlighting; pull Pi prototype and refresh for visual confirmation. PC mode/automatic startup remains deferred; use Wi-Fi / Spotify Connect. No backend or APK changes.
+**Current priority (2026-11-28):** Spotify control refinement at `5922ba0`: two-line device control, green laptop icon/name, SVG chevrons and content-width playback mode dropdown. Pull Pi prototype and refresh for physical visual acceptance; preserve existing playback behavior. User screenshot shows previous footer absent; exclusive Apps highlight awaits explicit confirmation. PC mode remains deferred; use Wi-Fi / Spotify Connect. No backend or APK changes.
 
 Historical initial plan (superseded where newer checkpoints record completion):
 
@@ -641,3 +641,7 @@ User accepted Spotify saved icon and playback-device green accent on physical di
 ### Exclusive Apps drawer navigation highlight (2026-11-28)
 
 User reported simultaneous active-page and Apps highlights when opening the right-side Apps drawer. Prototype [2d0bfe6](https://github.com/Cousinsuke/Spotify-Desk/commit/2d0bfe6b98ee9c7d2c6d3dc79aa09b9337276a0d) synchronizes rail drawer-open data attribute at render and CSS suppresses current-page visual highlight only while Apps is open. Underlying aria-current semantics retained; closing drawer restores page highlight, selecting another page uses that page, other overlays unchanged. JS parse and isolated render/source tests passed in JS runtime across 25 combinations. Physical visual confirmation pending, as is the previous paired-footer change. Static asset update; pull and reload without service restart or APK rebuild. PC work remains deferred.
+
+### Spotify playback device control and dropdown refinement (2026-11-28)
+
+User supplied physical Spotify screenshot and laptop-outline icon reference, requested green Spotify-style playback-device icon, removal of Selected prefix, improved dropdown arrows and content-sized mode selector. User approved recommended two-line full-width device control, with possible later visual adjustment. Prototype [5922ba0](https://github.com/Cousinsuke/Spotify-Desk/commit/5922ba0f9c0c0bcf52fa0db4dae824cdea91a63c) adds muted PLAYBACK DEVICE caption and green laptop-outline icon/name; last-device caption for inactive recovery; no Selected or Playing on prefix. Keeps 49px control height, separate saved-song button and ellipsis for long names. Shared themed select arrows and device selector use matching SVG chevrons; themed arrows rotate when expanded. Spotify header selector fits selected label, with maximum width; other dropdown widths unchanged. No playback commands, state, Smart Shuffle, backend, APK or PC functionality changes. JS parse and isolated markup/source regression checks passed in JS runtime; real-device sizing and appearance unverified. Pull Pi prototype and refresh; no restart required. Prior screenshot showed no global footer; no explicit drawer regression result yet. PC remains deferred.
