@@ -28,12 +28,12 @@ html[data-device-gateway="1"] #demo{display:none}
 #screen[data-page=spotify][data-spotify-background=theme][data-theme=black]{background:#080808}
 #screen[data-page=spotify] #page{padding:19px 39px 30px 26px}
 .spotify-header{display:flex;justify-content:space-between;align-items:center;height:43px;flex-shrink:0;margin-bottom:12px;font-size:14px;letter-spacing:2px;color:#deebe5}
-.spotify-header select{letter-spacing:0;min-width:112px;padding:7px 12px;background:#111c19b8;border-color:#ffffff35}
+.spotify-header select{letter-spacing:0;min-width:0;width:fit-content;max-width:70%;padding:7px 12px;background:#111c19b8;border-color:#ffffff35}
 .spotify-layout{display:grid;grid-template-columns:minmax(0,39%) minmax(0,1fr);align-items:center;gap:22px;flex:1;min-height:0}
 .album{aspect-ratio:1;max-height:100%;overflow:hidden;border-radius:17px;box-shadow:0 8px 24px #0004}.album svg{display:block;width:100%;height:100%}
 .player{min-width:0;display:flex;flex-direction:column;gap:17px;justify-content:center}.song{min-width:0}.song small{font-size:11px;letter-spacing:1.6px;color:#c2d6cc}.song h1{font-size:34px;margin:6px 0 4px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.song>div{font-size:18px;color:#d2dfd8}.timeline{min-width:0}.timeline input{display:block;width:100%;height:27px;margin:0;accent-color:#c6e9d3;cursor:pointer;touch-action:none}.times{display:flex;justify-content:space-between;color:#d6e3db;font-size:12px}
 .transport{display:flex;justify-content:space-between;align-items:center;gap:6px}.transport button{position:relative;width:49px;height:49px;background:transparent;border:0;display:grid;place-items:center;padding:0;color:#eef8f1}.transport button .icon{width:27px;height:27px}.transport button[aria-pressed=true]{color:#a9e8bb;background:#ffffff18}.transport button.play{width:70px;height:70px;border-radius:50%;background:#e3f1e8;color:#23372d}.transport button.play .icon{width:34px;height:34px}#repeatOne{position:absolute;right:5px;bottom:3px;font-size:11px}
-.player-bottom{display:flex;gap:9px;align-items:center}.player-bottom button{height:49px;display:flex;align-items:center;gap:10px;border-color:#ffffff25;background:#172820b5}.player-bottom #deviceSelect{min-width:0;flex:1;text-align:left}.player-bottom #deviceLabel{flex:1;overflow:hidden;white-space:nowrap;text-overflow:ellipsis;font-size:14px}.player-bottom #deviceSelect .icon{width:23px;height:23px;flex:none}.player-bottom #saveSong{width:52px;justify-content:center;padding:0}.player-bottom #saveSong[aria-pressed=true]{color:var(--spotify-accent)}.chevron{margin-left:auto}
+.player-bottom{display:flex;gap:9px;align-items:center}.player-bottom button{height:49px;display:flex;align-items:center;gap:10px;border-color:#ffffff25;background:#172820b5}.player-bottom #deviceSelect{min-width:0;flex:1;text-align:left;padding:5px 12px;gap:8px}.player-bottom .device-copy{display:flex;flex:1;min-width:0;flex-direction:column;gap:1px}.player-bottom .device-caption{font-size:10px;line-height:1.15;letter-spacing:.8px;color:#d2d6d4;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.player-bottom .device-main{display:flex;align-items:center;min-width:0;gap:7px}.player-bottom #deviceLabel{flex:1;min-width:0;overflow:hidden;white-space:nowrap;text-overflow:ellipsis;font-size:14px;line-height:1.2}.player-bottom #deviceSelect .icon{width:23px;height:23px;flex:none}.player-bottom #saveSong{width:52px;justify-content:center;padding:0}.player-bottom #saveSong[aria-pressed=true]{color:var(--spotify-accent)}.chevron{margin-left:auto}
 #devices{top:50%;left:50%;transform:translate(-50%,-50%);width:min(570px,85%);max-height:90%}.device-note{font-size:12px;color:var(--muted)}.device-option{width:100%;display:flex;align-items:center;gap:12px;text-align:left;margin:8px 0;min-height:55px}.device-option span:last-child{margin-left:auto;font-size:12px;color:var(--muted)}.device-option[aria-pressed=true]{border-color:#9cceae;background:#365346}
 #quickHandle,#reveal{touch-action:none}#screen{touch-action:pan-y}
 
@@ -43,6 +43,8 @@ html[data-device-gateway="1"] #demo{display:none}
 #screen[data-page=spotify] .player-bottom #saveSong{background:transparent;border:0;color:#fff}
 #screen[data-page=spotify] .player-bottom #saveSong[aria-pressed=true]{color:var(--spotify-accent)}
 #screen[data-page=spotify] .player-bottom #deviceLabel{color:var(--spotify-accent)}
+#screen[data-page=spotify] .player-bottom #deviceSelect .device-icon{color:var(--spotify-accent);width:20px;height:20px}
+#screen[data-page=spotify] .player-bottom #deviceSelect>.dropdown-chevron{margin-left:auto}
 #screen[data-page=spotify] #devices .device-option[aria-pressed=true],#screen[data-page=spotify] #devices .device-option[aria-pressed=true] span{color:var(--spotify-accent)}
 #screen[data-page=spotify] .player-bottom #saveSong .icon{width:32px;height:32px}
 #screen[data-page=spotify] .transport button[aria-pressed=true]{color:#a8efc2}
@@ -413,8 +415,8 @@ html[data-device-gateway="1"] #demo{display:none}
 #screen[data-input=touch] button:focus,#screen[data-input=touch] a:focus,#screen[data-input=touch] input:focus{outline:none}
 /* All page/setting selects use the same Graphite/Black themed modal. */
 .themed-select{display:inline-flex;align-items:center;justify-content:space-between;gap:9px;min-width:0;white-space:nowrap;text-align:left;padding:7px 12px;font-size:14px;flex:none}
-.themed-select>span:first-child{overflow:hidden;text-overflow:ellipsis;min-width:0}.themed-select-chevron{font-size:15px;line-height:1;opacity:.75;flex:none}
-.setting .themed-select{max-width:58%;padding:5px 8px}.spotify-header .themed-select{min-width:112px;letter-spacing:0;background:rgba(255,255,255,.10);border-color:rgba(255,255,255,.19);color:#fff}
+.themed-select>span:first-child{overflow:hidden;text-overflow:ellipsis;min-width:0}.themed-select-chevron{display:flex;align-items:center;line-height:1;flex:none}.dropdown-chevron{display:block;width:16px;height:16px;flex:none;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;opacity:.85}.themed-select[aria-expanded=true] .dropdown-chevron{transform:rotate(180deg)}
+.setting .themed-select{max-width:58%;padding:5px 8px}.spotify-header .themed-select{width:fit-content;min-width:0;max-width:70%;gap:6px;padding:7px 10px;letter-spacing:0;background:rgba(255,255,255,.10);border-color:rgba(255,255,255,.19);color:#fff}
 .glucose-header .themed-select,.glucose-chart-controls .themed-select{min-height:34px;padding:5px 10px;border-radius:10px;background:#ffffff16;border-color:#ffffff30;color:#fff;font-size:14px}.glucose-header .themed-select{min-width:120px}
 .weather-forecast-heading .themed-select{width:auto;height:30px;padding:3px 10px;font-size:13px;letter-spacing:0;background:#ffffff12;border-color:#ffffff30}
 .themed-select-shade{position:absolute;inset:0;z-index:7;background:#0008;touch-action:none}
