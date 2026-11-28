@@ -133,10 +133,25 @@ class LiveGatewayTests(GatewayTests):
         self.assertEqual(self.req("/api/pc/state",headers=h).status_code,200)
         self.assertEqual(self.req("/api/pc/state?fresh=1",headers=h).status_code,400)
         self.assertEqual(self.req("/api/pc/state","POST",headers=h,json={"action":"toggle","value":True}).status_code,405)
-        self.assertEqual(self.req("/api/pc/command","POST",headers=h,json={"action":"toggle","value":True}).status_code,404)
+        self.assertEqual(self.req("/api/pc/command","POST",headers=h,json={"action":"toggle","value":True}).status_code,400)
         g.revoke(self.path)
         self.assertEqual(self.req("/api/pc/state",headers=h).status_code,401)
         self.assertEqual(self.calls,[("GET","/api/pc/state",{},None)])
+
+    def test_pc_command_boundary(self):
+        path="/api/pc/command"
+        h={"X-Desk-Preview":"1","Origin":self.base}
+        data={"action":"pause","trackKey":"a"*64}
+        self.assertEqual(self.req(path,"POST",headers=h,json=data).status_code,401)
+        self.pair()
+        self.assertEqual(self.req(path,headers=h).status_code,405)
+        self.assertEqual(self.req(path,"POST",headers={"X-Desk-Preview":"1"},json=data).status_code,403)
+        self.assertEqual(self.req(path+"?fresh=1","POST",headers=h,json=data).status_code,400)
+        self.assertEqual(self.req(path,"POST",headers=h,json={**data,"action":"volume"}).status_code,400)
+        self.assertEqual(self.req(path,"POST",headers=h,json=data).status_code,200)
+        g.revoke(self.path)
+        self.assertEqual(self.req(path,"POST",headers=h,json=data).status_code,401)
+        self.assertEqual(self.calls,[("POST",path,{},data)])
 
     def test_fast_playback_state_query_allowlist(self):
         self.pair()

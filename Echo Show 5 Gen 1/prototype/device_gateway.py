@@ -5,6 +5,7 @@ import ipaddress
 import json
 import math
 import requests
+from pc_protocol import command_body as pc_command_body
 import os
 from pathlib import Path
 import re
@@ -132,6 +133,8 @@ def config(state):
 
 LIVE_GET=frozenset(("/api/spotify/state","/api/spotify/devices","/api/pc/state","/api/weather","/api/glucose","/api/calendar","/api/system"))
 LIVE_POST="/api/spotify/command"
+PC_POST="/api/pc/command"
+POST_ROUTES=frozenset((LIVE_POST,PC_POST))
 LOCAL="http://127.0.0.1:8765"
 LIMIT=1024*1024
 
@@ -180,7 +183,7 @@ def command_body(data):
 def local_api(method,path,params,body):
     # Fixed loopback destination; no redirects, environment proxies, browser cookies,
     # forwarding headers, arbitrary paths or request-header forwarding.
-    if (method,path) not in {( "GET",p) for p in LIVE_GET}|{("POST",LIVE_POST)}:raise ValueError("Route denied")
+    if (method,path) not in {( "GET",p) for p in LIVE_GET}|{("POST",p) for p in POST_ROUTES}:raise ValueError("Route denied")
     with requests.Session() as session:
         session.trust_env=False
         headers={"X-Desk-Preview":"1","Sec-Fetch-Site":"same-origin","Accept":"application/json"}
@@ -221,14 +224,14 @@ def create_app(path,bind,network,clock=time.time,live=False,backend=local_api):
         if request.headers.get("Sec-Fetch-Site") not in (None,"none","same-origin"):abort(403)
         if request.method not in ("GET","HEAD","POST"):abort(405)
         if request.method=="POST" and request.headers.get("Origin")!=origin:abort(403)
-        api_route=live and request.path in LIVE_GET|{LIVE_POST,"/api/device/session"}
+        api_route=live and request.path in LIVE_GET|POST_ROUTES|{"/api/device/session"}
         if not api_route and request.path not in ("/","/pair") and request.path.lstrip("/") not in ASSETS:abort(404)
         if request.path!="/pair" and not authorized(path,request.cookies.get(COOKIE),clock()):
             if request.path=="/" and request.method in ("GET","HEAD"):return redirect("/pair",303)
             abort(401)
         if api_route:
             if request.headers.get("X-Desk-Preview")!="1":abort(403)
-            if request.method!=("POST" if request.path==LIVE_POST else "GET"):abort(405)
+            if request.method!=("POST" if request.path in POST_ROUTES else "GET"):abort(405)
         elif request.method=="POST" and request.path!="/pair":abort(405)
 
     @app.after_request
@@ -277,7 +280,7 @@ def create_app(path,bind,network,clock=time.time,live=False,backend=local_api):
             body=None
             if request.method=="POST":
                 if request.mimetype!="application/json":abort(415)
-                body=command_body(request.get_json(silent=True))
+                body=(pc_command_body if route==PC_POST else command_body)(request.get_json(silent=True))
         except (ValueError,OverflowError):return jsonify(error="Invalid device request"),400
         try:
             data,status=backend(request.method,route,params,body)

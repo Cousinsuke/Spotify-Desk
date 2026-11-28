@@ -358,10 +358,10 @@ let nativeSpotifyLaunch=false;
 window.echoDeskEnableSpotifyLaunch=()=>{nativeSpotifyLaunch=true};
 window.echoDeskEnableVolumeRouting=()=>{nativeVolumeRouting=true};
 function echoModeSupported(){return liveEnabled&&document.documentElement.dataset.deviceGateway==='1'}
-let pcSelected=false,pcState={connected:false,error:'Connecting to PC…'},pcReceived=0,pcInFlight=false,pcEpoch=0;
+let pcSelected=false,pcState={connected:false,error:'Connecting to PC…'},pcReceived=0,pcInFlight=false,pcEpoch=0,pcBusy=false,pcMessage='';
 function liveMode(){return pcSelected?'pc':echoModeSupported()?confirmedPlaybackMode(live.state,prefs.echoDeviceId):'wifi'}
 async function refreshPC(){
-  if(!pcSelected||pcInFlight||document.hidden)return;
+  if(!pcSelected||pcInFlight||pcBusy||document.hidden)return;
   const epoch=pcEpoch;pcInFlight=true;
   const controller=new AbortController(),timeout=setTimeout(()=>controller.abort(),7000);
   try{
@@ -379,8 +379,26 @@ function pcPosition(){
   if(!s.connected||!s.hasPlayback)return 0;
   return Math.max(0,Math.min(s.durationMs||Infinity,(s.positionMs||0)+(s.playing?Math.min(6000,Math.max(0,performance.now()-pcReceived)):0)))/1000;
 }
+function pcReady(){
+  return pcSelected&&!pcBusy&&pcState.connected===true&&pcState.canControl===true&&pcState.hasPlayback===true&&typeof pcState.trackKey==='string'&&/^[0-9a-f]{64}$/.test(pcState.trackKey)&&performance.now()-pcReceived<=6000;
+}
+async function pcCommand(action){
+  if(document.hidden||!pcReady()||!['toggle','previous','next'].includes(action))return;
+  const data={action:action==='toggle'?(pcState.playing?'pause':'play'):action,trackKey:pcState.trackKey};
+  pcBusy=true;pcMessage='';const epoch=++pcEpoch;
+  renderLiveState();
+  const controller=new AbortController(),timeout=setTimeout(()=>controller.abort(),12000);
+  try{
+    const r=await fetch('/api/pc/command',{method:'POST',signal:controller.signal,cache:'no-store',credentials:'same-origin',headers:{'X-Desk-Preview':'1','Content-Type':'application/json'},body:JSON.stringify(data)});
+    if(!r.ok||(await r.json()).ok!==true)throw Error('PC command not confirmed');
+  }catch{if(pcSelected&&epoch===pcEpoch)pcMessage='PC command not confirmed · refresh and try again'}
+  finally{
+    clearTimeout(timeout);pcBusy=false;
+    if(pcSelected&&epoch===pcEpoch){pcState={...pcState,canControl:false};renderLiveState();refreshPC()}
+  }
+}
 function selectPC(value){
-  pcSelected=value;pcEpoch++;remoteVolumeQueue=null;clearTimeout(remoteVolumeTimer);remoteVolumeTimer=null;
+  pcSelected=value;pcEpoch++;pcMessage='';remoteVolumeQueue=null;clearTimeout(remoteVolumeTimer);remoteVolumeTimer=null;
   pcState={connected:false,error:'Connecting to PC…'};
   if(overlay==='devices')closeOverlay(false);
   renderLiveState();
@@ -399,13 +417,14 @@ window.addEventListener('pointerup',()=>{seeking=false});window.addEventListener
 function musicAction(action,value,refresh=true){if(liveEnabled){
   if(action==='mode'){
     syncLiveMode();
-    if(live.pending||remoteVolumeBusy)return;
+    if(live.pending||remoteVolumeBusy||pcBusy)return;
     if(value==='pc'&&echoModeSupported()){selectPC(true);return}
     if(pcSelected)selectPC(false);
     if(!live.state.connected||live.state.error)return;
     if(value==='echo'&&echoModeSupported())openOverlay('devices',prefs.echoDeviceId?'echo-transfer':'echo-bind');
     else if(value==='wifi')openOverlay('devices','wifi');
-  }else if(!pcSelected)live.command(action,value);
+  }else if(pcSelected)pcCommand(action);
+  else live.command(action,value);
   return
 }playback=music.reduce(playback,action,value);if(active==='spotify')updateSpotify();schedule()}
 let deviceRequest=0;
@@ -415,7 +434,7 @@ function syncLiveMode(){
     const echo=select.querySelector('option[value=echo]');
     if(echo)echo.textContent=echoModeSupported()?(prefs.echoDeviceId?'Echo':'Echo · set up'):'Echo · paired display only';
     select.value=liveMode();
-    select.disabled=live.pending||remoteVolumeBusy||(!echoModeSupported()&&(!live.state.connected||!!live.state.error));
+    select.disabled=live.pending||remoteVolumeBusy||pcBusy||(!echoModeSupported()&&(!live.state.connected||!!live.state.error));
   }
   syncThemedSelects();
 }
@@ -613,17 +632,17 @@ function renderPCState(){
  if(home)home.textContent=s.connected?(s.title||'PC · no playback'):'PC · disconnected';
  if(active!=='spotify'||!$('album'))return;
  const text=(id,value)=>{if($(id).textContent!==value)$(id).textContent=value};
- text('playStatus',!s.connected?'PC · DISCONNECTED':!s.hasPlayback?'PC · NO PLAYBACK':s.playing?'PC · NOW PLAYING':'PC · PAUSED');
+ text('playStatus',!s.connected?'PC · DISCONNECTED':pcBusy?'PC · UPDATING…':!s.hasPlayback?'PC · NO PLAYBACK':s.playing?'PC · NOW PLAYING':'PC · PAUSED');
  text('songTitle',s.title||'No music playing');
  text('songArtist',s.artist||'Start media on your PC');
  text('duration',music.time(Math.floor((s.durationMs||0)/1000)));
  const seek=$('seek');seek.max=Math.max(1,(s.durationMs||0)/1000);seek.disabled=true;
- const album=$('album');if(album.dataset.url!==''||!album.firstChild){album.dataset.url='';albumPalette.mount(album,'',()=>active==='spotify'&&$('album')===album&&album.dataset.url==='')}
+ const album=$('album'),art=window.EchoAlbumPalette.approvedUrl(s.art);if(album.dataset.url!==art||!album.firstChild){album.dataset.url=art;albumPalette.mount(album,art,()=>pcSelected&&active==='spotify'&&$('album')===album&&album.dataset.url===art)}
  const play=$('playToggle'),label=s.playing?'Pause':'Play';if(play.getAttribute('aria-label')!==label||!play.firstChild){play.innerHTML=transportIcon(s.playing?'pause':'play');play.setAttribute('aria-label',label)}
  $('shuffle').setAttribute('aria-pressed','false');$('repeat').setAttribute('aria-pressed','false');$('repeatOne').hidden=true;$('saveSong').innerHTML=transportIcon('save');$('saveSong').setAttribute('aria-pressed','false');
- for(const b of page.querySelectorAll('[data-music]'))b.disabled=true;
+ for(const b of page.querySelectorAll('[data-music]'))b.disabled=!pcReady()||!['toggle','next','previous'].includes(b.dataset.music);
  text('deviceLabel','PC · system volume '+(Number.isInteger(s.volume)?s.volume+'%':'unavailable'));$('deviceSelect').disabled=true;
- text('liveError',s.connected?'Read-only preview · controls pending':s.error||'PC companion unavailable');
+ text('liveError',s.connected?(pcMessage||(s.canControl||pcBusy?'PC media session · local controls':'PC controls unavailable · check companion')):s.error||'PC companion unavailable');
  updateLiveProgress();
 }
 function updateLiveProgress(){if(!liveEnabled||active!=='spotify'||!$('seek')||seeking)return;const pos=pcSelected?pcPosition():live.position(),seek=$('seek');if(seek.value!==String(Math.floor(pos)))seek.value=Math.floor(pos);const elapsed=music.time(Math.floor(pos));if($('elapsed').textContent!==elapsed)$('elapsed').textContent=elapsed;}

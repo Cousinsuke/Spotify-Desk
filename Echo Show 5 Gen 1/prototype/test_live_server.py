@@ -40,6 +40,19 @@ class LocalTests(unittest.TestCase):
             self.assertEqual(response.json,{"connected":True,"hasPlayback":False})
             snapshot.assert_called_once_with()
 
+    def test_pc_command_boundary(self):
+        path="/api/pc/command"
+        data={"action":"pause","trackKey":"a"*64}
+        with patch.object(s.pc_client,"command",return_value=True) as command:
+            self.assertEqual(self.client.post(path,base_url=self.url,headers=self.headers,json=data,environ_overrides={"REMOTE_ADDR":"192.168.50.20"}).status_code,403)
+            self.assertEqual(self.client.post(path,base_url=self.url,headers={"X-Desk-Preview":"1"},json=data).status_code,403)
+            self.assertEqual(self.client.post(path,base_url=self.url,headers=self.headers,json={"action":"toggle"}).status_code,400)
+            command.assert_not_called()
+            self.assertEqual(self.client.post(path,base_url=self.url,headers=self.headers,json=data).status_code,200)
+            command.assert_called_once_with(data)
+            command.return_value=False
+            self.assertEqual(self.client.post(path,base_url=self.url,headers=self.headers,json=data).status_code,409)
+
     def test_wrong_host(self):
         self.assertEqual(self.client.get("/",base_url="http://evil.invalid").status_code,403)
     def test_wrong_origin(self):

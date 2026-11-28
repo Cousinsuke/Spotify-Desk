@@ -1,6 +1,5 @@
-"""Read-only PC media preflight. Loopback HTTP, bearer authenticated, SSH tunnel only."""
+"""PC media agent. Loopback HTTP, bearer authenticated, SSH tunnel only."""
 import argparse
-import hashlib
 import hmac
 import json
 import os
@@ -10,6 +9,8 @@ import sys
 from http.server import BaseHTTPRequestHandler, HTTPServer
 from urllib.request import Request, build_opener, ProxyHandler
 from urllib.error import URLError
+import re
+from pc_protocol import approved_art, command_body, track_key
 
 PORT = 8877
 TOKEN_FILE = Path.home() / ".spotify-desk" / "pc-agent-token"
@@ -41,14 +42,31 @@ def make_adapter():
     sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
     if sys.platform == "linux":
         from linux_companion import LinuxCompanion
-        return LinuxCompanion()
+        class EchoLinuxCompanion(LinuxCompanion):
+            def command_for(self, action, expected):
+                # Re-read the selected session, then call the exact MPRIS bus
+                # name. Never reselect another player or fall back to Connect.
+                with self._guard:
+                    raw = self.status(force=True)
+                    name = raw.get("device_id")
+                    if raw.get("ok") is not True or raw.get("has_playback") is not True or track_key(raw.get("track_key")) != expected:
+                        return False
+                    if not isinstance(name, str) or not re.fullmatch(r"[A-Za-z0-9_-]+(?:\.[A-Za-z0-9_-]+)*", name):
+                        return False
+                    method = {"play": "Play", "pause": "Pause", "next": "Next", "previous": "Previous"}[action]
+                    self._run("busctl", "--user", "call", "org.mpris.MediaPlayer2." + name,
+                              "/org/mpris/MediaPlayer2", "org.mpris.MediaPlayer2.Player", method)
+                    self._cached = None
+                    return True
+
+        return EchoLinuxCompanion()
     if sys.platform == "win32":
         from windows_companion import WindowsCompanion
         return WindowsCompanion()
     raise RuntimeError("Unsupported PC platform")
 
 
-def snapshot(adapter):
+def snapshot(adapter, controls=False):
     try:
         raw = adapter.status()
         if raw.get("ok") is not True:
@@ -63,8 +81,9 @@ def snapshot(adapter):
         return {"ok": True, "hasPlayback": playing,
                 "title": bounded(raw.get("title")) if playing else "",
                 "artist": bounded(raw.get("artist")) if playing else "",
-                "trackKey": hashlib.sha256(bounded(raw.get("track_key")).encode("utf-8", "replace")).hexdigest()
-                if playing and raw.get("track_key") else "",
+                "trackKey": track_key(raw.get("track_key")) if playing else "",
+                "canControl": bool(controls and playing and raw.get("track_key") and callable(getattr(adapter, "command_for", None))),
+                "art": approved_art(raw.get("artwork")) if playing else "",
                 "playing": playing and raw.get("playing") is True,
                 "durationMs": millis(raw.get("duration_ms")) if playing else 0,
                 "positionMs": millis(raw.get("progress_ms")) if playing else 0,
@@ -73,7 +92,7 @@ def snapshot(adapter):
         return {"ok": False, "error": "PC media adapter unavailable"}
 
 
-def handler_for(adapter, token):
+def handler_for(adapter, token, controls=False):
     class Handler(BaseHTTPRequestHandler):
         def setup(self):
             self.request.settimeout(5)
@@ -99,11 +118,34 @@ def handler_for(adapter, token):
             if self.path != "/state":
                 self.reply(404, {"ok": False})
                 return
-            state = snapshot(adapter)
+            state = snapshot(adapter, controls)
             self.reply(200 if state["ok"] else 503, state)
 
         def do_POST(self):
-            self.reply(405, {"ok": False})
+            auth = self.headers.get("Authorization", "")
+            if not hmac.compare_digest(auth.encode("utf-8"), ("Bearer " + token).encode("ascii")):
+                self.reply(401, {"ok": False})
+                return
+            if not controls or self.path != "/command" or not callable(getattr(adapter, "command_for", None)):
+                self.reply(405, {"ok": False})
+                return
+            if self.headers.get_content_type() != "application/json":
+                self.reply(415, {"ok": False})
+                return
+            try:
+                length = int(self.headers.get("Content-Length", "0"))
+                if not 1 <= length <= 512:
+                    raise ValueError("Invalid length")
+                data = command_body(json.loads(self.rfile.read(length)))
+            except (ValueError, OSError):
+                self.reply(400, {"ok": False})
+                return
+            try:
+                accepted = adapter.command_for(data["action"], data["trackKey"])
+            except Exception:
+                self.reply(503, {"ok": False})
+                return
+            self.reply(200 if accepted is True else 409, {"ok": accepted is True})
 
     return Handler
 
@@ -128,15 +170,20 @@ def report(state):
                       "artistAvailable": bool(state.get("artist")),
                       "durationAvailable": bool(state.get("durationMs")),
                       "positionAvailable": state.get("positionMs", 0) > 0,
-                      "volumeAvailable": state.get("volume") is not None}, indent=2))
+                      "volumeAvailable": state.get("volume") is not None,
+                      "artworkAvailable": bool(state.get("art")),
+                      "controlsAvailable": state.get("canControl") is True}, indent=2))
     return 0 if state.get("ok") is True else 1
 
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("action", choices=("probe", "serve", "check"))
+    parser.add_argument("--controls", action="store_true", help="enable tested Linux media commands when serving")
     parser.add_argument("--token-stdin", action="store_true", help="check only; read token from stdin")
     args = parser.parse_args()
+    if args.controls and args.action != "serve":
+        parser.error("--controls requires serve")
     if args.token_stdin and args.action != "check":
         parser.error("--token-stdin requires check")
     try:
@@ -148,8 +195,8 @@ def main():
                 raise ValueError("Invalid token")
             return report(check(token))
         token = token_file(create=True)
-        with HTTPServer(("127.0.0.1", PORT), handler_for(make_adapter(), token)) as server:
-            print("Read-only PC agent listening on 127.0.0.1:8877. Ctrl+C to stop.", flush=True)
+        with HTTPServer(("127.0.0.1", PORT), handler_for(make_adapter(), token, args.controls)) as server:
+            print(("PC agent (controls requested)" if args.controls else "Read-only PC agent") + " listening on 127.0.0.1:8877. Ctrl+C to stop.", flush=True)
             server.serve_forever()
     except KeyboardInterrupt:
         return 0

@@ -18,6 +18,7 @@ import glucose_service
 import public_calendar_service
 import system_service
 import pc_client
+from pc_protocol import command_body as pc_command_body
 from datetime import datetime
 from zoneinfo import ZoneInfo
 from flask import Flask, jsonify, redirect, request, send_from_directory
@@ -499,6 +500,18 @@ def pc_state():
     if request.remote_addr != HOST or request.args:
         raise ApiError(403, "Local PC state access only.")
     return jsonify(pc_client.snapshot())
+
+@app.post("/api/pc/command")
+def pc_command():
+    if request.remote_addr != HOST or request.args:
+        raise ApiError(403, "Local PC command access only.")
+    try:
+        data = pc_command_body(request.get_json(silent=True))
+    except ValueError:
+        raise ApiError(400, "Invalid PC command.")
+    if not pc_client.command(data):
+        raise ApiError(409, "PC command not confirmed; refresh and try again.")
+    return jsonify(ok=True)
 
 @app.get("/api/glucose")
 def glucose_state():
