@@ -301,7 +301,8 @@ def state():
         return jsonify(connected=False,saved=None)
     try:
         p=player(request.args.get("fresh")=="1")
-        sample_at=playback_cache[0] if playback_cache and playback_cache[1] is p else time.monotonic()
+        cached=playback_cache
+        sample_at=cached[0] if cached and cached[1] is p else time.monotonic()
         item=p.get("item") or {}
         d=p.get("device") or {}
         if not item and not d.get("id"):

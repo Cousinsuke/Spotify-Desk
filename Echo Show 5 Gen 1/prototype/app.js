@@ -290,7 +290,7 @@ screen.addEventListener('click',e=>{const b=e.target.closest('button');if(e.targ
 screen.addEventListener('input',e=>{const el=e.target,k=el.dataset.pref;if(el.id==='seek'){if(liveEnabled){$('elapsed').textContent=music.time(Number(el.value));return}musicAction('seek',Number(el.value),false);return}if(!k||el.type!=='range')return;prefs[k]=Number(el.value);const o=el.parentElement.querySelector('output');if(o)o.textContent=el.value+(k==='speed'?' ms':'%');if(k==='nightDim')syncNightControls();save()});
 screen.addEventListener('change',e=>{const el=e.target,k=el.dataset.pref;if(el.dataset.nightTime){const key=el.dataset.nightTime;if(['nightStart','nightEnd'].includes(key)&&nightMinutes(el.value)!==null){prefs[key]=el.value;syncNightControls();save()}else if(['nightStart','nightEnd'].includes(key))el.value=prefs[key];return}if(el.dataset.glucoseControl){changeGlucose(el.dataset.glucoseControl,el.value);return}if(el.id==='weatherView'){if(['hourly','daily'].includes(el.value)&&el.value!==weatherView){weatherView=el.value;renderWeather(true);$('weatherView')?.focus()}return}if(el.id==='seek'&&liveEnabled){live.command('seek',Number(el.value));return}if(el.dataset.mode!==undefined){musicAction('mode',el.value);if(overlay==='quick'){renderQuick();syncLiveMode()}return}if(el.dataset.appPin){const id=el.dataset.appPin;prefs.appLayout=changeAppPin(prefs.appLayout,id,el.checked);refreshAppSettings(id,'pin');return}if(el.dataset.hide){prefs.autoHide[el.dataset.hide]=el.checked;save();return}if(k&&el.tagName==='SELECT'){if(Object.prototype.hasOwnProperty.call(homeOptions,k)&&!homeOptions[k].some(([id])=>id===el.value))return;if(k==='night'&&!['off','manual','scheduled'].includes(el.value))return;prefs[k]=k==='delay'?Number(el.value):el.value;if(k==='night')syncNightControls();save();if(active==='home'&&k==='homeClock')renderHome();if(active==='weather'&&['weatherDays','weatherIcons'].includes(k))renderWeather();if(active==='glucose'&&['glucoseView','glucoseBackground'].includes(k))renderGlucose()}});
 screen.addEventListener('pointerdown',e=>{if(active==='calendar'&&e.target.closest('.cal-grid')){gesture=null;schedule();return}const r=screen.getBoundingClientRect();gesture={x:e.clientX,y:e.clientY,top:e.clientY-r.top<28,edge:r.right-e.clientX<30,control:!!e.target.closest('input,select,button:not(#quickHandle):not(#reveal)')};schedule()});
-screen.addEventListener('pointerup',e=>{if(!gesture)return;const dx=e.clientX-gesture.x,dy=e.clientY-gesture.y;const g=gesture;gesture=null;if(overlay||g.control)return;if(g.top&&dy>50&&dy>Math.abs(dx)*1.4)openOverlay('quick');else if(g.edge&&dx< -45&&Math.abs(dx)>Math.abs(dy)*1.4)setRail(true)});
+screen.addEventListener('pointerup',e=>{if(!gesture)return;const dx=e.clientX-gesture.x,dy=e.clientY-gesture.y;const g=gesture;gesture=null;if(overlay||themedSelectOpen||g.control)return;if(g.top&&dy>50&&dy>Math.abs(dx)*1.4)openOverlay('quick');else if(g.edge&&dx< -45&&Math.abs(dx)>Math.abs(dy)*1.4)setRail(true)});
 screen.addEventListener('pointercancel',()=>{gesture=null});rail.addEventListener('focusout',()=>setTimeout(schedule,0));screen.addEventListener('keydown',e=>{if(e.key==='Escape'&&overlay){closeOverlay();return}if(e.key==='Escape'&&expanded&&prefs.autoHide[active]){setRail(false);return}schedule()});
 
 // All playback here is deterministic sample state. No audio/API requests.
@@ -582,7 +582,7 @@ function updateLiveProgress(){if(!liveEnabled||active!=='spotify'||!$('seek')||s
 screen.addEventListener('pointerdown',e=>{if(e.pointerType==='touch'||e.pointerType==='pen'||e.pointerType==='mouse')screen.dataset.input='touch'},true);
 screen.addEventListener('keydown',e=>{if(!['Shift','Control','Alt','Meta'].includes(e.key))screen.dataset.input='keyboard'},true);
 const themedSelectButtons=new WeakMap();
-let themedSelectOpen=null,lastSpotifyPoll=0;
+let themedSelectOpen=null,lastSpotifyPoll=0,weatherRenderDeferred=false;
 function syncThemedSelects(){
   if(themedSelectOpen&&(!themedSelectOpen.select.isConnected||themedSelectOpen.select.disabled))closeThemedSelect(false);
   for(const select of screen.querySelectorAll('select')){
@@ -613,6 +613,7 @@ function closeThemedSelect(restore=true){
   current.trigger.setAttribute('aria-expanded','false');
   if(restore&&current.trigger.isConnected&&!current.trigger.disabled)current.trigger.focus({preventScroll:true});
   schedule();
+  if(weatherRenderDeferred){weatherRenderDeferred=false;queueMicrotask(()=>{if(active==='weather'&&!themedSelectOpen){renderWeather();if(overlay==='weather')renderWeatherDetails(true)}else if(active==='weather')weatherRenderDeferred=true})}
 }
 function openThemedSelect(select,trigger){
   if(select.disabled||!select.isConnected)return;
@@ -635,7 +636,7 @@ function openThemedSelect(select,trigger){
       if(!select.isConnected||select.disabled||button.disabled){closeThemedSelect(false);return}
       const changed=i!==select.selectedIndex;
       closeThemedSelect();
-      if(changed){select.selectedIndex=i;select.dispatchEvent(new Event('change',{bubbles:true}))}
+      if(changed||select.hasAttribute('data-mode')){select.selectedIndex=i;select.dispatchEvent(new Event('change',{bubbles:true}))}
       syncThemedSelects();
     });
     choices.append(button);
@@ -669,7 +670,7 @@ if(liveEnabled){$('demo').textContent=document.documentElement.dataset.deviceGat
 setInterval(()=>{if(active==='calendar'&&!document.hidden)refreshCalendar();if(active==='system'&&!document.hidden)refreshSystem()},5000);
 setInterval(()=>{clock();updateNightMode();if(active==='calendar'&&calendarToday!==calendarKey(new Date()))renderCalendar();if(!liveEnabled){playback=music.reduce(playback,'tick');if(active==='spotify'&&!overlay)updateSpotify()}},1000);
 
-if(weather.enabled){weather.onChange=()=>{if(active==='home')updateHomeWeather();else if(active==='weather'){renderWeather();if(overlay==='weather')renderWeatherDetails(true)}};weather.refresh();setInterval(()=>{if(['home','weather'].includes(active)&&!document.hidden)weather.refresh()},15000);}
+if(weather.enabled){weather.onChange=()=>{if(active==='home')updateHomeWeather();else if(active==='weather'){if(themedSelectOpen){weatherRenderDeferred=true;return}renderWeather();if(overlay==='weather')renderWeatherDetails(true)}};weather.refresh();setInterval(()=>{if(['home','weather'].includes(active)&&!document.hidden)weather.refresh()},15000);}
 
 // Calendar grid: one month per deliberate vertical swipe, never scroll the agenda.
 let calendarDrag=null,ignoreCalendarClick=false;
