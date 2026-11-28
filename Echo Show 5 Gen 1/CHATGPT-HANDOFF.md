@@ -28,7 +28,7 @@ The existing Gluroo reader and dashboard are already in the repository; a prior 
 
 ## Next step
 
-**Current priority (2026-11-28):** Spotify saved icon and green device accent accepted. Prototype `92f0017` removes global paired-display footer across every page; pull Pi prototype and refresh for visual verification. Preview labels retained. PC mode/automatic startup remains deferred; use Wi-Fi / Spotify Connect. No backend or APK change.
+**Current priority (2026-11-28):** Spotify saved icon and green device accent accepted; paired footer removed at `92f0017` (physical verification pending). Prototype `2d0bfe6` fixes exclusive Apps drawer highlighting; pull Pi prototype and refresh for visual confirmation. PC mode/automatic startup remains deferred; use Wi-Fi / Spotify Connect. No backend or APK changes.
 
 Historical initial plan (superseded where newer checkpoints record completion):
 
@@ -637,3 +637,7 @@ User supplied a solid green checked-circle reference and approved two visual cha
 ### Remove persistent paired-display footer (2026-11-28)
 
 User accepted Spotify saved icon and playback-device green accent on physical display and requested removal of LIVE · PAIRED DISPLAY from bottom-left of every page. Prototype [92f0017](https://github.com/Cousinsuke/Spotify-Desk/commit/92f0017001cf2449f6d8177008dc25700bd61ebf) hides shared demo footer for paired-root markup before JS initialization and clears its text in paired live mode. Local test and desktop design-preview labels remain. Pairing, authentication, session behavior and page-specific statuses unchanged. JS syntax and four source assertions passed in JS runtime; physical confirmation pending. Static assets only; pull Pi prototype and refresh without service restart or APK rebuild. PC development remains deferred.
+
+### Exclusive Apps drawer navigation highlight (2026-11-28)
+
+User reported simultaneous active-page and Apps highlights when opening the right-side Apps drawer. Prototype [2d0bfe6](https://github.com/Cousinsuke/Spotify-Desk/commit/2d0bfe6b98ee9c7d2c6d3dc79aa09b9337276a0d) synchronizes rail drawer-open data attribute at render and CSS suppresses current-page visual highlight only while Apps is open. Underlying aria-current semantics retained; closing drawer restores page highlight, selecting another page uses that page, other overlays unchanged. JS parse and isolated render/source tests passed in JS runtime across 25 combinations. Physical visual confirmation pending, as is the previous paired-footer change. Static asset update; pull and reload without service restart or APK rebuild. PC work remains deferred.
