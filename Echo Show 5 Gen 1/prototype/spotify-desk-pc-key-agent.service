@@ -1,0 +1,16 @@
+[Unit]
+Description=Spotify Desk private SSH key agent
+StartLimitIntervalSec=0
+
+[Service]
+Type=exec
+RuntimeDirectory=spotify-desk-pc
+RuntimeDirectoryMode=0700
+ExecStart=/usr/bin/ssh-agent -D -a %t/spotify-desk-pc/agent.sock
+Restart=on-failure
+RestartSec=5
+TimeoutStopSec=10
+UMask=0077
+
+[Install]
+WantedBy=default.target

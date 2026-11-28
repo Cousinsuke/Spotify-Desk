@@ -1,0 +1,18 @@
+[Unit]
+Description=Spotify Desk private PC-to-Pi reverse tunnel
+Wants=spotify-desk-pc-key-agent.service spotify-desk-pc-agent.service
+After=spotify-desk-pc-key-agent.service spotify-desk-pc-agent.service
+StartLimitIntervalSec=0
+
+[Service]
+Type=exec
+EnvironmentFile=%h/.config/spotify-desk-pc/tunnel.env
+ExecStart=/usr/bin/ssh -F /dev/null -i %h/.ssh/spotify-desk-pi -o IdentityAgent=%t/spotify-desk-pc/agent.sock -o IdentitiesOnly=yes -o BatchMode=yes -o StrictHostKeyChecking=yes -o ForwardAgent=no -o ExitOnForwardFailure=yes -o ConnectTimeout=8 -o ServerAliveInterval=15 -o ServerAliveCountMax=3 -N -T -R 127.0.0.1:8877:127.0.0.1:8877 -- ${DESK_PI_TARGET}
+Restart=always
+RestartSec=15
+TimeoutStopSec=10
+UMask=0077
+NoNewPrivileges=true
+
+[Install]
+WantedBy=default.target
