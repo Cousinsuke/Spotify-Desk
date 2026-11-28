@@ -5,6 +5,9 @@ import android.app.AlertDialog;
 import android.content.Intent;
 import android.content.ActivityNotFoundException;
 import android.graphics.Color;
+import android.media.AudioManager;
+import android.view.KeyEvent;
+import android.widget.FrameLayout;
 import android.net.Uri;
 import android.net.http.SslError;
 import android.os.Bundle;
@@ -31,6 +34,9 @@ import android.widget.ScrollView;
 
 public final class MainActivity extends Activity {
     private WebView web;
+    private FrameLayout content;
+    private LocalVolumeOverlay volumeOverlay;
+    private AudioManager audio;
     private Uri origin;
     private boolean errorShown;
     private final Handler retryHandler = new Handler(Looper.getMainLooper());
@@ -71,6 +77,13 @@ public final class MainActivity extends Activity {
         origin = Uri.parse(getString(R.string.dashboard_origin));
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         getWindow().setDecorFitsSystemWindows(false);
+        audio = getSystemService(AudioManager.class);
+        setVolumeControlStream(AudioManager.STREAM_MUSIC);
+        FrameLayout root = new FrameLayout(this);
+        content = new FrameLayout(this);
+        root.addView(content, new FrameLayout.LayoutParams(-1, -1));
+        volumeOverlay = new LocalVolumeOverlay(this, root);
+        setContentView(root);
         openDashboard();
     }
 
@@ -152,7 +165,8 @@ public final class MainActivity extends Activity {
                 return true;
             }
         });
-        setContentView(web);
+        content.removeAllViews();
+        content.addView(web, new FrameLayout.LayoutParams(-1, -1));
         web.loadUrl(origin.toString());
         immersive();
     }
@@ -204,7 +218,31 @@ public final class MainActivity extends Activity {
         ScrollView scroll = new ScrollView(this);
         scroll.setFillViewport(true);
         scroll.addView(panel);
-        setContentView(scroll);
+        content.removeAllViews();
+        content.addView(scroll, new FrameLayout.LayoutParams(-1, -1));
+    }
+
+    @Override public boolean dispatchKeyEvent(KeyEvent event) {
+        int key = event.getKeyCode();
+        if (key != KeyEvent.KEYCODE_VOLUME_UP && key != KeyEvent.KEYCODE_VOLUME_DOWN)
+            return super.dispatchKeyEvent(event);
+        if (!resumed || !hasWindowFocus() || audio == null || audio.isVolumeFixed())
+            return super.dispatchKeyEvent(event);
+        if (event.getAction() == KeyEvent.ACTION_DOWN) {
+            try {
+                audio.adjustStreamVolume(AudioManager.STREAM_MUSIC,
+                    key == KeyEvent.KEYCODE_VOLUME_UP ? AudioManager.ADJUST_RAISE : AudioManager.ADJUST_LOWER, 0);
+            } catch (SecurityException e) {
+                return super.dispatchKeyEvent(event);
+            }
+            volumeOverlay.show(audio.getStreamVolume(AudioManager.STREAM_MUSIC),
+                audio.getStreamMinVolume(AudioManager.STREAM_MUSIC),
+                audio.getStreamMaxVolume(AudioManager.STREAM_MUSIC),
+                audio.isStreamMute(AudioManager.STREAM_MUSIC));
+            return true;
+        }
+        if (event.getAction() == KeyEvent.ACTION_UP) return true;
+        return super.dispatchKeyEvent(event);
     }
 
     private void disposeWeb() {
@@ -244,6 +282,7 @@ public final class MainActivity extends Activity {
 
     @Override protected void onPause() {
         resumed = false;
+        volumeOverlay.hide();
         retryHandler.removeCallbacks(retryTask);
         CookieManager.getInstance().flush();
         super.onPause();
@@ -252,6 +291,7 @@ public final class MainActivity extends Activity {
     @Override protected void onDestroy() {
         resumed = false;
         retryPending = false;
+        volumeOverlay.hide();
         retryHandler.removeCallbacks(retryTask);
         disposeWeb();
         super.onDestroy();
