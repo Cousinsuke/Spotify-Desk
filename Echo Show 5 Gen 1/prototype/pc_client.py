@@ -5,7 +5,7 @@ import stat
 from pathlib import Path
 import re
 import requests
-from pc_protocol import approved_art, command_body, valid_key
+from pc_protocol import approved_art, command_body, valid_key, spotify_uri
 
 TOKEN_PATH = Path.home() / ".spotify-desk" / "pc-agent-token"
 URL = "http://127.0.0.1:8877/state"
@@ -42,6 +42,9 @@ def normalize(data):
             "playing": active and data.get("playing") is True,
             "trackKey": key, "canControl": bool(key and data.get("canControl") is True),
             "art": approved_art(data.get("art")) if active else "",
+            "spotifyUri": spotify_uri(data.get("spotifyUri")) if active else "",
+            "shuffle": data.get("shuffle") if active and type(data.get("shuffle")) is bool else None,
+            "repeat": data.get("repeat") if active and data.get("repeat") in ("None","Playlist","Track") else None,
             "durationMs": duration if active else 0,
             "positionMs": min(position, duration) if duration and active else position if active else 0,
             "volume": volume if active and type(volume) is int and 0 <= volume <= 100 else None}

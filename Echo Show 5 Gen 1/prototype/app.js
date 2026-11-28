@@ -334,7 +334,10 @@ async function flushRemoteVolume(){
 window.echoDeskRouteVolume=direction=>{
   if(direction!==1&&direction!==-1)return 'unavailable';
   nativeVolumeRouting=true;
-  if(pcSelected){remoteVolumePopup('PC volume','PC volume control pending');return 'unavailable'}
+  if(pcSelected){
+    if(document.hidden||!pcReady()||!Number.isInteger(pcState.volume)){remoteVolumePopup('PC volume','PC busy or unavailable');return 'unavailable'}
+    void pcCommand('volume',direction*5);return 'remote';
+  }
   const state=live.state,route=liveEnabled&&echoModeSupported()?volumeRoute(state,prefs.echoDeviceId):'local';
   if(route==='local'){
     remoteVolumeQueue=null;
@@ -358,7 +361,7 @@ let nativeSpotifyLaunch=false;
 window.echoDeskEnableSpotifyLaunch=()=>{nativeSpotifyLaunch=true};
 window.echoDeskEnableVolumeRouting=()=>{nativeVolumeRouting=true};
 function echoModeSupported(){return liveEnabled&&document.documentElement.dataset.deviceGateway==='1'}
-let pcSelected=false,pcState={connected:false,error:'Connecting to PC…'},pcReceived=0,pcInFlight=false,pcEpoch=0,pcBusy=false,pcMessage='';
+let pcSelected=false,pcState={connected:false,error:'Connecting to PC…'},pcReceived=0,pcInFlight=false,pcEpoch=0,pcBusy=false,pcMessage='',pcVolumePending=false;
 function liveMode(){return pcSelected?'pc':echoModeSupported()?confirmedPlaybackMode(live.state,prefs.echoDeviceId):'wifi'}
 async function refreshPC(){
   if(!pcSelected||pcInFlight||pcBusy||document.hidden)return;
@@ -371,8 +374,9 @@ async function refreshPC(){
     if(epoch!==pcEpoch||!pcSelected)return;
     pcState=s&&s.connected===true?s:{connected:false,error:s?.error||'PC companion unavailable'};
     pcReceived=performance.now();
+    if(pcVolumePending){pcVolumePending=false;remoteVolumePopup('PC volume',Number.isInteger(pcState.volume)?pcState.volume+'%':'Unavailable',Number.isInteger(pcState.volume)?pcState.volume:null)}
   }catch{if(epoch===pcEpoch&&pcSelected)pcState={connected:false,error:'PC companion unavailable'}}
-  finally{clearTimeout(timeout);pcInFlight=false;if(epoch===pcEpoch&&pcSelected)renderLiveState()}
+  finally{clearTimeout(timeout);pcInFlight=false;if(epoch===pcEpoch&&pcSelected)renderLiveState();else if(pcSelected&&!pcBusy)refreshPC()}
 }
 function pcPosition(){
   const s=pcState;
@@ -382,23 +386,41 @@ function pcPosition(){
 function pcReady(){
   return pcSelected&&!pcBusy&&pcState.connected===true&&pcState.canControl===true&&pcState.hasPlayback===true&&typeof pcState.trackKey==='string'&&/^[0-9a-f]{64}$/.test(pcState.trackKey)&&performance.now()-pcReceived<=6000;
 }
-async function pcCommand(action){
-  if(document.hidden||!pcReady()||!['toggle','previous','next'].includes(action))return;
-  const data={action:action==='toggle'?(pcState.playing?'pause':'play'):action,trackKey:pcState.trackKey};
+function pcActionAvailable(action){
+  return pcReady()&&(['toggle','previous','next'].includes(action)||
+    (action==='shuffle'&&typeof pcState.shuffle==='boolean')||
+    (action==='repeat'&&['None','Playlist','Track'].includes(pcState.repeat))||
+    (action==='save'&&typeof pcState.saved==='boolean')||
+    (action==='volume'&&Number.isInteger(pcState.volume)));
+}
+async function pcCommand(action,value){
+  if(document.hidden||!pcActionAvailable(action))return;
+  if(action==='volume'&&![5,-5].includes(value))return;
+  const prior=pcState,priorReceived=pcReceived;
+  const data={action:action==='toggle'?(prior.playing?'pause':'play'):action,trackKey:prior.trackKey};
+  if(action==='shuffle'||action==='save')data.value=!prior[action==='save'?'saved':'shuffle'];
+  if(action==='repeat')data.value=({None:'Playlist',Playlist:'Track',Track:'None'})[prior.repeat];
+  if(action==='volume')data.value=value;
   pcBusy=true;pcMessage='';const epoch=++pcEpoch;
+  // Apply intent immediately; keep a rollback snapshot for rejected writes.
+  if(action==='toggle'){pcState={...prior,positionMs:Math.round(pcPosition()*1000),playing:!prior.playing};pcReceived=performance.now()}
+  if(action==='shuffle')pcState={...prior,shuffle:data.value};
+  if(action==='repeat')pcState={...prior,repeat:data.value};
+  if(action==='save')pcState={...prior,saved:data.value};
+  if(action==='volume'){pcVolumePending=true;remoteVolumePopup('PC volume','Adjusting…')}
   renderLiveState();
   const controller=new AbortController(),timeout=setTimeout(()=>controller.abort(),12000);
   try{
     const r=await fetch('/api/pc/command',{method:'POST',signal:controller.signal,cache:'no-store',credentials:'same-origin',headers:{'X-Desk-Preview':'1','Content-Type':'application/json'},body:JSON.stringify(data)});
     if(!r.ok||(await r.json()).ok!==true)throw Error('PC command not confirmed');
-  }catch{if(pcSelected&&epoch===pcEpoch)pcMessage='PC command not confirmed · refresh and try again'}
+  }catch{if(pcSelected&&epoch===pcEpoch){pcState=prior;pcReceived=priorReceived;pcMessage='PC command not confirmed · refresh and try again';if(action==='volume'){pcVolumePending=false;remoteVolumePopup('PC volume','Not confirmed')}}}
   finally{
     clearTimeout(timeout);pcBusy=false;
-    if(pcSelected&&epoch===pcEpoch){pcState={...pcState,canControl:false};renderLiveState();refreshPC()}
+    if(pcSelected&&epoch===pcEpoch){pcState={...pcState,canControl:false};renderLiveState();if(pcInFlight)setTimeout(refreshPC,150);else refreshPC()}
   }
 }
 function selectPC(value){
-  pcSelected=value;pcEpoch++;pcMessage='';remoteVolumeQueue=null;clearTimeout(remoteVolumeTimer);remoteVolumeTimer=null;
+  pcSelected=value;pcEpoch++;pcMessage='';pcVolumePending=false;remoteVolumeQueue=null;clearTimeout(remoteVolumeTimer);remoteVolumeTimer=null;
   pcState={connected:false,error:'Connecting to PC…'};
   if(overlay==='devices')closeOverlay(false);
   renderLiveState();
@@ -639,8 +661,13 @@ function renderPCState(){
  const seek=$('seek');seek.max=Math.max(1,(s.durationMs||0)/1000);seek.disabled=true;
  const album=$('album'),art=window.EchoAlbumPalette.approvedUrl(s.art);if(album.dataset.url!==art||!album.firstChild){album.dataset.url=art;albumPalette.mount(album,art,()=>pcSelected&&active==='spotify'&&$('album')===album&&album.dataset.url===art)}
  const play=$('playToggle'),label=s.playing?'Pause':'Play';if(play.getAttribute('aria-label')!==label||!play.firstChild){play.innerHTML=transportIcon(s.playing?'pause':'play');play.setAttribute('aria-label',label)}
- $('shuffle').setAttribute('aria-pressed','false');$('repeat').setAttribute('aria-pressed','false');$('repeatOne').hidden=true;$('saveSong').innerHTML=transportIcon('save');$('saveSong').setAttribute('aria-pressed','false');
- for(const b of page.querySelectorAll('[data-music]'))b.disabled=!pcReady()||!['toggle','next','previous'].includes(b.dataset.music);
+ $('shuffle').setAttribute('aria-pressed',String(s.shuffle===true));
+ $('repeat').setAttribute('aria-pressed',String(s.repeat==='Playlist'||s.repeat==='Track'));
+ $('repeat').setAttribute('aria-label','Repeat: '+(s.repeat||'unavailable'));$('repeatOne').hidden=s.repeat!=='Track';
+ const save=$('saveSong'),saveLabel=s.saved===true?'Remove saved song':'Save song';
+ if(save.getAttribute('aria-label')!==saveLabel||!save.firstChild){save.innerHTML=transportIcon(s.saved===true?'saved':'save');save.setAttribute('aria-label',saveLabel)}
+ save.setAttribute('aria-pressed',String(s.saved===true));
+ for(const b of page.querySelectorAll('[data-music]'))b.disabled=!pcActionAvailable(b.dataset.music);
  text('deviceLabel','PC · system volume '+(Number.isInteger(s.volume)?s.volume+'%':'unavailable'));$('deviceSelect').disabled=true;
  text('liveError',s.connected?(pcMessage||(s.canControl||pcBusy?'PC media session · local controls':'PC controls unavailable · check companion')):s.error||'PC companion unavailable');
  updateLiveProgress();

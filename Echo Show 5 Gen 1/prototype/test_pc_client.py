@@ -29,6 +29,16 @@ class PCClientTests(unittest.TestCase):
         self.assertEqual(post.call_args.args[0],"http://127.0.0.1:8877/command")
         self.assertFalse(post.call_args.kwargs["allow_redirects"])
 
+    def test_extended_state(self):
+        data=pc_client.normalize({"ok":True,"hasPlayback":True,"shuffle":False,"repeat":"Track","spotifyUri":"spotify:track:"+"A"*22})
+        self.assertIs(data["shuffle"],False)
+        self.assertEqual(data["repeat"],"Track")
+        self.assertEqual(data["spotifyUri"],"spotify:track:"+"A"*22)
+        data=pc_client.normalize({"ok":True,"hasPlayback":True,"shuffle":1,"repeat":"x","spotifyUri":"spotify:episode:x"})
+        self.assertIsNone(data["shuffle"])
+        self.assertIsNone(data["repeat"])
+        self.assertEqual(data["spotifyUri"],"")
+
     def test_no_playback(self):
         data = pc_client.normalize({"ok": True, "hasPlayback": False, "title": "Old", "playing": True, "volume": True})
         self.assertEqual(data["title"], "")

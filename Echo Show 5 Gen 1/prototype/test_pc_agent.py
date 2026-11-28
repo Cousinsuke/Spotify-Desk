@@ -5,7 +5,7 @@ from http.server import HTTPServer
 from urllib.error import HTTPError
 from urllib.request import Request, urlopen
 from pc_agent import handler_for, snapshot, valid_token
-from pc_protocol import track_key, approved_art, command_body
+from pc_protocol import track_key, approved_art, command_body, native_track_uri
 
 
 class Adapter:
@@ -35,6 +35,20 @@ class PcAgentTests(unittest.TestCase):
         for data in ({"action": "volume", "trackKey": "a"*64}, {"action": "next", "trackKey": "x"}, {"action": "next", "trackKey": "a"*64, "device": "x"}, {"action": [], "trackKey": "a"*64}):
             with self.assertRaises(ValueError):
                 command_body(data)
+
+    def test_extended_commands_and_identity(self):
+        key="a"*64
+        for a,v in (("shuffle",True),("repeat","Track"),("volume",5),("save",False)):
+            data={"action":a,"trackKey":key,"value":v}
+            self.assertEqual(command_body(data),data)
+        for a,v in (("shuffle",1),("repeat","invalid"),("volume",True),("volume",100),("save","true")):
+            with self.assertRaises(ValueError):
+                command_body({"action":a,"trackKey":key,"value":v})
+        ident="A"*22
+        raw={"device_id":"spotify","track_key":"spotify|/com/spotify/track/"+ident+"|Artist"}
+        self.assertEqual(native_track_uri(raw),"spotify:track:"+ident)
+        self.assertEqual(native_track_uri({**raw,"device_id":"chromium"}),"")
+        self.assertEqual(native_track_uri({**raw,"track_key":"spotify|Song|Artist"}),"")
 
     def test_authenticated_commands(self):
         class Controlled(Adapter):

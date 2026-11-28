@@ -499,7 +499,15 @@ def command():
 def pc_state():
     if request.remote_addr != HOST or request.args:
         raise ApiError(403, "Local PC state access only.")
-    return jsonify(pc_client.snapshot())
+    state = pc_client.snapshot()
+    uri = state.pop("spotifyUri", "")
+    state["saved"] = None
+    if uri and token and state.get("connected") and state.get("canControl"):
+        try:
+            state["saved"] = saved_status(uri)
+        except ApiError:
+            pass
+    return jsonify(state)
 
 @app.post("/api/pc/command")
 def pc_command():
@@ -509,6 +517,17 @@ def pc_command():
         data = pc_command_body(request.get_json(silent=True))
     except ValueError:
         raise ApiError(400, "Invalid PC command.")
+    if data["action"] == "save":
+        state = pc_client.snapshot()
+        uri = state.get("spotifyUri")
+        from pc_protocol import spotify_uri
+        if not state.get("connected") or not state.get("canControl") or state.get("trackKey") != data["trackKey"] or not spotify_uri(uri):
+            raise ApiError(409, "PC track changed or cannot be saved.")
+        if not token:
+            raise ApiError(409, "Spotify library unavailable.")
+        spotify("PUT" if data["value"] else "DELETE", "/me/library", {"uris":uri})
+        saved_cache.pop(uri,None)
+        return jsonify(ok=True)
     if not pc_client.command(data):
         raise ApiError(409, "PC command not confirmed; refresh and try again.")
     return jsonify(ok=True)

@@ -10,7 +10,8 @@ from http.server import BaseHTTPRequestHandler, HTTPServer
 from urllib.request import Request, build_opener, ProxyHandler
 from urllib.error import URLError
 import re
-from pc_protocol import approved_art, command_body, track_key
+import shlex
+from pc_protocol import approved_art, command_body, track_key, native_track_uri
 
 PORT = 8877
 TOKEN_FILE = Path.home() / ".spotify-desk" / "pc-agent-token"
@@ -43,7 +44,23 @@ def make_adapter():
     if sys.platform == "linux":
         from linux_companion import LinuxCompanion
         class EchoLinuxCompanion(LinuxCompanion):
-            def command_for(self, action, expected):
+            def _property(self, name, prop):
+                try:
+                    return shlex.split(self._run("busctl", "--user", "get-property", "org.mpris.MediaPlayer2." + name,
+                        "/org/mpris/MediaPlayer2", "org.mpris.MediaPlayer2.Player", prop))
+                except Exception:
+                    return []
+
+            def capabilities(self, raw):
+                name = raw.get("device_id")
+                if not isinstance(name, str) or not re.fullmatch(r"[A-Za-z0-9_-]+(?:\\.[A-Za-z0-9_-]+)*", name):
+                    return {}
+                shuffle = self._property(name, "Shuffle")
+                loop = self._property(name, "LoopStatus")
+                return {"shuffle": shuffle == ["b", "true"] if shuffle in (["b", "true"], ["b", "false"]) else None,
+                        "repeat": loop[1] if len(loop) == 2 and loop[0] == "s" and loop[1] in ("None", "Playlist", "Track") else None}
+
+            def command_for(self, action, expected, value=None):
                 # Re-read the selected session, then call the exact MPRIS bus
                 # name. Never reselect another player or fall back to Connect.
                 with self._guard:
@@ -53,9 +70,23 @@ def make_adapter():
                         return False
                     if not isinstance(name, str) or not re.fullmatch(r"[A-Za-z0-9_-]+(?:\.[A-Za-z0-9_-]+)*", name):
                         return False
-                    method = {"play": "Play", "pause": "Pause", "next": "Next", "previous": "Previous"}[action]
-                    self._run("busctl", "--user", "call", "org.mpris.MediaPlayer2." + name,
-                              "/org/mpris/MediaPlayer2", "org.mpris.MediaPlayer2.Player", method)
+                    bus = "org.mpris.MediaPlayer2." + name
+                    path = "/org/mpris/MediaPlayer2"
+                    interface = "org.mpris.MediaPlayer2.Player"
+                    if action == "volume":
+                        level = self._volume()
+                        if type(level) is not int:
+                            return False
+                        return self.command("volume", max(0, min(100, level + value)))
+                    if action in ("shuffle", "repeat"):
+                        caps = self.capabilities(raw)
+                        if caps.get(action) is None:
+                            return False
+                        prop, sig, val = ("Shuffle", "b", str(value).lower()) if action == "shuffle" else ("LoopStatus", "s", value)
+                        self._run("busctl", "--user", "set-property", bus, path, interface, prop, sig, val)
+                    else:
+                        method = {"play": "Play", "pause": "Pause", "next": "Next", "previous": "Previous"}[action]
+                        self._run("busctl", "--user", "call", bus, path, interface, method)
                     self._cached = None
                     return True
 
@@ -78,7 +109,10 @@ def snapshot(adapter, controls=False):
         playing = raw.get("has_playback") is True
         volume = raw.get("volume")
         volume = volume if type(volume) is int and 0 <= volume <= 100 else None
+        caps = adapter.capabilities(raw) if playing and callable(getattr(adapter, "capabilities", None)) else {}
         return {"ok": True, "hasPlayback": playing,
+                "shuffle": caps.get("shuffle"), "repeat": caps.get("repeat"),
+                "spotifyUri": native_track_uri(raw) if playing else "",
                 "title": bounded(raw.get("title")) if playing else "",
                 "artist": bounded(raw.get("artist")) if playing else "",
                 "trackKey": track_key(raw.get("track_key")) if playing else "",
@@ -141,7 +175,11 @@ def handler_for(adapter, token, controls=False):
                 self.reply(400, {"ok": False})
                 return
             try:
-                accepted = adapter.command_for(data["action"], data["trackKey"])
+                if data["action"] == "save":
+                    self.reply(405, {"ok": False})
+                    return
+                args = (data["action"], data["trackKey"])
+                accepted = adapter.command_for(*args, data["value"]) if "value" in data else adapter.command_for(*args)
             except Exception:
                 self.reply(503, {"ok": False})
                 return
@@ -172,7 +210,10 @@ def report(state):
                       "positionAvailable": state.get("positionMs", 0) > 0,
                       "volumeAvailable": state.get("volume") is not None,
                       "artworkAvailable": bool(state.get("art")),
-                      "controlsAvailable": state.get("canControl") is True}, indent=2))
+                      "controlsAvailable": state.get("canControl") is True,
+                      "shuffleAvailable": type(state.get("shuffle")) is bool,
+                      "repeatAvailable": state.get("repeat") in ("None", "Playlist", "Track"),
+                      "spotifyTrackIdentified": bool(state.get("spotifyUri"))}, indent=2))
     return 0 if state.get("ok") is True else 1
 
 

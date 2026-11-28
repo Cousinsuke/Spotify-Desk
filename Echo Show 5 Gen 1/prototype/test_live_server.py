@@ -37,7 +37,7 @@ class LocalTests(unittest.TestCase):
             snapshot.assert_not_called()
             response=self.client.get(path,base_url=self.url,headers=self.headers)
             self.assertEqual(response.status_code,200)
-            self.assertEqual(response.json,{"connected":True,"hasPlayback":False})
+            self.assertEqual(response.json,{"connected":True,"hasPlayback":False,"saved":None})
             snapshot.assert_called_once_with()
 
     def test_pc_command_boundary(self):
@@ -52,6 +52,22 @@ class LocalTests(unittest.TestCase):
             command.assert_called_once_with(data)
             command.return_value=False
             self.assertEqual(self.client.post(path,base_url=self.url,headers=self.headers,json=data).status_code,409)
+
+    def test_pc_library_exact_identity(self):
+        uri="spotify:track:"+"A"*22
+        key="a"*64
+        state={"connected":True,"canControl":True,"trackKey":key,"spotifyUri":uri}
+        s.token={"access_token":"test"}
+        with patch.object(s.pc_client,"snapshot",side_effect=lambda:dict(state)),patch.object(s,"saved_status",return_value=True),patch.object(s,"spotify") as spotify:
+            result=self.client.get("/api/pc/state",base_url=self.url,headers=self.headers).json
+            self.assertIs(result["saved"],True)
+            self.assertNotIn("spotifyUri",result)
+            data={"action":"save","trackKey":"b"*64,"value":False}
+            self.assertEqual(self.client.post("/api/pc/command",base_url=self.url,headers=self.headers,json=data).status_code,409)
+            spotify.assert_not_called()
+            data["trackKey"]=key
+            self.assertEqual(self.client.post("/api/pc/command",base_url=self.url,headers=self.headers,json=data).status_code,200)
+            spotify.assert_called_once_with("DELETE","/me/library",{"uris":uri})
 
     def test_wrong_host(self):
         self.assertEqual(self.client.get("/",base_url="http://evil.invalid").status_code,403)
