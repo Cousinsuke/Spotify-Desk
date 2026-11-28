@@ -3,6 +3,7 @@ package com.spotifydesk.echo;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Intent;
+import android.content.ActivityNotFoundException;
 import android.graphics.Color;
 import android.net.Uri;
 import android.net.http.SslError;
@@ -24,6 +25,7 @@ import android.webkit.WebViewClient;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.ScrollView;
 
 public final class MainActivity extends Activity {
     private WebView web;
@@ -136,11 +138,18 @@ public final class MainActivity extends Activity {
         settings.setText("Android settings");
         settings.setOnClickListener(v -> startActivity(new Intent(Settings.ACTION_SETTINGS)));
         panel.addView(settings);
+        Button home = new Button(this);
+        home.setText("Change default Home app");
+        home.setOnClickListener(v -> openHomeSettings());
+        panel.addView(home);
         Button exit = new Button(this);
         exit.setText("Exit");
         exit.setOnClickListener(v -> finish());
         panel.addView(exit);
-        setContentView(panel);
+        ScrollView scroll = new ScrollView(this);
+        scroll.setFillViewport(true);
+        scroll.addView(panel);
+        setContentView(scroll);
     }
 
     private void disposeWeb() {
@@ -152,13 +161,22 @@ public final class MainActivity extends Activity {
         old.destroy();
     }
 
+    private void openHomeSettings() {
+        try {
+            startActivity(new Intent(Settings.ACTION_HOME_SETTINGS));
+        } catch (ActivityNotFoundException e) {
+            startActivity(new Intent(Settings.ACTION_SETTINGS));
+        }
+    }
+
     @Override public void onBackPressed() {
         new AlertDialog.Builder(this).setTitle("Spotify Desk")
-            .setItems(new String[]{"Return to dashboard", "Reload dashboard", "Android settings", "Exit"},
+            .setItems(new String[]{"Return to dashboard", "Reload dashboard", "Android settings", "Change default Home app", "Exit"},
                 (dialog, choice) -> {
                     if (choice == 1) openDashboard();
                     else if (choice == 2) startActivity(new Intent(Settings.ACTION_SETTINGS));
-                    else if (choice == 3) finish();
+                    else if (choice == 3) openHomeSettings();
+                    else if (choice == 4) finish();
                 }).show();
     }
 
