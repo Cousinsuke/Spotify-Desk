@@ -188,8 +188,8 @@ button,select,input{font:inherit;color:inherit}button,select{background:var(--co
 /* Fixed chart palette: white trace and labels, neutral graph panel in every mode. */
 #screen[data-page=glucose] .glucose-chart-controls select{color:#fff;background:#ffffff16;border-color:#ffffff30}
 #glucosePlot .glu-grid{stroke:#ffffff32}
-#glucosePlot .glu-band-edge{stroke:#bfc8d599}
-#glucosePlot .glu-band{fill:#c0c8d3}
+#glucosePlot .glu-band-edge{stroke:#4ade8080}
+#glucosePlot .glu-band{fill:#4ade80;fill-opacity:.22}
 #glucosePlot .glu-now{stroke:#d4d9e0}
 #glucosePlot .glu-trace{stroke:#fff}
 #glucosePlot .glu-dot{fill:#fff;stroke:#252a30}

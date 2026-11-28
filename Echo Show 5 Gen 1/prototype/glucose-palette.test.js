@@ -8,6 +8,8 @@ for(const b of ['range','low','above','high']){
 const graph=rule('.glucose-graph'); // Last rule is position-only; check base separately.
 assert.ok(css.includes('gap:8px;background:#252a30'));
 assert.ok(rule('#glucosePlot .glu-trace').includes('stroke:#fff'));
+assert.equal(rule('#glucosePlot .glu-band'),'fill:#4ade80;fill-opacity:.22');
+assert.equal(rule('#glucosePlot .glu-band-edge'),'stroke:#4ade8080');
 assert.ok(rule('#glucosePlot .glu-label').includes('fill:#fff'));
 assert.ok(rule('#screen[data-page=home] .tile[data-page=glucose]').includes('background:var(--glu-status-bg)'));
 assert.ok(!rule('#screen[data-page=glucose][data-glucose-background=theme]').includes('--glu-status'));
