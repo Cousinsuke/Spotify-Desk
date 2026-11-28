@@ -6,9 +6,7 @@ StartLimitIntervalSec=0
 Type=exec
 WorkingDirectory=%h/Projects/Spotify-Desk-PC-Agent
 ExecStart=/usr/bin/python3 "%h/Projects/Spotify-Desk-PC-Agent/Echo Show 5 Gen 1/prototype/pc_agent.py" serve --controls
-Environment=PYTHONUNBUFFERED=1
-Environment=DBUS_SESSION_BUS_ADDRESS=unix:path=%t/bus
-Environment=XDG_RUNTIME_DIR=%t
+Environment=PYTHONUNBUFFERED=1 DBUS_SESSION_BUS_ADDRESS=unix:path=%t/bus XDG_RUNTIME_DIR=%t
 Restart=always
 RestartSec=5
 TimeoutStopSec=10

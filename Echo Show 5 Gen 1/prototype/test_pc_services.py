@@ -18,6 +18,9 @@ class PcServicesTests(unittest.TestCase):
         service = unit("spotify-desk-pc-agent.service")
         self.assertIn("pc_agent.py", service["Service"]["ExecStart"])
         self.assertTrue(service["Service"]["ExecStart"].endswith("serve --controls"))
+        self.assertCountEqual(service["Service"]["Environment"].split(), [
+            "PYTHONUNBUFFERED=1", "DBUS_SESSION_BUS_ADDRESS=unix:path=%t/bus", "XDG_RUNTIME_DIR=%t"
+        ])
         self.assertEqual(service["Service"]["Restart"], "always")
         self.assertEqual(service["Install"]["WantedBy"], "default.target")
 
