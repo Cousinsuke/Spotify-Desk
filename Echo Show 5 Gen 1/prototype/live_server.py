@@ -17,6 +17,7 @@ import weather_service
 import glucose_service
 import public_calendar_service
 import system_service
+import pc_client
 from datetime import datetime
 from zoneinfo import ZoneInfo
 from flask import Flask, jsonify, redirect, request, send_from_directory
@@ -492,6 +493,12 @@ def command():
     playback_cache=None
     diagnostic("command_ack", action=a)
     return jsonify(ok=True)
+
+@app.get("/api/pc/state")
+def pc_state():
+    if request.remote_addr != HOST or request.args:
+        raise ApiError(403, "Local PC state access only.")
+    return jsonify(pc_client.snapshot())
 
 @app.get("/api/glucose")
 def glucose_state():

@@ -274,8 +274,8 @@ function refreshAppSettings(id,kind,direction){
   (target&&!target.disabled?target:alternative)?.focus({preventScroll:true});
 }
 function renderSettings(){page.innerHTML='<h1>Settings</h1><div class="settings-layout"><nav class="categories" aria-label="Settings categories">'+[['general','General'],['navigation','Navigation'],['apps','Apps'],['home','Home'],['spotify','Spotify'],['weather','Weather'],['glucose','Glucose'],['connections','Connections'],['system','System']].map(([id,name])=>'<button data-category="'+id+'" class="'+(category===id?'active':'')+'">'+name+'</button>').join('')+'</nav><div class="details" id="settingsDetails"></div></div>';const d=$('settingsDetails');if(category==='navigation'){d.innerHTML='<h2>Navigation</h2>'+delayRow()+selectRow('Rail style','railStyle',[['floating','Floating'],['transparent','Transparent'],['edge','Edge aligned']])+rangeRow('Opacity','opacity',25,100,5,'%')+Object.entries(apps).map(([id,name])=>'<div class="setting"><label for="hide-'+id+'">Auto-hide on '+name+'</label><input id="hide-'+id+'" type="checkbox" data-hide="'+id+'" '+(prefs.autoHide[id]?'checked':'')+'></div>').join('')+'<button data-category="apps">Customize app shortcuts</button>'}else if(category==='apps'){d.innerHTML=appSettingsRows()}else if(category==='general'){d.innerHTML='<h2>General</h2>'+themeRow()+brightnessRow()+nightRow()+selectRow('Animation','animation',[['none','None'],['fade','Fade'],['slide','Slide']])+rangeRow('Animation speed','speed',100,350,50,' ms')+'<p>Startup: Home · Screen: always on (hardware validation pending).</p>'}else if(category==='home'){d.innerHTML='<h2>Home</h2>'+homeRows()+'<p class="app-help">Changes apply immediately and are remembered. Clock-only hides summary tiles; apps remain available from the rail and drawer.</p><button data-page="home">Preview Home</button>'}else if(category==='glucose'){d.innerHTML='<h2>Glucose</h2>'+glucoseRows(false)+'<p>'+(glucoseLive.enabled?'Gluroo · local connection · minimum 150s source polling.':'Sample readings only.')+' Use the Libre app for monitoring, decisions and alarms.</p>'}else if(category==='weather'){d.innerHTML='<h2>Weather</h2><p>Bournemouth · Fixed location</p>'+weatherRows()+'<p>'+(weather.enabled?'Open-Meteo · refresh every 15 minutes.':'Sample forecast only.')+'</p>'}else if(category==='system'){d.innerHTML='<h2>System</h2><p>Read-only server and service diagnostics. Display hardware support is pending.</p><button data-page="system">Open System Information</button>'}else if(category==='spotify'){d.innerHTML='<h2>Spotify</h2>'+spotifyBackgroundRow()+'<p>'+(liveEnabled?'Live Spotify Connect playback.':'Sample playback only.')+'</p>'+(echoModeSupported()?'<p>Echo mode uses your selected Spotify Connect device. Physical buttons control the local speaker.</p><button data-echo-bind>Configure Echo device</button>':'')}else{d.innerHTML='<h2>'+({home:'Home',spotify:'Spotify',weather:'Weather',glucose:'Glucose',connections:'Connections',system:'System'}[category])+'</h2><p>Settings for this category will be added in a later increment.</p>'}d.insertAdjacentHTML('beforeend','<button data-reset>Reset preview preferences</button>')}
-screen.addEventListener('click',e=>{const b=e.target.closest('button');if(e.target===shade){closeOverlay();return}if(!b){if(expanded&&!overlay&&prefs.autoHide[active]&&page.contains(e.target)&&!e.target.closest('input,select,a,label,textarea,[contenteditable]'))setRail(false);return}if(b.dataset.systemView&&active==='system'){const next=b.dataset.systemView;if(['server','echo'].includes(next)&&next!==systemView){systemView=next;echoData=null;renderSystem();refreshSystem();page.querySelector('[data-system-view="'+next+'"]')?.focus({preventScroll:true})}return}if(b.id==='reveal'){setRail(true);return}if(b.id==='quickHandle'){openOverlay('quick');return}if(b.hasAttribute('data-close')){closeOverlay();return}if(b.dataset.calAction){calendarAction(b.dataset.calAction);return}if(b.dataset.calDay){const day=b.dataset.calDay;if(calendarGrid(calendarShown).some(d=>d.key===day)){calendarSelected=day;calendarShown=calendarMonth(day,0);renderCalendar();refreshCalendar();page.querySelector('[data-cal-day="'+day+'"]')?.focus({preventScroll:true})}return}if(b.dataset.hourDay!==undefined){weatherDay=Number(b.dataset.hourDay);openOverlay('weather');return}if(b.dataset.weatherDay!==undefined){const i=Number(b.dataset.weatherDay);if(Number.isInteger(i)&&i>=0&&i<weather.validDuration(prefs.weatherDays)){weatherDay=i;openOverlay('weather')}return}if(b.hasAttribute('data-echo-bind')){if(echoModeSupported()&&!live.pending)openOverlay('devices','echo-bind');return}if(b.dataset.open){openOverlay(b.dataset.open);return}if(b.dataset.music){musicAction(b.dataset.music);return}if(b.dataset.liveDevice){
-  if(live.pending||!live.state.connected||live.state.error)return;
+screen.addEventListener('click',e=>{const b=e.target.closest('button');if(e.target===shade){closeOverlay();return}if(!b){if(expanded&&!overlay&&prefs.autoHide[active]&&page.contains(e.target)&&!e.target.closest('input,select,a,label,textarea,[contenteditable]'))setRail(false);return}if(b.dataset.systemView&&active==='system'){const next=b.dataset.systemView;if(['server','echo'].includes(next)&&next!==systemView){systemView=next;echoData=null;renderSystem();refreshSystem();page.querySelector('[data-system-view="'+next+'"]')?.focus({preventScroll:true})}return}if(b.id==='reveal'){setRail(true);return}if(b.id==='quickHandle'){openOverlay('quick');return}if(b.hasAttribute('data-close')){closeOverlay();return}if(b.dataset.calAction){calendarAction(b.dataset.calAction);return}if(b.dataset.calDay){const day=b.dataset.calDay;if(calendarGrid(calendarShown).some(d=>d.key===day)){calendarSelected=day;calendarShown=calendarMonth(day,0);renderCalendar();refreshCalendar();page.querySelector('[data-cal-day="'+day+'"]')?.focus({preventScroll:true})}return}if(b.dataset.hourDay!==undefined){weatherDay=Number(b.dataset.hourDay);openOverlay('weather');return}if(b.dataset.weatherDay!==undefined){const i=Number(b.dataset.weatherDay);if(Number.isInteger(i)&&i>=0&&i<weather.validDuration(prefs.weatherDays)){weatherDay=i;openOverlay('weather')}return}if(b.hasAttribute('data-echo-bind')){if(!pcSelected&&echoModeSupported()&&!live.pending)openOverlay('devices','echo-bind');return}if(b.dataset.open){if(!pcSelected||b.dataset.open!=='devices')openOverlay(b.dataset.open);return}if(b.dataset.music){musicAction(b.dataset.music);return}if(b.dataset.liveDevice){
+  if(pcSelected||live.pending||!live.state.connected||live.state.error)return;
   const id=normaliseEchoDevice(b.dataset.liveDevice);
   if(!id)return;
   if(b.hasAttribute('data-bind-echo')){
@@ -288,7 +288,7 @@ screen.addEventListener('click',e=>{const b=e.target.closest('button');if(e.targ
   return
 }if(b.dataset.device){playback=music.reduce(playback,'device',b.dataset.device);closeOverlay(false);renderSpotify();$('deviceSelect')?.focus();return}if(b.dataset.page){navigate(b.dataset.page);return}if(b.dataset.appMove){const id=b.dataset.appMove,delta=Number(b.dataset.direction);prefs.appLayout=changeAppOrder(prefs.appLayout,id,delta);refreshAppSettings(id,'move',delta);return}if(b.dataset.category){category=b.dataset.category;renderSettings();return}if(b.hasAttribute('data-reset')&&confirm('Reset preview preferences only?')){prefs=defaults();save();renderRail();renderSettings()}});
 screen.addEventListener('input',e=>{const el=e.target,k=el.dataset.pref;if(el.id==='seek'){if(liveEnabled){$('elapsed').textContent=music.time(Number(el.value));return}musicAction('seek',Number(el.value),false);return}if(!k||el.type!=='range')return;prefs[k]=Number(el.value);const o=el.parentElement.querySelector('output');if(o)o.textContent=el.value+(k==='speed'?' ms':'%');if(k==='nightDim')syncNightControls();save()});
-screen.addEventListener('change',e=>{const el=e.target,k=el.dataset.pref;if(el.dataset.nightTime){const key=el.dataset.nightTime;if(['nightStart','nightEnd'].includes(key)&&nightMinutes(el.value)!==null){prefs[key]=el.value;syncNightControls();save()}else if(['nightStart','nightEnd'].includes(key))el.value=prefs[key];return}if(el.dataset.glucoseControl){changeGlucose(el.dataset.glucoseControl,el.value);return}if(el.id==='weatherView'){if(['hourly','daily'].includes(el.value)&&el.value!==weatherView){weatherView=el.value;renderWeather(true);$('weatherView')?.focus()}return}if(el.id==='seek'&&liveEnabled){live.command('seek',Number(el.value));return}if(el.dataset.mode!==undefined){musicAction('mode',el.value);if(overlay==='quick'){renderQuick();syncLiveMode()}return}if(el.dataset.appPin){const id=el.dataset.appPin;prefs.appLayout=changeAppPin(prefs.appLayout,id,el.checked);refreshAppSettings(id,'pin');return}if(el.dataset.hide){prefs.autoHide[el.dataset.hide]=el.checked;save();return}if(k&&el.tagName==='SELECT'){if(Object.prototype.hasOwnProperty.call(homeOptions,k)&&!homeOptions[k].some(([id])=>id===el.value))return;if(k==='night'&&!['off','manual','scheduled'].includes(el.value))return;prefs[k]=k==='delay'?Number(el.value):el.value;if(k==='night')syncNightControls();save();if(active==='home'&&k==='homeClock')renderHome();if(active==='weather'&&['weatherDays','weatherIcons'].includes(k))renderWeather();if(active==='glucose'&&['glucoseView','glucoseBackground'].includes(k))renderGlucose()}});
+screen.addEventListener('change',e=>{const el=e.target,k=el.dataset.pref;if(el.dataset.nightTime){const key=el.dataset.nightTime;if(['nightStart','nightEnd'].includes(key)&&nightMinutes(el.value)!==null){prefs[key]=el.value;syncNightControls();save()}else if(['nightStart','nightEnd'].includes(key))el.value=prefs[key];return}if(el.dataset.glucoseControl){changeGlucose(el.dataset.glucoseControl,el.value);return}if(el.id==='weatherView'){if(['hourly','daily'].includes(el.value)&&el.value!==weatherView){weatherView=el.value;renderWeather(true);$('weatherView')?.focus()}return}if(el.id==='seek'&&liveEnabled){if(!pcSelected)live.command('seek',Number(el.value));return}if(el.dataset.mode!==undefined){musicAction('mode',el.value);if(overlay==='quick'){renderQuick();syncLiveMode()}return}if(el.dataset.appPin){const id=el.dataset.appPin;prefs.appLayout=changeAppPin(prefs.appLayout,id,el.checked);refreshAppSettings(id,'pin');return}if(el.dataset.hide){prefs.autoHide[el.dataset.hide]=el.checked;save();return}if(k&&el.tagName==='SELECT'){if(Object.prototype.hasOwnProperty.call(homeOptions,k)&&!homeOptions[k].some(([id])=>id===el.value))return;if(k==='night'&&!['off','manual','scheduled'].includes(el.value))return;prefs[k]=k==='delay'?Number(el.value):el.value;if(k==='night')syncNightControls();save();if(active==='home'&&k==='homeClock')renderHome();if(active==='weather'&&['weatherDays','weatherIcons'].includes(k))renderWeather();if(active==='glucose'&&['glucoseView','glucoseBackground'].includes(k))renderGlucose()}});
 screen.addEventListener('pointerdown',e=>{if(active==='calendar'&&e.target.closest('.cal-grid')){gesture=null;schedule();return}const r=screen.getBoundingClientRect();gesture={x:e.clientX,y:e.clientY,top:e.clientY-r.top<28,edge:r.right-e.clientX<30,control:!!e.target.closest('input,select,button:not(#quickHandle):not(#reveal)')};schedule()});
 screen.addEventListener('pointerup',e=>{if(!gesture)return;const dx=e.clientX-gesture.x,dy=e.clientY-gesture.y;const g=gesture;gesture=null;if(overlay||themedSelectOpen||g.control)return;if(g.top&&dy>50&&dy>Math.abs(dx)*1.4)openOverlay('quick');else if(g.edge&&dx< -45&&Math.abs(dx)>Math.abs(dy)*1.4)setRail(true)});
 screen.addEventListener('pointercancel',()=>{gesture=null});rail.addEventListener('focusout',()=>setTimeout(schedule,0));screen.addEventListener('keydown',e=>{if(e.key==='Escape'&&overlay){closeOverlay();return}if(e.key==='Escape'&&expanded&&prefs.autoHide[active]){setRail(false);return}schedule()});
@@ -317,7 +317,7 @@ function scheduleRemoteVolume(){
 async function flushRemoteVolume(){
   const q=remoteVolumeQueue;remoteVolumeQueue=null;
   if(!q||!q.delta)return;
-  if(document.hidden||volumeRoute(live.state,prefs.echoDeviceId)!=='remote'||live.state.deviceId!==q.id||live.pending){
+  if(pcSelected||document.hidden||volumeRoute(live.state,prefs.echoDeviceId)!=='remote'||live.state.deviceId!==q.id||live.pending){
     remoteVolumePopup(q.name+' volume','Device changed or busy');return;
   }
   remoteVolumeBusy=true;
@@ -334,6 +334,7 @@ async function flushRemoteVolume(){
 window.echoDeskRouteVolume=direction=>{
   if(direction!==1&&direction!==-1)return 'unavailable';
   nativeVolumeRouting=true;
+  if(pcSelected){remoteVolumePopup('PC volume','PC volume control pending');return 'unavailable'}
   const state=live.state,route=liveEnabled&&echoModeSupported()?volumeRoute(state,prefs.echoDeviceId):'local';
   if(route==='local'){
     remoteVolumeQueue=null;
@@ -357,8 +358,35 @@ let nativeSpotifyLaunch=false;
 window.echoDeskEnableSpotifyLaunch=()=>{nativeSpotifyLaunch=true};
 window.echoDeskEnableVolumeRouting=()=>{nativeVolumeRouting=true};
 function echoModeSupported(){return liveEnabled&&document.documentElement.dataset.deviceGateway==='1'}
-function liveMode(){return echoModeSupported()?confirmedPlaybackMode(live.state,prefs.echoDeviceId):'wifi'}
-function modeOptions(){if(liveEnabled)return '<option value="wifi" '+(liveMode()==='wifi'?'selected':'')+'>Wi-Fi</option><option disabled>PC · pending</option><option value="echo" '+(!echoModeSupported()?'disabled':liveMode()==='echo'?'selected':'')+'>'+(echoModeSupported()?(prefs.echoDeviceId?'Echo':'Echo · set up'):'Echo · paired display only')+'</option>';return [['wifi','Wi-Fi'],['pc','PC'],['echo','Echo · pending']].map(([id,label])=>'<option value="'+id+'" '+(id===playback.mode?'selected ':'')+(id==='echo'?'disabled':'')+'>'+label+'</option>').join('')}
+let pcSelected=false,pcState={connected:false,error:'Connecting to PC…'},pcReceived=0,pcInFlight=false,pcEpoch=0;
+function liveMode(){return pcSelected?'pc':echoModeSupported()?confirmedPlaybackMode(live.state,prefs.echoDeviceId):'wifi'}
+async function refreshPC(){
+  if(!pcSelected||pcInFlight||document.hidden)return;
+  const epoch=pcEpoch;pcInFlight=true;
+  const controller=new AbortController(),timeout=setTimeout(()=>controller.abort(),7000);
+  try{
+    const r=await fetch('/api/pc/state',{signal:controller.signal,cache:'no-store',credentials:'same-origin',headers:{'X-Desk-Preview':'1'}});
+    if(!r.ok)throw Error('PC companion unavailable');
+    const s=await r.json();
+    if(epoch!==pcEpoch||!pcSelected)return;
+    pcState=s&&s.connected===true?s:{connected:false,error:s?.error||'PC companion unavailable'};
+    pcReceived=performance.now();
+  }catch{if(epoch===pcEpoch&&pcSelected)pcState={connected:false,error:'PC companion unavailable'}}
+  finally{clearTimeout(timeout);pcInFlight=false;if(epoch===pcEpoch&&pcSelected)renderLiveState()}
+}
+function pcPosition(){
+  const s=pcState;
+  if(!s.connected||!s.hasPlayback)return 0;
+  return Math.max(0,Math.min(s.durationMs||Infinity,(s.positionMs||0)+(s.playing?Math.min(6000,Math.max(0,performance.now()-pcReceived)):0)))/1000;
+}
+function selectPC(value){
+  pcSelected=value;pcEpoch++;remoteVolumeQueue=null;clearTimeout(remoteVolumeTimer);remoteVolumeTimer=null;
+  pcState={connected:false,error:'Connecting to PC…'};
+  if(overlay==='devices')closeOverlay(false);
+  renderLiveState();
+  if(value)refreshPC();else live.refresh(true);
+}
+function modeOptions(){if(liveEnabled)return '<option value="wifi" '+(liveMode()==='wifi'?'selected':'')+'>Wi-Fi</option><option value="pc" '+(!echoModeSupported()?'disabled':pcSelected?'selected':'')+'>PC</option><option value="echo" '+(!echoModeSupported()?'disabled':liveMode()==='echo'?'selected':'')+'>'+(echoModeSupported()?(prefs.echoDeviceId?'Echo':'Echo · set up'):'Echo · paired display only')+'</option>';return [['wifi','Wi-Fi'],['pc','PC'],['echo','Echo · pending']].map(([id,label])=>'<option value="'+id+'" '+(id===playback.mode?'selected ':'')+(id==='echo'?'disabled':'')+'>'+label+'</option>').join('')}
 function spotifyModeRow(){return '<div class="setting"><label>Playback mode</label><select data-mode aria-label="Playback mode">'+modeOptions()+'</select></div>'}
 function spotifyBackgroundRow(){return selectRow('Background','spotifyBackground',[['album','Album colours'],['art','Dimmed album artwork'],['theme','Global theme']])}
 function artwork(t){return '<svg viewBox="0 0 320 320" role="img" aria-label="Abstract sample album artwork"><rect width="320" height="320" fill="'+t.colors[0]+'"/><circle cx="190" cy="105" r="94" fill="'+t.colors[1]+'"/><path d="M0 235 100 70 210 235 320 115V320H0Z" fill="'+t.colors[2]+'"/><circle cx="112" cy="215" r="66" fill="none" stroke="'+t.colors[1]+'" opacity=".6" stroke-width="12"/><text x="160" y="290" text-anchor="middle" fill="white" font-size="12" letter-spacing="4">SAMPLE ART</text></svg>'}
@@ -371,10 +399,13 @@ window.addEventListener('pointerup',()=>{seeking=false});window.addEventListener
 function musicAction(action,value,refresh=true){if(liveEnabled){
   if(action==='mode'){
     syncLiveMode();
-    if(live.pending||!live.state.connected||live.state.error)return;
+    if(live.pending||remoteVolumeBusy)return;
+    if(value==='pc'&&echoModeSupported()){selectPC(true);return}
+    if(pcSelected)selectPC(false);
+    if(!live.state.connected||live.state.error)return;
     if(value==='echo'&&echoModeSupported())openOverlay('devices',prefs.echoDeviceId?'echo-transfer':'echo-bind');
     else if(value==='wifi')openOverlay('devices','wifi');
-  }else live.command(action,value);
+  }else if(!pcSelected)live.command(action,value);
   return
 }playback=music.reduce(playback,action,value);if(active==='spotify')updateSpotify();schedule()}
 let deviceRequest=0;
@@ -384,7 +415,7 @@ function syncLiveMode(){
     const echo=select.querySelector('option[value=echo]');
     if(echo)echo.textContent=echoModeSupported()?(prefs.echoDeviceId?'Echo':'Echo · set up'):'Echo · paired display only';
     select.value=liveMode();
-    select.disabled=live.pending||!live.state.connected||!!live.state.error;
+    select.disabled=live.pending||remoteVolumeBusy||(!echoModeSupported()&&(!live.state.connected||!!live.state.error));
   }
   syncThemedSelects();
 }
@@ -558,6 +589,7 @@ const albumPalette=window.EchoAlbumPalette.createController(document,(colors,url
 });
 function renderLiveState(){
  syncLiveMode();
+ if(pcSelected){renderPCState();return}
 const s=live.state,home=$('homeTrack');if(home)home.textContent=s.connected?(s.inactive?'No active playback':s.title||'No playback'):'Spotify — not connected';
 if(active!=='spotify'||!$('album'))return;
 const text=(id,v)=>{const el=$(id);if(el.textContent!==v)el.textContent=v};
@@ -576,7 +608,25 @@ for(const b of page.querySelectorAll('[data-music]')){if(b===save)continue;const
 text('deviceLabel',s.device?(s.playing?'Playing on ':s.recovery==='recent'?'Last device: ':'Selected: ')+s.device:'Select playback device');$('deviceSelect').disabled=live.pending||!s.connected||!!s.error;
 const err=$('liveError');err.replaceChildren();if(!s.connected){if(document.documentElement.dataset.deviceGateway==='1'){const a=document.createElement('span');a.className='live-link';a.textContent='Connect Spotify from the private admin dashboard.';err.append(a)}else{const a=document.createElement('a');a.href='/spotify/login';a.className='live-link';a.textContent='Connect Spotify';err.append(a)}}if(s.error||live.message){const span=document.createElement('span');span.textContent=' '+(live.message||s.error);err.append(span)}
 }
-function updateLiveProgress(){if(!liveEnabled||active!=='spotify'||!$('seek')||seeking)return;const pos=live.position(),seek=$('seek');if(seek.value!==String(Math.floor(pos)))seek.value=Math.floor(pos);const elapsed=music.time(Math.floor(pos));if($('elapsed').textContent!==elapsed)$('elapsed').textContent=elapsed;}
+function renderPCState(){
+ const s=pcState,home=$('homeTrack');
+ if(home)home.textContent=s.connected?(s.title||'PC · no playback'):'PC · disconnected';
+ if(active!=='spotify'||!$('album'))return;
+ const text=(id,value)=>{if($(id).textContent!==value)$(id).textContent=value};
+ text('playStatus',!s.connected?'PC · DISCONNECTED':!s.hasPlayback?'PC · NO PLAYBACK':s.playing?'PC · NOW PLAYING':'PC · PAUSED');
+ text('songTitle',s.title||'No music playing');
+ text('songArtist',s.artist||'Start media on your PC');
+ text('duration',music.time(Math.floor((s.durationMs||0)/1000)));
+ const seek=$('seek');seek.max=Math.max(1,(s.durationMs||0)/1000);seek.disabled=true;
+ const album=$('album');if(album.dataset.url!==''||!album.firstChild){album.dataset.url='';albumPalette.mount(album,'',()=>active==='spotify'&&$('album')===album&&album.dataset.url==='')}
+ const play=$('playToggle'),label=s.playing?'Pause':'Play';if(play.getAttribute('aria-label')!==label||!play.firstChild){play.innerHTML=transportIcon(s.playing?'pause':'play');play.setAttribute('aria-label',label)}
+ $('shuffle').setAttribute('aria-pressed','false');$('repeat').setAttribute('aria-pressed','false');$('repeatOne').hidden=true;$('saveSong').innerHTML=transportIcon('save');$('saveSong').setAttribute('aria-pressed','false');
+ for(const b of page.querySelectorAll('[data-music]'))b.disabled=true;
+ text('deviceLabel','PC · system volume '+(Number.isInteger(s.volume)?s.volume+'%':'unavailable'));$('deviceSelect').disabled=true;
+ text('liveError',s.connected?'Read-only preview · controls pending':s.error||'PC companion unavailable');
+ updateLiveProgress();
+}
+function updateLiveProgress(){if(!liveEnabled||active!=='spotify'||!$('seek')||seeking)return;const pos=pcSelected?pcPosition():live.position(),seek=$('seek');if(seek.value!==String(Math.floor(pos)))seek.value=Math.floor(pos);const elapsed=music.time(Math.floor(pos));if($('elapsed').textContent!==elapsed)$('elapsed').textContent=elapsed;}
 // Theme-native dropdowns: retain real selects as internal state and dispatch the same
 // change event as before. No native Android select picker is exposed to touch.
 screen.addEventListener('pointerdown',e=>{if(e.pointerType==='touch'||e.pointerType==='pen'||e.pointerType==='mouse')screen.dataset.input='touch'},true);
@@ -665,8 +715,8 @@ const themedSelectObserver=new MutationObserver(records=>{
 });
 themedSelectObserver.observe(screen,{childList:true,subtree:true,attributes:true,attributeFilter:['disabled','selected']});
 apply();renderPage();syncThemedSelects();setRail(true);
-document.addEventListener('visibilitychange',()=>{if(!document.hidden){updateNightMode();if(liveEnabled)live.refresh(true)}else closeThemedSelect(false)});
-if(liveEnabled){$('demo').textContent=document.documentElement.dataset.deviceGateway==='1'?'LIVE · PAIRED DISPLAY':'LOCAL TEST · SECONDARY DISPLAY';screen.style.setProperty('--album-color','#40434c');screen.style.setProperty('--album-dark','#15171a');live.onChange=renderLiveState;live.refresh();setInterval(()=>{if(document.hidden||!(nativeVolumeRouting||['spotify','home','system'].includes(active)))return;const now=performance.now(),interval=active==='spotify'?2000:5000;if(now-lastSpotifyPoll>=interval){lastSpotifyPoll=now;live.refresh()}},1000);setInterval(updateLiveProgress,200)}
+document.addEventListener('visibilitychange',()=>{if(!document.hidden){updateNightMode();if(liveEnabled)live.refresh(true);if(pcSelected)refreshPC()}else closeThemedSelect(false)});
+if(liveEnabled){$('demo').textContent=document.documentElement.dataset.deviceGateway==='1'?'LIVE · PAIRED DISPLAY':'LOCAL TEST · SECONDARY DISPLAY';screen.style.setProperty('--album-color','#40434c');screen.style.setProperty('--album-dark','#15171a');live.onChange=renderLiveState;live.refresh();setInterval(()=>{if(document.hidden||!(nativeVolumeRouting||['spotify','home','system'].includes(active)))return;const now=performance.now(),interval=active==='spotify'?2000:5000;if(now-lastSpotifyPoll>=interval){lastSpotifyPoll=now;live.refresh()}},1000);setInterval(updateLiveProgress,200);setInterval(()=>{if(pcSelected&&['spotify','home'].includes(active))refreshPC()},2000)}
 setInterval(()=>{if(active==='calendar'&&!document.hidden)refreshCalendar();if(active==='system'&&!document.hidden)refreshSystem()},5000);
 setInterval(()=>{clock();updateNightMode();if(active==='calendar'&&calendarToday!==calendarKey(new Date()))renderCalendar();if(!liveEnabled){playback=music.reduce(playback,'tick');if(active==='spotify'&&!overlay)updateSpotify()}},1000);
 

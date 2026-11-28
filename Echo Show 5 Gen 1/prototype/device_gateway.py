@@ -130,7 +130,7 @@ def config(state):
     return validate_network(data["bind"],data["network"])
 
 
-LIVE_GET=frozenset(("/api/spotify/state","/api/spotify/devices","/api/weather","/api/glucose","/api/calendar","/api/system"))
+LIVE_GET=frozenset(("/api/spotify/state","/api/spotify/devices","/api/pc/state","/api/weather","/api/glucose","/api/calendar","/api/system"))
 LIVE_POST="/api/spotify/command"
 LOCAL="http://127.0.0.1:8765"
 LIMIT=1024*1024
