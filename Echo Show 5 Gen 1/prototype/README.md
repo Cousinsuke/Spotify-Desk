@@ -281,3 +281,7 @@ All eight extended-control physical checks passed on the Echo. Add three indepen
 ### Omarchy service test parser correction
 
 User reported 12 tests run: all eight PC agent tests and three service source checks passed; test_agent raised DuplicateOptionError because ConfigParser rejects repeated Environment directives (valid in systemd). Consolidate the same three environment assignments into one systemd Environment line, and assert all three in the regression test. No intended runtime behavior change. Installer syntax check produced no error. Rerun all 12 tests before installation; no activation or physical recovery reported yet.
+
+### Spotify saved icon and device accent
+
+User requested matching green playback-device text and a solid green saved-song circle with dark check, based on reference image. Shared Spotify-only accent #26d765 applied to the bottom device label, selected/active device row text and saved icon. Available/inactive device rows and unsaved outline-plus stay neutral; button sizes, state logic, theme backgrounds and Spotify API unchanged. User explicitly excluded Smart Shuffle, so shuffle remains unchanged. Applies to existing sample, Wi-Fi/Echo and PC renderers without changing PC functionality. Added source regression checks; physical Echo appearance pending. Static assets only; no APK update or Pi service restart required when refreshed from checkout.

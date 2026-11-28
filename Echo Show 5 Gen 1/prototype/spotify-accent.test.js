@@ -1,0 +1,16 @@
+'use strict';
+const assert=require('node:assert/strict'),fs=require('node:fs'),path=require('node:path');
+const js=fs.readFileSync(path.join(__dirname,'app.js'),'utf8');
+const css=fs.readFileSync(path.join(__dirname,'style.css'),'utf8');
+const start=js.indexOf('const transportIcons='),end=js.indexOf('let nativeVolumeRouting=',start);
+assert.ok(start>=0&&end>start);
+const icons=new Function(js.slice(start,end)+';return transportIcons;')();
+assert.match(icons.saved,/<circle[^>]*fill="currentColor"[^>]*stroke="none"/);
+assert.match(icons.saved,/<path[^>]*stroke="#090909"/);
+assert.match(icons.save,/<circle[^>]*\/><path d="M7 12h10M12 7v10"/);
+assert.ok(!icons.save.includes('fill="currentColor"'));
+assert.match(css,/--spotify-accent:#26d765/);
+assert.ok(css.includes('#screen[data-page=spotify] .player-bottom #saveSong[aria-pressed=true]{color:var(--spotify-accent)}'));
+assert.ok(css.includes('#screen[data-page=spotify] .player-bottom #deviceLabel{color:var(--spotify-accent)}'));
+assert.ok(css.includes('#screen[data-page=spotify] #devices .device-option[aria-pressed=true] span{color:var(--spotify-accent)}'));
+console.log('Spotify accent and saved icon checks passed');
