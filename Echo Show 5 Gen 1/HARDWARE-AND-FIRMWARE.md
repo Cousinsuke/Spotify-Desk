@@ -72,3 +72,8 @@ Video description links transcribed from user screenshots (not all reopened this
 - [WebView Kiosk](https://f-droid.org/en/packages/uk.nktnet.webviewkiosk/)
 - [Fire OS archive](https://ftvdb.com/echo/firmware/com.amazon.checkers.android.os/)
 - [Community walkthrough previously found](https://note.com/axisrevo/n/n9d8e77e2750c?hl=en)
+
+
+### Received Echo Show — stock firmware observed
+
+2026-11-28: Echo Show arrived. User supplied stock Device Options photo confirming Echo Show 5 (1st generation), Fire OS 6.5.7.1 (NS6571/6225). No unlock/flash or read-only fastboot checks performed yet. Archived checkers OTA analysis includes build 6225 in 44072a3-20240709_170103 LK group (https://github.com/bboe/firebreak/blob/main/docs/devices.md#checkers); promising but not a measurement of this unit's actual LK. Current Kiosk Satellite guide confirms supported 2024 LK, exact product AEOCH, amonet-checkers-v2.0.2.zip for first generation only, warns against stock updates (https://github.com/jxlarrea/lineageos-echo-kiosk-satellite/blob/main/docs/unlocking.md#echo-show-5-1st-gen). Keep offline and do not reset/update; next unplug power, hold all three top buttons while reconnecting power, enter fastboot, test cable and read product/LK; stop before writes and confirm exact result. Physical label and USB stability unverified. No private serial/photo committed; documentation only.
