@@ -28,7 +28,7 @@ The existing Gluroo reader and dashboard are already in the repository; a prior 
 
 ## Next step
 
-**Current priority (2026-11-28):** PC agent four tests passed on Omarchy; local probe reports no playback. Confirm Spotify actually playing on the PC and inspect playerctl -l / playerctl -a status, then rerun probe. Prototype `596792e` fixes test-only HTTPError cleanup warnings; rerun pending. Secure Pi tunnel and dashboard controls pending local detection. Native Android media-session work and extended stability remain deferred; last full Python suite 96 passed.
+**Current priority (2026-11-28):** PC agent four tests passed cleanly at `596792e`; playerctl reports no players and agent sees no playback; PipeWire volume responds, D-Bus session address present. Identify actual Spotify client and MPRIS registration using read-only Omarchy checks, compare another local media source if necessary. Then verify local probe and secure Pi tunnel before dashboard controls. Android media-session work and extended stability remain deferred.
 
 Historical initial plan (superseded where newer checkpoints record completion):
 
@@ -585,3 +585,7 @@ User approved proceeding with PC playback mode. Read-only source review confirms
 ### PC agent tests passed; local MPRIS playback detection pending
 
 User ran test_pc_agent on Omarchy with Python 3.15.2: all 4 tests passed (0.514s). ResourceWarning messages from expected urllib HTTPError responses (401/404/405) not explicitly closed; prototype [596792e](https://github.com/Cousinsuke/Spotify-Desk/commit/596792ef9673d6222e687ac16b391eca1c1c04b4) closes them in finally in the test only; rerun pending. Local probe returned ok=true, hasPlayback=false, all playback capability flags false. This is consistent with no MPRIS player being detected, but actual player activity, Spotify output route and playerctl/D-Bus state not yet established. Next start a local track on PC (not Xbox/Echo), inspect playerctl -l and playerctl -a status, check session bus if empty, rerun probe. Do not modify adapter or establish tunnel until local playback detection works. No new production behavior, APK or service changes. No personal metadata committed.
+
+### PC agent warning cleanup verified; MPRIS source absent
+
+User fast-forwarded Omarchy PC-agent checkout to 596792e; all four agent tests passed in 0.007s with no ResourceWarnings. playerctl -l and playerctl -a status both return No players found; wpctl default sink responds at 100%; session D-Bus address is present (connectivity not independently tested). Probe again ok=true, hasPlayback=false. This isolates the reported lack of metadata to local player/MPRIS discovery rather than HTTP transport. Earlier project conversation also reported browser Spotify with no MPRIS player; current launch type not yet confirmed. Next inspect user bus MPRIS names, native Spotify package/process presence and browser media-key feature settings, and compare a locally playing browser video if needed. Playerctl upstream describes MPRIS requirement: https://github.com/altdesktop/playerctl#no-players-found. Do not change adapter, browser flags or install packages before identifying the actual source. Tunnel and dashboard control integration pending. No production code changes, private metadata or raw process arguments committed.
