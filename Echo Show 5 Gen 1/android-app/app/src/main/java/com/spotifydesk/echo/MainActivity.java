@@ -8,6 +8,8 @@ import android.graphics.Color;
 import android.net.Uri;
 import android.net.http.SslError;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.provider.Settings;
 import android.view.View;
 import android.view.WindowInsets;
@@ -31,6 +33,38 @@ public final class MainActivity extends Activity {
     private WebView web;
     private Uri origin;
     private boolean errorShown;
+    private final Handler retryHandler = new Handler(Looper.getMainLooper());
+    private int retryAttempt;
+    private boolean retryPending;
+    private boolean resumed;
+    private long retryDelay;
+    private final Runnable retryTask = () -> {
+        if (resumed && retryPending && !isFinishing() && !isDestroyed()) openDashboard();
+    };
+
+    private void scheduleRetry() {
+        retryHandler.removeCallbacks(retryTask);
+        if (resumed && retryPending && !isFinishing() && !isDestroyed())
+            retryHandler.postDelayed(retryTask, retryDelay);
+    }
+
+    private void retryNow() {
+        retryAttempt = 0;
+        openDashboard();
+    }
+
+    private static boolean retryableNetworkError(int code) {
+        switch (code) {
+            case WebViewClient.ERROR_HOST_LOOKUP:
+            case WebViewClient.ERROR_CONNECT:
+            case WebViewClient.ERROR_TIMEOUT:
+            case WebViewClient.ERROR_IO:
+            case WebViewClient.ERROR_UNKNOWN:
+                return true;
+            default:
+                return false;
+        }
+    }
 
     @Override public void onCreate(Bundle state) {
         super.onCreate(state);
@@ -62,6 +96,8 @@ public final class MainActivity extends Activity {
     }
 
     private void openDashboard() {
+        retryHandler.removeCallbacks(retryTask);
+        retryPending = false;
         disposeWeb();
         errorShown = false;
         web = new WebView(this);
@@ -90,18 +126,26 @@ public final class MainActivity extends Activity {
                 }
             }
             @Override public void onPageFinished(WebView v, String url) {
-                CookieManager.getInstance().flush();
+                if (v == web && !errorShown && allowed(Uri.parse(url))) {
+                    CookieManager.getInstance().flush();
+                    retryAttempt = 0;
+                }
             }
             @Override public void onReceivedSslError(WebView v, SslErrorHandler handler, SslError error) {
                 handler.cancel();
                 fail(v, "HTTPS certificate validation failed. Check the Pi certificate and device clock. No connection was allowed.");
             }
             @Override public void onReceivedError(WebView v, WebResourceRequest req, WebResourceError error) {
-                if (req.isForMainFrame()) fail(v, "Dashboard unavailable. Check Wi-Fi, Pi service and HTTPS certificate.");
+                if (req.isForMainFrame()) {
+                    int code = error.getErrorCode();
+                    fail(v, "Dashboard unavailable. Check Wi-Fi, Pi service and HTTPS certificate. (Error " + code + ")",
+                        retryableNetworkError(code));
+                }
             }
             @Override public void onReceivedHttpError(WebView v, WebResourceRequest req, WebResourceResponse error) {
                 if (req.isForMainFrame() && error.getStatusCode() >= 500)
-                    fail(v, "Dashboard server unavailable. Check the Pi service.");
+                    fail(v, "Dashboard server unavailable. Check the Pi service. (HTTP " + error.getStatusCode() + ")",
+                        RetryPolicy.retryableHttp(error.getStatusCode()));
             }
             @Override public boolean onRenderProcessGone(WebView v, RenderProcessGoneDetail detail) {
                 fail(v, "WebView stopped. Tap Retry to reopen the dashboard.");
@@ -114,10 +158,21 @@ public final class MainActivity extends Activity {
     }
 
     private void fail(WebView source, String message) {
-        if (source != web || errorShown || isFinishing()) return;
+        fail(source, message, false);
+    }
+
+    private void fail(WebView source, String message, boolean retryable) {
+        if (source != web || errorShown || isFinishing() || isDestroyed()) return;
         errorShown = true;
+        retryPending = retryable;
+        if (retryable) {
+            retryDelay = RetryPolicy.delayMillis(retryAttempt);
+            if (retryAttempt < RetryPolicy.MAX_ATTEMPT) retryAttempt++;
+            message += "\nAutomatic retry in " + (retryDelay / 1000) + " seconds.";
+        }
         showRecovery(message);
         disposeWeb();
+        scheduleRetry();
     }
 
     private void showRecovery(String message) {
@@ -132,7 +187,7 @@ public final class MainActivity extends Activity {
         panel.addView(text);
         Button retry = new Button(this);
         retry.setText("Retry dashboard");
-        retry.setOnClickListener(v -> openDashboard());
+        retry.setOnClickListener(v -> retryNow());
         panel.addView(retry);
         Button settings = new Button(this);
         settings.setText("Android settings");
@@ -170,22 +225,34 @@ public final class MainActivity extends Activity {
     }
 
     @Override public void onBackPressed() {
+        retryHandler.removeCallbacks(retryTask);
         new AlertDialog.Builder(this).setTitle("Spotify Desk")
             .setItems(new String[]{"Return to dashboard", "Reload dashboard", "Android settings", "Change default Home app", "Exit"},
                 (dialog, choice) -> {
-                    if (choice == 1) openDashboard();
+                    if (choice == 1) retryNow();
                     else if (choice == 2) startActivity(new Intent(Settings.ACTION_SETTINGS));
                     else if (choice == 3) openHomeSettings();
                     else if (choice == 4) finish();
-                }).show();
+                }).setOnDismissListener(dialog -> scheduleRetry()).show();
+    }
+
+    @Override protected void onResume() {
+        super.onResume();
+        resumed = true;
+        scheduleRetry();
     }
 
     @Override protected void onPause() {
+        resumed = false;
+        retryHandler.removeCallbacks(retryTask);
         CookieManager.getInstance().flush();
         super.onPause();
     }
 
     @Override protected void onDestroy() {
+        resumed = false;
+        retryPending = false;
+        retryHandler.removeCallbacks(retryTask);
         disposeWeb();
         super.onDestroy();
     }
