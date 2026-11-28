@@ -13,6 +13,7 @@ import android.net.http.SslError;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
+import android.os.SystemClock;
 import android.provider.Settings;
 import android.view.View;
 import android.view.WindowInsets;
@@ -41,6 +42,7 @@ public final class MainActivity extends Activity {
     private boolean dashboardPageReady;
     private int brightnessEpoch;
     private float appliedBrightness = -1f;
+    private long nextDiagnosticsAt;
     private final Runnable brightnessTask = this::readDashboardBrightness;
     private Uri origin;
     private boolean errorShown;
@@ -156,7 +158,24 @@ public final class MainActivity extends Activity {
             } catch (NumberFormatException e) {
                 applyWindowBrightness(-1f);
             }
+            maybeSendDiagnostics(source, epoch);
             scheduleBrightness();
+        });
+    }
+
+    private boolean diagnosticsPage(WebView source, int epoch) {
+        return epoch == brightnessEpoch && source == web && resumed && dashboardPageReady
+            && !errorShown && brightnessPage(source.getUrl());
+    }
+
+    private void maybeSendDiagnostics(WebView source, int epoch) {
+        long now = SystemClock.elapsedRealtime();
+        if (now < nextDiagnosticsAt || !diagnosticsPage(source, epoch)) return;
+        nextDiagnosticsAt = now + 5000;
+        source.evaluateJavascript("typeof window.echoDeskWantsDiagnostics==='function'&&window.echoDeskWantsDiagnostics()", wanted -> {
+            if (!"true".equals(wanted) || !diagnosticsPage(source, epoch)) return;
+            String snapshot = DisplayDiagnostics.snapshot(this, audio, appliedBrightness).toString();
+            source.evaluateJavascript("if(typeof window.echoDeskReceiveDiagnostics==='function')window.echoDeskReceiveDiagnostics(" + snapshot + ")", null);
         });
     }
 

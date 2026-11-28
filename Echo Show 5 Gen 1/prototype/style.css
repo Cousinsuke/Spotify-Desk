@@ -387,3 +387,10 @@ button,select,input{font:inherit;color:inherit}button,select{background:var(--co
   #rail button .icon{width:25px;height:25px}
   #screen[data-page=spotify] #page{padding-right:44px}
 }
+
+/* System Information device selector; keeps the existing two scrollable panels. */
+.sys-tabs{display:flex;gap:4px;flex-shrink:0;padding:3px;border-radius:10px;background:var(--control)}
+.sys-tabs button{padding:7px 11px;font-size:12px;white-space:nowrap;border:1px solid transparent;border-radius:7px;background:transparent;color:var(--muted)}
+.sys-tabs button[aria-pressed=true]{background:var(--panel);border-color:var(--border);color:var(--text,#f3f5f7)}
+.sys-panel h2+.sys-note{margin:0 0 5px}
+@media(max-width:840px){.sys-tabs button{padding:5px 9px;font-size:11px}}

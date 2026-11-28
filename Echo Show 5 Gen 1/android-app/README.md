@@ -25,3 +25,7 @@ Physical GPIO volume keys confirmed through Android getevent; media stream has 0
 ## Hardware backlight (0.5.0)
 
 Requires updated prototype/app.js on Pi. Native window brightness reads only a validated integer 10–100 from trusted root main-frame JS via evaluateJavascript, foreground only, 350ms interval, no exposed native JS bridge. Browser fallback remains visual; native disables CSS dimming after handshake. Night mode caps manual brightness; recovery, pairing, other screens and paused Activity return to system brightness. No global settings permission or system-wide change. Test 100/50/10%, scheduled/manual night cap, reset, page switching, reboot, native recovery and old browser fallback. APK and physical test pending.
+
+## Display diagnostics (0.6.0)
+
+System Information > Echo Show receives local read-only Android snapshot every five seconds only when selected; no new permissions, no upload, no exposed JS bridge. CPU temperature/utilization not reported; thermal severity instead. Display resolution is app window bounds; brightness is requested window setting. Requires updated Pi app.js/style.css. Test selector, memory/storage, uptime, volume/brightness, browser fallback, page scrolling and prior startup recovery. Native build/device tests pending.
