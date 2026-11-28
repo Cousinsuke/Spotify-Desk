@@ -305,3 +305,85 @@ button,select,input{font:inherit;color:inherit}button,select{background:var(--co
 .sys-service{padding:10px 0;border-bottom:1px solid var(--border)}.sys-state{display:flex;align-items:center;gap:5px;font-size:12px;color:var(--muted);text-align:right}.sys-state i{width:7px;height:7px;border-radius:50%;background:currentColor;flex:none}
 .sys-state[data-state=ok]{color:#92d2a2}.sys-state[data-state=warn]{color:#f0c574}.sys-state[data-state=bad]{color:#ff9696}
 .sys-display{margin-top:12px;background:var(--control);border-radius:9px;padding:9px;font-size:13px}.sys-display p{font-size:12px;color:var(--muted);margin:5px 0}.sys-note{display:block;margin-top:8px}
+
+
+/* Compact landscape: Echo Show physical 960x480 reports 788x394 CSS pixels.
+ * Preserve normal preview and existing Home/Glucose styling. */
+@media (min-width:701px) and (max-width:840px),
+       (min-width:701px) and (max-height:420px) and (orientation:landscape) {
+  #screen[data-page=weather] #page {
+    padding:16px 44px 24px 22px;
+    gap:6px;
+    overflow-y:auto;
+    scrollbar-width:none;
+  }
+  #screen[data-page=weather] #page::-webkit-scrollbar{display:none}
+  .weather-current{min-height:84px;gap:14px}
+  .weather-current .weather-symbol{width:76px;height:76px}
+  .weather-temp{font-size:60px;letter-spacing:-2px}
+  .weather-condition{font-size:15px;margin-top:3px}
+  .weather-stats{gap:6px}
+  .weather-stats>div{padding:6px 3px;gap:3px}
+  .weather-stats span{font-size:11px}
+  .weather-stats strong{font-size:17px}
+  .weather-forecast-heading #weatherView{height:30px;padding:3px 10px;font-size:13px}
+  .forecast-day,.forecast-hours .hour-card{height:108px;padding:5px 3px;gap:2px}
+  .forecast-day .weather-symbol,.hour-card .weather-symbol{width:30px;height:30px}
+  .forecast-day>span,.hour-card>span{font-size:12px}
+  .forecast-day strong,.hour-card strong{font-size:18px}
+  .forecast-day strong small{font-size:13px}
+  .forecast-day small,.hour-card small{font-size:11px}
+  .hour-card .hour-date{font-size:10px;line-height:11px}
+  #weatherDetails{inset:14px 34px 24px;max-height:none;overflow-y:auto;overscroll-behavior-y:contain;touch-action:pan-y}
+  #weatherDetails:not([hidden]){padding:10px 14px;gap:6px}
+  #weatherDetails header{font-size:18px}
+  #weatherDetails header button{padding:2px 10px;min-height:32px}
+  #weatherDetails .weather-detail-summary{padding:0 4px 6px;gap:10px}
+  #weatherDetails .weather-detail-summary .weather-symbol{width:48px;height:48px}
+  #weatherDetails .weather-detail-summary strong{font-size:28px}
+  #weatherDetails .weather-detail-summary span{font-size:13px}
+  #weatherDetails .forecast-heading{min-height:20px}
+  #weatherDetails .hourly-days{min-height:112px;gap:6px}
+  #weatherDetails .hourly-days .hour-card{flex-basis:calc((100% - 30px)/6);gap:2px;padding:4px 2px}
+  #weatherDetails .hourly-days .weather-symbol{width:30px;height:30px}
+  #weatherDetails .weather-detail-stats{grid-template-columns:repeat(6,minmax(0,1fr));gap:5px}
+  .weather-detail-stats>div{min-width:0;padding:6px 2px;gap:3px}
+  .weather-detail-stats span{font-size:10px;text-align:center}
+  .weather-detail-stats strong{font-size:15px;white-space:nowrap}
+  /* Calendar keeps six full weeks and a separately scrollable agenda. */
+  #screen[data-page=calendar] #page{padding:18px 36px 24px 20px}
+  .cal-layout{gap:10px}
+  .cal-month header{margin-bottom:6px}
+  .cal-month h1{font-size:19px}
+  .cal-nav button{min-height:34px;padding:4px 8px;font-size:13px}
+  .cal-grid{grid-template-rows:20px repeat(6,minmax(0,1fr))}
+  .cal-agenda{padding:10px}
+  .cal-agenda h2{font-size:17px;margin-bottom:6px}
+  .cal-source,.cal-empty,.cal-event-date{font-size:12px;line-height:1.35}
+  .cal-source{margin:6px 0}
+  .cal-event{gap:3px;padding:7px;margin:5px 0 8px}
+  .cal-event strong{font-size:14px}
+  .cal-event small{font-size:11px}
+  .cal-legend{gap:5px;margin-bottom:6px}
+  /* System panels retain native scrolling for diagnostics beyond the first view. */
+  #screen[data-page=system] #page{padding:18px 36px 24px 20px;gap:7px}
+  .sys-header h1{font-size:21px}
+  .sys-layout{gap:9px}
+  .sys-panel{padding:10px}
+  .sys-panel h2{font-size:16px;margin-bottom:4px}
+  .sys-host{font-size:11px;margin-bottom:6px}
+  .sys-metric{margin:5px 0}
+  .sys-meter{height:5px;margin:3px 0}
+  .sys-metric>div:first-child,.sys-stat,.sys-service{font-size:13px}
+  .sys-facts{padding-top:4px}
+  .sys-stat{margin:4px 0}
+  .sys-service{padding:7px 0}
+  .sys-display{margin-top:8px;padding:7px;font-size:12px}
+  .sys-display p{font-size:11px;margin:3px 0}
+  .sys-note{margin-top:5px}
+  /* Allow all pinned controls to fit in the reduced rail height. */
+  #rail{gap:4px;padding:6px}
+  #rail button{min-height:0}
+  #rail button .icon{width:25px;height:25px}
+  #screen[data-page=spotify] #page{padding-right:44px}
+}
