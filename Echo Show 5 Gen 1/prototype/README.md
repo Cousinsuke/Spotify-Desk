@@ -285,3 +285,7 @@ User reported 12 tests run: all eight PC agent tests and three service source ch
 ### Spotify saved icon and device accent
 
 User requested matching green playback-device text and a solid green saved-song circle with dark check, based on reference image. Shared Spotify-only accent #26d765 applied to the bottom device label, selected/active device row text and saved icon. Available/inactive device rows and unsaved outline-plus stay neutral; button sizes, state logic, theme backgrounds and Spotify API unchanged. User explicitly excluded Smart Shuffle, so shuffle remains unchanged. Applies to existing sample, Wi-Fi/Echo and PC renderers without changing PC functionality. Added source regression checks; physical Echo appearance pending. Static assets only; no APK update or Pi service restart required when refreshed from checkout.
+
+### Paired display footer removal
+
+User accepted Spotify accent/saved icon appearance and requested removal of the persistent LIVE · PAIRED DISPLAY footer on every page. Hide the shared demo label via paired-root CSS before JS startup and clear its text in paired live mode. Keep local live-test and unpaired desktop design preview labels, pairing/session/authentication and page-specific statuses unchanged. JS syntax and four source assertions passed in JS runtime; physical refresh pending. Static assets only; no service restart or APK update. PC work remains deferred.
