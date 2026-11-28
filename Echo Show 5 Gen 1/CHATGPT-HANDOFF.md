@@ -28,7 +28,7 @@ The existing Gluroo reader and dashboard are already in the repository; a prior 
 
 ## Next step
 
-**Current priority (2026-11-28):** Spotify visual refinement at `e46a9b6`: shared green device text and solid saved check icon implemented; user excluded Smart Shuffle. Pull Pi prototype and refresh, then verify saved/unsaved and active-device appearance. PC mode/automatic startup remains deferred; use existing Wi-Fi / Spotify Connect. No backend or APK change.
+**Current priority (2026-11-28):** Spotify saved icon and green device accent accepted. Prototype `92f0017` removes global paired-display footer across every page; pull Pi prototype and refresh for visual verification. Preview labels retained. PC mode/automatic startup remains deferred; use Wi-Fi / Spotify Connect. No backend or APK change.
 
 Historical initial plan (superseded where newer checkpoints record completion):
 
@@ -633,3 +633,7 @@ User decided to pause PC mode and automatic companion/tunnel startup because exi
 ### Spotify saved icon and playback-device accent (2026-11-28)
 
 User supplied a solid green checked-circle reference and approved two visual changes, explicitly excluding Smart Shuffle. Prototype [e46a9b6](https://github.com/Cousinsuke/Spotify-Desk/commit/e46a9b6535298d0ee7ce4687c4d6b2e19721fc58) uses shared Spotify-only #26d765 for playback-device label, selected/active device row text and saved state. Saved SVG is a filled circle with dark check; unsaved outline-plus and inactive/available device rows remain neutral. Existing button sizes, theme backgrounds, state and commands unchanged, including normal shuffle. Shared sample/Wi-Fi/Echo/PC renderer styling only; PC development remains deferred. JavaScript parse and new source regression assertions passed in JS runtime; actual Node suite and physical appearance not yet confirmed. Pull Pi prototype and refresh paired dashboard; static assets only, no service restart or APK rebuild required. No credentials or reference image committed.
+
+### Remove persistent paired-display footer (2026-11-28)
+
+User accepted Spotify saved icon and playback-device green accent on physical display and requested removal of LIVE · PAIRED DISPLAY from bottom-left of every page. Prototype [92f0017](https://github.com/Cousinsuke/Spotify-Desk/commit/92f0017001cf2449f6d8177008dc25700bd61ebf) hides shared demo footer for paired-root markup before JS initialization and clears its text in paired live mode. Local test and desktop design-preview labels remain. Pairing, authentication, session behavior and page-specific statuses unchanged. JS syntax and four source assertions passed in JS runtime; physical confirmation pending. Static assets only; pull Pi prototype and refresh without service restart or APK rebuild. PC development remains deferred.
