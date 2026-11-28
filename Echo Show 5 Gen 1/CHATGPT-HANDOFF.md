@@ -28,7 +28,7 @@ The existing Gluroo reader and dashboard are already in the repository; a prior 
 
 ## Next step
 
-**Current priority (2026-11-28):** User explicitly deferred PC mode and automatic startup; use existing Wi-Fi / Spotify Connect mode for normal playback. Preserve accepted eight physical PC control checks and all implementation. Resume PC work only on request, from `19deddb` corrected service preflight (12-test rerun, install and lifecycle verification pending). Seek, rapid volume, Windows and meter also deferred. No further active task selected. Pi/application/APK unchanged.
+**Current priority (2026-11-28):** Spotify visual refinement at `e46a9b6`: shared green device text and solid saved check icon implemented; user excluded Smart Shuffle. Pull Pi prototype and refresh, then verify saved/unsaved and active-device appearance. PC mode/automatic startup remains deferred; use existing Wi-Fi / Spotify Connect. No backend or APK change.
 
 Historical initial plan (superseded where newer checkpoints record completion):
 
@@ -629,3 +629,7 @@ User fast-forwarded PC checkout to `201af0c` and ran 12 tests: all eight PC agen
 ### PC mode development deferred by user (2026-11-28)
 
 User decided to pause PC mode and automatic companion/tunnel startup because existing Wi-Fi / Spotify Connect mode is sufficient for now. Preserve all accepted PC controls, implementation and service installer; do not remove PC mode or revert prototype. Latest prototype `19deddb` contains corrected service preflight parser test; clean 12-test rerun, installation/activation, key unlock and lifecycle/reconnect validation are not confirmed. Eight physical extended PC controls previously accepted; eight PC agent tests passed during service preflight. Remaining PC tasks (automatic startup, seek, rapid volume, Windows support, meter) deferred until explicitly resumed. Use Wi-Fi mode for normal playback control. Existing Pi dashboard/gateway and Android app unchanged; no need to run PC agent or reverse tunnel for Wi-Fi mode. If PC user services were enabled, they can be stopped/disabled independently without touching Pi services. When resuming, start from corrected preflight at `19deddb` rather than repeating accepted controls or transport setup. No new application code, credentials, deployment or tests in this checkpoint.
+
+### Spotify saved icon and playback-device accent (2026-11-28)
+
+User supplied a solid green checked-circle reference and approved two visual changes, explicitly excluding Smart Shuffle. Prototype [e46a9b6](https://github.com/Cousinsuke/Spotify-Desk/commit/e46a9b6535298d0ee7ce4687c4d6b2e19721fc58) uses shared Spotify-only #26d765 for playback-device label, selected/active device row text and saved state. Saved SVG is a filled circle with dark check; unsaved outline-plus and inactive/available device rows remain neutral. Existing button sizes, theme backgrounds, state and commands unchanged, including normal shuffle. Shared sample/Wi-Fi/Echo/PC renderer styling only; PC development remains deferred. JavaScript parse and new source regression assertions passed in JS runtime; actual Node suite and physical appearance not yet confirmed. Pull Pi prototype and refresh paired dashboard; static assets only, no service restart or APK rebuild required. No credentials or reference image committed.
