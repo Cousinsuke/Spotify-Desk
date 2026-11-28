@@ -1,0 +1,162 @@
+"""Read-only PC media preflight. Loopback HTTP, bearer authenticated, SSH tunnel only."""
+import argparse
+import hashlib
+import hmac
+import json
+import os
+from pathlib import Path
+import secrets
+import sys
+from http.server import BaseHTTPRequestHandler, HTTPServer
+from urllib.request import Request, build_opener, ProxyHandler
+from urllib.error import URLError
+
+PORT = 8877
+TOKEN_FILE = Path.home() / ".spotify-desk" / "pc-agent-token"
+MAX_BODY = 16384
+
+
+def valid_token(value):
+    return isinstance(value, str) and len(value) == 64 and all(c in "0123456789abcdef" for c in value)
+
+
+def token_file(create=False):
+    if create and not TOKEN_FILE.exists():
+        TOKEN_FILE.parent.mkdir(mode=0o700, parents=True, exist_ok=True)
+        try:
+            with os.fdopen(os.open(TOKEN_FILE, os.O_WRONLY | os.O_CREAT | os.O_EXCL, 0o600), "w") as f:
+                f.write(secrets.token_hex(32) + "\n")
+        except FileExistsError:
+            pass
+    if os.name == "posix" and TOKEN_FILE.stat().st_mode & 0o077:
+        raise ValueError("Token file permissions must be 0600")
+    token = TOKEN_FILE.read_text(encoding="ascii").strip()
+    if not valid_token(token):
+        raise ValueError("Invalid PC agent token")
+    return token
+
+
+def make_adapter():
+    # Reuse the existing, unchanged desktop adapters from the same checkout.
+    sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
+    if sys.platform == "linux":
+        from linux_companion import LinuxCompanion
+        return LinuxCompanion()
+    if sys.platform == "win32":
+        from windows_companion import WindowsCompanion
+        return WindowsCompanion()
+    raise RuntimeError("Unsupported PC platform")
+
+
+def snapshot(adapter):
+    try:
+        raw = adapter.status()
+        if raw.get("ok") is not True:
+            raise RuntimeError("Adapter unavailable")
+        def bounded(value):
+            return str(value or "")[:240]
+        def millis(value):
+            return min(value, 86400000) if type(value) is int and value >= 0 else 0
+        playing = raw.get("has_playback") is True
+        volume = raw.get("volume")
+        volume = volume if type(volume) is int and 0 <= volume <= 100 else None
+        return {"ok": True, "hasPlayback": playing,
+                "title": bounded(raw.get("title")) if playing else "",
+                "artist": bounded(raw.get("artist")) if playing else "",
+                "trackKey": hashlib.sha256(bounded(raw.get("track_key")).encode("utf-8", "replace")).hexdigest()
+                if playing and raw.get("track_key") else "",
+                "playing": playing and raw.get("playing") is True,
+                "durationMs": millis(raw.get("duration_ms")) if playing else 0,
+                "positionMs": millis(raw.get("progress_ms")) if playing else 0,
+                "volume": volume if playing else None}
+    except Exception:
+        return {"ok": False, "error": "PC media adapter unavailable"}
+
+
+def handler_for(adapter, token):
+    class Handler(BaseHTTPRequestHandler):
+        def setup(self):
+            self.request.settimeout(5)
+            super().setup()
+
+        def log_message(self, *args):
+            pass
+
+        def reply(self, code, data):
+            body = json.dumps(data, ensure_ascii=True).encode("ascii")
+            self.send_response(code)
+            self.send_header("Content-Type", "application/json")
+            self.send_header("Cache-Control", "no-store")
+            self.send_header("Content-Length", str(len(body)))
+            self.end_headers()
+            self.wfile.write(body)
+
+        def do_GET(self):
+            auth = self.headers.get("Authorization", "")
+            if not hmac.compare_digest(auth.encode("utf-8"), ("Bearer " + token).encode("ascii")):
+                self.reply(401, {"ok": False})
+                return
+            if self.path != "/state":
+                self.reply(404, {"ok": False})
+                return
+            state = snapshot(adapter)
+            self.reply(200 if state["ok"] else 503, state)
+
+        def do_POST(self):
+            self.reply(405, {"ok": False})
+
+    return Handler
+
+
+def check(token):
+    request = Request(f"http://127.0.0.1:{PORT}/state", headers={"Authorization": "Bearer " + token})
+    # Do not use environment HTTP proxies for local credentials.
+    with build_opener(ProxyHandler({})).open(request, timeout=15) as response:
+        data = response.read(MAX_BODY + 1)
+        if len(data) > MAX_BODY:
+            raise ValueError("Oversized PC state")
+        state = json.loads(data)
+    return state
+
+
+def report(state):
+    # Only capability flags are printed, never track names, IDs or tokens.
+    print(json.dumps({"ok": state.get("ok") is True,
+                      "hasPlayback": state.get("hasPlayback") is True,
+                      "playing": state.get("playing") is True,
+                      "titleAvailable": bool(state.get("title")),
+                      "artistAvailable": bool(state.get("artist")),
+                      "durationAvailable": bool(state.get("durationMs")),
+                      "positionAvailable": state.get("positionMs", 0) > 0,
+                      "volumeAvailable": state.get("volume") is not None}, indent=2))
+    return 0 if state.get("ok") is True else 1
+
+
+def main():
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("action", choices=("probe", "serve", "check"))
+    parser.add_argument("--token-stdin", action="store_true", help="check only; read token from stdin")
+    args = parser.parse_args()
+    if args.token_stdin and args.action != "check":
+        parser.error("--token-stdin requires check")
+    try:
+        if args.action == "probe":
+            return report(snapshot(make_adapter()))
+        if args.action == "check":
+            token = sys.stdin.read(256).strip() if args.token_stdin else token_file()
+            if not valid_token(token):
+                raise ValueError("Invalid token")
+            return report(check(token))
+        token = token_file(create=True)
+        with HTTPServer(("127.0.0.1", PORT), handler_for(make_adapter(), token)) as server:
+            print("Read-only PC agent listening on 127.0.0.1:8877. Ctrl+C to stop.", flush=True)
+            server.serve_forever()
+    except KeyboardInterrupt:
+        return 0
+    except (OSError, ValueError, RuntimeError, URLError, ImportError):
+        print("PC agent unavailable; check adapter dependencies, token and tunnel.", file=sys.stderr)
+        return 1
+
+
+if __name__ == "__main__":
+    sys.exit(main())
