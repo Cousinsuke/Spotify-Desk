@@ -53,7 +53,7 @@ def make_adapter():
 
             def capabilities(self, raw):
                 name = raw.get("device_id")
-                if not isinstance(name, str) or not re.fullmatch(r"[A-Za-z0-9_-]+(?:\\.[A-Za-z0-9_-]+)*", name):
+                if not isinstance(name, str) or not re.fullmatch(r"[A-Za-z0-9_-]+(?:\.[A-Za-z0-9_-]+)*", name):
                     return {}
                 shuffle = self._property(name, "Shuffle")
                 loop = self._property(name, "LoopStatus")

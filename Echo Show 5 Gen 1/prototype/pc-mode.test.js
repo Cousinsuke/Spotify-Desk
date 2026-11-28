@@ -7,6 +7,8 @@ assert.ok(gw.includes('"/api/pc/command"'));
 assert.ok(js.includes("trackKey:prior.trackKey"));
 assert.ok(js.includes("!pcActionAvailable(b.dataset.music)"));
 assert.ok(js.includes("playing:!prior.playing"));
+assert.ok(js.includes("incoming.trackKey===pcIntent.key&&now<pcIntent.until"));
+assert.ok(js.includes("until:performance.now()+2500"));
 assert.ok(js.includes("pcState=prior;pcReceived=priorReceived"));
 assert.ok(js.includes("window.EchoAlbumPalette.approvedUrl(s.art)"));
 console.log('PC mode source guards passed');

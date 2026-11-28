@@ -361,7 +361,7 @@ let nativeSpotifyLaunch=false;
 window.echoDeskEnableSpotifyLaunch=()=>{nativeSpotifyLaunch=true};
 window.echoDeskEnableVolumeRouting=()=>{nativeVolumeRouting=true};
 function echoModeSupported(){return liveEnabled&&document.documentElement.dataset.deviceGateway==='1'}
-let pcSelected=false,pcState={connected:false,error:'Connecting to PC…'},pcReceived=0,pcInFlight=false,pcEpoch=0,pcBusy=false,pcMessage='',pcVolumePending=false;
+let pcSelected=false,pcState={connected:false,error:'Connecting to PC…'},pcReceived=0,pcInFlight=false,pcEpoch=0,pcBusy=false,pcMessage='',pcVolumePending=false,pcIntent=null;
 function liveMode(){return pcSelected?'pc':echoModeSupported()?confirmedPlaybackMode(live.state,prefs.echoDeviceId):'wifi'}
 async function refreshPC(){
   if(!pcSelected||pcInFlight||pcBusy||document.hidden)return;
@@ -372,10 +372,18 @@ async function refreshPC(){
     if(!r.ok)throw Error('PC companion unavailable');
     const s=await r.json();
     if(epoch!==pcEpoch||!pcSelected)return;
-    pcState=s&&s.connected===true?s:{connected:false,error:s?.error||'PC companion unavailable'};
-    pcReceived=performance.now();
+    const incoming=s&&s.connected===true?s:{connected:false,error:s?.error||'PC companion unavailable'};
+    const now=performance.now();
+    if(pcIntent){
+      // Briefly retain acknowledged playback intent across delayed local metadata.
+      // Never mask a disconnect, a different track, or an expired confirmation.
+      if(incoming.connected&&incoming.trackKey===pcIntent.key&&now<pcIntent.until&&incoming.playing!==pcIntent.playing){
+        incoming.playing=pcIntent.playing;incoming.positionMs=Math.round(pcPosition()*1000);
+      }else pcIntent=null;
+    }
+    pcState=incoming;pcReceived=now;
     if(pcVolumePending){pcVolumePending=false;remoteVolumePopup('PC volume',Number.isInteger(pcState.volume)?pcState.volume+'%':'Unavailable',Number.isInteger(pcState.volume)?pcState.volume:null)}
-  }catch{if(epoch===pcEpoch&&pcSelected)pcState={connected:false,error:'PC companion unavailable'}}
+  }catch{if(epoch===pcEpoch&&pcSelected){pcIntent=null;pcState={connected:false,error:'PC companion unavailable'};if(pcVolumePending){pcVolumePending=false;remoteVolumePopup('PC volume','Unavailable')}}}
   finally{clearTimeout(timeout);pcInFlight=false;if(epoch===pcEpoch&&pcSelected)renderLiveState();else if(pcSelected&&!pcBusy)refreshPC()}
 }
 function pcPosition(){
@@ -401,7 +409,7 @@ async function pcCommand(action,value){
   if(action==='shuffle'||action==='save')data.value=!prior[action==='save'?'saved':'shuffle'];
   if(action==='repeat')data.value=({None:'Playlist',Playlist:'Track',Track:'None'})[prior.repeat];
   if(action==='volume')data.value=value;
-  pcBusy=true;pcMessage='';const epoch=++pcEpoch;
+  pcBusy=true;pcMessage='';pcIntent=null;const epoch=++pcEpoch;
   // Apply intent immediately; keep a rollback snapshot for rejected writes.
   if(action==='toggle'){pcState={...prior,positionMs:Math.round(pcPosition()*1000),playing:!prior.playing};pcReceived=performance.now()}
   if(action==='shuffle')pcState={...prior,shuffle:data.value};
@@ -413,6 +421,7 @@ async function pcCommand(action,value){
   try{
     const r=await fetch('/api/pc/command',{method:'POST',signal:controller.signal,cache:'no-store',credentials:'same-origin',headers:{'X-Desk-Preview':'1','Content-Type':'application/json'},body:JSON.stringify(data)});
     if(!r.ok||(await r.json()).ok!==true)throw Error('PC command not confirmed');
+    if(pcSelected&&epoch===pcEpoch&&action==='toggle')pcIntent={key:prior.trackKey,playing:!prior.playing,until:performance.now()+2500};
   }catch{if(pcSelected&&epoch===pcEpoch){pcState=prior;pcReceived=priorReceived;pcMessage='PC command not confirmed · refresh and try again';if(action==='volume'){pcVolumePending=false;remoteVolumePopup('PC volume','Not confirmed')}}}
   finally{
     clearTimeout(timeout);pcBusy=false;
@@ -420,7 +429,7 @@ async function pcCommand(action,value){
   }
 }
 function selectPC(value){
-  pcSelected=value;pcEpoch++;pcMessage='';pcVolumePending=false;remoteVolumeQueue=null;clearTimeout(remoteVolumeTimer);remoteVolumeTimer=null;
+  pcSelected=value;pcEpoch++;pcMessage='';pcVolumePending=false;pcIntent=null;remoteVolumeQueue=null;clearTimeout(remoteVolumeTimer);remoteVolumeTimer=null;
   pcState={connected:false,error:'Connecting to PC…'};
   if(overlay==='devices')closeOverlay(false);
   renderLiveState();

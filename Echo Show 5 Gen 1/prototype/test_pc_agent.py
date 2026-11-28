@@ -1,10 +1,12 @@
 import json
 import threading
 import unittest
+import sys
+from unittest.mock import patch
 from http.server import HTTPServer
 from urllib.error import HTTPError
 from urllib.request import Request, urlopen
-from pc_agent import handler_for, snapshot, valid_token
+from pc_agent import handler_for, snapshot, valid_token, make_adapter
 from pc_protocol import track_key, approved_art, command_body, native_track_uri
 
 
@@ -49,6 +51,27 @@ class PcAgentTests(unittest.TestCase):
         self.assertEqual(native_track_uri(raw),"spotify:track:"+ident)
         self.assertEqual(native_track_uri({**raw,"device_id":"chromium"}),"")
         self.assertEqual(native_track_uri({**raw,"track_key":"spotify|Song|Artist"}),"")
+
+    @unittest.skipUnless(sys.platform == "linux", "Linux adapter only")
+    def test_linux_exact_target_and_properties(self):
+        adapter=make_adapter()
+        raw={"ok":True,"has_playback":True,"device_id":"chromium.instance4560","track_key":"synthetic"}
+        expected=track_key("synthetic")
+        with patch.object(adapter,"status",return_value=raw),patch.object(adapter,"_run",side_effect=['b true','s "Track"']) as run:
+            self.assertEqual(adapter.capabilities(raw),{"shuffle":True,"repeat":"Track"})
+            self.assertIn("org.mpris.MediaPlayer2.chromium.instance4560",run.call_args.args)
+        with patch.object(adapter,"status",return_value=raw),patch.object(adapter,"_run",return_value="") as run:
+            self.assertFalse(adapter.command_for("pause","b"*64))
+            run.assert_not_called()
+            self.assertTrue(adapter.command_for("pause",expected))
+            self.assertEqual(run.call_args.args[-1],"Pause")
+            self.assertIn("org.mpris.MediaPlayer2.chromium.instance4560",run.call_args.args)
+        with patch.object(adapter,"status",return_value=raw),patch.object(adapter,"capabilities",return_value={"shuffle":False}),patch.object(adapter,"_run",return_value="") as run:
+            self.assertTrue(adapter.command_for("shuffle",expected,True))
+            self.assertEqual(run.call_args.args[-3:],("Shuffle","b","true"))
+        with patch.object(adapter,"status",return_value=raw),patch.object(adapter,"_volume",return_value=98),patch.object(adapter,"command",return_value=True) as command:
+            self.assertTrue(adapter.command_for("volume",expected,5))
+            command.assert_called_once_with("volume",100)
 
     def test_authenticated_commands(self):
         class Controlled(Adapter):
