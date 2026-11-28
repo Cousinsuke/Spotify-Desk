@@ -289,6 +289,8 @@ screen.addEventListener('pointercancel',()=>{gesture=null});rail.addEventListene
 // All playback here is deterministic sample state. No audio/API requests.
 const transportIcons={previous:'<path d="M5 4v16M19 4 7 12l12 8z" fill="currentColor"/>',next:'<path d="M19 4v16M5 4l12 8-12 8z" fill="currentColor"/>',play:'<path d="m8 4 13 8-13 8z" fill="currentColor"/>',pause:'<path d="M8 5v14M16 5v14" stroke-width="4"/>',shuffle:'<path d="M3 6h3c4 0 8 12 12 12h3m-4-4 4 4-4 4M3 18h3c1.5 0 3-2 4-4m4-4c1-2 3-4 4-4h3m-4-4 4 4-4 4"/>',repeat:'<path d="M4 10V6h15m-4-4 4 4-4 4M20 14v4H5m4-4-4 4 4 4"/>',save:'<circle cx="12" cy="12" r="10"/><path d="M7 12h10M12 7v10"/>',saved:'<circle cx="12" cy="12" r="10"/><path d="m7 12 3 3 7-7"/>'};
 const transportIcon=id=>'<svg class="icon" viewBox="0 0 24 24" aria-hidden="true">'+transportIcons[id]+'</svg>';
+let nativeSpotifyLaunch=false;
+window.echoDeskEnableSpotifyLaunch=()=>{nativeSpotifyLaunch=true};
 function echoModeSupported(){return liveEnabled&&document.documentElement.dataset.deviceGateway==='1'}
 function liveMode(){return echoModeSupported()?confirmedPlaybackMode(live.state,prefs.echoDeviceId):'wifi'}
 function modeOptions(){if(liveEnabled)return '<option value="wifi" '+(liveMode()==='wifi'?'selected':'')+'>Wi-Fi</option><option disabled>PC · pending</option><option value="echo" '+(!echoModeSupported()?'disabled':liveMode()==='echo'?'selected':'')+'>'+(echoModeSupported()?(prefs.echoDeviceId?'Echo':'Echo · set up'):'Echo · paired display only')+'</option>';return [['wifi','Wi-Fi'],['pc','PC'],['echo','Echo · pending']].map(([id,label])=>'<option value="'+id+'" '+(id===playback.mode?'selected ':'')+(id==='echo'?'disabled':'')+'>'+label+'</option>').join('')}
@@ -332,6 +334,16 @@ function renderDevices(purpose='all'){
     };
     const note=text=>{const p=document.createElement('p');p.className='device-note';p.textContent=text;host.append(p)};
     const bind=()=>{const b=document.createElement('button');b.dataset.echoBind='';b.textContent='Configure Echo device';host.append(b)};
+    const openSpotify=()=>{
+      if(!nativeSpotifyLaunch||!echoModeSupported())return;
+      const a=document.createElement('a');a.className='device-option native-spotify-launch';
+      a.href='/__desk_open_spotify';a.textContent='Open Spotify';host.append(a);
+      note('After Spotify opens, return Home using Android navigation, then select Echo again.');
+    };
+    const retryEcho=()=>{
+      const b=document.createElement('button');b.className='device-option';
+      b.textContent='Retry Echo connection';b.addEventListener('click',()=>renderDevices('echo-transfer'));host.append(b);
+    };
     reset();note(purpose==='echo-transfer'?'Finding your Echo Show…':'Loading…');
     live.devices().then(list=>{
       if(!valid())return;
@@ -344,11 +356,12 @@ function renderDevices(purpose='all'){
           return;
         }
         note('Saved Echo device is unavailable. Open Spotify on the Echo Show, or configure the device again if its ID changed.');
-        bind();close.focus();return;
+        openSpotify();retryEcho();bind();close.focus();return;
       }
       if(purpose==='echo-bind')note('Select only the Spotify device that is physically your Echo Show. This selection is remembered on this display and transfers playback to it.');
       const rows=purpose==='wifi'?list.filter(d=>d.id!==prefs.echoDeviceId):list;
       if(!rows.length)note('No available Spotify devices. Open Spotify on your target device.');
+      if(purpose==='echo-bind'||purpose==='all')openSpotify();
       for(const d of rows){
         const b=document.createElement('button');b.className='device-option';
         b.dataset.liveDevice=d.id||'';b.disabled=!normaliseEchoDevice(d.id)||d.restricted;

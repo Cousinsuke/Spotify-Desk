@@ -179,6 +179,41 @@ public final class MainActivity extends Activity {
         });
     }
 
+    private static final String SPOTIFY_PACKAGE = "com.spotify.music";
+    private static final String SPOTIFY_LAUNCH_PATH = "/__desk_open_spotify";
+
+    private boolean spotifyLaunchRequest(Uri uri) {
+        return allowed(uri) && SPOTIFY_LAUNCH_PATH.equals(uri.getEncodedPath())
+            && uri.getEncodedQuery() == null && uri.getEncodedFragment() == null;
+    }
+
+    private void openSpotify() {
+        try {
+            Intent intent = getPackageManager().getLaunchIntentForPackage(SPOTIFY_PACKAGE);
+            if (intent == null) throw new ActivityNotFoundException();
+            startActivity(intent);
+        } catch (ActivityNotFoundException | SecurityException e) {
+            new AlertDialog.Builder(this).setTitle("Spotify unavailable")
+                .setMessage("Install or enable the official Spotify app, then try again.")
+                .setPositiveButton("OK", null).show();
+        }
+    }
+
+    private void offerSpotifyLaunch(WebView source, WebResourceRequest req) {
+        if (source != web || !req.isForMainFrame() || !resumed || !hasWindowFocus()
+            || !dashboardPageReady || errorShown || !brightnessPage(source.getUrl())) return;
+        // A genuine main-frame tap can launch only the fixed Spotify package.
+        // If WebView does not report a gesture, require a native confirmation.
+        if (req.hasGesture()) openSpotify();
+        else new AlertDialog.Builder(this).setTitle("Open Spotify?")
+            .setMessage("Open the official Spotify app on this Echo Show.")
+            .setNegativeButton("Cancel", null)
+            .setPositiveButton("Open", (dialog, which) -> {
+                if (source == web && resumed && dashboardPageReady && !errorShown
+                    && brightnessPage(source.getUrl())) openSpotify();
+            }).show();
+    }
+
     private void openDashboard() {
         retryHandler.removeCallbacks(retryTask);
         retryPending = false;
@@ -201,6 +236,10 @@ public final class MainActivity extends Activity {
         cm.setAcceptThirdPartyCookies(web, false);
         web.setWebViewClient(new WebViewClient() {
             @Override public boolean shouldOverrideUrlLoading(WebView v, WebResourceRequest req) {
+                if (spotifyLaunchRequest(req.getUrl())) {
+                    offerSpotifyLaunch(v, req);
+                    return true;
+                }
                 return !allowed(req.getUrl());
             }
             @Override public void onPageStarted(WebView v, String url, android.graphics.Bitmap icon) {
@@ -216,6 +255,8 @@ public final class MainActivity extends Activity {
                     CookieManager.getInstance().flush();
                     retryAttempt = 0;
                     dashboardPageReady = brightnessPage(url);
+                    if (dashboardPageReady)
+                        v.evaluateJavascript("if(typeof window.echoDeskEnableSpotifyLaunch==='function')window.echoDeskEnableSpotifyLaunch()", null);
                     scheduleBrightness();
                 }
             }
@@ -341,12 +382,13 @@ public final class MainActivity extends Activity {
     @Override public void onBackPressed() {
         retryHandler.removeCallbacks(retryTask);
         new AlertDialog.Builder(this).setTitle("Spotify Desk")
-            .setItems(new String[]{"Return to dashboard", "Reload dashboard", "Android settings", "Change default Home app", "Exit"},
+            .setItems(new String[]{"Return to dashboard", "Reload dashboard", "Android settings", "Change default Home app", "Exit", "Open Spotify"},
                 (dialog, choice) -> {
                     if (choice == 1) retryNow();
                     else if (choice == 2) startActivity(new Intent(Settings.ACTION_SETTINGS));
                     else if (choice == 3) openHomeSettings();
                     else if (choice == 4) finish();
+                    else if (choice == 5) openSpotify();
                 }).setOnDismissListener(dialog -> scheduleRetry()).show();
     }
 

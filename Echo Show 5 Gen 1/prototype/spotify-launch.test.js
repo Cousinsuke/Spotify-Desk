@@ -1,0 +1,16 @@
+'use strict';
+const assert=require('node:assert/strict'),fs=require('node:fs'),path=require('node:path');
+const js=fs.readFileSync(path.join(__dirname,'app.js'),'utf8');
+const java=fs.readFileSync(path.join(__dirname,'../android-app/app/src/main/java/com/spotifydesk/echo/MainActivity.java'),'utf8');
+const manifest=fs.readFileSync(path.join(__dirname,'../android-app/app/src/main/AndroidManifest.xml'),'utf8');
+assert.ok(js.includes("a.href='/__desk_open_spotify'"));
+assert.ok(js.includes("if(!nativeSpotifyLaunch||!echoModeSupported())return;"));
+assert.ok(js.includes('retryEcho();bind();'));
+assert.ok(java.includes('req.isForMainFrame()'));
+assert.ok(java.includes('req.hasGesture()'));
+assert.ok(java.includes('getLaunchIntentForPackage(SPOTIFY_PACKAGE)'));
+assert.ok(java.includes('uri.getEncodedQuery() == null'));
+assert.ok(java.includes('handler.cancel();'));
+assert.ok(java.includes('audio.adjustStreamVolume'));
+assert.ok(manifest.includes('<package android:name="com.spotify.music"/>'));
+console.log('Spotify launch source checks passed');

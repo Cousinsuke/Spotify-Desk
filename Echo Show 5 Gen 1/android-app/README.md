@@ -29,3 +29,7 @@ Requires updated prototype/app.js on Pi. Native window brightness reads only a v
 ## Display diagnostics (0.6.0)
 
 System Information > Echo Show receives local read-only Android snapshot every five seconds only when selected; no new permissions, no upload, no exposed JS bridge. CPU temperature/utilization not reported; thermal severity instead. Display resolution is app window bounds; brightness is requested window setting. Requires updated Pi app.js/style.css. Test selector, memory/storage, uptime, volume/brightness, browser fallback, page scrolling and prior startup recovery. Native build/device tests pending.
+
+## Spotify on-demand launch (0.7.0)
+
+Fixed official Spotify package visibility declaration and launch action in native Back menu and trusted root-page link. No generic external-app/intent bridge; main-frame, same-origin, foreground and explicit gesture/native confirmation checks; no automatic startup or autoplay. Return to dashboard using Android Home. Missing/disabled Spotify displays native error. Requires updated Pi app.js/style.css for web link; Back menu works independently. Build and physical testing pending.

@@ -394,3 +394,6 @@ button,select,input{font:inherit;color:inherit}button,select{background:var(--co
 .sys-tabs button[aria-pressed=true]{background:var(--panel);border-color:var(--border);color:var(--text,#f3f5f7)}
 .sys-panel h2+.sys-note{margin:0 0 5px}
 @media(max-width:840px){.sys-tabs button{padding:5px 9px;font-size:11px}}
+
+/* Explicit user-tapped native Spotify launch link, shown only on compatible wrapper. */
+.native-spotify-launch{display:flex;align-items:center;justify-content:center;text-decoration:none;color:inherit;border:1px solid var(--border);border-radius:10px;background:var(--control);min-height:38px;padding:8px 12px;margin:6px 0;font-size:14px}
