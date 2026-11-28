@@ -55,7 +55,10 @@ class PcAgentTests(unittest.TestCase):
                 ]:
                     with self.assertRaises(HTTPError) as cm:
                         urlopen(Request(base + path, headers=headers, method=method), timeout=3)
-                    self.assertEqual(cm.exception.code, code)
+                    try:
+                        self.assertEqual(cm.exception.code, code)
+                    finally:
+                        cm.exception.close()
                 self.assertEqual(adapter.calls, 0)
                 with urlopen(Request(base + "/state", headers=auth), timeout=3) as response:
                     self.assertEqual(response.headers["Cache-Control"], "no-store")
